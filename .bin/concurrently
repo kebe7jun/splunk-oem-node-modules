@@ -74,7 +74,7 @@ function main() {
 
 function parseArgs() {
     program
-        .version('')
+        .version(require('../../package.json').version)
         .usage('[options] <command ...>')
         .option(
             '-k, --kill-others',
@@ -452,7 +452,7 @@ function shortenText(text, length, cut) {
     if (text.length <= length) {
         return text;
     }
-    cut = _.isString(cut) ? cut :?'..';
+    cut = _.isString(cut) ? cut : '..';
 
     var endLength = Math.floor(length / 2);
     var startLength = length - endLength;
