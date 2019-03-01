@@ -30,7 +30,7 @@ define(
             },
             activate: function(options) {
                 this.ensureDeactivated({deep: true});
-                
+
                 FlashMessagesLegacyView.prototype.activate.apply(this, arguments);
                 this.update();
                 return this;
@@ -46,7 +46,7 @@ define(
                     eventCount = this.model.searchJob.entry.content.get('eventCount'),
                     uneventful = this.model.searchJob.isUneventfulReportSearch(),
                     template;
-                
+
                 if (this.model.searchJob.isRealtime()) {
                     this.collection.reset([{
                         type: 'error',
@@ -62,7 +62,7 @@ define(
                     }]);
                     return;
                 }
-                
+
                 if (uneventful) {
                     template = _.template(this.reportingTemplate, {
                         _: _,
@@ -70,7 +70,7 @@ define(
                         isEventSearch: this.model.searchJob.isEventSearch(),
                         splunkd_utils: splunkd_utils
                     });
-                    
+
                     this.collection.reset([{
                         type: 'warning',
                         html: template
@@ -105,19 +105,21 @@ define(
                     }
                     return;
                 }
-                
+
                 this.collection.reset();
             },
             reportingTemplate: '\
                 <% if (!isEventSearch) { %> \
                     <%- _("Your search did not return any patterns because your search did not return any events.").t() %>\
                 <% } else { %>\
-                    <% if (adhocSearchLevel == splunkd_utils.FAST) { %>\
-                        <%- _("Your search did not return any patterns because you are in the Fast Mode.").t() %>\
-                    <% } else if (adhocSearchLevel==splunkd_utils.SMART) { %>\
-                        <%- _("Your search did not return any patterns because you are in the Smart Mode.").t() %>\
-                    <% } %>\
-                    <%= _(\'<a href="#">Search in the Verbose Mode</a> to see the patterns.\').t() %>\
+                    <h2>\
+                        <% if (adhocSearchLevel == splunkd_utils.FAST) { %>\
+                            <%- _("Your search did not return any patterns because you are in Fast Mode.").t() %>\
+                        <% } else if (adhocSearchLevel==splunkd_utils.SMART) { %>\
+                            <%- _("Your search did not return any patterns because you are in Smart Mode.").t() %>\
+                        <% } %>\
+                    </h2>\
+                    <%= _(\'<a href="#">Search in Verbose Mode</a> to view patterns.\').t() %>\
                 <% } %>\
             '
         });

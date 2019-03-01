@@ -8,7 +8,7 @@
     </div>
 
     % if scheduled_view.schedule.is_scheduled == True:
-        <div class="pdfScheduleStop" style="border-bottom:1px solid #ccc;padding-bottom:1em;margin-bottom:1em;">
+        <div class="pdfScheduleStop" style="border-bottom:1px solid #c3cbd4;padding-bottom:1em;margin-bottom:1em;">
             <h2>${_("Stop Scheduling this PDF")}</h2>
             <button style="float:right;" class="splButton-primary stopScheduling" type="submit" onclick="$('.is_scheduled').val('False'); $(document.forms[0]).trigger('submit');"><span>${_('Stop Scheduling')}</span></button>
             <p class="note">Delete the current schedule to stop PDF delivery</p>
@@ -58,7 +58,7 @@
         </fieldset>
         <input type="hidden" class="is_scheduled" name="schedule.is_scheduled" value="True"/>
         <input type="hidden" name="id" value="${scheduled_view.id}" id="scheduled-view-id"/>
-        <input type="hidden" name="pdfPreviewUrl" value="${pdfPreviewUrl}" id="pdf-preview-url"/>
+        <input type="hidden" name="pdfPreviewUrl" value="${pdfPreviewUrl|h}" id="pdf-preview-url"/>
         <input type="submit" style="display:none;" />
         % if pdfPreviewUrl != None:
             <p class="information" style="margin-top:1em;"><a id="pdf-preview-link" target="_blank" href="#">${_("Preview")}</a></p>

@@ -83,7 +83,7 @@ define([
             var report = reportModel;
 
             // modify the element report first as the replace of search manager will recreate the report model
-            var displayProperties = reportModel.entry.content.toJSON({
+            var reportOptions = reportModel.entry.content.toJSON({
                 omitNonSavedSearchesDefaults: true,
                 onlyDisplayProperties: true
             });
@@ -101,12 +101,17 @@ define([
                 "refreshType": existingManager.get('refreshType'),
                 "type": existingManager.get('type')
             };
+
+            if (report.entry.content.has('displayview')) {
+                reportOptions['displayview'] = report.entry.content.get('displayview');
+            }
+
             // SPL-130406: make sure to add sample_ratio to settings if it exists
             if (report.entry.content.has('dispatch.sample_ratio')) {
                 settings['sample_ratio'] = report.entry.content.get('dispatch.sample_ratio');
             }
 
-            elementReport.set(displayProperties, {tokens: true});
+            elementReport.set(reportOptions, {tokens: true});
             DashboardFactory.getDefault().instantiate({
                 type: 'inline-search',
                 id: existingManager.id,
@@ -179,7 +184,11 @@ define([
         useReportSettingsForElement: function(elementReport, savedReport) {
 
             // clear all display properties in element report so that report properties will be used
-            var clearProperties = _.extend({}, DashboardElementReport.getDisplayProperties(elementReport.toJSON()), DashboardElementReport.NON_SAVEDSEARCHES_DEFAULTS.toJSON());
+            var clearProperties = _.extend(
+                { displayview: true }, 
+                DashboardElementReport.getDisplayProperties(elementReport.toJSON()),
+                DashboardElementReport.NON_SAVEDSEARCHES_DEFAULTS.toJSON()
+            );
             for (var key in clearProperties) {
                 clearProperties[key] = undefined;
             }

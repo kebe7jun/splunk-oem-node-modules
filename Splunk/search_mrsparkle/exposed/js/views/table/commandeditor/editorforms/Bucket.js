@@ -77,10 +77,12 @@ define(
                                 items: BucketCommand.TIME_SCALE_UNITS,
                                 popdownOptions: {
                                     detachDialog: true
-                                }
+                                },
+                                additionalClassNames: 'timespan-dropdown'
                             }
                         }
-                    ]
+                    ],
+                    additionalClassNames: ['timespan-width']
                 });
             },
 

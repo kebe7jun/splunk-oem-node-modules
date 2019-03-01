@@ -31,7 +31,6 @@ define(
                 BaseRouter.prototype.initialize.apply(this, arguments);
                 this.enableSplunkBar = false;
                 this.enableAppBar = false;
-                this.enableFooter = false;
                 this.showAppsList = false;
                 this.fetchManagers = false;
                 this.fetchAppLocal = false;

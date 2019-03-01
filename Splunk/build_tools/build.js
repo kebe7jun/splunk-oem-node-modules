@@ -67,9 +67,13 @@ function run(configPath, options) {
         configsToMerge.push(getProdConfig(configPath));
     }
 
-    configsToMerge.push(getProfileConfig(configPath, options));
-
-    var config = mergeConfigs.apply(null, configsToMerge);
+    var config;
+    var profileConfig = getProfileConfig(configPath, options);
+    if (_.isArray(profileConfig)) {
+        config = profileConfig.map(c => mergeConfigs.apply(null, configsToMerge.concat(c)));
+    } else {
+        config = mergeConfigs.apply(null, configsToMerge.concat(profileConfig));
+    }
 
     function handler(err, stats) {
         if (err) throw err;
@@ -187,7 +191,7 @@ function getDevConfig(configPath) {
         path.join(__dirname,  'profiles', 'common', defaultConfigName)
     ];
     if (_.includes(configFile, 'config')) {
-        paths.unshift(path.resolve(configDir, configFile.replace('config', 'prod')));
+        paths.unshift(path.resolve(configDir, configFile.replace('config', 'dev')));
     }
     return getFirstResolvedModule(paths, 'Dev config not found');
 }

@@ -87,7 +87,7 @@ define([
         $xml = migrateViewType($xml, state.inputs.empty() ? 'dashboard' : 'form');
 
         if (state.dashboard.isDirty() || options.forceDirty) {
-            applyLabelAndDescription($xml, state.dashboard.getState(), options);
+            applyDashboardGlobalState($xml, state.dashboard.getState(), options);
         }
 
         RowColumnSerializer.applyRowColumnLayout(XML.root($xml), state, _.extend({flagUsedSearchStates: options.addGlobalSearches}, options));
@@ -112,10 +112,11 @@ define([
         return XML.serializeDashboardXML($xml, true);
     }
 
-    function applyLabelAndDescription($xml, dashboardState, options) {
+    function applyDashboardGlobalState($xml, dashboardState, options) {
         var root = XML.root($xml);
         var newLabel = dashboardState.label;
         var newDescription = dashboardState.description;
+        var theme = dashboardState.theme;
         var rootNodeName = root[0].nodeName;
         var labelNode = root.find(rootNodeName + ">label");
         if (!labelNode.length) {
@@ -132,6 +133,12 @@ define([
             descriptionNode.text(newDescription);
         } else {
             descriptionNode.remove();
+        }
+        var currentTheme = root.attr('theme');
+        if (currentTheme == null && theme === 'light') {
+            root.removeAttr('theme');
+        } else {
+            root.attr('theme', theme);
         }
     }
 

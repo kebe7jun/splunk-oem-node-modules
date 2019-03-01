@@ -20,7 +20,6 @@ define([
             this.options.label = options.label || _('Limit').t();
             this.options.helpClass = 'pivot-inspector-help-text';
             this.options.help = ' ';
-            this.options.controlClass = showGroupOthersControl ? 'controls-fill' : '';
             this.options.controls = [
                 {
                     type: 'Text',

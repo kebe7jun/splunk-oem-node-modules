@@ -131,6 +131,15 @@ define(
                         $deferred.reject();
                     });
                 return $deferred;
+            },
+            isArchiverAppInstalled: function() {
+                return this.findByEntryName('dynamic-data-self-storage-app');
+            },
+            archiverAppLabel: function() {
+                if (this.isArchiverAppInstalled()) {
+                    return this.findByEntryName('dynamic-data-self-storage-app').entry.content.get('label');
+                }
+                return _('Cloud Archives').t();
             }
         });
     }

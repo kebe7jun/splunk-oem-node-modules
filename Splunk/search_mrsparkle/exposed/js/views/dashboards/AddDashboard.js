@@ -29,6 +29,7 @@ define(
                 this.nameTextControl = new TextControl({
                     modelAttribute: 'name',
                     model: this.model.dashboard.entry.content,
+                    ariaLabel: _('ID').t(),
                     save: false
                 });
 
@@ -44,6 +45,7 @@ define(
                     controlOptions: {
                         modelAttribute: 'description',
                         model: this.model.dashboard.meta,
+                        ariaLabel: _('Description').t(),
                         placeholder: _('optional').t(),
                         save: false
                     },
@@ -53,9 +55,8 @@ define(
                 var sharedLabel = this.model.user.canUseApps() ? _('Shared in App').t() : _('Shared').t();
                 this.children.permissions = new ControlGroup({
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassName: "btn-group-2",
                         modelAttribute: 'perms',
                         model: this.model.perms,
                         items: [
@@ -70,6 +71,7 @@ define(
                 this.titleTextControl = new TextControl({
                     modelAttribute: 'label',
                     model: this.model.dashboard.meta,
+                    ariaLabel: _('Title').t(),
                     placeholder: _('optional').t(),
                     save: false
                 });

@@ -1,4 +1,4 @@
-<table class="table table-chrome table-striped <%- hasMoreInfo ? 'table-row-expanding' : '' %> entities-grid">
+<table class="table table-chrome table-striped table-hover <%- hasMoreInfo ? 'table-row-expanding' : '' %> entities-grid">
     <colgroup>
         <% if (hasMoreInfo) { %>
         <col class="col-info">
@@ -26,14 +26,23 @@
         <% _.each(columns, function(col, ix) {  %>
             <% if (_.isFunction(col.visible) && !col.visible.call(that)) { return; } %>
             <% if (col.noSort) { %>
-            <th><%- col.title %><%= col.html %></th>
+				<th><%- col.title %><%= col.html %>
+					<% if (col.tooltip) { %>
+					<a href="#" class="tooltip-link" id="<%-col.id %>-tooltip">?</a>
+					<% } %>
+				</th>
             <% } else { %>
-            <th class="<%- sortCellClass %>" <%- sortKeyAttribute %>="<%- col.id %>">
-                <a href="#" class="<%- col.id %>-sort-link"><%- col.title %><%= col.html %><i class="icon-sorts"></i></a>
-            </th>
+				<th class="<%- sortCellClass %>" <%- sortKeyAttribute %>="<%- col.id %>">
+					<div>	
+						<a href="#" class="<%- col.id %>-sort-link"><%- col.title %><%= col.html %><i class="icon-sorts"></i></a>
+						<% if (col.tooltip) { %>
+						<a href="#" class="tooltip-link" id="<%-col.id %>-tooltip">?</a>
+						<% } %>
+					</div>
+				</th>
             <% } %>
             <% if (ix==0) { %>
-            <th><%= _('Actions').t() %></th>
+            <th class="col-actions"><%= _('Actions').t() %></th>
             <% } %>
         <% }); %>
     </tr>

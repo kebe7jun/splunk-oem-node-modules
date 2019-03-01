@@ -1,10 +1,10 @@
 <% if (field) { %>
     <a href="#" class="close"><i class="icon-close"></i></a>
-    <h2 class="field-info-header"><%- field.get('name') %></h2>
+    <h2 class="field-info-header" tabindex="0"><%- field.get('name') %></h2>
     <div class="divider"></div>
     <% if (selectableFields) { %>
         <div class="pull-right">
-            <label class="select-field-label"><%- _("Selected").t() %></label>
+            <label class="select-field-label" tabindex="0"><%- _("Selected").t() %></label>
             <div class="btn-group btn-group-radio">
                 <% var is_selected_field = selectedFields.findWhere({'name': field.get('name')}); %>
                 <button class="btn select <%- is_selected_field ? 'active' : '' %>" data-field-name="<%- field.get('name') %>"><%- _("Yes").t() %></button>
@@ -12,9 +12,9 @@
             </div>
         </div>
     <% } %>
-    <p><%- field.get("is_exact") ? "" : ">" %><%- field.get("distinct_count") %> <%- (field.get("distinct_count")>1) ?  _("Values").t(): _("Value").t() %>, <%= i18n.format_percent(summary.frequency(field.get('name'))) %> <%- _("of events").t() %></p>
+    <p tabindex="0"><%- field.get("is_exact") ? "" : ">" %><%- field.get("distinct_count") %> <%- (field.get("distinct_count")>1) ?  _("Values").t(): _("Value").t() %>, <%= i18n.format_percent(summary.frequency(field.get('name'))) %> <%- _("of events").t() %></p>
     <div class="field-info-reports-section">
-    <h3 class="reports-header"><%- _("Reports").t() %></h3>
+    <h3 class="reports-header" tabindex="0"><%- _("Reports").t() %></h3>
     <table class="fields">
         <tbody>
             <% if (field.isNumeric()) { %>
@@ -59,16 +59,16 @@
         </tbody>
     </table>
 </div>
-    <table class="table table-condensed table-dotted">
+    <table class="table table-condensed table-dotted table-field-values">
         <thead>
             <tr>
             <% if (field.get('modes').length >= 10) { %>
-                <th class="value"><strong><%- _("Top 10 Values").t() %></strong></th>
+                <th class="value" tabindex="0"><strong><%- _("Top 10 Values").t() %></strong></th>
             <% } else { %>
-                <th class="value"><strong><%- _("Values").t() %></strong></th>
+                <th class="value" tabindex="0"><strong><%- _("Values").t() %></strong></th>
             <% } %>
-            <td class="count"><%- _("Count").t() %></td>
-                <td class="percent">%</td>
+            <td class="count" tabindex="0"><%- _("Count").t() %></td>
+                <td class="percent" tabindex="0">%</td>
                 <td class="bar">&nbsp;</td>
             </tr>
         </thead>
@@ -77,13 +77,15 @@
             <% _.each(field.get('modes'), function(mode) { %>
                 <tr>
                     <td class="value"><a href="#" data-report="fieldvalue" data-field="<%- field.get('name') %>" data-value="<%- mode.value %>"><%- mode.value %></a></td>
-                    <td class="count"><%- format_decimal(mode.count || -1) %></td>
+                    <td class="count" tabindex="0"><%- format_decimal(mode.count || -1) %></td>
                     <% percent = mode.count/field.get('count') %>
-                    <td class="percent"><%- format_percent(percent) %></td>
                     <% if (modes_len > 1) { %>
+                        <td class="percent" tabindex="0"><%- format_percent(percent) %></td>
                         <td class="bar">
                             <div style="width:<%- Math.round(percent * 100) %>%;" class="graph-bar"></div>
-                        </td> 
+                        </td>
+                    <% } else { %>
+                        <td colspan="2" class="percent" tabindex="0"><%- format_percent(percent) %></td>
                     <% } %>
                 </tr>
             <% }); %>

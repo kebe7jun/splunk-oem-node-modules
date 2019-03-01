@@ -1,7 +1,7 @@
 .viz-picker-body {
     max-height: 325px;
     overflow-y: auto;
-    background-color: $white;
+    background-color: $popupBackgroundColor;
     border-radius: $containerInnerBorderRadius;
     .vizpicker-message{
         .icon{
@@ -17,7 +17,7 @@
         }
         color:$textColor;
         position:relative;
-        font-size:$baseFontSize;
+        font-size:$fontSize;
         padding:6px 10px 6px 10px;
         margin:0px;
         border-bottom:1px solid $borderColor;
@@ -26,8 +26,9 @@
 
 .viz-picker-footer {
     padding: 9px 16px 5px 16px;
-    background: $offWhite;
+    background: $vizPickerFooterColor;
     min-height: 60px;
+    border-radius: 0 0 3px 3px;
 }
 
 .viz-picker-list-section {
@@ -35,7 +36,7 @@
 
     p {
         margin-bottom: 0px;
-        color: #999;
+        color: $vizPickerHeadingTextColor;
     }
 }
 
@@ -47,17 +48,17 @@
 
     float: left;
 
-    border: 1px solid $borderLightColor;
+    border: $vizPickerItemBorder;
 
     overflow: hidden;
 
     &:hover {
-        border-color: $borderDarkColor;
+        border-color: $vizPickerItemBorderColorHover;
         box-shadow: 0px 2px 1px rgba(0, 0, 0, .1);
     }
 
     &:focus {
-        @mixin focus-button;
+        @mixin focus-element;
     }
 }
 
@@ -66,7 +67,7 @@
 }
 
 .viz-picker-selected-viz-item {
-    border-color: $blue;
+    border-color: $infoColor;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -77,17 +78,17 @@
 
 
 .viz-picker-info-label {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 
 .viz-picker-info-search-hint-header {
-    color: $textGrayDark;
+    color: $vizPickerSearchExampleTextColor;
     margin: 0px;
 }
 
 .viz-picker-info-search-hint-text {
     font-family: $monoFontFamily;
-    color: $textGrayDark;
+    color: $vizPickerSearchExampleTextColor;
 }
 
 .viz-picker-clear-fix {

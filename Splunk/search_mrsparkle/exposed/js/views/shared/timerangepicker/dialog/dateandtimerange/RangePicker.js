@@ -22,26 +22,30 @@ define([
                         inputClassName: 'timerangepicker-earliest',
                         model: {
                             dateTime: this.model.earliestDateInput
-                        }
+                        },
+                        legendLabel: _("Earliest").t()
                     });
 
                     this.children.latestTimeInput = new TimeInput({
                         inputClassName: 'timerangepicker-latest',
                         model: {
                             dateTime: this.model.latestDateInput
-                        }
+                        },
+                        legendLabel: _("Latest").t()
                     });
                 } else {
                     this.children.earliestTimeInput = new DateControl({
                         model: this.model.earliestDateInput,
                         inputClassName: "timerangepicker-earliest-date",
-                        validate: true
+                        validate: true,
+                        ariaLabel: _("Earliest Date").t()
                     });
 
                     this.children.latestTimeInput = new DateControl({
                         model: this.model.latestDateInput,
                         inputClassName: "timerangepicker-latest-date",
-                        validate: true
+                        validate: true,
+                        ariaLabel: _("Latest Date").t()
                     });
                 }
 
@@ -73,18 +77,23 @@ define([
                     this.children.latestTimeInput.render().prependTo(this.$('.latest_picker'));
                 }
 
+                var latestClass = 'only-latest';
+
                 if (rangeType === 'before_date') {
+                    this.$('.time-between-dates').addClass(latestClass);
                     this.$('.earliest_picker').hide();
                     this.$('.up-to-now').hide();
                     this.$('.and').hide();
                     this.$('.latest_picker').show();
                     this.$('.latest_picker').find('.help-time').html(_("00:00:00").t());
                 } else if (rangeType === 'after_date'){
+                    this.$('.time-between-dates').removeClass(latestClass);
                     this.$('.earliest_picker').show();
                     this.$('.up-to-now').show();
                     this.$('.and').hide();
                     this.$('.latest_picker').hide();
                 } else {
+                    this.$('.time-between-dates').removeClass(latestClass);
                     this.$('.earliest_picker').show();
                     this.$('.up-to-now').hide();
                     this.$('.and').show();

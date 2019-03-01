@@ -1,4 +1,4 @@
-$navbarSearchPlaceholderColor:    #ccc;
+$navbarSearchPlaceholderColor:    $gray80;
 .view {
     flex: 1 1 230px; /* shrink or grow is fine */
     display: flex;
@@ -10,32 +10,36 @@ $navbarSearchPlaceholderColor:    #ccc;
     /*  Focus state */
 
     /*  Don't show IE 10 clear when an artificial one is shown. */
-    &.text-clear::-ms-clear {
+    &::-ms-clear {
         display: none;
     }
 
     &[type=text] {
         all: initial;
         display: inline-block;
-        height: 11px;
+        height: 28px;
         margin: 3px 0 0 0;
         line-height: 16px;
         width: 120px;
         border: 0px;
-        transition: background-color 0.3s linear;
-        border-radius: 4px;
-        background-color: color($white a(20%));
-        padding: 4px 30px 4px 8px;
+        transition: background-color 0.3s linear,  background-color 0.3s linear;
+        border-radius: $borderRadius;
+        background-color: $navBarSearchInputBackgroundColor;
+        border: $navBarSearchInputBorder;
+        box-sizing: border-box;
+        padding: 7px 30px 7px 8px;
         color: $textColor;
         font-size: inherit !important; /* fix for splunk components */
-        font-family: $baseFontFamily;
+        font-family: $fontFamily;
+        box-sizing: border-box;
 
         &::placeholder {
-           color: $navbarSearchPlaceholderColor;
-           transition: color 0.3s linear;
+            color: $navbarSearchPlaceholderColor;
+            transition: color 0.3s linear;
         }
         &:hover, &:focus {
-            background-color: $white;
+            background-color: $navBarSearchInputHoverColor;
+            border-color: $navBarSearchInputHoverBorderColor;
 
             &::placeholder {
                color: $placeholderText;
@@ -43,14 +47,22 @@ $navbarSearchPlaceholderColor:    #ccc;
         }
     }
     &:focus {
-        @mixin focus-field;
+        @mixin focus-element;
     }
 }
 
 .clear {
-    composes: clear from '../../controls/TextControl.pcssm'
+    composes: clear from '../../controls/TextControl.pcssm';
+    z-index: calc($zindexFocus + 1);
+    line-height: 24px;
+}
+
+.searchIcon {
+    composes: searchIcon from '../../controls/TextControl.pcssm';
+    z-index: calc($zindexFocus + 1);
 }
 
 .placeholder {
-    composes: placeholder from '../../controls/TextControl.pcssm'
+    composes: placeholder from '../../controls/TextControl.pcssm';
+    z-index: calc($zindexFocus + 1);
 }

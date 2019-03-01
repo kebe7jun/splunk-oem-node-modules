@@ -127,7 +127,7 @@
     cursor:hand;
 }
 .EventsViewer .default .event {
-    font-family:Consolas, Monaco, Courier New, monospace;
+    font-family: "Splunk Platform Mono", Inconsolata, Consolas, "Droid Sans Mono", Monaco, "Courier New", Courier, monospace;
     font-size:12px;
     margin:0px 0px 0px 0px;
     zoom:1;

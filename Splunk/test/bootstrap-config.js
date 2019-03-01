@@ -10,6 +10,10 @@ define(['./window-c'], function(windowC) {
             },
 
             beforeEachAppLoad: function() {
+                // delete the native fetch so that fetch polyfill can take place
+                // this is required to work with sinon FakeXMLHttpRequest.
+                window.nativeFetch = window.fetch;
+                delete window.fetch;
                 delete window.Select2;
                 delete window.$;
                 delete window.jQuery;
@@ -17,6 +21,8 @@ define(['./window-c'], function(windowC) {
 
             afterEachAppLoad: function(app) {
                 windowSelect2[app] = window.Select2;
+                window.fetch = window.nativeFetch;
+                delete window.nativeFetch;
             },
 
             beforeEachApp: function(app) {

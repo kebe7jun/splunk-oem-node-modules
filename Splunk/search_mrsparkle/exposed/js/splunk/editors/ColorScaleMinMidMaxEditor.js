@@ -16,24 +16,14 @@ define(function(require, exports, module) {
     var EditorLabel = require("splunk/editors/EditorLabel");
     var EnumEditor = require("splunk/editors/EnumEditor");
     var SimpleTypeEditor = require("splunk/editors/SimpleTypeEditor");
+    var ColorCodes = require("splunk/palettes/ColorCodes");
     var MinMidMaxColorPalette = require("splunk/palettes/MinMidMaxColorPalette");
     var HStackPanel = require("splunk/panels/HStackPanel");
     var MinMidMaxScale = require("splunk/scales/MinMidMaxScale");
     var SVGUtils = require("svg/SVGUtils");
     var PopTart = require("views/shared/PopTart");
 
-    var SEQUENTIAL1SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/sequential-1.svg"));
-    var SEQUENTIAL2SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/sequential-2.svg"));
-    var SEQUENTIAL3SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/sequential-3.svg"));
-    var SEQUENTIAL4SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/sequential-4.svg"));
-    var SEQUENTIAL5SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/sequential-5.svg"));
-    var SEQUENTIAL6SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/sequential-6.svg"));
-    var DIVERGENT1SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/divergent-1.svg"));
-    var DIVERGENT2SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/divergent-2.svg"));
-    var DIVERGENT3SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/divergent-3.svg"));
-    var DIVERGENT4SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/divergent-4.svg"));
-    var DIVERGENT5SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/divergent-5.svg"));
-    var DIVERGENT6SVG = SVGUtils.strip(require("contrib/text!splunk/editors/assets/divergent-6.svg"));
+    var PRESET_PALETTE_TEMPLATE = SVGUtils.strip(require("contrib/text!splunk/editors/assets/preset-palette-template.svg"));
 
     require("./ColorScaleMinMidMaxEditor.pcss");
 
@@ -44,65 +34,81 @@ define(function(require, exports, module) {
         var _PRESETS_MAP = {
             'sequential1': {
                 minColor: Color.fromString('#ffffff'),
-                maxColor: Color.fromString('#31a35f'),
-                svg: SEQUENTIAL1SVG
+                maxColor: Color.fromString(ColorCodes.SEQUENTIAL[0])
             },
             'sequential2': {
-                minColor: Color.fromString('#31a35f'),
-                maxColor: Color.fromString('#ffffff'),
-                svg: SEQUENTIAL2SVG
+                minColor: Color.fromString(ColorCodes.SEQUENTIAL[0]),
+                maxColor: Color.fromString('#ffffff')
             },
             'sequential3': {
                 minColor: Color.fromString('#ffffff'),
-                maxColor: Color.fromString('#d6563c'),
-                svg: SEQUENTIAL3SVG
+                maxColor: Color.fromString(ColorCodes.SEQUENTIAL[1])
             },
             'sequential4': {
-                minColor: Color.fromString('#d6563c'),
-                maxColor: Color.fromString('#ffffff'),
-                svg: SEQUENTIAL4SVG
+                minColor: Color.fromString(ColorCodes.SEQUENTIAL[1]),
+                maxColor: Color.fromString('#ffffff')
             },
             'sequential5': {
                 minColor: Color.fromString('#ffffff'),
-                maxColor: Color.fromString('#1e93c6'),
-                svg: SEQUENTIAL5SVG
+                maxColor: Color.fromString(ColorCodes.SEQUENTIAL[2])
             },
             'sequential6': {
-                minColor: Color.fromString('#1e93c6'),
-                maxColor: Color.fromString('#ffffff'),
-                svg: SEQUENTIAL6SVG
+                minColor: Color.fromString(ColorCodes.SEQUENTIAL[2]),
+                maxColor: Color.fromString('#ffffff')
             },
             'divergent1': {
-                minColor: Color.fromString('#1e93c6'),
-                maxColor: Color.fromString('#d6563c'),
-                svg: DIVERGENT1SVG
+                minColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[0][0]),
+                maxColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[0][1])
             },
             'divergent2': {
-                minColor: Color.fromString('#31a35f'),
-                maxColor: Color.fromString('#d6563c'),
-                svg: DIVERGENT2SVG
+                minColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[1][0]),
+                maxColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[1][1])
             },
             'divergent3': {
-                minColor: Color.fromString('#cc5068'),
-                maxColor: Color.fromString('#f2b827'),
-                svg: DIVERGENT3SVG
+                minColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[2][0]),
+                maxColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[2][1])
             },
             'divergent4': {
-                minColor: Color.fromString('#49443b'),
-                maxColor: Color.fromString('#31a35f'),
-                svg: DIVERGENT4SVG
+                minColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[3][0]),
+                maxColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[3][1])
             },
             'divergent5': {
-                minColor: Color.fromString('#ed8440'),
-                maxColor: Color.fromString('#6a5c9e'),
-                svg: DIVERGENT5SVG
+                minColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[4][0]),
+                maxColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[4][1])
             },
             'divergent6': {
-                minColor: Color.fromString('#3863a0'),
-                maxColor: Color.fromString('#a2cc3e'),
-                svg: DIVERGENT6SVG
+                minColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[5][0]),
+                maxColor: Color.fromString(ColorCodes.DIVERGENT_PAIRS[5][1])
             }
         };
+
+        _(_PRESETS_MAP).each(function(preset, name) {
+            var minColor = preset.minColor;
+            var maxColor = preset.maxColor;
+            var isSequential = name.indexOf('sequential') === 0;
+            if (isSequential) {
+                preset.svg = _(PRESET_PALETTE_TEMPLATE).template({
+                    colors: [
+                        Color.interpolate(minColor, maxColor, 0).toString('hex'),
+                        Color.interpolate(minColor, maxColor, 0.25).toString('hex'),
+                        Color.interpolate(minColor, maxColor, 0.5).toString('hex'),
+                        Color.interpolate(minColor, maxColor, 0.75).toString('hex'),
+                        Color.interpolate(minColor, maxColor, 1).toString('hex')
+                    ]
+                });
+            } else {
+                var white = Color.fromString('#ffffff');
+                preset.svg = _(PRESET_PALETTE_TEMPLATE).template({
+                    colors: [
+                        Color.interpolate(minColor, white, 0).toString('hex'),
+                        Color.interpolate(minColor, white, 0.5).toString('hex'),
+                        Color.interpolate(minColor, white, 1).toString('hex'),
+                        Color.interpolate(white, maxColor, 0.5).toString('hex'),
+                        Color.interpolate(white, maxColor, 1).toString('hex')
+                    ]
+                });
+            }
+        });
 
         // Public Properties
 
@@ -481,7 +487,7 @@ define(function(require, exports, module) {
                     .set('midColor', isSequential ? null : Color.fromString('#ffffff'))
                     .set('maxColor', maxColor);
             };
-                
+
         });
 
         var PresetsButton = Class(Element, function(PresetsButton, base) {
@@ -513,7 +519,7 @@ define(function(require, exports, module) {
                     .addClass('caret');
 
                 this.element.href = '#';
-                presetsButtonContent.element.innerHTML = StringUtil.escapeHTML(_('Custom').t());
+                presetsButtonContent.element.innerHTML = _PRESETS_MAP.sequential1.svg;
 
                 this
                     .addChild(presetsButtonContent)
@@ -578,7 +584,7 @@ define(function(require, exports, module) {
                         <a class="item divergent3" href="#"> <%= divergent3.svg %> </a>\
                         <a class="item divergent4" href="#"> <%= divergent4.svg %> </a>\
                         <a class="item divergent5" href="#"> <%= divergent5.svg %> </a>\
-                        <a class="item divergent6" href="#"> <%= divergent6.svg %> </a>\
+                        <a class="item item-border-bottom divergent6" href="#"> <%= divergent6.svg %> </a>\
                     </div>\
                 </div>'
         });

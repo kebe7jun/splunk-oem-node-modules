@@ -59,7 +59,8 @@ define(
                 this.children.resultsPane = new _ResultsPane({
                     model: this.model,
                     collection: this.collection,
-                    hideDock: this.hideDock
+                    hideDock: this.hideDock,
+                    isSHC: this.options.isSHC
                 });
 
                 this.collection.appsRemote.error.on('change', this.render, this);

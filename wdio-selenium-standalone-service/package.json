@@ -1,6 +1,6 @@
 {
   "name": "wdio-selenium-standalone-service",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "WebdriverIO service to start & stop Selenium Standalone",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,7 @@
   "homepage": "https://github.com/webdriverio/wdio-selenium-standalone-service#readme",
   "dependencies": {
     "fs-extra": "^0.30.0",
-    "selenium-standalone": "^6.0.0"
+    "selenium-standalone": "^6.13.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",

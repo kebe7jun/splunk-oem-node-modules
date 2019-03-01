@@ -46,12 +46,11 @@
             line-height: 40px;
             padding: 0 50px 0 30px;
             font-size: 17px;
-            white-space: nowrap;
-            color: $splunkLiteBlack;
+            color: $black;
 
             &:hover:not(.disabled),
             &:focus:not(.disabled) {
-                color: $splunkLiteBlack;
+                color: $black;
                 background: $pillBackgroundColorHover;
             }
        }

@@ -5,14 +5,18 @@ define(
         'underscore',
         '../Base',
         'views/shared/PopTart',
-        'util/pdf_utils'
+        'util/pdf_utils',
+        './ExportMenu',
+        './EditMenu.pcssm'
     ],
     function(module,
              $,
              _,
              BaseDashboardView,
              PopTartView,
-             PDFUtils) {
+             PDFUtils,
+             ExportMenu,
+             css) {
 
         var defaults = {
             button: true,
@@ -90,72 +94,6 @@ define(
             '
         });
 
-        var ExportMenu = PopTartView.extend({
-            className: 'dropdown-menu export-menu',
-            initialize: function() {
-                PopTartView.prototype.initialize.apply(this, arguments);
-                _.defaults(this.options, defaults);
-            },
-            events: {
-                'click a.edit-export-pdf': function(e) {
-                    e.preventDefault();
-                    this._triggerControllerEvent('action:export-pdf');
-                },
-                'click a.edit-schedule-pdf': function(e) {
-                    e.preventDefault();
-                    if ($(e.currentTarget).is('.disabled')) {
-                        return;
-                    }
-                    this._triggerControllerEvent('action:schedule-pdf');
-                },
-                'click a.edit-print': function(e) {
-                    e.preventDefault();
-                    this._triggerControllerEvent('action:print');
-                }
-            },
-            _triggerControllerEvent: function() {
-                this.model.controller.trigger.apply(this.model.controller, arguments);
-                this.hide();
-            },
-            render: function() {
-                this.$el.html(PopTartView.prototype.template_menu);
-                this.$el.append(this._getTemplate());
-                return this;
-            },
-            _getTemplate: function() {
-                var menuModel = {
-                    canWrite: this.model.view.entry.acl.canWrite(),
-                    isSimpleXML: this.model.view.isSimpleXML(),
-                    userCanSchedule: this.model.user.canSchedulePDF(),
-                    viewSchedulable: this.model.view.canSchedulePDF(),
-                    viewPdfSchedulable: PDFUtils.isPDFGenAvailable() && this.model.view.canSchedulePDF(),
-                    canExport: this.model.view.isSimpleXML() && PDFUtils.isPDFGenAvailable(),
-                    isForm: this.model.view.isForm()
-                };
-                return this.compiledTemplate(menuModel);
-            },
-            isEmpty: function() {
-                return false; // There're will be at least one print item
-            },
-            template: '\
-                <ul class="first-group">\
-                    <% if (canExport) { %>\
-                        <li><a href="#" class="edit-export-pdf"><%- _("Export PDF").t() %></a></li>\
-                    <% } else { %>\
-                        <li><a href="#" class="edit-export-pdf disabled"><%- _("Export PDF").t() %></a></li>\
-                    <% } %>\
-                    <% if (userCanSchedule) { %>\
-                        <% if (viewPdfSchedulable) { %>\
-                            <li><a href="#" class="edit-schedule-pdf"><%- _("Schedule PDF Delivery").t() %></a></li>\
-                        <% } else { %>\
-                            <li><a href="#" class="edit-schedule-pdf disabled"><%- _("Schedule PDF Delivery").t() %></a></li>\
-                        <% } %>\
-                    <% } %>\
-                    <li><a href="#" class="edit-print"><%- _("Print").t() %></a></li>\
-                </ul>\
-            '
-        });
-
         return BaseDashboardView.extend({
             moduleId: module.id,
             viewOptions: {
@@ -169,20 +107,6 @@ define(
                 'click a.edit-btn': function(e) {
                     e.preventDefault();
                     this.model.controller.trigger('mode:edit');
-                },
-                'click a.edit-export': function(e) {
-                    e.preventDefault();
-                    this.children.exportMenu = new ExportMenu({
-                        model: this.model
-                    });
-                    this.children.exportMenu.once('hide', this.children.exportMenu.remove);
-                    $('body').append(this.children.exportMenu.render().$el);
-                    var $btn = $(e.currentTarget);
-                    $btn.addClass('active');
-                    this.children.exportMenu.show($btn);
-                    this.children.exportMenu.once('hide', function(){
-                        $btn.removeClass('active');
-                    });
                 },
                 'click a.edit-other': function(e) {
                     e.preventDefault();
@@ -205,15 +129,30 @@ define(
                     canWrite: this.model.view.entry.acl.canWrite()
                 };
                 this.$el.html(this.compiledTemplate(menuModel));
+
+                if (this.model.page == null || !this.model.page.get('hideExport')) {
+                    if (this.children.exportMenu) {
+                        this.children.exportMenu.remove();
+                        this.children.exportMenu = null;
+                    }
+                    this.children.exportMenu = new ExportMenu({
+                        model: this.model,
+                        collection: {
+                            apps: this.collection.appLocalsUnfilteredAll
+                        }
+                    });
+                    this.children.exportMenu.render().$el.appendTo(this.$('.dashboard-export-container'));
+                }
                 return this;
             },
+
             template: '\
             <span class="dashboard-view-controls">\
-               <% if(canWrite) { %>\
+                <% if(canWrite) { %>\
                     <a class="btn edit-btn" href="#"><%- _("Edit").t() %></a>\
-               <% } %>\
-                <a class="btn edit-export" href="#"><%- _("Export").t() %> <span class="caret"></span></a>\
-                <a class="btn edit-other" href="#">...</a>\
+                <% } %>\
+                <div class="dashboard-export-container ' + css.exportButtonContainer + '"></div>\
+                <a aria-label="<%- _("more").t() %>" class="btn edit-other" href="#">...</a>\
             </span>\
         '
         });

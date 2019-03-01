@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-    var mvc = require('./mvc');
     var SearchManager = require('./searchmanager');
     var _ = require("underscore");
     var console = require('util/console');
@@ -14,7 +13,6 @@ define(function(require, exports, module) {
     var TokenUtils = require('./tokenutils');
 
     var DISPATCHABLE_PROPERTIES = DispatchJob.DISPATCHABLE_PROPERTIES;
-    var registry = mvc.Components;
 
     // Dispatchable properties specific to the savedsearch endpoint
     var ENDPOINT_PROPERTIES = {
@@ -134,7 +132,7 @@ define(function(require, exports, module) {
          */
         createManager: function(job) {
             var tokenDependencies = this.settings.get('tokenDependencies', { tokens: true });
-            if (!TokenUtils.tokenDependenciesMet(tokenDependencies, registry)) {
+            if (!TokenUtils.tokenDependenciesMet(tokenDependencies, this.registry)) {
                 this.trigger("search:error", Messages.resolve("unresolved-tokens").message);
                 return;
             }
@@ -180,7 +178,7 @@ define(function(require, exports, module) {
                 ((new Date()).valueOf() - cache * 1000);
 
             var tokenDependencies = this.settings.get('tokenDependencies', { tokens: true });
-            if (!TokenUtils.tokenDependenciesMet(tokenDependencies, registry)) {
+            if (!TokenUtils.tokenDependenciesMet(tokenDependencies, this.registry)) {
                 this.trigger("search:error", Messages.resolve("unresolved-tokens").message);
                 return;
             }
@@ -203,7 +201,6 @@ define(function(require, exports, module) {
                         that._startSearchWithNewJob(search);
                         return;
                     }
-
                     if (cache === 'scheduled') {
                         // Grab the latest search job from the jobs history
                         search.getLatestHistoricJobId()

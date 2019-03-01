@@ -5,9 +5,6 @@ var _ = require('lodash');
 var mergeConfigs = require('../../util/mergeConfigs');
 var sharedConfig = require('./shared.config');
 var postcssConfig = require('./postcss.config');
-var postcssOptions = {
-    loadTheme: 'enterprise'
-};
 /**
  * Library config - A convenience config for generating a standalone library of
  * Splunk web code. The config is an entry file or files that export the desired
@@ -33,14 +30,14 @@ module.exports = function(configs, name, options) {
     // If the entry is an object, we use it, otherwise we build and object from the path string
     if(_.isObject(configs)){
         entry = configs;
-    }   
+    }
     else {
         if (!name) {
             name = path.basename(configs, '.js');
         }
         entry[name] = path.resolve(configs);
     }
-    return mergeConfigs(sharedConfig, postcssConfig(_.merge({}, options, postcssOptions)), {
+    return mergeConfigs(sharedConfig, postcssConfig(options), {
         output: {
             path: '.',
             filename: '[name].js',

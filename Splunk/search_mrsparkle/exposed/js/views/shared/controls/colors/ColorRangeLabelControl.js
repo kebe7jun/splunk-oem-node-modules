@@ -24,30 +24,26 @@ define([
             },
 
             render: function() {
-                this.$('.text-value').tooltip('destroy');
+                this.$('.color-range-label-control-value').tooltip('destroy');
                 this.$el.html(this.compiledTemplate({
                     value: this.options.value || this.model.get('value'),
                     label: this.options.label,
                     customClass: this.options.customClass || 'color-control-left-col'
                 }));
-                this.$('.text-value').tooltip({ animation: false, container: 'body' });
+                this.$('.color-range-label-control-value').tooltip({ animation: false, container: 'body' });
                 return this;
             },
 
             remove: function() {
-                this.$('.text-value').tooltip('destroy');
+                this.$('.color-range-label-control-value').tooltip('destroy');
                 return Control.prototype.remove.apply(this, arguments);
             },
 
             template: '\
-                <div class="control-group <%- customClass %>">\
-                    <label class="control-label text-label">\
-                        <span><%- label %></span>\
+                    <label class="color-range-label-control-label">\
+                        <%- label %>\
                     </label>\
-                    <label class="control-label text-value" title="<%- value %>">\
-                        <span class="value"><%- value %></span>\
-                    </label>\
-                </div>\
+                    <span class="color-range-label-control-value"><%- value %></span>\
             '
         });
 

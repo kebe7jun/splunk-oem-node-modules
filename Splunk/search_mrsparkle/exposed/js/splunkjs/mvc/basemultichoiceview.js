@@ -15,16 +15,16 @@ define(function(require, exports, module) {
      */
     var BaseMultiChoiceView = BaseChoiceView.extend(/** @lends splunkjs.mvc.BaseMultiChoiceView.prototype */{
         _isMultiChoiceView: true,
-        
+
         updateSelectedLabel: function() {
             var oldSelectedLabels = util.asArray(this.settings.get('selectedLabel'));
 
             var selectedLabels = _.map(
-                this.val(), 
+                this.val(),
                 function(value) {
                     var choice = this._findDisplayedChoice(value);
                     return choice ? choice.label : undefined;
-                }, 
+                },
                 this);
 
             if (!_.isEqual(oldSelectedLabels, selectedLabels)) {
@@ -36,16 +36,20 @@ define(function(require, exports, module) {
             }
         },
 
+        normalizeValue: function(value) {
+            return Array.isArray(value) ? value : [value];
+        },
+
         val: function(newValue) {
             var oldValue = this.settings.get('value');
 
             var oldValueAsArray = util.asArray(oldValue);
             var newValueAsArray = util.asArray(newValue);
-            
+
             if (arguments.length === 0) {
                 return oldValueAsArray;
             }
-            
+
             var sortedOldValue = _.clone(oldValueAsArray).sort();
             var sortedNewValue = _.clone(newValueAsArray).sort();
 
@@ -57,10 +61,26 @@ define(function(require, exports, module) {
             }
 
             this.settings.set('value', newValueAsArray);
-            
+
             return newValueAsArray;
         },
-        
+
+        getState: function() {
+            var baseState = BaseChoiceView.prototype.getState.apply(this, arguments);
+
+            var value = this.settings.get('value');
+
+            return _.extend({}, baseState, {
+                value: value != null && !Array.isArray(value) ? [value] : value,
+                onChange: function(value) {
+                    // Need to overrride onChange in the BaseChoiceView.
+                    // All the multichoice views do not need to call the onUserInput() function because
+                    // multichoice views do not have the 'selectFirstChoice' option.
+                    this.val(value);
+                }.bind(this)
+            });
+        },
+
         _getSelectedData: function() {
             var values = this.val();
             return _(values).map(_.bind(function(val){
@@ -72,6 +92,6 @@ define(function(require, exports, module) {
             }, this));
         }
     });
-    
+
     return BaseMultiChoiceView;
 });

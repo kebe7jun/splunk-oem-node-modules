@@ -7,6 +7,7 @@
 <%
     import splunk
     from splunk.appserver.mrsparkle.lib import util, i18n
+    productName = util.getProductName()
 %>
 
 % if error:
@@ -43,10 +44,10 @@
 		    <!-- start prompt message --> 
 		    <div class="spl-prompt-message-wrapper"> 
 		        <h3 class="spl-main-description-hdr"> 
-		            ${_('Error contacting SplunkApps')}
+		            ${_('Error contacting Splunkbase')}
 		        </h3> 
 		        <p class="spl-main-description"> 
-		           ${_('A problem occurred while contacting SplunkApps.  If you have a copy of the app stored locally, click the button below to upload it directly to Splunk.')}
+		           ${_('A problem occurred while contacting Splunkbase.  If you have a copy of the app stored locally, click the button below to upload it directly to Splunk %s.' % productName)}
 		        </p> 
 		    </div> 
 		</div>

@@ -69,7 +69,6 @@ define([
 
             permissionsParams = {
                 collection: this.collection,
-                displayForControlClass: 'controls-thirdblock',
                 displayForLabel: _('Display For').t(),
                 showDispatchAs: this.options.showDispatchAs,
                 model: {

@@ -45,7 +45,7 @@ define(
                 this.children.caseRadio = new ControlGroup({
                     controlType: 'SyntheticRadio',
                     size: 'small',
-                    controlClass: 'controls-fill',
+
                     label: _('Case').t(),
                     controlOptions: {
                         modelAttribute: 'toUpper',

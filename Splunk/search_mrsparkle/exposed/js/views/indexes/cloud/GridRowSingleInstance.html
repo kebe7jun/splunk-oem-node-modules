@@ -40,15 +40,12 @@
 <td class="event-count" title="<%- splunkUtil.sprintf(_('%s events').t(), model.entity.entry.content.get("totalEventCount")) %>"><%- formatNumbersUtils.abbreviateNumber(model.entity.entry.content.get("totalEventCount")) %></td> <!-- Abbreviate number -->
 <td class="earliest-event" title="<%- formatToLocalTime(model.entity.entry.content.get("minTime")) %>"><%- formatToRelativeTime(model.entity.entry.content.get("minTime")) %></td> <!-- format into relative time -->
 <td class="latest-event" title="<%- formatToLocalTime(model.entity.entry.content.get("maxTime")) %>"><%- formatToRelativeTime(model.entity.entry.content.get("maxTime")) %></td><!-- format into relative time -->
-<td class="retention">
+<td class="searchable-retention" title='<%- model.entity.entry.content.get("frozenTimePeriodInSecs") %>'>
     <% var frozenTimePeriodInSecs = model.entity.entry.content.get("frozenTimePeriodInSecs");
-    var frozenTimePeriodInSecsDisplay = frozenTimePeriodInSecs === 0 ? _("keep indefinitely").t() : timeUtils.getRelativeStringFromSeconds(frozenTimePeriodInSecs);
+    var frozenTimePeriodInSecsDisplay = (frozenTimePeriodInSecs === 0) ? _("keep indefinitely").t() : timeUtils.getRelativeStringFromSeconds(frozenTimePeriodInSecs);
     %>
-    <%- frozenTimePeriodInSecsDisplay %></td> <!-- format into relative time -->
-
-<% if (user.canViewArchives()) { %>
-    <td class="archive"><%- model.entity.entry.content.get("archive.provider") %></td>
-<% } %>
+    <%- frozenTimePeriodInSecsDisplay %>
+</td> <!-- format into relative time -->
 
 <td class="index-status">
     <div class="status-cell-placeholder"></div>

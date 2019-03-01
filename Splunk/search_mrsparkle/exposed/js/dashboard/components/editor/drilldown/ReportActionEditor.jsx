@@ -1,5 +1,6 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ItemSelector from 'dashboard/components/shared/ItemSelector';
 import OpenInNewTab from 'dashboard/components/shared/OpenInNewTab';
 import { createTestHook } from 'util/test_support';

@@ -1,99 +1,130 @@
 /* @flow */
-"use strict"
+"use strict";
 
-const fs = require("fs")
-const lessSyntax = require("postcss-less")
-const path = require("path")
-const postcss = require("postcss")
-const scssSyntax = require("postcss-scss")
-const sugarssSyntax = require("sugarss")
-const dynamicRequire = require("./dynamicRequire")
+const autoSyntax = require("postcss-syntax");
+const dynamicRequire = require("./dynamicRequire");
+const fs = require("fs");
+const LazyResult = require("postcss/lib/lazy-result");
+const postcss = require("postcss");
 
-const postcssProcessor = postcss()
+const importLazy = require("import-lazy")(require);
+const syntaxes /*: {
+  [syntaxName: string]: postcss$syntax,
+}*/ = {
+  sugarss: importLazy("sugarss"),
+  css: {
+    stringify: postcss.stringify
+  }
+};
+["less", "sass", "scss", "markdown", "html", "styled", "jsx"].forEach(mod => {
+  syntaxes[mod] = importLazy("postcss-" + mod);
+});
 
-module.exports = function (stylelint/*: stylelint$internalApi*/)/*: Promise<?Object>*/ {
-  const options/*: {
+const postcssProcessor = postcss();
+
+module.exports = function(
+  stylelint /*: stylelint$internalApi*/
+) /*: Promise<?Object>*/ {
+  const options /*: {
     code?: string,
     codeFilename?: string,
     filePath?: string,
     codeProcessors?: Array<Function>,
     syntax?: stylelint$syntaxes,
     customSyntax?: string
-  }*/ = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
+  }*/ =
+    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  const cached/*: ?postcss$result*/ = stylelint._postcssResultCache.get(options.filePath)
-  if (cached) return Promise.resolve(cached)
+  const cached /*: ?postcss$result*/ = stylelint._postcssResultCache.get(
+    options.filePath
+  );
+  if (cached) return Promise.resolve(cached);
 
-  let getCode
+  let getCode;
   if (options.code !== undefined) {
-    getCode = Promise.resolve(options.code)
+    getCode = Promise.resolve(options.code);
   } else if (options.filePath) {
-    getCode = readFile(options.filePath)
+    getCode = readFile(options.filePath);
   }
 
   if (!getCode) {
-    throw new Error("code or filePath required")
+    throw new Error("code or filePath required");
   }
 
-  return getCode.then(code => {
-    const customSyntax = stylelint._options.customSyntax
-    let syntax = stylelint._options.syntax
+  return getCode
+    .then(code => {
+      const customSyntax = stylelint._options.customSyntax;
+      let syntax = stylelint._options.syntax;
 
-    if (customSyntax) {
-      try {
-        syntax = dynamicRequire(customSyntax)
-      } catch (e) {
-        throw new Error(`Cannot resolve custom syntax module ${customSyntax}`)
-      }
-    } else {
-      const fileExtension = path.extname(options.filePath || "")
-      if (syntax === "scss" || !syntax && fileExtension === ".scss") {
-        syntax = scssSyntax
-      } else if (syntax === "less" || !syntax && fileExtension === ".less") {
-        syntax = lessSyntax
-      } else if (syntax === "sugarss" || !syntax && fileExtension === ".sss") {
-        syntax = sugarssSyntax
+      if (customSyntax) {
+        try {
+          syntax = dynamicRequire(customSyntax);
+        } catch (e) {
+          throw new Error(
+            `Cannot resolve custom syntax module ${customSyntax}`
+          );
+        }
+        /*
+          * PostCSS allows for syntaxes that only contain a parser, however,
+          * it then expects the syntax to be set as the `parser` option rather than `syntax.
+          */
+        if (!syntax.parse) {
+          syntax = {
+            parse: syntax,
+            stringify: postcss.stringify
+          };
+        }
       } else if (syntax) {
-        throw new Error("You must use a valid syntax option, either: scss, less or sugarss")
+        syntax = syntaxes[syntax];
+        if (!syntax) {
+          throw new Error(
+            "You must use a valid syntax option, either: scss, sass, less or sugarss"
+          );
+        }
+      } else if (
+        !(options.codeProcessors && options.codeProcessors.length) ||
+        (options.filePath && /\.(scss|sass|less)$/.test(options.filePath))
+      ) {
+        syntaxes.css.parse = stylelint._options.fix
+          ? importLazy("postcss-safe-parser")
+          : postcss.parse;
+        syntax = autoSyntax(syntaxes);
       }
-    }
 
-    const postcssOptions/*: postcss$options*/ = {}
+      const postcssOptions /*: postcss$options*/ = {
+        from: options.filePath,
+        syntax
+      };
 
-    postcssOptions.from = options.filePath
+      const source = options.code ? options.codeFilename : options.filePath;
+      let preProcessedCode = code;
+      if (options.codeProcessors) {
+        options.codeProcessors.forEach(codeProcessor => {
+          preProcessedCode = codeProcessor(preProcessedCode, source);
+        });
+      }
 
-    /*
-     * PostCSS allows for syntaxes that only contain a parser, however,
-     * it then expects the syntax to be set as the `parser` option rather than `syntax.
-     */
-    if (syntax && !syntax.stringify) {
-      postcssOptions.parser = syntax
-    } else {
-      postcssOptions.syntax = syntax
-    }
+      const result = new LazyResult(
+        postcssProcessor,
+        preProcessedCode,
+        postcssOptions
+      );
 
-    const source = options.code ? options.codeFilename : options.filePath
-    let preProcessedCode = code
-    if (options.codeProcessors) {
-      options.codeProcessors.forEach(codeProcessor => {
-        preProcessedCode = codeProcessor(preProcessedCode, source)
-      })
-    }
+      return result;
+    })
+    .then(postcssResult => {
+      stylelint._postcssResultCache.set(options.filePath, postcssResult);
+      return postcssResult;
+    });
+};
 
-    return postcssProcessor.process(preProcessedCode, postcssOptions)
-  }).then(postcssResult => {
-    stylelint._postcssResultCache.set(options.filePath, postcssResult)
-    return postcssResult
-  })
-}
-
-function readFile(filePath/*: string*/)/*: Promise<string>*/ {
+function readFile(filePath /*: string*/) /*: Promise<string>*/ {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (err, content) => {
       if (err) {
-        return reject(err)
+        return reject(err);
       }
-      resolve(content)
-    })
-  })
+      resolve(content);
+    });
+  });
 }

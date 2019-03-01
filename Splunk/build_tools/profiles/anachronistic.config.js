@@ -26,9 +26,7 @@ module.exports = function(options) {
             return accum
         }, {});
 
-    return mergeConfigs(sharedConfig, postCssConfig({
-        loadTheme: 'enterprise'
-    }), {
+    return mergeConfigs(sharedConfig, postCssConfig(), {
         output: {
             path: path.join(SPLUNK_SOURCE, 'web/search_mrsparkle/exposed/js'),
             filename: '[name].js',

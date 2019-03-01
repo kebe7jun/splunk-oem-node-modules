@@ -6,9 +6,13 @@ define(
     [
         'jquery',
         'underscore',
+        'backbone',
         'module',
         'collections/services/AppLocals',
         'collections/indexes/cloud/Archives',
+        'collections/services/configs/conf-self-storage-locations/BucketList',
+        'models/indexes/cloud/Archiver',
+        'models/services/data/Archiver',
         'models/services/data/Indexes',
         'views/Base',
         'views/indexes/core/AddEditIndexDialog',
@@ -26,9 +30,13 @@ define(
     function (
         $,
         _,
+        Backbone,
         module,
         AppLocals,
         ArchivesCollection,
+        BucketListCollection,
+        ArchiverModel,
+        ArchiverSingleInstanceModel,
         IndexModel,
         BaseView,
         AddEditIndexDialogCore,
@@ -48,9 +56,12 @@ define(
         return BaseView.extend({
             template: template,
             moduleId: module.id,
-
+            className: 'input-settings-main input-settings-form-horizontal',
             initialize: function (options) {
                 BaseView.prototype.initialize.apply(this, arguments);
+
+                this.deferreds = {};
+
                 var serverName = this.model.serverInfo.getServerName();
 
                 this.isStackmakr = util.isStackmakr(this.model.dmcSettings.isEnabled(), this.model.serverInfo.isCloud());
@@ -63,6 +74,9 @@ define(
                     'ui.host': serverName
                 };
                 _.defaults(this.model.input.attributes, defaults);
+
+                this.model.stateModel = this.model.stateModel || new Backbone.Model();
+                this.model.stateModel.set('isArchiverAppInstalled', this.collection.appLocals.isArchiverAppInstalled());
 
                 // don't let appcontext be in system
                 if (this.model.input.get('appContext') === 'system') {
@@ -84,6 +98,8 @@ define(
                 var filteredAppLocals = this.collection.appLocalsUnfilteredAll.listOnlyWriteableAndNonInternalApps();
                 this.collection.filteredAppLocals = new AppLocals(filteredAppLocals);
 
+                this.collection.bucketList = new BucketListCollection();
+
                 this.children.waitSpinner = new WaitSpinner();
                 if (this.model.serverInfo.isCloud()){
                     this.children.waitSpinnerArchives = new WaitSpinner();
@@ -99,7 +115,6 @@ define(
                 this.children.sourcetypeSwitch = new ControlGroup({
                     className: 'sourcetype-switch control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-thirdblock',
                     controlOptions: {
                         modelAttribute: 'sourcetypeSwitch',
                         model: this.model.input,
@@ -132,7 +147,7 @@ define(
                 this.children.sourcetypeManual = new ControlGroup({
                     className: 'sourcetype control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.sourcetype',
                         model: this.model.input,
@@ -143,12 +158,12 @@ define(
                 this.children.sourcetypeCategory = new ControlGroup({
                     className: 'sourcetype-category control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.category',
                         model: this.model.sourcetype,
                         items: this.collection.sourcetypesCollection.getCategories(),
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'narrow',
                         toggleClassName: 'btn'
                     },
@@ -157,7 +172,7 @@ define(
                 this.children.sourcetypeDescription = new ControlGroup({
                     className: 'sourcetype-desc control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.description',
                         model: this.model.sourcetype,
@@ -169,12 +184,12 @@ define(
                 this.children.context = new ControlGroup({
                     className: 'context control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'appContext',
                         model: this.model.input,
                         items: this.buildAppItems(),
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         toggleClassName: 'btn'
                     },
                     label: _('App Context').t()
@@ -186,6 +201,7 @@ define(
                     controlOptions: {
                         modelAttribute: 'hostSwitch',
                         model: this.model.input,
+                        showAsButtonGroup: false,
                         items: [
                             {
                                 label: _('Constant value').t(),
@@ -208,7 +224,6 @@ define(
                 this.children.hostSwitchNet = new ControlGroup({
                     className: 'host-switch-net control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-thirdblock',
                     controlOptions: {
                         modelAttribute: 'ui.connection_host',
                         model: this.model.input,
@@ -234,7 +249,7 @@ define(
                 this.children.host = new ControlGroup({
                     className: 'host control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.host',
                         model: this.model.input,
@@ -245,19 +260,19 @@ define(
                 this.children.hostRegex = new ControlGroup({
                     className: 'host_regex control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.host_regex',
                         model: this.model.input,
                         save: false
                     },
-                    tooltip: _('Specify the regular expression Splunk uses to extract host names from the source path.').t(),
+                    tooltip: _('Specify the regular expression the Splunk platform uses to extract host names from the source path.').t(),
                     label: _('Regular expression').t()
                 });
                 this.children.hostSegment = new ControlGroup({
                     className: 'host_segment control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.host_segment',
                         model: this.model.input,
@@ -378,17 +393,33 @@ define(
                         modelAttribute: 'ui.index',
                         model: this.model.input,
                         items: this.indexes,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'wide',
-                        toggleClassName: 'btn'
+                        toggleClassName: 'btn',
+                        popdownOptions: {
+                            minMargin: 120
+                        }
                     },
                     label: (this.model.wizard.get('inputType') === 'http') ? _('Default Index').t() : _('Index').t()
                 });
+
+                $('.layoutBodyColumns').on('scroll', this.windowScroll.bind(this));
 
                 this.children.waitSpinner.stop();
                 this.children.waitSpinner.remove();
 
                 this.$('#index_placeholder').prepend(this.children.index.render().el);
+            },
+
+            /** Popdown will adjust position if popdown touches the header SPL-148286 */
+            windowScroll: function(e) {
+                if (this.children.index && this.children.index.childList && this.children.index.childList[0] &&
+                    this.children.index.childList[0].children && this.children.index.childList[0].children.popdown) {
+                    var popdown = this.children.index.childList[0].children.popdown;
+                    if (popdown && popdown.children && popdown.children.delegate && popdown.children.delegate.isShown) {
+                        popdown.adjustPosition();
+                    }
+                }
             },
 
             updateAvailableIndexes: function() {
@@ -403,7 +434,7 @@ define(
                 this.children.allowedIndexes = new ControlGroup({
                     className: 'allowed-indexes control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.indexes',
                         model: this.model.input,
@@ -446,7 +477,6 @@ define(
                 var mode = this.model.input.get('sourcetypeSwitch'),
                     $controls = this.$('.sourcetype-switch .controls'),
                     $btns = $controls.find('.btn-group');
-                $controls.removeClass('controls-halfblock').addClass('controls-thirdblock');
                 $btns.removeClass('hidden-button');
                 this.children.sourcetype.$el.hide();
                 this.children.sourcetypeManual.$el.hide();
@@ -461,7 +491,6 @@ define(
                 }
                 if (['tcp','udp','scripts'].indexOf(this.model.wizard.get('inputType')) > -1) {
                     this.$('button[data-value=auto]').hide();
-                    $controls.removeClass('controls-thirdblock').addClass('controls-halfblock');
                     $btns.addClass('hidden-button');
                 }
                 if (this.model.wizard.get('inputType') === 'http' && this.isStackmakr) {
@@ -470,30 +499,65 @@ define(
             },
 
             showAddEditDialog: function() {
+                var dialogOptions = {};
+                dialogOptions.collection = {};
+
                 var isCloud = this.model.serverInfo.isCloud();
+                var archiverModelClass = this.options.isSingleInstanceCloud ? ArchiverSingleInstanceModel : ArchiverModel;
                 var dialogClass = isCloud ? AddEditIndexDialogCloud : AddEditIndexDialogCore;
                 this.collection.archives = isCloud ? new ArchivesCollection() : null;
 
-                var archivesDeferred = this.fetchArchivesCollection();
-
-                $.when(archivesDeferred).then(_(function() {
+                $.when(this.fetchArchivesCollection()).then(_(function() {
                     if (this.children.waitSpinnerArchives){
                         this.children.waitSpinnerArchives.stop();
                         this.children.waitSpinnerArchives.$el.hide();
                     }
-                    var dialogOptions = {
-                        isNew: true,
-                        model: {
-                            application: this.model.application,
-                            user: this.model.user
-                        },
-                        collection: {
-                            appLocals: this.collection.filteredAppLocals,
-                            archives: this.collection.archives
-                        },
-                        // TODO [JCS] For clustered cloud, we need to pass in the cloud index model
-                        entityModelClass: IndexModel
+
+                    dialogOptions.isNew = true;
+                    dialogOptions.model = {
+                        application: this.model.application,
+                        user: this.model.user,
+                        stateModel: this.model.stateModel,
+                        entity: new IndexModel()
                     };
+
+                    dialogOptions.collection.appLocals = this.collection.filteredAppLocals;
+                    dialogOptions.collection.archives = this.collection.archives;
+                    dialogOptions.archiverModelClass = archiverModelClass;
+                    // TODO: Enclose the below in an if-block once the backend is ready 
+                    dialogOptions = $.extend(dialogOptions, {
+                        SELF_STORAGE: 'SelfStorage',
+                        ARCHIVE: 'Archive',
+                        NONE: 'None'
+                    });
+
+                    if (isCloud && !_.isUndefined(this.model.stateModel.get('isArchiverAppInstalled'))) {
+                        this.model.stateModel.set('isSelfStorage', false);
+                        // fetch bucketlist when showAddEditDialog is called instead of constructor
+                        // to avoid fetching bucketlist if not needed
+                        this.deferreds.bucketList = new $.Deferred();
+                        dialogOptions.collection.bucketList = this.collection.bucketList;
+                        dialogOptions.deferreds = {
+                            bucketList: this.deferreds.bucketList
+                        };
+                        this.collection.bucketList.fetch({
+                            data: {
+                                count: -1,
+                                owner: this.model.application.get('owner'),
+                                app: this.model.application.get('app')
+                            },
+                            success: _(function (collection, response) {
+                                if (collection.length > 0) {
+                                    this.model.stateModel.set('selfStorageConfigured', true);
+                                } else {
+                                    this.model.stateModel.set('selfStorageConfigured', false);
+                                }
+                                this.deferreds.bucketList.resolve();
+                            }).bind(this)
+                        });
+                        this.model.stateModel.set('archiverAppLabel', this.collection.appLocals.archiverAppLabel());
+                    }
+
                     this.children.editIndexDialog = new dialogClass(dialogOptions);
                     this.listenTo(this.children.editIndexDialog, "entitySaved", this.onIndexSaved);
                     this.listenTo(this.children.editIndexDialog, "hidden", this.onSaveDialogHidden);
@@ -555,16 +619,16 @@ define(
             faqList: [
                 {
                     question: _('How do indexes work?').t(),
-                    answer: _('Indexes are repositories for data in Splunk, and reside in flat files on the \
-                    Splunk instance known as the indexer. When Splunk indexes raw event data, \
-                    it transforms the data into searchable events and stores those events in the index.').t()
+                    answer: _('Indexes are repositories for data in the Splunk platform, and reside in flat files on the ' +
+                    'Splunk platform instance known as the indexer. When the Splunk platform indexes raw event data, ' +
+                    'it transforms the data into searchable events and stores those events in the index.').t()
                 },
                 {
                     question: _('How do I know when to create or use multiple indexes?').t(),
-                    answer: _('When you add data to Splunk, consider creating indexes for specific purposes \
-                    or domains of data that might require different access privileges, retention periods, or logical \
-                    groupings. For optimal performance, limit the number of source types contained within an index to \
-                    fewer than 20 if possible.').t()
+                    answer: _('When you add data to the Splunk platform, consider creating indexes for specific purposes ' +
+                    'or domains of data that might require different access privileges, retention periods, or logical ' +
+                    'groupings. For optimal performance, limit the number of source types contained within an index to ' +
+                    'fewer than 20 if possible.').t()
                 }
             ],
 

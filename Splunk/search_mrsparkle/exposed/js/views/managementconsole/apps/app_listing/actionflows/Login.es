@@ -59,11 +59,9 @@ export default LoginView.extend({
         'Splunk is not responsible for any third-party app and does not provide any warranty or support. ' +
         'If you have any questions, complaints or claims with respect to an app, please contact the applicable ' +
         'licensor directly whose contact information can be found on the Splunkbase download page.").t() %></p>' +
-        '<a target="_blank" class="license-agreement" id="splunk-base-link"></a></br> ' +
-        '<a target="_blank" class="license-agreement" id="app-license"></a></br> ' +
-        '<a target="_blank" class="license-agreement" id="cloud-terms-conditions" ' +
-        'href="https://www.splunk.com/en_us/legal/terms/splunk-cloud-terms-of-service.html">' +
-        '<%- _("Splunk Cloud Terms of Service").t() %></a></br> ' +
+        '<p class="rights"><a target="_blank" class="license-agreement" id="splunk-base-link"></a>' +
+        '<%- _(" is governed by the following license: ").t() %>' +
+        '<a target="_blank" class="license-agreement" id="app-license"></a></p>' +
         '<div class="consent-placeholder"></div> ' +
         '</div>',
 });

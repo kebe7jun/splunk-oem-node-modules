@@ -12,7 +12,7 @@
         float: left;
         margin-right: 5px;
     }
-    
+
     .summary-count {
         .warning-no-results {
             margin-top: -5px;
@@ -24,7 +24,7 @@
     }
 
     .btn-group >.btn-pill {
-        font-size: $baseFontSizeSmall
+        font-size: $fontSizeSmall
     }
 
     .status, .table-count {
@@ -32,16 +32,16 @@
         padding-left: 10px;
 
         .icon-warning, .icon-warning-paused {
-            color: $yellow;
+            color: $warningColor;
             font-size: 200%;
             display: inline-block;
             margin-right: 3px;
             vertical-align: middle;
             line-height: 16px;
         }
-        
+
         .icon-alert {
-            color: $red;
+            color: $errorColor;
             font-size: 200%;
             display: inline-block;
             margin-right: 3px;
@@ -50,7 +50,7 @@
         }
 
         .icon-check {
-            color: $splunkGreen;
+            color: $successColor;
         }
     }
 }

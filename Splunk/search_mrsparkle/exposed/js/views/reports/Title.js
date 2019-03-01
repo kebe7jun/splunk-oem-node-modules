@@ -28,7 +28,7 @@ define(
                 return this;
             },
             template: '\
-                <h2 class="section-title"><i class="icon-report"></i> <%- title %></h2>\
+                <h2 class="section-title"><%- title %></h2>\
                 <p class="section-description">\
                     <% if (isLite) { %>\
                         <%- _("Reports are based on single searches and can include visualizations, statistics and/or events.").t() %>\

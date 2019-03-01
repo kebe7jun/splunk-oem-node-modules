@@ -31,7 +31,7 @@ function(
 
             this.children.flashMessages = new FlashMessages({
                 helperOptions: {
-                    postProcess: function(errors){
+                    postProcess: function(errors) {
                         if(errors && errors.length > 0 ){
                             var realErrors = [];
                             for(var i = 0, len = errors.length;i<len;i++){
@@ -68,13 +68,22 @@ function(
                 controlOptions: {
                     model: this.model.sourcetypeModel.entry.content,
                     modelAttribute: 'description',
-                    className: 'fieldDesc',
+                    additionalClassNames: 'fieldDesc',
                     save: false,
                     updateModel: false
                 }
             });
 
             var categoryItems = this.buildCategoryItems();
+            var selectedCategory = this.model.sourcetypeModel.entry.content.get('category');
+            if (selectedCategory !== 'Log to Metrics') {
+                var logToMetricsIndex = categoryItems.map(function(e) {
+                    return e.value;
+                }).indexOf('Log to Metrics');
+                if (logToMetricsIndex >= 0) {
+                    categoryItems.splice(logToMetricsIndex, 1);
+                }
+            }
             this.children.categorySelect = new ControlGroup({
                 label: _('Category').t(),
                 controlType: 'SyntheticSelect',
@@ -82,7 +91,7 @@ function(
                     model: this.model.sourcetypeModel.entry.content,
                     modelAttribute: 'category',
                     items: categoryItems,
-                    className: 'fieldCategorySelect',
+                    additionalClassNames: 'fieldCategorySelect',
                     toggleClassName: 'btn',
                     popdownOptions: {
                         attachDialogTo: 'body'
@@ -100,7 +109,7 @@ function(
                     model: this.model.sourcetypeModel.entry.acl,
                     modelAttribute: 'app',
                     items: appItems,
-                    className: 'fieldAppSelect',
+                    additionalClassNames: 'fieldAppSelect',
                     toggleClassName: 'btn',
                     popdownOptions: {
                         attachDialogTo: 'body'
@@ -142,18 +151,57 @@ function(
         buildCategoryItems: function(){
             return this.collection.sourcetypesCollection.getCategories();
         },
-        save: function(){
+        save: function(done) {
+            var selectedCategory = this.children.categorySelect.childList[0].getValue();
+            var isCategoryLogToMetrics = selectedCategory === 'Log to Metrics';
+            if (!isCategoryLogToMetrics) {
+                this.saveSourcetype(isCategoryLogToMetrics, done);
+                return;
+            }
+            var sourcetypeModel = this.model.sourcetypeModel;
+            var metricTransformsModel = this.model.metricTransformsModel;
+            this.children.flashMessages.register(metricTransformsModel);
+            var saveDfd = metricTransformsModel.save({}, {}, { sourcetypeModel: sourcetypeModel });
+            if (saveDfd) {
+                saveDfd.done(function() {
+                    // Remove timeout after SPL-157987 is fixed
+                    setTimeout(function() {
+                        this.saveSourcetype(isCategoryLogToMetrics, done);
+                    }.bind(this), 2000);
+                }.bind(this))
+                .fail(function() {
+                    done();
+                }.bind(this));
+            }
+        },
+        saveSourcetype: function(isCategoryLogToMetrics, done) {
             var self = this;
-            var sourcetypeName = this.children.sourcetypeName.childList[0].getValue();
+            var saveOptions = {};
             var app = this.children.appSelect.childList[0].getValue();
             var owner = 'nobody';
+            saveOptions.data = {
+                app: app,
+                owner: owner
+            };
+
+            var schemaName = this.model.metricTransformsModel.get('name') || this.model.sourcetypeModel.get('ui.metric_transforms.schema_name');
+            if (schemaName && schemaName.includes('metric-schema:')) {
+                schemaName = schemaName.split('metric-schema:')[1];
+            }
+            if (!isCategoryLogToMetrics && schemaName) {
+                this.model.sourcetypeModel.set('ui.metric_transforms.schema_name', '');
+            } else if (schemaName) {
+                this.model.sourcetypeModel.set({'ui.metric_transforms.schema_name': 'metric-schema:' + schemaName});
+            }
 
             var propsToSave = this.model.sourcetypeModel.getExplicitProps();
+
             propsToSave.pulldown_type = 'true';
             propsToSave.description = this.children.description.childList[0].getValue();
             propsToSave.category = this.children.categorySelect.childList[0].getValue();
 
             var newModel = new SourcetypeModel();
+            var sourcetypeName = this.children.sourcetypeName.childList[0].getValue();
             newModel.entry.set('name', sourcetypeName);
             newModel.entry.acl.set('app', app);
             newModel.entry.content.set(propsToSave);
@@ -161,21 +209,26 @@ function(
 
             this.children.flashMessages.register(newModel);
             if (!newModel.entry.isValid(true)) {
+                done();
                 return;
             }
 
-            newModel.save({}, {data: {
-                app: app,
-                owner: owner
-            }})
-                .done(function(){
+            var saveDfd = newModel.save({}, saveOptions);
+            if (saveDfd) {
+                saveDfd.done(function(){
+                    var schemaNameExists = !_.isEmpty(schemaName);
+                    if (!isCategoryLogToMetrics && schemaNameExists) {
+                        this.model.metricTransformsModel.deleteMetricTransform(schemaName, this.model.sourcetypeModel);
+                    }
                     self.onSaveDone.apply(self, [newModel]);
-                })
+                    done();
+                }.bind(this))
                 .fail(function(jqXhr){
-                    if(parseInt(jqXhr.status, 10) === 409){
+                    if (parseInt(jqXhr.status, 10) === 409) {
                         //409 is splunkd telling us we have name conflict.
                         self.confirmOverwrite(sourcetypeName, function(confirmed){
-                            if(!confirmed){
+                            if (!confirmed) {
+                                done();
                                 return;
                             }
                             //TODO must overwrite with the same app TODO
@@ -187,12 +240,22 @@ function(
                                 .save({data:{
                                     app: app,
                                     owner: owner
-                                }}).done(function(){
+                                }}).done(function() {
                                     self.onSaveDone.apply(self, [newModel]);
-                                });
+                                    done();
+                                }).fail(function() {
+                                    this.model.metricTransformsModel.deleteMetricTransform(schemaName, this.model.sourcetypeModel);
+                                    done();
+                                }.bind(this));
                         });
+                    } else {
+                        if (isCategoryLogToMetrics) {
+                            this.model.metricTransformsModel.deleteMetricTransform(schemaName, this.model.sourcetypeModel);
+                        }
+                        done();
                     }
-                });
+                }.bind(this));
+            }
         },
         onSaveDone: function(newModel){
             var id = newModel && newModel.entry && newModel.entry.get('name');

@@ -81,13 +81,14 @@ define(
                 });
             },
 
-            render: function () {
+            render: function (permission) {
+                var hasPermission = (typeof permission === 'undefined') ? this.collection.appLocals.links.get('create') : permission;
                 var appId = this.model.appRemote.get('appid'),
                     localApp = this.collection.appLocals.findByEntryName(appId),
                     // unfiltered collection includes not visible apps
                     localAppUnfiltered = this.collection.appLocalsUnfiltered.findByEntryName(appId),
                     appContent = {};
-                if ( !this.collection.appLocals.links.get('create') ) { // user does not have permission
+                if ( !hasPermission ) { // user does not have permission
                     appContent['link'] = route.splunkbaseApp(this.model.appRemote.get('uid'));
                     appContent['buttonText'] = _('View on Splunkbase').t();
                     appContent['buttonClass'] = 'more-info';

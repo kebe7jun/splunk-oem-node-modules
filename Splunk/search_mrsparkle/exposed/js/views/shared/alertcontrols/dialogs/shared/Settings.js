@@ -45,7 +45,7 @@ define(
          *     },
          *     mode: <String> 'edit' | 'create'. Default 'create'
          *     showSearch: <Boolean> Whether to show the search field. Default false.
-         *     showSearchField: <Boolean> Whether to show an editable search field. Default false. 
+         *     showSearchField: <Boolean> Whether to show an editable search field. Default false.
          *     showAppSelector: <Boolean> Whether to show an app selector.
          * }
          */
@@ -63,7 +63,6 @@ define(
             if (this.options.showSearch) {
                 this.children.search = new ControlGroup({
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         defaultValue: this.model.alert.entry.content.get('search'),
                         enabled: false,
@@ -76,7 +75,6 @@ define(
             if (this.options.mode === 'create') {
                 this.children.name = new ControlGroup({
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'name',
                         model: this.model.alert.entry.content,
@@ -88,7 +86,6 @@ define(
                 var permissionLabel = (this.model.user.canUseApps()) ? _('Shared in App').t() : _('Shared').t();
                 this.children.permission = new ControlGroup({
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'ui.permissions',
                         model: this.model.alert.entry.content,
@@ -102,7 +99,6 @@ define(
             } else {
                 this.children.name = new ControlGroup({
                     controlType: 'Label',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'name',
                         model: this.model.alert.entry
@@ -113,14 +109,13 @@ define(
 
             this.children.descriptionField = new ControlGroup({
                 controlType: 'Textarea',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'description',
                     model: this.model.alert.entry.content,
                     placeholder: _('Optional').t()
                 },
                 label: _('Description').t()
-            });            
+            });
 
             if (this.options.showSearchField) {
                 this.children.searchField = new SearchInputView({
@@ -143,7 +138,6 @@ define(
                     this.children.selectApp = new ControlGroup({
                         label: _("App").t(),
                         controlType: 'SyntheticSelect',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: "app",
                             model: this.model.alert.entry.acl,
@@ -161,7 +155,6 @@ define(
             if (this.model.user.canRTSearch()) {
                 this.children.type = new ControlGroup({
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'ui.type',
                         model: this.model.alert.entry.content,
@@ -240,7 +233,8 @@ define(
         },
         setLabel: function() {
             var timeLabel = this.model.alert.workingTimeRange.generateLabel(this.collection.times);
-            this.$el.find("span.time-label").text(timeLabel);
+            this.$('a.timerange-control').attr('aria-label', _('Time Range').t() + ':' + timeLabel);
+            this.$("span.time-label").text(timeLabel);
         },
         render: function() {
             this.$el.html(this.compiledTemplate({
@@ -271,9 +265,9 @@ define(
             this.children.type.render().appendTo(this.$el);
             this.children.scheduleSentenceView.render().appendTo(this.$el);
             var $customTime = this.children.scheduleSentenceView.$el.find('.custom_time');
-            
+
             $customTime.prepend('<div class="control-group timerange" style="display: block;"><label class="control-label">' + _('Time Range').t() + '</label></div>');
-            this.$('div.timerange').append('<div class="controls controls-block"><a href="#" class="btn timerange-control"><span class="time-label"></span><span class="icon-triangle-right-small"></span></a></div>');
+            this.$('div.timerange').append('<div class="controls controls-fill"><a href="#" class="btn timerange-control" style="width: 100%;"><span class="time-label"></span><span class="icon-triangle-right-small"></span></a></div>');
 
             this.setLabel();
             this.toggleScheduleSentence();

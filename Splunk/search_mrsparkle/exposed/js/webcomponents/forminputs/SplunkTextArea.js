@@ -22,6 +22,8 @@ define([
             value: function() {
                 InputBase.attachedCallback.apply(this, arguments);
 
+                var $el = $(this);
+
                 this.view = new TextAreaControl({
                     el: this,
                     model: this.model,
@@ -30,6 +32,8 @@ define([
                     pattern: this.model.get('pattern')
                 });
                 this.view.render();
+
+                $el.addClass('control');
             }
         },
 

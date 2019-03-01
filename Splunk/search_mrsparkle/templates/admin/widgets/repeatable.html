@@ -57,7 +57,7 @@ settings = jsonify({'prefix': prefix, 'mincount': element.get('mincount', 0), 'm
     % if 'label' in element:
         <label for="${element['elementName']}._id">${_(element['label']) | h}</label>
     % endif
-    % if 'exampleText' in element and not isLite:
+    % if 'exampleText' in element:
         <p class="exampleText"><em>${_(element['exampleText']) | extract_help_links }</em></p>
     % endif
     <div>
@@ -95,9 +95,6 @@ settings = jsonify({'prefix': prefix, 'mincount': element.get('mincount', 0), 'm
                 <%include file="/admin/widgets/${widget}.html" args="element=subelement, eaiAttributes={}, widgetstyle=''" />
             </div>
             <p class="addField"><a href="#" class="addnew">${_('Add another field') | h}</a></p>
-            % if 'exampleText' in element and isLite:
-                <p class="exampleText"><em>${_(element['exampleText']) | extract_help_links }</em></p>
-            % endif
         % endif
     </div>
 </div>

@@ -7,7 +7,8 @@ define(
         'dashboard/DashboardParser',
         'dashboard/DashboardFactory',
         'views/dashboard/editor/addcontent/list/items/PanelItem',
-        'splunk.util'
+        'splunk.util',
+        './DashboardItem.pcssm'
     ],
     function(module,
              $,
@@ -16,12 +17,13 @@ define(
              Parser,
              Factory,
              PanelItem,
-             SplunkUtil) {
-        
+             SplunkUtil,
+             css) {
+
         var DashboardItem = BaseView.extend({
             moduleId: module.id,
             tagName: 'li',
-            className: 'dashboard-list-item panel-content',
+            className: css.item,
             initialize: function(options) {
                 BaseView.prototype.initialize.apply(this, arguments);
                 this.id = options.id || _.uniqueId('dashboard_');
@@ -46,7 +48,7 @@ define(
                         this.children[panelItem.id] = panelItem;
                     }, this);
                 } catch (e) {
-                    var $error = $('<li class="dashboard-panel-list-item parser-error"><a><i class="icon-warning-sign"></i> ' + _("Error parsing dashboard!").t() + '</a></li>').appendTo($ul);
+                    var $error = $('<li class="' + css.item + ' parser-error"><a style="padding-left: 48px;"><i class="icon-warning-sign"></i> ' + _("Error parsing dashboard!").t() + '</a></li>').appendTo($ul);
                     $error.attr('title', 'Error: ' + e.message);
                     $error.tooltip({
                         template: '<div class="tooltip add-content-name"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
@@ -70,6 +72,7 @@ define(
                     title: _(this.label).t(),
                     id: this.id
                 }));
+                this.$el.attr('data-role', 'panel-content');
                 this._renderTooltip();
                 this.collapse(); // collapse by default
                 return this;

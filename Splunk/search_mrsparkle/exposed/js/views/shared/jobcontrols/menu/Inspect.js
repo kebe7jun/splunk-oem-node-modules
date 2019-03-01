@@ -34,11 +34,11 @@ define(['underscore', 'module', 'views/Base', 'uri/route', 'splunk.window'], fun
         },
 
         disableInspect : function(){
-            this.$('.job-inspect').addClass('disabled');
+            this.$('.job-inspect').addClass('disabled').attr('aria-disabled', 'true');
         },
 
         render: function() {
-            this.$el.html('<a class="job-inspect" href="#">' + _('Inspect Job').t() + '</a>');
+            this.$el.html('<a class="job-inspect" aria-disabled="false" href="#">' + _('Inspect Job').t() + '</a>');
             return this;
         }
     });

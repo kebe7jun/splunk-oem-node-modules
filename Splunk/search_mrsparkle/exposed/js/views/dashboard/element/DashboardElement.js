@@ -252,7 +252,29 @@ define([
             this.children.footer.render().$el.appendTo(this.$el);
             this._updateVizTypeClass();
             this.onModeChange();
+            this.setupActiveStateHandler();
             return this;
+        },
+        setupActiveStateHandler: function() {
+            this.$el.attr('tabindex', 0);
+            this.$el.hover(this.activate.bind(this), this.deActivate.bind(this));
+            this.$el.focusin(this.activate.bind(this));
+            this.$el.focusout(function(e) {
+                // if there're no menus, deactivate when focus move out from current dom,
+                // otherwise deactivate when focus move out from last menu
+                var lastPanelMenu = this.$el.find('.btn-pill:not(.hidden)').last()[0];
+                if (lastPanelMenu == null && this.$el[0] === $(e.target)[0]) {
+                    this.deActivate();
+                } else if (lastPanelMenu === $(e.target)[0]) {
+                    this.deActivate();
+                }
+            }.bind(this));
+        },
+        activate: function() {
+            this.$el.addClass('active');
+        },
+        deActivate: function() {
+            this.$el.removeClass('active');
         },
         onModeChange: function() {
             this.$el.trigger('elementVisibilityChanged');

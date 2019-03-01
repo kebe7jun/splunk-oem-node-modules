@@ -201,9 +201,11 @@ define(
                     <% var i = 0, len = actions.length %>\
                     <% for(i; i<len; i++) { %>\
                         <% var attrs = getTransformedAttrs.call(that, collection.at(actions[i])); %>\
-                        <li>\
-                            <a class="actions" href="#" data-target="<%- "_"+(attrs["link.target"] || attrs["search.target"]) %>" data-idx="<%- that.actions[i] %>" data-type="<%-attrs["type"] %>"><%- _(trim(attrs["label"], 100)).t() %></a>\
-                        </li>\
+                        <% if (attrs["label"] !== undefined) { %>\
+                            <li>\
+                                <a class="actions" href="#" data-target="<%- "_"+(attrs["link.target"] || attrs["search.target"]) %>" data-idx="<%- that.actions[i] %>" data-type="<%-attrs["type"] %>"><%- _(trim(attrs["label"], 100)).t() %></a>\
+                            </li>\
+                        <% } %>\
                     <% } %>\
                 </ul>\
             '

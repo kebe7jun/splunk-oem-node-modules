@@ -1,3 +1,5 @@
+$dataRebalanceControlGroupWidth: 490px;
+$dataRebalanceControlLabelWidth: 110px;
 .clustering-config-datarebalance {
 
     .control-group {
@@ -6,14 +8,14 @@
 
     .control-label {
         display: inline-block;
-        width: 100px;
+        width: $dataRebalanceControlLabelWidth;
         margin-right: 10px;
     }
 
-    .controls-block {
+    .controls {
         display: inline-block;
         height: 15px;
-        width: 150px;
+        width: calc($dataRebalanceControlGroupWidth - $dataRebalanceControlLabelWidth);
     }
 
     .starting-button {

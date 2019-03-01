@@ -44,6 +44,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -146,6 +147,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -248,6 +250,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -350,6 +353,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -452,6 +456,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -555,6 +560,7 @@ var FULL_INDEXES_LIST =
             "sharing": "app"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -657,6 +663,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -759,6 +766,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -862,6 +870,7 @@ var FULL_INDEXES_LIST =
             "sharing": "app"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -965,6 +974,7 @@ var FULL_INDEXES_LIST =
             "sharing": "app"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -1067,6 +1077,7 @@ var FULL_INDEXES_LIST =
             "sharing": "app"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -1169,6 +1180,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -1267,6 +1279,7 @@ var FULL_INDEXES_LIST =
             "sharing": "system"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",
@@ -1370,6 +1383,7 @@ var FULL_INDEXES_LIST =
             "sharing": "app"
         },
         "content": {
+            "archiver.selfStorageBucket": "test",
             "assureUTF8": false,
             "blockSignSize": 0,
             "blockSignatureDatabase": "_blocksignature",

@@ -13,20 +13,16 @@
     <% } %>
     <% if (isInternal) { %>
     <span class="disabled-action"><%= _("Delete").t() %></span>
-    <% if (isEnabled) { %>
-    <span class="disabled-action"><%= _("Disable").t() %></span>
-    <% } else { %>
-    <span class="disabled-action"><%= _("Enable").t() %></span>
-    <% } %>
     <% } else { %>
     <% if (isEnabled) { %>
     <a href="#" class="deleteAction"><%= _("Delete").t() %></a>
-    <a href="#" class="disableAction"><%= _("Disable").t() %></a>
     <% } else { %>
     <span class="disabled-action"><%= _("Delete").t() %></span>
-    <a href="#" class="enableAction"><%= _("Enable").t() %></a>
     <% } %>
     <% } %>
+    <% if (archiverAppInstalled && isDataArchiveEnabled && hasArchive) { %>
+        <a href="#" class="retrieve-action"><%= _('Restore').t() %></a>
+    <% } %> 
 </td>
 <td class="index-type">
     <i class="icon-<%-model.entity.getDataType()%> icon-large"></i>
@@ -40,14 +36,16 @@
 <td class="event-count" title="<%- splunkUtil.sprintf(_('%s events').t(), model.entity.entry.content.get("totalEventCount")) %>"><%- formatNumbersUtils.abbreviateNumber(model.entity.entry.content.get("totalEventCount")) %></td> <!-- Abbreviate number -->
 <td class="earliest-event" title="<%- formatToLocalTime(model.entity.entry.content.get("minTime")) %>"><%- formatToRelativeTime(model.entity.entry.content.get("minTime")) %></td> <!-- format into relative time -->
 <td class="latest-event" title="<%- formatToLocalTime(model.entity.entry.content.get("maxTime")) %>"><%- formatToRelativeTime(model.entity.entry.content.get("maxTime")) %></td><!-- format into relative time -->
-<td class="retention">
+<td class="searchable-retention" title='<%- model.entity.entry.content.get("frozenTimePeriodInSecs") %>'>
     <% var frozenTimePeriodInSecs = model.entity.entry.content.get("frozenTimePeriodInSecs");
-        var frozenTimePeriodInSecsDisplay = frozenTimePeriodInSecs === 0 ? _("keep indefinitely").t() : timeUtils.getRelativeStringFromSeconds(frozenTimePeriodInSecs);
+    var frozenTimePeriodInSecsDisplay = (frozenTimePeriodInSecs) === 0 ? _("keep indefinitely").t() : timeUtils.getRelativeStringFromSeconds(frozenTimePeriodInSecs, true);
     %>
     <%- frozenTimePeriodInSecsDisplay %></td> <!-- format into relative time -->
 
-<% if (user.canViewArchives()) { %>
-    <td class="archive"><%- model.entity.entry.content.get("archive.provider") %></td>
+<% if (archiverAppInstalled) { %>
+    <td class="storage-type" title='<%- storageType %>'>
+        <%- storageType %>
+    </td>
 <% } %>
 
 <td class="index-status">

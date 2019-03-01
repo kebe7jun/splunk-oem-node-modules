@@ -10,7 +10,6 @@ var entryPath = path.join(process.env.SPLUNK_SOURCE, 'web', 'build_tools', 'prof
 module.exports = function(options) {
     var outputPath = path.join(process.env.SPLUNK_SOURCE, 'web', 'search_mrsparkle', 'exposed', 'build', 'simplexml');
     return mergeConfigs(sharedConfig, _.merge({}, options, postCssConfig({
-        loadTheme: 'enterprise',
         profileName: 'simplexml'
     })), {
         output: {

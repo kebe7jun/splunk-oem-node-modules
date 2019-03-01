@@ -9,9 +9,9 @@
 */
 
 
-.visualization-controls{
+.visualization-controls {
 
-	.popdown{
+	.popdown {
 		width: 88px; /* TODO: Fix css so this width is not set and right side of btn-pill is not clipped */
 	}
 
@@ -25,7 +25,7 @@
     margin-left: 0;
 
     .link-label {
-        margin-left: 2px;
+        margin-left: 4px;
     }
 }
 
@@ -41,16 +41,25 @@ $noTabsLabelWidth: 100px;
 $tabsLeftWidth: 98px;
 $labelLeftSpace: 10px;
 
-.input-append.delta-time-range {
-  display: inline-block;
-  > .dropdown-toggle {
-	width: 90px;
-	padding: 4px 12px;
-  }
-  > input[type="text"] {
-	width: 111px;
+.delta-time-range.delta-time-range-amount {
+  flex-basis: 40%;
+
+  > input {
+    width: 100%;
   }
 }
+
+.delta-time-range.delta-time-range-unit {
+  flex-basis: 60%;
+
+  .btn {
+	width: 100%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+	margin-left: -1px;
+  }
+}
+
 
 .single-value-radio-icon-group label {
 	margin-top: 3px;
@@ -60,92 +69,77 @@ $labelLeftSpace: 10px;
 
 .color-bin-container {
 
-    margin-left: 100px;
-    padding-top: 2px;
+    margin-left: 120px;
+    padding-top: 5px;
     margin-bottom: 10px;
 
     .color-bin {
         border-width: 1px;
         border-style: solid;
         display: inline-block;
-        width: 12px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
     }
 }
 
 .input-append .btn-link {
-	font-size: $baseFontSize;
+	font-size: $fontSize;
 	vertical-align: middle;
 	margin: 5px;
 }
 
-/*  new color range grouping */
-/*  FIXME: lots of magic numbers here */
 .shared-vizcontrols-format-dialog, .form-horizontal
 {
+  .label-rotation-alignment {
+    vertical-align: baseline;
+  }
   .delta-time-range-mode {
 	margin-bottom: 10px;
-  }
-  .color-ranges-control-group {
-	overflow: hidden;
-	margin-bottom: 10px;
-	.control-label {
-	  width: 110px;
-	}
-	.controls-block {
-	  width: 220px;
-	  margin-left: 120px;
-	  .color-control-left-col {
-		float: left;
-		width: 80px;
-		.control-label.input-label {
-		  width: 35px;
-		}
-		.input-value {
-		  width: 40px;
-		}
-	  }
-	  .color-control-right-col {
-		float: left;
-		width: 85px;
-	  }
-	  .text-label, .text-value, .input-label {
-		text-align: left;
-	  }
-	  .control-label.text-label {
-		width: 35px;
-	  }
-	  .control-label.text-value {
-		width: 40px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-	  }
-	  .control-label.input-label {
-		width: 20px;
-	  }
-	  .input-value {
-		width: 60px;
-		float: left;
-	  }
-	  .controls.input-value-container {
-		margin-left: 20px;
-	  }
-	  .add-color-range-btn {
-		width: 200px;
-	  }
-	  .remove-range-container {
-		width: 15px;
-		margin-top: 4px;
-		float: left;
-	  }
+	flex-basis: 100%;
+
+	> .btn {
+		width: 100%;
 	}
   }
+
+  .min-max-color-control {
+    .color-square-standalone {
+      margin-top: 0;
+    }
+  }
+}
+
+.shared-vizcontrols-format-dialog {
+    .control-group > .controls > .control {
+        &.control-focused {
+            z-index: $zindexFocus;
+        }
+        &[data-name="static-legend-placement"] {
+            margin-top: 2px;
+        }
+        &.shared-vizcontrols-customcontrols-choroplethcolormodecontrol > .btn {
+            width: 100%;
+        }
+    }
+    .url span {
+        &.uneditable-input.uneditable-input-multiline[disabled] {
+            display: inline-block !important;
+        }
+    }
 }
 
 .color-mode-radio-icon-container {
 	float: left;
+	display: flex;
+
+  &.shared-controls-syntheticradiocontrol {
+    width: auto;
+  }
+
 	.icon-placeholder {
-	  margin: 0px 10px 0px 20px;
+	  &:not(last-child) {
+      margin-right: $spacing;
+    }
 	  .radio-icon {
 		font-size: 14px;
 		display: inline-block;
@@ -165,7 +159,7 @@ $labelLeftSpace: 10px;
 		}
 	  }
 	  .color-mode-radio-icon {
-		border: 1px #CCC solid;
+		border: 1px $inputBorderColor solid;
 		width: 40px;
 		margin-left: 10px;
 	  }
@@ -175,15 +169,24 @@ $labelLeftSpace: 10px;
 	  }
 	}
 	input[type="radio"] {
-	  float: left;
-	  width: 20px;
-	  height: 26px;
+		margin: 14px 4px;
+		font-size: 10px;
+		height: $fontSizeSmall;
+    box-shadow: none;
+    opacity: 0.01; /* Hiding element but not completely so selenium can find it */
+
+    + .btn-radio {
+      margin: 6px 0 0 -19px;
+    }
+    &:focus + .btn-radio:before {
+      @mixin focus-element;
+    }
 	}
 	.radio-label {
 	  font-size: 12px;
 	  margin-left: 30px;
 	  padding-bottom: 10px;
-	}
+  }
 }
 
 
@@ -258,30 +261,13 @@ $(wideTextLocaleSelector) {
     select {
         width: 100%;
     }
-}
+    splunk-text-input:not(:first-child) {
+        flex: 1;
 
-/*  Lite UI */
-/*  ================ */
-/*  Lite */
-@if $theme == lite {
-    .shared-vizcontrols-format-dialog .tabbable, .shared-vizcontrols-format-dialog .popdown-dialog-body {
-		background-color: $offWhite;
-	}
-
-  	.shared-vizcontrols-format-dialog .nav-tabs-left > li a {
-		border-color: $borderColor;
-	}
-
-	.shared-vizcontrols-format-dialog .nav-tabs-left > li:not(.active) a {
-		background-color: $offWhite;
-
-		&:hover {
-			background-color: $pillBackgroundColorHover;
-			border-color: $borderColor;
-		}
-        &:focus {
-            @mixin focus-pill;
+        input[type="text"] {
+            border: $inputBorder;
+            border-radius: $inputBorderRadius;
+            margin-top: 3px;
         }
-
-	}
+    }
 }

@@ -42,14 +42,14 @@ define(
             render: function() {
                 var canWrite = this.model.searchJob.entry.acl.canWrite(),
                     isBackground = this.model.searchJob.isBackground(),
-                    isRealTime = this.model.searchJob.entry.content.get("isRealTimeSearch");
+                    isRealTime = this.model.searchJob.isRealtime();
 
                 this.$el.html('<a href="#">Send Job to Background</a>');
 
                 if (canWrite && this.model.searchJob.isRunning() && !isRealTime && !isBackground){
-                    this.$el.html('<a href="#">' + _("Send Job to Background").t() + '</a>');
+                    this.$el.html('<a href="#" aria-disabled="false">' + _("Send Job to Background").t() + '</a>');
                 } else {
-                    this.$el.html('<a href="#" class="disabled">' + _("Send Job to Background").t() + '</a>');
+                    this.$el.html('<a href="#" aria-disabled="true" class="disabled">' + _("Send Job to Background").t() + '</a>');
                 }
 
                 return this;

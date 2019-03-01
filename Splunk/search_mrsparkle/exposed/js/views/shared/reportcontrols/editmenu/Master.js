@@ -86,7 +86,9 @@
                     } else {
                         data = {s: this.model.report.id};
                     }
-                    var routeString = route.search(
+                    var openInView = this.model.report.openInView(this.model.user);
+                    var view = route.getView(openInView);
+                    var routeString = view.route(
                             this.model.application.get('root'),
                             this.model.application.get('locale'),
                             this.model.application.get('app'),
@@ -103,6 +105,9 @@
                             searchJob: this.model.searchJob,
                             application: this.model.application,
                             user: this.model.user
+                        },
+                        collection: {
+                            appLocals: this.collection.appLocals
                         },
                         onHiddenRemove: true
                     });
@@ -197,16 +202,14 @@
                     this.$el.append('<a class="dropdown-toggle edit' + (this.options.button ? " btn" : "") + '" href="#">' + _("Edit").t() +'<span class="caret"></span></a>');
                 } else {
                     if (this.options.showOpenActions) {
-                        if (this.model.report.openInView(this.model.user) === 'pivot'){
-                            var openInPivot = route.pivot(
-                                    this.model.application.get("root"),
-                                    this.model.application.get("locale"),
-                                    this.model.application.get("app"),
-                                    {data: {s: this.model.report.id}});
-                            this.$el.append('<a class="' + (this.options.button ? "btn" : "") + '" href="' + openInPivot + '">' + _("Open in Pivot").t() +'</a>');
-                        } else {
-                            this.$el.append('<a class="open-in-search' + (this.options.button ? " btn" : "") + '" href="#">' + _("Open in Search").t() +'</a>');
-                        }
+                        var openInView = this.model.report.openInView(this.model.user);
+                        var view = route.getView(openInView);
+                        var link = view.route(
+                                this.model.application.get("root"),
+                                this.model.application.get("locale"),
+                                this.model.application.get("app"),
+                                {data: {s: this.model.report.id}});
+                        this.$el.append('<a class="open-in-' + openInView + (this.options.button ? " btn" : "") + '" href="' + link + '">' + view.openLabel +'</a>');
                     }
                     if (canClone) {
                         this.$el.append('<a class="clone' + (this.options.button ? " btn" : "") + '" href="#">' + _("Clone").t() +'</a>');

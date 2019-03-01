@@ -188,7 +188,6 @@ define(function(require, exports, module) {
         },
 
         formatData: function(data) {
-            console.log('chart data changed:', data);
             return data;
         },
 

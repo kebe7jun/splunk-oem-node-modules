@@ -1,12 +1,13 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
-import ControlGroup from 'splunk-ui/components/ControlGroup';
-import RadioBar from 'splunk-ui/components/RadioBar';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
+import RadioBar from '@splunk/react-ui/RadioBar';
 import OpenInNewTab from 'dashboard/components/shared/OpenInNewTab';
 import SearchEditor from 'dashboard/components/shared/SearchEditor';
-import Link from 'splunk-ui/components/Link';
+import Link from '@splunk/react-ui/Link';
 import FormMessage from 'dashboard/components/shared/FormMessage';
-import StaticContent from 'splunk-ui/components/StaticContent';
+import StaticContent from '@splunk/react-ui/StaticContent';
 import { createTestHook } from 'util/test_support';
 import SearchTimeEditor from './SearchTimeEditor';
 
@@ -17,6 +18,13 @@ const SearchActionEditor = ({
     search,
     searchError,
     onSearchChange,
+    isFetchingPresets,
+    presets,
+    locale,
+    parseEarliest,
+    parseLatest,
+    onRequestParseEarliest,
+    onRequestParseLatest,
     extraTimeRangeOptions,
     activeTimeRangeOption,
     onTimeRangeOptionChange,
@@ -29,6 +37,7 @@ const SearchActionEditor = ({
     target,
     onTargetChange,
     learnMoreLinkForTokens,
+    timeRangePickerDocsURL,
 }) => {
     const radioBarOptions = options.map(option => (
         <RadioBar.Option
@@ -38,7 +47,7 @@ const SearchActionEditor = ({
         />
     ));
     const hasError = !!searchError;
-    const label = _('Search string').t();
+    const label = _('Search String').t();
     const errorMessage = hasError ? `${label} ${searchError}` : '';
 
     const searchActionDetail = activeOption === 'custom' ?
@@ -69,6 +78,13 @@ const SearchActionEditor = ({
                 />
             </ControlGroup>
             <SearchTimeEditor
+                isFetchingPresets={isFetchingPresets}
+                presets={presets}
+                locale={locale}
+                parseEarliest={parseEarliest}
+                parseLatest={parseLatest}
+                onRequestParseEarliest={onRequestParseEarliest}
+                onRequestParseLatest={onRequestParseLatest}
                 extraOptions={extraTimeRangeOptions}
                 activeOption={activeTimeRangeOption}
                 onOptionChange={onTimeRangeOptionChange}
@@ -78,6 +94,7 @@ const SearchActionEditor = ({
                 onTimeRangeTokenChange={onTimeRangeTokenChange}
                 earliestTokenError={earliestTokenError}
                 latestTokenError={latestTokenError}
+                timeRangePickerDocsURL={timeRangePickerDocsURL}
             />
             <OpenInNewTab
                 value={target}
@@ -90,7 +107,7 @@ const SearchActionEditor = ({
 
     return (
         <div {...createTestHook(module.id)}>
-            <ControlGroup label={_('').t()} {...createTestHook(null, 'LinkToSearchSelector')}>
+            <ControlGroup label={''} {...createTestHook(null, 'LinkToSearchSelector')}>
                 <RadioBar value={activeOption} onChange={onOptionChange}>
                     {radioBarOptions}
                 </RadioBar>
@@ -107,6 +124,21 @@ SearchActionEditor.propTypes = {
     search: PropTypes.string.isRequired,
     searchError: PropTypes.string.isRequired,
     onSearchChange: PropTypes.func.isRequired,
+    isFetchingPresets: PropTypes.bool.isRequired,
+    presets: PropTypes.arrayOf(PropTypes.object).isRequired,
+    locale: PropTypes.string.isRequired,
+    parseEarliest: PropTypes.shape({
+        error: PropTypes.string,
+        iso: PropTypes.string,
+        time: PropTypes.string,
+    }),
+    parseLatest: PropTypes.shape({
+        error: PropTypes.string,
+        iso: PropTypes.string,
+        time: PropTypes.string,
+    }),
+    onRequestParseEarliest: PropTypes.func.isRequired,
+    onRequestParseLatest: PropTypes.func.isRequired,
     extraTimeRangeOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
     activeTimeRangeOption: PropTypes.string.isRequired,
     onTimeRangeOptionChange: PropTypes.func.isRequired,
@@ -125,12 +157,16 @@ SearchActionEditor.propTypes = {
     target: PropTypes.string.isRequired,
     onTargetChange: PropTypes.func.isRequired,
     learnMoreLinkForTokens: PropTypes.string.isRequired,
+    timeRangePickerDocsURL: PropTypes.string,
 };
 
 SearchActionEditor.defaultProps = {
     activeTimeRangeToken: '',
     earliestTokenError: '',
     latestTokenError: '',
+    parseEarliest: null,
+    parseLatest: null,
+    timeRangePickerDocsURL: null,
 };
 
 export default SearchActionEditor;

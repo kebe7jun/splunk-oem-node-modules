@@ -24,7 +24,7 @@ define([
         MatchResultsTableHeader,
         CheckmarkCellRenderer,
         fieldExtractorUtils) {
-        
+
         var MatchResultsTableMaster = ResultsTableMaster.extend({
 
             moduleId: module.id,
@@ -271,10 +271,10 @@ define([
                         fieldExtractorUtils.highlightedContentTemplate
                     );
                 }
-                
+
                 $td.addClass(fieldExtractorUtils.INTERACTIVE_CELL_CLASS).addClass('field-extraction').html(html);
                 if(this.model.state.get('mode') === fieldExtractorUtils.VALIDATE_FIELDS_MODE && this.model.state.get('interactiveMode') === fieldExtractorUtils.INTERACTION_MODE) {
-                    $td.find('.' + fieldExtractorUtils.HIGHLIGHTED_MATCH_CLASS).append('<a class="remove-button" href="#"><i class="icon-x-circle icon-large"></i></a>');
+                    $td.find('.' + fieldExtractorUtils.HIGHLIGHTED_MATCH_CLASS).append('<a class="remove-button" href="#"><i class="icon-x icon-large"></i></a>');
                 }
                 $td.find('.highlighted-existing-match').each(function(index, element) {
                     $(element).tooltip({ animation: false, title: element.getAttribute('data-field-name'), container: element });
@@ -300,4 +300,3 @@ define([
         return MatchResultsTableMaster;
 
     });
-

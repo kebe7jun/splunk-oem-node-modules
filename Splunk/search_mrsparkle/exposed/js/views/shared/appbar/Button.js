@@ -1,58 +1,32 @@
 define(
     [
-        'underscore',
+        'jquery',
         'module',
         'views/shared/Button',
-        'views/shared/Icon',
         './Button.pcssm'
     ],
     function(
-        _,
+        $,
         module,
         Button,
-        IconView,
         css
     ){
         return Button.extend({
             moduleId: module.id,
             css: css,
             initialize: function(options) {
+                this.className = options.isLite ? css.viewLite : css.viewEnterprise;
                 Button.prototype.initialize.apply(this, arguments);
             },
             render: function() {
-                // Attributes
-                this.$el.attr('href', this.options.href);
-                this.$el.attr('class', css.view);
-                this._setOrRemoveAttr('disabled', this.options.enabled ? false : 'disabled');
-                this._setOrRemoveAttr('title', this.options.title || this.options.label);
-                this._setOrRemoveAttr('data-action', this.options.action);
-                this._setOrRemoveAttr('data-active', this.options.active ? 'active' : false);
+                Button.prototype.render.apply(this, arguments);
 
-                // Contents
-                if (!this.el.innerHTML) {
-                    this.$el.html('<span class="' + this.css.label + ' ' + this.css.visibleLg + '" data-role="label">' + this.options.label + '</span>');
-                } else {
-                    this.$('[data-role=label]').html(this.options.label);
-                }
-
-                // Icon
-                if (this.options.icon) {
-                    this.children.icon = this.children.icon || new IconView();
-                    this.children.icon.set({icon: this.options.icon, size: this.options.iconSize});
-                    // ghetto and inconsistent
-                    this.children.icon.el.style.marginRight = '10px';
-
-                    this.children.icon.render().prependTo(this.$el);
-                } else if (this.children.icon) {
-                    this.children.icon.$el.detach();
-                }
-
-                // Data Attributes
-                _.each(this.options.dataAttributes, function(value, key){
-                    var dataAttr = 'data-' + key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-                    this._setOrRemoveAttr(dataAttr, value);
-                }, this);
-                return this;
+                var underlineColor = this.options.appColor === 'transparent' ? '#5CC05C' : this.options.appColor;
+                var underline = $('<div/>', {
+                    'class': this.options.isLite ? css.underlineLite : css.underline,
+                    style: (this.options.active && !this.options.isLite) ? 'background-color: ' + underlineColor : undefined,
+                    'data-role': 'underline'
+                }).appendTo(this.$el);
             }
         });
     });

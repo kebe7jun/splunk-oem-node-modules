@@ -153,13 +153,16 @@ define(
                 BaseView.prototype.initialize.apply(this, arguments);
                 this.configure();
             },
+            /**
+             * @param {string} classes Class names of a dom element. Note this is NOT a css selector.
+             */
             createOrFind: function(classes, parent, tag) {
                 classes = classes.split(' ');
                 parent = parent || this.$el;
                 tag = tag || "div";
                 var selector = _(classes).map(function(clazz) {
                     return "." + clazz;
-                }).join(' ');
+                }).join('');
                 var $dom = parent.children(selector);
                 if (!$dom.length) {
                     var domStr = sprintf('<%s class="%s"></%s>', tag, classes.join(' '), tag);

@@ -1,7 +1,7 @@
 /*  Splunk: Responsive Navs */
 /*  ======================= */
 
-$navHeightCollapsed: 6px;
+$navHeightCollapsed: 3px;
 
 /*  Styles for the responsive header */
 .shared-responsiveheaderpage {
@@ -26,7 +26,7 @@ $navHeightCollapsed: 6px;
 		right: 0px;
 		bottom: 0px;
 		height: $navHeightCollapsed;
-		background-color: color($grayLight l(-10%));
+		background-color: color($appBarBackground a(50%));
 
 		&:hover {
 			cursor: pointer;
@@ -34,7 +34,7 @@ $navHeightCollapsed: 6px;
 
 		.tab {
 			$height: 25px;
-			background-color: inherit;
+			background-color: $appBarBackground;
 			position: absolute;
 			top: 0px;
 			right: 10px;
@@ -101,6 +101,6 @@ $navHeightCollapsed: 6px;
 /*  ------------ */
 @if $theme == lite {
     .shared-responsiveheaderpage .expand-collapse-control {
-        background: $splunkLiteBlack !important;
+        background: $black !important;
     }
 }

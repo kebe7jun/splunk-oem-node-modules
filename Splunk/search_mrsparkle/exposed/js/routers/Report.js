@@ -250,6 +250,13 @@ define(
                         {silent:true});
                 }, 0));
 
+                this.listenTo(this.model.reportPristine.entry.content, 'change:workload_pool', _.debounce(function() {
+                        this.model.report.entry.content.set({
+                            'workload_pool': this.model.reportPristine.entry.content.get('workload_pool')
+                        },
+                        {silent:true});
+                }, 0));
+
                 //Events on the searchJob model
                 this.model.searchJob.on("prepared", function(){
                     this.model.report.setDisplayType(this.model.searchJob.isReportSearch());

@@ -746,9 +746,9 @@ var paneleditor = {};
 
                 getDefaultColorByIndex = function(index) {
                     switch(index) {
-                        case 0: return '0x84E900';
-                        case 1: return '0xFFE800';
-                        default: return '0xBF3030';
+                        case 0: return '0x53A051';
+                        case 1: return '0xF8BE34';
+                        default: return '0xDC4E41';
                     }
                 };
 
@@ -813,7 +813,7 @@ var paneleditor = {};
             picker.setValue = function(value) {
                 var i,
                     ranges = (value.ranges.length > 0) ? value.ranges : ['', '', '', ''],
-                    colors = (value.colors.length > 0) ? value.colors : ["0x84E900", "0xFFE800", "0xBF3030"];
+                    colors = (value.colors.length > 0) ? value.colors : ["0x53A051", "0xF8BE34", "0xDC4E41"];
 
                 removeAllRanges();
                 setElementRangeInfo($firstRange, {
@@ -1025,7 +1025,7 @@ var paneleditor = {};
             this.controls.gaugeColorPicker.setVisibility(constraintModulator.isValid({required: ['gaugecolors']}));
             this.controls.gaugeColorPicker.setValue({
                 ranges: PanelModel.deserializeArrayAsFloats(this.panel.fields.options['charting.chart.rangeValues']) || [],
-                colors: PanelModel.deserializeArray(this.panel.fields.options['charting.gaugeColors']) || ["0x84E900", "0xFFE800", "0xBF3030"]
+                colors: PanelModel.deserializeArray(this.panel.fields.options['charting.gaugeColors']) || ["0x53A051", "0xF8BE34", "0xDC4E41"]
             });
             this.controls.gaugeColorPicker.addValueChangeListener(function(value) {
                 that.panel.fields.options['charting.chart.rangeValues'] = PanelModel.serializeArray(value.ranges);

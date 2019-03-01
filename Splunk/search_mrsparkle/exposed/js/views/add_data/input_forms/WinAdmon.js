@@ -42,7 +42,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'ad-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -54,7 +53,6 @@ define(
                 this.children.target = new ControlGroup({
                     className: 'ad-target control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.targetDc',
                         model: this.model.input,
@@ -62,21 +60,20 @@ define(
                         placeholder: _('optional').t()
                     },
                     label:   _('Target domain controller').t(),
-                    tooltip: _('Provide the host name of the domain controller to monitor, or leave empty and Splunk will discover the nearest domain controller automatically.').t()
+                    tooltip: _('Provide the host name of the domain controller to monitor, or leave empty and the Splunk platform will discover the nearest domain controller automatically.').t()
                 });
 
 
                 this.children.monitorSubtree = new ControlGroup({
                     className: 'reg-subtree control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.monitorSubtree',
                         model: this.model.input,
                         save: false
                     },
                     label:   _('Monitor subtree').t(),
-                    tooltip: _('Check this box if Splunk should monitor all child nodes. If the box is unchecked, only the node you specify is monitored.').t()
+                    tooltip: _('Check this box if the Splunk platform should monitor all child nodes. If the box is unchecked, only the node you specify is monitored.').t()
                 });
 
                 this.children.faq = new Faq({faqList: this.faqList});
@@ -111,7 +108,7 @@ define(
                         placeholder: _('optional').t()
                     },
                     label:   _('Starting node').t(),
-                    tooltip: _('Select the node that Splunk should begin monitoring from. Leave empty and Splunk will start monitoring from the highest part of the tree it can.').t()
+                    tooltip: _('Select the node that the Splunk platform should begin monitoring from. Leave empty and the Splunk platform will start monitoring from the highest part of the tree it can.').t()
                 });
 
                 if (reRender) {
@@ -134,20 +131,20 @@ define(
                 },
                 {
                     question: _('How do the "Starting Node" and "Monitor Sub tree" controls work?').t(),
-                    answer: _('Specify an entry in the "Starting Node" field to tell Splunk Enterprise to monitor Active \
-                             Directory starting at that node. Check the "Monitor Sub tree" check box to tell Splunk \
-                             Enterprise to monitor the starting AD node and all sub-nodes.').t()
+                    answer: _('Specify an entry in the "Starting Node" field to tell Splunk Enterprise to monitor Active ' +
+                             'Directory starting at that node. Check the "Monitor Sub tree" check box to tell Splunk ' +
+                             'Enterprise to monitor the starting AD node and all sub-nodes.').t()
                 },
                 {
-                    question: _('Specify an entry in the "Starting Node" field to tell Splunk Enterprise to monitor \
-                              Active Directory starting at that node.').t(),
-                    answer: _('Check the "Monitor Sub tree" check box to tell Splunk Enterprise to monitor the starting \
-                            AD node and all sub-nodes.').t()
+                    question: _('Specify an entry in the "Starting Node" field to tell Splunk Enterprise to monitor ' +
+                              'Active Directory starting at that node.').t(),
+                    answer: _('Check the "Monitor Sub tree" check box to tell Splunk Enterprise to monitor the starting ' +
+                            'AD node and all sub-nodes.').t()
                 },
                 {
                     question: _('Why should I be careful about the number of AD items I monitor?').t(),
-                    answer: _('Active Directory changes can generate a lot of events. This can impact performance on the \
-                            indexer, as well as license usage.').t()
+                    answer: _('Active Directory changes can generate a lot of events. This can impact performance on the ' +
+                            'indexer, as well as license usage.').t()
                 }
             ],
 

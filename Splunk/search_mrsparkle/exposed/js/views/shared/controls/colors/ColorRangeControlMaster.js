@@ -7,7 +7,8 @@ define([
         'views/shared/controls/colors/ColorRangeControlRow',
         'models/Base',
         'collections/Base',
-        'util/color_utils'
+        'util/color_utils',
+        'splunk/palettes/ColorCodes'
     ],
     function(
         $,
@@ -18,19 +19,24 @@ define([
         ColorRangeControlRow,
         BaseModel,
         BaseCollection,
-        colorUtils
+        colorUtils,
+        ColorCodes
         ) {
 
         return Control.extend({
             className: 'tab-pane clearfix',
             moduleId: module.id,
-            DEFAULT_COLOR: '0x555555',
+            DEFAULT_COLOR: colorUtils.replaceSymbols(ColorCodes.DARK_GREY, '0x'),
 
             initialize: function() {
                 Control.prototype.initialize.apply(this, arguments);
                 this.rangeValuesName = this.options.modelAttribute;
                 this.rangeColorsName = this.options.rangeColorsName;
-                this.defaultColors = this.options.defaultColors || ['0x84E900', '0xFFE800', '0xBF3030'];
+                this.defaultColors = this.options.defaultColors || [
+                    colorUtils.replaceSymbols(ColorCodes.SEMANTIC_BY_NAME.success, '0x'),
+                    colorUtils.replaceSymbols(ColorCodes.SEMANTIC_BY_NAME.warning, '0x'),
+                    colorUtils.replaceSymbols(ColorCodes.SEMANTIC_BY_NAME.error, '0x')
+                ];
                 this.defaultRanges = this.options.defaultRangeValues || [0, 30, 70, 100];
                 this.displayMinMaxLabels = this.options.displayMinMaxLabels;
                 this.paletteColors = this.options.paletteColors;

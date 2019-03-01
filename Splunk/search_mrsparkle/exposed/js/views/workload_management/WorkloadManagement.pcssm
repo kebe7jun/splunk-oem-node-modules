@@ -1,0 +1,39 @@
+.paddingTopNone {
+    padding-top: 0px;
+}
+
+.mainSection {
+    background-color: white;
+    padding: 20px 20px 0px 20px;
+}
+
+.table {
+    padding-bottom: 40px;
+}
+
+.table td {
+    word-break: break-all;
+}
+
+.link {
+    color: $linkColor;
+
+    &:not([disabled]) {
+        &:hover {
+            background-color: transparent;
+        }
+
+        &:focus {
+            background-color: transparent;
+            box-shadow: none;
+        }
+    }
+}
+
+.successIcon {
+    color: $successColorL10;
+}
+
+.displayNone {
+    display: none;
+}

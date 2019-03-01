@@ -37,7 +37,6 @@ define(
                 this.children.tablelDisplayNameGroup = new ControlGroup({
                     label: _('Table Title').t(),
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controls: this.children.tableDisplayNameControl
                 });
 
@@ -49,7 +48,6 @@ define(
                 this.children.tableNameGroup = new ControlGroup({
                     label: _('Table ID').t(),
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controls: this.children.tableNameControl,
                     tooltip: _('The ID is used as the filename on disk. Cannot be changed later.').t(),
                     help: _('Can only contain letters, numbers and underscores.').t()
@@ -60,11 +58,10 @@ define(
                     destDelegate: this.children.tableNameControl,
                     transformFunction: dataModelFormUtils.normalizeForID
                 });
-                
+
                 this.children.description = new ControlGroup({
                     label: _('Description').t(),
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.inmem.entry.content,
                         modelAttribute: 'dataset.description',

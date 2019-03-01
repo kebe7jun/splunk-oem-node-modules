@@ -2,6 +2,25 @@
 /*  ===================== */
 /*  Reports listing page */
 
+.reports-table > .table {
+    @mixin create-card-table;
+    margin-bottom: $spacing;
+    width: auto;
+
+
+    > tbody > tr {
+        > td.title > a {
+            text-overflopw: ellipsis;
+            min-width: 150px;
+            max-width: calc(100vw - 800px);
+        }
+        &.expanded > td.title > a {
+            word-break: break-word;
+            white-space: unset;
+        }
+    }
+}
+
 /*  TODO: this shouldn't be needed, or should be common */
 .section-description {
 	margin-bottom: 0;
@@ -9,7 +28,17 @@
 }
 
 .col-actions {
-	width: 180px;
+	width: 240px;
+}
+
+.actions-edit > a {
+    float: left;
+    width: 50%;
+}
+
+.actions-edit > div {
+    display: inline-block;
+    width: 50%;
 }
 
 .col-next-scheduled-time {
@@ -17,7 +46,7 @@
 }
 
 .col-app, .col-owner {
-	width: 140px;
+	width: 90px;
 	white-space: nowrap;
 	text-overflow:ellipsis;
 }
@@ -57,99 +86,89 @@ td.app, td.owner {
 }
 
 
-/*  Lite */
+/*  Tiles */
 /*  ------------------------------- */
-@if $theme == lite {
-	.col-actions {
-		width: 220px;
-	}
-	
-	.reports-table {
-		border-top: 1px solid $borderColor;
+.reports-tiles {
+	color: $textColor;
+}
+
+.reports-tiles-reporttilelist {
+	padding: 0px 40px;
+}
+
+.reports-tiles-reporttile {
+	display: inline-block;
+	vertical-align: top;
+	margin: 6px;
+
+	.tile-shape {
+		position: relative;
+		width: 230px;
+		height: 280px;
+		border-radius: 2px;
+		background-color: $gray30;
+		color: $white;
 	}
 
-	.reports-tiles {
-		color: $textColor;
+	.tile-icon {
+		position: absolute;
+		top: 120px;
+		left: 0px;
+		right: 0px;
+		text-align: center;
 	}
 
-	.reports-tiles-reporttilelist {
-		padding: 0px 40px;
+	.tile-name {
+		position: absolute;
+		top: 40px;
+		left: 20px;
+		right: 20px;
+		max-height: 80px;
+		overflow: hidden;
+		font-size: 14px;
+		text-align: center;
 	}
 
-	.reports-tiles-reporttile {
-		display: inline-block;
-		vertical-align: top;
-		margin: 6px;
+	.tile-actions {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
 
-		.tile-shape {
-			position: relative;
-			width: 230px;
-			height: 280px;
-			border-radius: 2px;
-			background-color: $grayDark;
+		.action-edit {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			color: $textTileColor;
+			text-decoration: none;
+
+			.caret {
+				font-size: 8px;
+			}
+		}
+
+		.action-edit:hover {
 			color: $white;
 		}
 
-		.tile-icon {
+		.action-buttons {
 			position: absolute;
-			top: 120px;
-			left: 0px;
-			right: 0px;
-			text-align: center;
-		}
+			bottom: 14px;
+			right: 10px;
 
-		.tile-name {
-			position: absolute;
-			top: 40px;
-			left: 20px;
-			right: 20px;
-			max-height: 80px;
-			overflow: hidden;
-			font-size: 14px;
-			text-align: center;
-		}
-
-		.tile-actions {
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			bottom: 0px;
-			right: 0px;
-
-			.action-edit {
-				position: absolute;
-				top: 10px;
-				right: 10px;
+			.btn {
+				margin: 3px;
+				border-color: $borderColor !important;
+				background-color: $gray30;
 				color: $textTileColor;
-				text-decoration: none;
-
-				.caret {
-					font-size: 8px;
-				}
+				box-shadow: none;
+				text-shadow: none;
 			}
 
-			.action-edit:hover {
+			.btn:hover {
+				border-color: $white !important;
 				color: $white;
-			}
-
-			.action-buttons {
-				position: absolute;
-				bottom: 14px;
-				right: 10px;
-
-				.btn {
-					margin: 3px;
-					border-color: $borderColor !important;
-					background-color: $grayDark;
-					color: $textTileColor;
-					box-shadow: none;
-					text-shadow: none;
-				}
-
-				.btn:hover {
-					border-color: $white !important;
-					color: $white;
-				}
 			}
 		}
 	}

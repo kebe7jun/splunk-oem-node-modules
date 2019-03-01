@@ -2,18 +2,21 @@
 
     $perctWidth: 40%;
     $space: 30px;
-    $inputWidth : 382px;
-    $verticalPadding: 15px;
+    $inputWidth : 436px;
+    $verticalPadding: 10px;
     $horizontalPadding: 20px;
-    $breadcrumbFontSize: 13px;
+    $breadcrumbFontSize: 14px;
 
     .section-header {
-        min-height: 102px;
+        min-height: 108px;
         padding-bottom: 0px;
 
         .breadcrumb {
-            margin-top: 5px;
+            height: 20px;
             font-size: $breadcrumbFontSize;
+        }
+        .control-wrapper .control {
+            display: inline-block;
         }
     }
 
@@ -50,12 +53,12 @@
         position: fixed;
         top: 0px;
         bottom: inherit;
-        min-height: 41px;
+        min-height: 42px;
         margin-left: -$horizontalPadding;
         padding: $verticalPadding 0px 0px $horizontalPadding;
-        border-bottom: 1px solid $borderColor;
         z-index: 1;
         background-color: $bodyBackgroundColor;
+        box-shadow: $affixTopBoxShadow;
 
         .savedsearchesadvancededit-buttonheader {
             right: calc(2 * $horizontalPadding);
@@ -64,16 +67,17 @@
 
     .edit-form-wrapper {
         min-height: 393px;
-        background-color: $white;
-        border-top: 1px solid $borderColor;
-        padding-bottom: 50px;
+        padding: $spacing;
+        margin: 0 $spacing $spacing;
+        @mixin create-card;
 
         .alerts {
             padding: 20px;
         }
 
         .controls-placeholder.form-horizontal  {
-            margin-top: 20px;
+            margin: 20px auto 0;
+            width: 800px;
 
             .shared-controls-controlgroup {
 
@@ -84,10 +88,13 @@
 
                 .controls {
                     margin-left: $perctWidth;
-                    width : calc($inputWidth + $space + 53px);
 
                     input {
                         width: $inputWidth;
+
+                        &.text-clear {
+                            padding-right: 30px;
+                        }
                     }
 
                     span.input-label {

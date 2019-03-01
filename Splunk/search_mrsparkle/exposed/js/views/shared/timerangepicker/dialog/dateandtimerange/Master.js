@@ -304,7 +304,8 @@ define(
                     return this;
                 },
                 template: '\
-                    <div class="form form-inline date-range-container">\
+                    <div class="form date-range-container"></div>\
+                    <div class="apply-button-wrapper">\
                         <button class="apply btn"><%- _("Apply").t() %></button>\
                     </div>\
                 '

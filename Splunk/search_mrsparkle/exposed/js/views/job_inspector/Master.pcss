@@ -3,11 +3,11 @@
     padding: 20px 0 0 20px;
   }
   .header {
-    background-color: $grayDarker;
-    border-bottom: 1px solid $grayLighter;
+    background-color: $gray20;
+    border-bottom: $borderLight;
     padding: 5px 14px;
     font-size: 12px;
-    
+
     h1 {
       margin: 5px 0;
       color: $white;
@@ -15,7 +15,7 @@
       font-weight: normal;
     }
   }
-  
+
   .emphatic {
     font-weight: bold;
   }
@@ -23,10 +23,10 @@
   h2 {
     font-size: 12px;
     font-weight: bold;
-    color: $grayDark;
+    color: $textColor;
   }
-  
-  font-size: 11px;
+
+  font-size: $fontSizeSmall;
   background-color: $white;
   font-family: $sansFontFamily;
 
@@ -34,52 +34,55 @@
     font-size: 12px;
     font-weight: bold;
   }
-  
+
   .job-overview {
     padding: 10px 10px 20px 14px;
-    background-color: $grayLighter;
+    background-color: $gray96;
     > p {
-      
+
       a.search-log {
         text-decoration: underline;
       }
+      a.dfs-log {
+        text-decoration: underline;
+      }
     }
-    
+
     .summary {
-      
+
       pre {
         white-space: normal;
         .highlighted {
-          background-color: $yellow;
+          background-color: $warningColor;
           padding: 2px;
         }
       }
-      
+
       .messages {
         li {
           list-style-type: none;
           margin-left: 10px;
-          
+
           & .text {
             font-weight: bold;
           }
-        } 
+        }
       }
     }
   }
-  
+
   .job-execution-cost {
-    border-top: 1px solid $grayLightMedium;
+    border-top: $borderDefault;
     padding: 0 14px;
     font-size: 10px;
-    
+
     table {
       th {
         padding: 4px 10px;
         text-align: left;
-        background-color: $grayLighter;
+        background-color: $gray92;
       }
-      
+
       tr {
         &.sub {
           img.durationBar {
@@ -87,10 +90,10 @@
           }
         }
       }
-      
+
       td {
         padding: 4px 10px;
-        border-bottom: 1px dotted $grayLight;
+        border-bottom: 1px dotted $borderDarkColor;
         vertical-align: top;
           &.numeric {
             text-align: right;
@@ -106,32 +109,36 @@
       }
     }
   }
-  
+
   .job-properties {
     padding: 0 14px;
     font-size: 10px;
-    
+
     table {
       margin-bottom: 15px;
       border-collapse: collapse;
       width:100%;
-      
+
       tr.additional-links {
         a {
           padding-right: 10px;
           padding-bottom: 10px;
           text-decoration: underline;
           display: block;
-          
+
           &.search-log {
             display: inline;
           }
-          
+
+          &.dfs-log {
+            display: inline;
+          }
+
           &.peer-link {
             display: inline;
           }
         }
-        
+
         td {
           &.job-prop-value {
             white-space: normal;
@@ -139,19 +146,19 @@
           }
         }
       }
-      
+
       td {
         padding: 4px 10px;
-        border-bottom: 1px dotted $grayLightMedium;
+        border-bottom: 1px dotted $borderColor;
         vertical-align: top;
-         
+
         &.job-prop-name {
           font-weight: bold;
           white-space: nowrap;
           font-size: 10px;
-          background-color: $grayLighter;
+          background-color: $gray96;
         }
-        
+
         &.job-prop-value {
           font-weight: normal;
           font-family: $monoFontFamily;
@@ -159,7 +166,7 @@
       }
     }
   }
-  
+
   .footer {
     padding: 10px;
   }
@@ -179,4 +186,3 @@
     padding: 14px 0 0 14px;
   }
 }
-

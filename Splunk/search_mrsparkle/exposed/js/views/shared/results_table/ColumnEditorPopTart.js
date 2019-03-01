@@ -148,16 +148,18 @@ define(
             },
 
             tabsTemplate: '\
-                <ul class="nav nav-tabs-left">\
-                    <li class="edit-color">\
-                        <a href="#"> <%- _("Color").t() %></a>\
-                    </li>\
-                    <li class="edit-format">\
-                        <a href="#"><%- _("Number Formatting").t() %></a>\
-                        \
-                    </li>\
-                </ul>\
-                <div class="tab-content"></div>',
+                <div class="tabbable">\
+                    <ul class="nav nav-tabs-left">\
+                        <li class="edit-color">\
+                            <a href="#"> <%- _("Color").t() %></a>\
+                        </li>\
+                        <li class="edit-format">\
+                            <a href="#"><%- _("Number Formatting").t() %></a>\
+                            \
+                        </li>\
+                    </ul>\
+                    <div class="tab-content"></div>\
+                </div>',
 
             warningMessage: '\
                 <div class="alert alert-warning alert-warning-overlay">\

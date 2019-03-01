@@ -4,8 +4,7 @@ function($, _, Backbone, SplunkDBase, BaseModel, splunkUtil, Val){
     var ScheduledView =  SplunkDBase.extend({
         defaults: {
             'is_scheduled': false,
-            // DCE-OEM-CHANGE
-            'action.email.subject.view': "Dashboard: '$dashboard.label$'",
+            'action.email.subject.view': "Splunk Dashboard: '$dashboard.label$'",
             'action.email.message.view': 'A dashboard was generated for $dashboard.label$',
             'action.email.useNSSubject': '1',
             'action.email.papersize': 'letter',

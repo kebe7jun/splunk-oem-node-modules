@@ -25,9 +25,8 @@ define(
             initialize: function() {
                 // Dummy model
                 this.model = new BaseModel({
-                    sliderVal: 0.5,
-                    radioToggle: 'no',
-                    radioBoolean: 0
+                    verticalRadioToggle: 'no',
+                    verticalSelect: 0
                 });
 
                 BaseView.prototype.initialize.apply(this,arguments);

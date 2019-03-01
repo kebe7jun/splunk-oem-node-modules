@@ -50,6 +50,16 @@ define(
                 this.initializeDeployTaskModel();
                 this.initializeDeployModel();
                 this.initializeRolesCollection();
+
+                this.model.deployModel.on('serverValidated', function(success, context, messages) {
+                    var netErrorMsg = _.find(messages, function(msg) {
+                        return msg.type === 'network_error' || msg.text === 'Server error';
+                    });
+                    if (netErrorMsg) {
+                        this.model.deployModel.entry.content.unset('taskId');
+                        this.initializeDeployModel();
+                    }
+                }, this);
             },
 
             initializeAppsLocal: function() {
@@ -64,11 +74,11 @@ define(
             // Initialize deploy task model to keep track of the deploy action progress. No initial fetch
             initializeDeployTaskModel: function() {
                 this.model.deployTask = new TaskModel();
+                this.model.deployModel = new DeployModel();
             },
 
             // Initialize the deploy model - provide taskId for the last deployment
             initializeDeployModel: function() {
-                this.model.deployModel = new DeployModel();
                 this.model.deployModel.startPolling();
 
                 this.listenTo(this.model.deployModel.entry.content, 'change:taskId', function(model, taskId) {
@@ -80,7 +90,6 @@ define(
                     }
                     this.model.deployTask.trigger('newTask');
                 }.bind(this));
-
             },
 
             initializeRolesCollection: function() {

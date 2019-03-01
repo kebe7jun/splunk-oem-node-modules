@@ -18,11 +18,15 @@ define(['underscore', 'jquery'], function (_, $) {
         a: ['href']
     };
 
-    function removeBadNodes($root) {
-        if($root.is(BAD_NODE_SELECTOR)) {
+    function removeBadNodes($root, options) {
+        var badNodeSelector = BAD_NODE_SELECTOR;
+        if (options.additionalBadNodeSelector) {
+            badNodeSelector += (',' + options.additionalBadNodeSelector);
+        }
+        if($root.is(badNodeSelector)) {
             return $([]);
         }
-        $root.find(BAD_NODE_SELECTOR).remove();
+        $root.find(badNodeSelector).remove();
         return $root;
     }
 
@@ -72,7 +76,7 @@ define(['underscore', 'jquery'], function (_, $) {
     function cleanStylesheets($root) {
         _($('<div />').append($root).find(CSS_NODE_SELECTOR)).each(cleanStylesheet);
     }
-    
+
     function cleanStylesheet(styleNode) {
         var $style = $(styleNode);
         var cssText = $style.html();
@@ -96,13 +100,17 @@ define(['underscore', 'jquery'], function (_, $) {
      * @param htmlText {string}
      * @param options {object}
      * @param options.allowInlineStyles {boolean}
+     * @param options.allowIframes {boolean}
      * @returns {*}
      */
     function cleanHtml(htmlText, options) {
         options || (options = {});
         // debugger
         var $html = $(stripComments("<div>" + htmlText + "</div>"));
-        $html = removeBadNodes($html);
+        var nodeRemovalOptions = {
+            additionalBadNodeSelector: options.allowIframes === false ? 'iframe' : null
+        };
+        $html = removeBadNodes($html, nodeRemovalOptions);
         cleanAttributes($html);
         cleanStylesheets($html);
         if (options.allowInlineStyles === false) {

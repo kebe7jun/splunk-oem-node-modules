@@ -168,8 +168,7 @@ define(
                 if (!this.options.disableDock) {
                     this.children.tableDock = new Dock({
                         el: this.el,
-                        affix: '.events-controls-inner',
-                        auto: true,
+                        affix: '.events-controls-inner'
                     });
                 }
             },

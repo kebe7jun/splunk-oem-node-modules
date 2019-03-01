@@ -9,8 +9,8 @@ from splunk.appserver.mrsparkle.lib import util, i18n
 isLite = util.isLite()
 %>
 
-<div class="dataInputsWrapper">
-    <div class="dataInputsDesc">${_('View, edit, and set permissions on field extractions. Define event workflow actions and field aliases. Rename sourcetypes.')}</div>
+<div class="dataInputsWrapper settingsIndex">
+    <div class="settingsIndexDesc">${_('View, edit, and set permissions on field extractions. Define event workflow actions and field aliases. Rename sourcetypes.')}</div>
     
     <table class="splTable" id="dataInputs">
         <tr>
@@ -19,7 +19,7 @@ isLite = util.isLite()
         </tr>
         <tr>
             <td class="input_name"><a href="${make_url(['manager', namespace, 'data', 'props', 'fieldaliases'])}">${_('Field aliases')}</a></td>
-            <td><a href="${make_url(['manager', namespace, 'data', 'props', 'fieldaliases', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
+            <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'data', 'props', 'fieldaliases', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
         </tr>
         <tr>
             <td colspan="2" class="input_description">${_('Edit or add one or more aliases to field names')}</td>
@@ -27,7 +27,7 @@ isLite = util.isLite()
         
         <tr>
             <td class="input_name"><a href="${make_url(['manager', namespace, 'data', 'props', 'calcfields'])}">${_('Calculated fields')}</a></td>
-            <td><a href="${make_url(['manager', namespace, 'data', 'props', 'calcfields', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
+            <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'data', 'props', 'calcfields', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
         </tr>
         <tr>
             <td colspan="2" class="input_description">${_('Edit or add one or more calculated fields')}</td>
@@ -35,9 +35,9 @@ isLite = util.isLite()
         
         <tr>
             <td class="input_name"><a href="${make_url(['manager', namespace, 'data', 'props', 'extractions/'])}">${_('Field extractions')}</a></td>
-            <td>
+            <td class="actions">
             %if not isLite:
-                <a href="${make_url(['manager', namespace, 'data', 'props', 'extractions', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a>
+                <a class="add-new" href="${make_url(['manager', namespace, 'data', 'props', 'extractions', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a>
             %else:
                 <a href="${make_url(['app', namespace, 'field_extractor'])}">${_('Open field extractor')}</a>
             %endif
@@ -49,7 +49,7 @@ isLite = util.isLite()
         
         <tr>
             <td class="input_name"><a href="${make_url(['manager', namespace, 'data', 'transforms', 'extractions'])}">${_('Field transformations')}</a></td>
-            <td><a href="${make_url(['manager', namespace, 'data', 'transforms', 'extractions', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
+            <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'data', 'transforms', 'extractions', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
         </tr>
         <tr>
             <td colspan="2" class="input_description">${_('Edit or add transformations for field extractions that use a transform.')}</td>
@@ -57,7 +57,7 @@ isLite = util.isLite()
         
         <tr>
             <td class="input_name"><a href="${make_url(['manager', namespace, 'data', 'props', 'sourcetype-rename'])}">${_('Sourcetype renaming')}</a></td>
-            <td><a href="${make_url(['manager', namespace, 'data', 'props', 'sourcetype-rename', '_new'], dict(action='edit'))}">${_('Add new')}</a></td>
+            <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'data', 'props', 'sourcetype-rename', '_new'], dict(action='edit'))}">${_('Add new')}</a></td>
         </tr>
         <tr>
             <td colspan="2" class="input_description">${_('Rename a source type. Multiple source types can share the same name.')}</td>
@@ -66,7 +66,7 @@ isLite = util.isLite()
         % if not isLite:
             <tr>
                 <td class="input_name"><a href="${make_url(['manager', namespace, 'data', 'ui', 'workflow-actions'])}">${_('Workflow actions')}</a></td>
-                <td><a href="${make_url(['manager', namespace, 'data', 'ui', 'workflow-actions', '_new'], dict(action='edit'))}">${_('Add new')}</a></td>
+                <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'data', 'ui', 'workflow-actions', '_new'], dict(action='edit'))}">${_('Add new')}</a></td>
             </tr>
             <tr>
                 <td colspan="2" class="input_description">${_('Edit or add workflow actions')}</td>

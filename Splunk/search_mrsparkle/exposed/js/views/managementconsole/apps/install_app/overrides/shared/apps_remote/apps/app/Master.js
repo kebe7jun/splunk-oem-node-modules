@@ -49,7 +49,8 @@ define([
                     collection: {
                         appLocalsUnfiltered: this.collection.appLocalsUnfiltered
                     },
-                    willDeploy: true
+                    willDeploy: true,
+                    isSHC: this.options.isSHC
                 });
 
                 this.$('body').append(confirmDialog.render().el);
@@ -90,6 +91,11 @@ define([
             this.collection.dmcApps.fetch();
         },
 
+        render: function () {
+            var permission = this.model.user.hasCapability('dmc_deploy_apps') ? true: false;
+            return AppView.prototype.render.apply(this, [permission]);
+        },
+
         cloudRender: function(install_method) {
             var appId = this.model.appRemote.get('appid'),
                 localApp = this.collection.appLocals.findByEntryName(appId),
@@ -99,7 +105,9 @@ define([
                 // We can do this by determining if its version is defined
                 // This is not a general solution per se, but it works for all apps that we
                 // allow to be installed in the cloud.
-                localAppUnfilteredVersion = localAppUnfiltered && localAppUnfiltered.entry.content.get('version');
+                localAppUnfilteredVersion = localAppUnfiltered && localAppUnfiltered.entry.content.get('version'),
+                supportedDeployments = ((this.model.appRemote.get('release') || {})['manifest'] || {})
+                    ['supportedDeployments'];
 
             if (dmcApp && (dmcApp.hasUpdate() && dmcApp.canUpdate())) {
                 // Add update button for DMC apps
@@ -120,15 +128,23 @@ define([
                     buttonText: _('Already Installed').t(),
                     buttonClass: 'disabled'
                 };
+            } else if (this.options.isSHC && supportedDeployments &&
+                       !(_.contains(supportedDeployments, '*') ||
+                         _.contains(supportedDeployments, '_search_head_clustering'))) {
+                return {
+                    buttonText: _('Not Compatible').t(),
+                    buttonClass: 'disabled',
+                    messageText: _('App does not support search head cluster deployments.').t()
+                };
             } else {
                 // Add install or request install button for remainder of the apps
-                switch(install_method) {
+                switch(install_method) { 
 
                     // This should never happen.
                     // If an app is ever flagged as "simple" in a AppManagement-Cloud
                     // environment, this means that this app should be installable,
                     // but only outside of AppManagement, therefore CloudOps needs to
-                    // be invovled --> we resolve this case to 'assisted' here.
+                    // be involved --> we resolve this case to 'assisted' here.
                     case 'simple':
                         return AppView.prototype.cloudRender.call(this, 'assisted');
 

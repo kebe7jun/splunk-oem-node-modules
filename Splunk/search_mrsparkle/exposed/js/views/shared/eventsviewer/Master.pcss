@@ -2,6 +2,10 @@
 /*  ================================ */
 /*  new events viewer ... */
 
+$et_magenta:                                #cc5068;
+$et_purple:                                 #6a5c9e;
+$et_teal:                                   #11a88b;
+
 /*  wrapper for sidebar and content */
 .search-results-wrapper {
 	clear: both;
@@ -13,7 +17,7 @@
 /*  common */
 .event .raw-event, .event .json-event {
 	font-family: $monoFontFamily;
-	font-size: 12px;
+	font-size: $fontSize;
 	color:$textColor;
 	/*  override BS styles */
 	border: none;
@@ -31,26 +35,26 @@
 	.fields .v:hover,
 	.fields .tg:hover,
 	.time:hover {
-		background-color: $yellowLight;
-		border-top: 4px solid $yellowLight;
-		border-bottom: 4px solid $yellowLight;
-		color: $linkColorHover;
-	}
+		background-color: $fieldHighlightBackgroundColor;
+		border-top: 4px solid $fieldHighlightBackgroundColor;
+		border-bottom: 4px solid $fieldHighlightBackgroundColor;
+		color: $fieldHighlightTextColor;
+    }
 	.key-name {
-		color: $red;
+		color: $errorColor;
 		font-weight: bold;
 	}
 	.string {
-		color:$teal; /* was 007777; */
+		color: $et_teal; /* was 007777; */
 	}
 	.number {
-		color:$purple; /* was AA00AA; */
+		color: $et_purple; /* was AA00AA; */
 	}
 	.boolean {
-		color:$orange; /* was 0000FF; */
+		color: $alertColor; /* was 0000FF; */
 	}
 	.null {
-		color:$orange; /* was 0000FF; */
+		color: $alertColor; /* was 0000FF; */
 	}
 }
 
@@ -112,7 +116,7 @@ ul.events-viewer-tooltip {
 	td.col-warnings {
 		i {
 			font-size: 18px;
-			color: $orange;
+			color: $alertColor;
 		}
 		span {	/*  for 508 */
 			position: absolute;
@@ -122,67 +126,73 @@ ul.events-viewer-tooltip {
 	.shared-eventsviewer-table-body-primaryrow > td.no-wrap {
 		white-space: pre;
 	}
+
 	td.expands.et_blue    {
-		background-color: $blueDark !important;
-		border-right:1px solid $blueDark !important;
+		background-color: $accentColor !important;
+		border-right:1px solid $accentColor !important;
 		&:hover {
-			background-color: color($blueDark l(+7%)) !important;
+			background-color: $accentColorL10 !important;
 		}
 	}
 	td.expands.et_green   {
-		background-color: $green !important;
-		border-right:1px solid $green !important;
+		background-color: $successColor !important;
+		border-right:1px solid $successColor !important;
 		&:hover {
-			background-color: color($green l(+7%)) !important;
-		}
-	}
-	td.expands.et_magenta {
-		background-color: $pink !important;  /* nothing closer in the viz colors */
-		border-right:1px solid $pink !important;
-		&:hover {
-			background-color: color($pink l(+7%)) !important;
+			background-color: $successColorL10 !important;
 		}
 	}
 	td.expands.et_orange  {
-		background-color: $orange !important;
-		border-right:1px solid $orange !important;
+		background-color: $alertColor !important;
+		border-right:1px solid $alertColor !important;
 		&:hover {
-			background-color: color($orange l(+7%)) !important;
-		}
-	}
-	td.expands.et_purple  {
-		background-color: $purple !important;
-		border-right:1px solid $purple !important;
-		&:hover {
-			background-color: color($purple l(+7%)) !important;
+			background-color: $alertColorL10 !important;
 		}
 	}
 	td.expands.et_red     {
-		background-color: $red !important;
-		border-right:1px solid $red !important;
+		background-color: $errorColor !important;
+		border-right:1px solid $errorColor !important;
 		&:hover {
-			background-color: color($red l(+7%)) !important;
+			background-color: $errorColorL10 !important;
 		}
 	}
 	td.expands.et_sky     {
-		background-color: $blue !important;
-		border-right:1px solid $blue !important;
+		background-color: $infoColor !important;
+		border-right:1px solid $infoColor !important;
 		&:hover {
-			background-color: color($blue l(+30%)) !important;
-		}
-	}
-	td.expands.et_teal    {
-		background-color: $teal !important; /* not in the viz colors */
-		border-right:1px solid $teal !important;
-		&:hover {
-			background-color: color($teal l(+7%)) !important;
+			background-color: $infoColorL10 !important;
 		}
 	}
 	td.expands.et_yellow  {
-		background-color: $yellow !important;
-		border-right:1px solid $yellow !important;
+		background-color: $warningColor !important;
+		border-right:1px solid $warningColor !important;
 		&:hover {
-			background-color: color($yellow l(+7%)) !important;
+			background-color: $warningColorL20 !important;
+		}
+	}
+
+
+	td.expands.et_magenta {
+		background-color: $et_magenta !important;  /* nothing closer in the viz colors */
+		border-right:1px solid $et_magenta !important;
+		&:hover {
+			background-color: color($et_magenta l(+7%)) !important;
+		}
+	}
+
+
+	td.expands.et_purple  {
+		background-color: $et_purple !important;
+		border-right:1px solid $et_purple !important;
+		&:hover {
+			background-color: color($et_purple l(+7%)) !important;
+		}
+	}
+
+	td.expands.et_teal    {
+		background-color: $et_teal !important; /* not in the viz colors */
+		border-right:1px solid $et_teal !important;
+		&:hover {
+			background-color: color($et_teal l(+7%)) !important;
 		}
 	}
 
@@ -192,6 +202,7 @@ ul.events-viewer-tooltip {
 	}
 
 	ul.condensed-selected-fields {
+		@mixin clearfix;
 		margin:  5px 0 0 0;
 		max-width: 100%;
 
@@ -205,7 +216,7 @@ ul.events-viewer-tooltip {
 
 			> :last-child {
 				padding-right: 10px;
-				border-right: 1px dashed $borderColor;
+				border-right: 1px dashed $eventFieldBorderColor;
 			}
 
 			&:last-child {
@@ -223,7 +234,8 @@ ul.events-viewer-tooltip {
 			}
 
             .field-value.a .f-v {
-                background-color: $yellowLight;
+                background-color: $fieldHighlightBackgroundColor;
+                color: $fieldHighlightTextColor;
             }
 
 			.f-v {
@@ -234,7 +246,7 @@ ul.events-viewer-tooltip {
 				overflow: hidden;
 				text-overflow:ellipsis;
 				vertical-align: top;
-
+				padding: 0 $linkPadding;
 			}
 
 			.f-v, .more-fields {
@@ -254,7 +266,8 @@ ul.events-viewer-tooltip {
 						color: $linkColorHover;
 					}
 					&.a {
-						background-color: $yellowLight;
+						background-color: $fieldHighlightBackgroundColor;
+                        color: $fieldHighlightTextColor;
 						margin-right: 2px;
 					}
 				}
@@ -268,84 +281,27 @@ ul.events-viewer-tooltip {
 		cursor: pointer;
 	}
 
-	.table-embed {
-		margin-top: 10px;
-		margin-bottom: 0;
-		background-color: transparent;
-		width: auto;
-		clear: left;
-		min-width: 0;
+	.table {
+        .field-actions {
+            display: block;
+            text-align: center;
+        }
 
-		th:first-child {
-			padding-left: 0;
-		}
+		.field-value {
+            word-break: break-all;
 
-		td > a._time-expand {
-			display: inline;
-			margin-left: 2px;
-		}
-		 td > a._time-expand:hover {
-			 text-decoration: none;
-		 }
-
-		td {
-			border-bottom: none ;
-			line-height: 20px;
-		}
-
-
-		tbody:first-child tr:first-child td {
-			border-top:none ;
-		}
-		td > a {
-			text-decoration: none;
-			display: block;
-			min-width: 16px;
-			padding: 0 3px;
-			&:hover{
-				background: $tableBackgroundAccentHover;
-				color: $linkColorHover !important; /* ghetto */
-			}
-			&:focus {
-				@mixin focus-pill;
-			}
-		}
-		a._time-expand:hover, a.more-fields:hover {
-			text-decoration: underline;
-			background: none;
-		}
-
-		.field-actions {
-			font-size: 14px;
-			height: 20px;
-			overflow: hidden;
-			text-align: center;
-			padding-right: 0
-		}
-
-		.btn-group {
-			font-size: inherit; /*  huh? */
-		}
-
-		.field-type {
-			padding-left: 0;
-		}
-		.field-key {
-			padding: 0 8px 0 0;
-		}
-		td.field-value {
-			word-break: break-all;
-			padding-left: 0;
-		}
-		.field-value{
-			a {
+            a {
 				display: inline-block;
+
+                &.tag {
+                    padding: 0 3px;
+                }
 			}
-			a.tag {
-				margin: 0px 1px;
-			}
-			&.a a.f-v, a.tag.a {
-				background-color: $yellowLight;
+
+			&.a a.f-v {
+                padding: 0 3px;
+				background-color: $fieldHighlightBackgroundColor;
+                color: $fieldHighlightTextColor;
 			}
 		}
 	}
@@ -365,10 +321,11 @@ ul.events-viewer-tooltip {
 		width: auto;
 
 		.checkbox {
-			margin: 0;
+			margin: 2px 0 0;
 			> a, > a:hover {
 				padding: 0;
 				color: $textColor !important; /* ghetto */
+				display: inline;
 			}
 		}
 
@@ -390,13 +347,21 @@ ul.events-viewer-tooltip {
 
 	.table-expanded a {
 		color: $linkColor !important; /* ghetto */
+		display: flex;
+
+		&._time-expand {
+			margin-left: $spacingQuarter;
+			text-decoration: none;
+			display: inline;
+		}
 	}
 
 	.table-expanded a:hover {
 		color: $linkColorHover !important; /* ghetto */
 	}
 	.table {
-		margin-bottom: 0;
+		margin-bottom: 5px;
+		@mixin create-card-table;
 	}
 
 	.hide-line-num th.line-num, .hide-line-num td.line-num {
@@ -413,13 +378,17 @@ ul.events-viewer-tooltip {
 	}
 
 	.event-actions {
-		margin-top: 10px;
+		margin: $spacingHalf 0;
 	}
 
 	.showinline, .hideinline {
 	  white-space:nowrap;
 	  word-wrap: normal;
 	  display: block;
+	}
+
+	.header-table-docked .table {
+		margin-bottom: 0;
 	}
 }
 
@@ -432,7 +401,14 @@ ul.events-viewer-tooltip {
 .shared-eventsviewer-list,
 .shared-eventsviewer-table,
 .shared-eventsviewer-raw {
-	background: $white;
+	background: $tableBackground;
+}
+
+.shared-eventsviewer-shared-eventfields > table{
+    box-shadow: 0 1px 1px $tableBorderHorizontalColor;
+    th, td {
+        border-bottom: $tableBorderHorizontal;
+    }
 }
 
 /*  docking ... */
@@ -442,7 +418,8 @@ ul.events-viewer-tooltip {
 	table-layout: auto;
 
 
-    > tbody > tr {
+    > tbody > tr.odd,
+    > tbody > tr.even {
         > td > a,
         > td > span.field-val {
             text-decoration: none;
@@ -454,7 +431,7 @@ ul.events-viewer-tooltip {
         > td.one-value-drilldown:hover,
         > td._time-drilldown:hover,
         > td.multi-value-drilldown > a.field-val:hover {
-            background-color: $tableBackgroundHover;
+            background-color: $tableRowHoverColor;
             cursor: pointer;
         }
         > td.one-value-drilldown:hover > a.field-val ,
@@ -462,7 +439,6 @@ ul.events-viewer-tooltip {
             color: $linkColorHover;
         }
     }
-
 }
 
 .docked-header-table > table {
@@ -474,7 +450,7 @@ ul.events-viewer-tooltip {
 
 
 .reorderable {
-    border-left:1px solid $tableBorderVertical;
+    border-left: $tableBorderVertical;
 }
 
 .reorderable-label {
@@ -487,7 +463,7 @@ ul.events-viewer-tooltip {
 	font-family: "Splunk Icons";
 	content: "\2195 ";
 	padding-left: 5px;
-	color: $tableSortIconColor;
+	color: $gray60;
 }
 .sorts.asc .reorderable-label:after,
 .sorts.Asc .reorderable-label:after
@@ -502,17 +478,17 @@ ul.events-viewer-tooltip {
 }
 
 .reorderable-helper {
-	background-color: $red;
+	background-color: $errorColor;
 	@mixin interactive;
 	@mixin interactive-hover;
 	border-radius: 0;
 	z-index: 10;
-	line-height: $baseLineHeight;
+	line-height: $lineHeight;
 }
 
 .reorderable-helper.reorderable-remove {
-	@mixin gradient-vertical color($red l(+50%)), color($red l(+40%));
-	border-color: color($red l(+20%) s(-40%));
+	background: $errorColorL50;
+	border-color: $errorColorL10;
 }
 
 th.reorderable {
@@ -539,7 +515,7 @@ th.reorderable {
 th.reorderable.moving {
 	color: transparent;
 	text-shadow: none;
-	background: $grayLightMedium;
+	background: $gray80;
 }
 
 th.reorderable.moving .reorderable-label:before  {
@@ -552,7 +528,7 @@ th.reorderable.moving .reorderable-label:after  {
 
 
 .table-insertion-cursor {
-	border-left: 1px dashed $red;
+	border-left: 1px dashed $accentColor;
 	position: absolute;
 	top: 0;
 	left:-100px;
@@ -578,7 +554,14 @@ th.reorderable.moving .reorderable-label:after  {
 		}
 	}
 
+	.shared-eventsviewer, .events-viewer-wrapper {
+		@mixin print-width-100-percent;
+	}
+
 	.shared-eventsviewer {
+		width: calc(100% - 1px) !important;
+		border: none;
+
 		pre.raw-event {
 			@mixin print-wrap-all;
 		}
@@ -589,10 +572,14 @@ th.reorderable.moving .reorderable-label:after  {
 				.tags > .tag.a {
 					border: 2px solid $borderColor;
 				}
+
+				.f-v {
+					@mixin print-wrap-all;
+				}
 			}
 		}
 
-		.table-embed {
+		.table {
 			.field-value.a .f-v,
 			.field-value .tag.a {
 				border: 2px solid $borderColor;
@@ -602,14 +589,22 @@ th.reorderable.moving .reorderable-label:after  {
 		.table-expanded a {
 			color: $black !important;
 		}
-		
+
+		.shared-eventsviewer-list .events-results-table {
+			table-layout: fixed !important;
+
+			th.line-num {
+				width: 8% !important;
+			}
+
+			th:last-child {
+				width: 70% !important;
+			}
+		}
+
 		/* SPL-126903: prevent line numbers >10 from displaying vertically */
 		.events-results-table td.line-num {
 	    	word-break: normal !important;
 		}
-	}
-
-	.shared-eventsviewer, .events-viewer-wrapper {
-		@mixin print-width-100-percent;
 	}
 }

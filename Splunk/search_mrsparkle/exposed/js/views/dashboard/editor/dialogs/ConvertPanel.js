@@ -30,7 +30,7 @@ define(
              splunkUtil,
              route) {
         var sprintf = splunkUtil.sprintf;
-        
+
         var CreateDialog = BaseView.extend({
             className: 'step step-create',
             initialize: function(options) {
@@ -50,7 +50,6 @@ define(
 
                 this.children.panelName = new ControlGroup({
                     label: _("ID").t(),
-                    controlClass: 'controls-block',
                     controls: this.children.panelNameTextControl,
                     tooltip: _('The ID is used as the filename on disk. Cannot be changed later.').t(),
                     help: _('Can only contain letters, numbers and underscores.').t()
@@ -59,9 +58,8 @@ define(
                 this.children.panelPerm = new ControlGroup({
                     label: _("Permissions").t(),
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             {value: "private", label: _("Private").t()},
                             {

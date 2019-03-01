@@ -22,6 +22,7 @@ define([
             Job.prototype.initialize.call(this, attributes);
             this._searchLogs = [];
             this._searchString = "*"; 
+            this._isBackground = false;
             this._isRunning = true;
             this._isFinalizing = false;
             this._isQueued = false;
@@ -41,6 +42,7 @@ define([
         startPolling: function() { },
         stopPolling: function() { },
         startJob: function() { return this._startJobDeferred; },
+        isBackground: function() { return this._isBackground; },
         isRunning: function() { return this._isRunning; },
         isFinalizing: function() { return this._isFinalizing; },
         isQueued: function() { return this._isQueued; },

@@ -28,9 +28,8 @@ define(
              *     enableExtract: <Boolean> IFX button at top/bottom
              * }
              */
-            initialize: function(options) {
+            initialize: function() {
                 this.$el.removeClass('fade');
-                options || (options = {});
                 ModalView.prototype.initialize.apply(this, arguments);
                 this.model.state = new BaseModel();
                 this.children.controlsTop = new ControlsView({
@@ -40,7 +39,7 @@ define(
                         application: this.model.application,
                         state: this.model.state
                     },
-                    enableExtract: options.enableExtract
+                    enableExtract: this.options.enableExtract
                 });
 
                 this.children.table = new Table({
@@ -60,8 +59,10 @@ define(
             render: function() {
                 this.$el.html(ModalView.TEMPLATE);
                 this.$(ModalView.HEADER_TITLE_SELECTOR).html(_('Select Fields').t());
+                this.$(ModalView.FOOTER_SELECTOR).html(''); // Empty Default Footer Text
                 this.children.controlsTop.render().appendTo(this.$(ModalView.BODY_SELECTOR));
                 this.children.table.render().appendTo(this.$(ModalView.BODY_SELECTOR));
+                this.$(ModalView.BODY_SELECTOR).removeClass(ModalView.BODY_SCROLLING_CLASS);
 
                 return this;
             }

@@ -29,9 +29,7 @@ define(function(require, exports, module) {
             $td.html(_.template(this.template, cellData));
         },
 
-        template: '\
-            <%- formattedValue %>\
-        '
+        template: '<%- formattedValue %>'
 
     });
 

@@ -29,7 +29,7 @@ define(
         return BaseView.extend({
             template: template,
             moduleId: module.id,
-
+            className: 'success-container',
             initialize: function (options) {
                 BaseView.prototype.initialize.apply(this, arguments);
 

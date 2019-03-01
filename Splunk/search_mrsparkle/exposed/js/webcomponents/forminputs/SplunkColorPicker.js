@@ -20,19 +20,10 @@ define([
                     value: initialColor || '0x000000'
                 });
 
-                // base colors from:
-                // https://confluence.splunk.com/display/PROD/Color+palettes%2C+chart+lines%2C+and+spacing
-                var sequentialBaseColors = [
-                    '#1D92C5',
-                    '#D6563C',
-                    '#6A5C9E',
-                    '#31A35F'
-                ];
-
                 var splunkPalettes = {
                     'splunkCategorical': ColorCodes.CATEGORICAL.slice(0, 10),
                     'splunkSemantic': ColorCodes.SEMANTIC,
-                    'splunkSequential': _.flatten(_.map(sequentialBaseColors, function(startColor) {
+                    'splunkSequential': _.flatten(_.map(ColorCodes.SEQUENTIAL, function(startColor) {
                         return [
                             startColor,
                             colorUtils.modifyLuminosityOfHexString(startColor, 1.1),

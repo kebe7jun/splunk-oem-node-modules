@@ -1,16 +1,20 @@
 define([
+    'jquery',
     'underscore',
     'module',
     'views/Base',
+    'views/shared/preferences/Master',
     'contrib/text!./MenuContents.html',
     './MenuContents.pcssm',
     'uri/route',
     'splunk.util'
 ],
 function(
+    $,
     _,
     module,
     BaseView,
+    PreferencesDialogView,
     template,
     css,
     route,
@@ -29,6 +33,24 @@ function(
                 this.render();
             }
         },
+        events: {
+            "click .link-preferences" : function(e) {
+                e.preventDefault();
+                this.children.preferencesDialog = new PreferencesDialogView({
+                    model: {
+                        user: this.model.user,
+                        application: this.model.application,
+                        serverInfo: this.model.serverInfo
+                    },
+                    collection: {
+                        appsVisible: this.collection.appsVisible
+                    },
+                    showAppSelection: !this.model.serverInfo.isLite()
+                });
+                this.children.preferencesDialog.render().appendTo($("body"));
+                this.trigger('close');
+            }
+        },
         render: function() {
             var rootUrl = this.model.application.get('root'),
                 locale = this.model.application.get('locale'),
@@ -40,13 +62,10 @@ function(
                     this.model.application.get('app'),
                     [
                         'authentication',
-                        'changepassword',
-                        userName
-                    ],
-                    {
-                        data: { action: 'edit' }
-                    }
+                        'changepassword'
+                    ]
                 ),
+				
                 accountLinkLite = route.manager(
                     rootUrl,
                     locale,

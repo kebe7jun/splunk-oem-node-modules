@@ -1,36 +1,30 @@
-$dce-menu-bg: #1f2126;
 .view {
-    composes: body from "../../DCEMenuDialog.pcssm";
-    /* DCE-OEM-CHANGE */
-    background-color: $dce-menu-bg;
-    border-radius: 0 0 5px 5px;
-    opacity: .94;
-    min-width: 160px;
+    composes: body from "../../MenuDialog.pcssm";
+    min-width: 260px;
 }
 
 .appsList {
-    composes: menuSelectable from '../../DCEMenuDialog.pcssm';
+    composes: menuSelectable from '../../MenuDialog.pcssm';
     max-height: calc(100vh - 120px);
-    /* DCE-OEM-CHANGE */
-    background-color: $dce-menu-bg;
+    border-radius: $containerInnerBorderRadius $containerInnerBorderRadius 0 0;
 }
 
 .menu {
-    composes: menuSelectable from "../../DCEMenuDialog.pcssm";
+    composes: menuSelectable from "../../MenuDialog.pcssm";
 }
 
 .label {
     padding-right: 30px;
+    display: inline-block;
 }
 
 .icon {
     height: 18px;
     position: absolute;
     right: 10px;
-    top: 4px;
+    top: 6px;
 }
 
-
 .selected {
-    composes: selected from "../../DCEMenuDialog.pcssm";
+    composes: selected from "../../MenuDialog.pcssm";
 }

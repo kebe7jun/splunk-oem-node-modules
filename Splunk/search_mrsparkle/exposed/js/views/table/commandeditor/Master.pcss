@@ -20,7 +20,7 @@
     &.collapsed {
         flex: 0 0 30px;
         cursor: pointer;
-        background-color: $grayLight;
+        background-color: $gray60;
 
         h3,
         .commandeditor-collapse,
@@ -40,7 +40,7 @@
         }
 
         &:hover {
-            background: color($grayLight blend($white 10%));
+            background: $gray80;
         }
     }
 
@@ -71,7 +71,7 @@
     right:0;
 
     &:focus {
-        @mixin focus-pill;
+        @mixin focus-element;
     }
 }
 
@@ -89,7 +89,7 @@
     }
 
     &:focus {
-        @mixin focus-pill;
+        @mixin focus-element;
     }
 }
 
@@ -105,7 +105,7 @@
     }
 
     &:focus {
-        @mixin focus-pill;
+        @mixin focus-element;
     }
 }
 
@@ -163,7 +163,6 @@ $commandEditorPopScale: calc((240 + 20) / 240);
     min-height: 0;
 
     a.disabled {
-        color: $textDisabledColor;
         cursor: not-allowed;
         pointer-events: none;
     }
@@ -208,6 +207,11 @@ $commandEditorPopScale: calc((240 + 20) / 240);
             }
     	}
 
+      .timespan-dropdown {
+          flex: 1 0 auto;
+          max-width: 40%;
+      }
+
     	> .btn {
             flex: 0 1 auto;
     		box-sizing: border-box;
@@ -238,6 +242,9 @@ $commandEditorPopScale: calc((240 + 20) / 240);
 
 }
 
+.timespan-width {
+    max-width: 220px;
+}
 
 /* Sections */
 
@@ -354,6 +361,11 @@ $commandEditorPopScale: calc((240 + 20) / 240);
     }
 }
 
+.controls-join .shared-controls-syntheticselectcontrol.comparator-control {
+    width: auto;
+    max-width: 65%;
+    flex: 1 0 auto;
+}
 
 /* Buttons */
 .commandeditor-buttons {
@@ -383,10 +395,10 @@ $commandEditorPopScale: calc((240 + 20) / 240);
 }
 
 @define-mixin btn-overlay-toggle {
-    border: 1px solid $borderColor;
+    border: 1px solid $interactiveBorderColor;
     display: block;
-    line-height: 22px;
-    border-radius: 4px;
+    line-height: 24px;
+    border-radius: $interactiveBorderRadius;
     position: relative;
     padding-left: 8px;
     padding-right: 14px;
@@ -407,7 +419,7 @@ $commandEditorPopScale: calc((240 + 20) / 240);
     &:focus {
     	background: $white;
         text-decoration:none;
-        @mixin focus-button;
+        @mixin focus-element;
     }
 
     .placeholder {
@@ -467,7 +479,7 @@ $commandEditorPopScale: calc((240 + 20) / 240);
 
 .range-text {
     .uneditable-input {
-        background-color: $grayLighter;
+        background-color: $gray92;
     }
 }
 
@@ -546,7 +558,7 @@ $commandEditorPopScale: calc((240 + 20) / 240);
         @mixin display-flex;
         flex: 1 0 0px;
         min-height: 16px;
-        background-color: $offWhite;
+        background-color: $gray98;
         color: $textGray;
         cursor: not-allowed;
         padding: 2px 6px;
@@ -579,7 +591,7 @@ $commandEditorPopScale: calc((240 + 20) / 240);
         border: 1px solid $borderColor;
         border-radius: 4px;
         color: $textGray;
-        background-color: $offWhite;
+        background-color: $gray98;
     }
 
     .function {
@@ -604,7 +616,7 @@ $commandEditorPopScale: calc((240 + 20) / 240);
     }
 
     .split-by-row {
-        height: 20px;
+        height: 30px;
 
         &:last-child {
             border-bottom: 1px solid $borderColor;
@@ -615,7 +627,7 @@ $commandEditorPopScale: calc((240 + 20) / 240);
 /* Advanced+Filter Rex */
 .commandeditor-form-advanced-rex, .commandeditor-form-filter-regex {
     .regex-box textarea {
-        font-size: 11px;
+        font-size: $fontSizeSmall;
     }
 
     dl > dt {

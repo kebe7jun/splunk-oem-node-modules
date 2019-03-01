@@ -49,7 +49,6 @@ define(
                 this.children.sourceSwitch = new ControlGroup({
                     className: 'source-switch control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'sourceSwitchPort',
                         model: this.model.input,
@@ -75,7 +74,6 @@ define(
                 this.children.port = new ControlGroup({
                     className: 'net-port control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -89,7 +87,6 @@ define(
                 this.children.sourceOverride = new ControlGroup({
                     className: 'net-port control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.source',
                         model: this.model.input,
@@ -105,7 +102,6 @@ define(
                 this.children.restrictToHost = new ControlGroup({
                     className: 'net-restrict control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.restrictToHost',
                         model: this.model.input,
@@ -156,25 +152,25 @@ define(
 
             faqList: [
                 {
-                    question: _('How should I configure Splunk for syslog traffic?').t(),
+                    question: _('How should I configure the Splunk platform for syslog traffic?').t(),
                     answer: _('The syslog service runs on UDP port 514 by default. If possible, send this traffic over TCP for better transmission reliability.').t()
                 },
                 {
                     question: _('What\'s the difference between receiving data over TCP versus UDP?').t(),
-                    answer: _('TCP requires a handshake between your system and the remote system for network communications. \
-                    It ensures content delivery, as the sending machine waits for an acknowledgement from the recipient before \
-                    passing more data along. With UDP, traffic arrives with best effort, with no knowledge of whether or not \
-                    the data was received. You can specify a list of connection restrictions from specific machines or networks for either protocol.').t()
+                    answer: _('TCP requires a handshake between your system and the remote system for network communications. ' +
+                    'It ensures content delivery, as the sending machine waits for an acknowledgement from the recipient before ' +
+                    'passing more data along. With UDP, traffic arrives with best effort, with no knowledge of whether or not ' +
+                    'the data was received. You can specify a list of connection restrictions from specific machines or networks for either protocol.').t()
                 },
                 {
                     question: _('Can I collect syslog data from Windows systems?').t(),
-                    answer: _('The system logging facility on Windows is the Windows Event Log service. However, if you \
-                            install a third-party syslog service on your Windows hosts, you can collect the data on Splunk with syslog monitoring.').t()
+                    answer: _('The system logging facility on Windows is the Windows Event Log service. However, if you ' +
+                            'install a third-party syslog service on your Windows hosts, you can collect the data on the Splunk platform with syslog monitoring.').t()
                 },
                 {
                     question: _('What is a source type?').t(),
-                    answer: _('A source type is a field that defines how Splunk handles a piece of incoming data. The \
-                    source type defines specifications for line break behavior, timestamp location, and character set.').t()
+                    answer: _('A source type is a field that defines how the Splunk platform handles a piece of incoming data. The ' +
+                    'source type defines specifications for line break behavior, timestamp location, and character set.').t()
                 }
             ],
 

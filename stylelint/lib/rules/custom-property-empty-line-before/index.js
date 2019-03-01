@@ -1,137 +1,134 @@
-"use strict"
+"use strict";
 
-const addEmptyLineBefore = require("../../utils/addEmptyLineBefore")
-const blockString = require("../../utils/blockString")
-const hasEmptyLine = require("../../utils/hasEmptyLine")
-const isCustomProperty = require("../../utils/isCustomProperty")
-const isSingleLineString = require("../../utils/isSingleLineString")
-const isStandardSyntaxDeclaration = require("../../utils/isStandardSyntaxDeclaration")
-const optionsMatches = require("../../utils/optionsMatches")
-const removeEmptyLinesBefore = require("../../utils/removeEmptyLinesBefore")
-const report = require("../../utils/report")
-const ruleMessages = require("../../utils/ruleMessages")
-const validateOptions = require("../../utils/validateOptions")
+const addEmptyLineBefore = require("../../utils/addEmptyLineBefore");
+const blockString = require("../../utils/blockString");
+const getPreviousNonSharedLineCommentNode = require("../../utils/getPreviousNonSharedLineCommentNode");
+const hasEmptyLine = require("../../utils/hasEmptyLine");
+const isAfterComment = require("../../utils/isAfterComment");
+const isCustomProperty = require("../../utils/isCustomProperty");
+const isFirstNested = require("../../utils/isFirstNested");
+const isSingleLineString = require("../../utils/isSingleLineString");
+const isStandardSyntaxDeclaration = require("../../utils/isStandardSyntaxDeclaration");
+const optionsMatches = require("../../utils/optionsMatches");
+const removeEmptyLinesBefore = require("../../utils/removeEmptyLinesBefore");
+const report = require("../../utils/report");
+const ruleMessages = require("../../utils/ruleMessages");
+const validateOptions = require("../../utils/validateOptions");
 
-const ruleName = "custom-property-empty-line-before"
+const ruleName = "custom-property-empty-line-before";
 
 const messages = ruleMessages(ruleName, {
   expected: "Expected empty line before custom property",
-  rejected: "Unexpected empty line before custom property",
-})
+  rejected: "Unexpected empty line before custom property"
+});
 
-const rule = function (expectation, options, context) {
+const rule = function(expectation, options, context) {
   return (root, result) => {
-    const validOptions = validateOptions(result, ruleName, {
-      actual: expectation,
-      possible: [
-        "always",
-        "never",
-      ],
-    }, {
-      actual: options,
-      possible: {
-        except: [
-          "first-nested",
-          "after-comment",
-          "after-custom-property",
-        ],
-        ignore: [
-          "after-comment",
-          "inside-single-line-block",
-        ],
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      {
+        actual: expectation,
+        possible: ["always", "never"]
       },
-      optional: true,
-    })
+      {
+        actual: options,
+        possible: {
+          except: ["first-nested", "after-comment", "after-custom-property"],
+          ignore: ["after-comment", "first-nested", "inside-single-line-block"]
+        },
+        optional: true
+      }
+    );
     if (!validOptions) {
-      return
+      return;
     }
 
     root.walkDecls(decl => {
-      const prop = decl.prop,
-        parent = decl.parent
+      const prop = decl.prop;
+      const parent = decl.parent;
 
       if (!isStandardSyntaxDeclaration(decl)) {
-        return
+        return;
       }
       if (!isCustomProperty(prop)) {
-        return
+        return;
       }
 
       // Optionally ignore the node if a comment precedes it
       if (
-        optionsMatches(options, "ignore", "after-comment")
-        && decl.prev()
-        && decl.prev().type === "comment"
+        optionsMatches(options, "ignore", "after-comment") &&
+        isAfterComment(decl)
       ) {
-        return
+        return;
+      }
+
+      // Optionally ignore the node if it is the first nested
+      if (
+        optionsMatches(options, "ignore", "first-nested") &&
+        isFirstNested(decl)
+      ) {
+        return;
       }
 
       // Optionally ignore nodes inside single-line blocks
       if (
-        optionsMatches(options, "ignore", "inside-single-line-block")
-        && isSingleLineString(blockString(parent))
+        optionsMatches(options, "ignore", "inside-single-line-block") &&
+        isSingleLineString(blockString(parent))
       ) {
-        return
+        return;
       }
 
-      let expectEmptyLineBefore = expectation === "always" ? true : false
+      let expectEmptyLineBefore = expectation === "always" ? true : false;
 
-      // Optionally reverse the expectation for the first nested node
+      // Optionally reverse the expectation if any exceptions apply
       if (
-        optionsMatches(options, "except", "first-nested")
-        && decl === parent.first
+        (optionsMatches(options, "except", "first-nested") &&
+          isFirstNested(decl)) ||
+        (optionsMatches(options, "except", "after-comment") &&
+          isAfterComment(decl)) ||
+        (optionsMatches(options, "except", "after-custom-property") &&
+          isAfterCustomProperty(decl))
       ) {
-        expectEmptyLineBefore = !expectEmptyLineBefore
+        expectEmptyLineBefore = !expectEmptyLineBefore;
       }
 
-      // Optionally reverse the expectation if a comment precedes this node
-      if (
-        optionsMatches(options, "except", "after-comment")
-        && decl.prev()
-        && decl.prev().type === "comment"
-      ) {
-        expectEmptyLineBefore = !expectEmptyLineBefore
-      }
-
-      // Optionally reverse the expectation if a custom property precedes this node
-      if (
-        optionsMatches(options, "except", "after-custom-property")
-        && decl.prev()
-        && decl.prev().prop
-        && isCustomProperty(decl.prev().prop)
-      ) {
-        expectEmptyLineBefore = !expectEmptyLineBefore
-      }
-
-      const hasEmptyLineBefore = hasEmptyLine(decl.raws.before)
+      const hasEmptyLineBefore = hasEmptyLine(decl.raws.before);
 
       // Return if the expectation is met
       if (expectEmptyLineBefore === hasEmptyLineBefore) {
-        return
+        return;
       }
 
       // Fix
       if (context.fix) {
         if (expectEmptyLineBefore) {
-          addEmptyLineBefore(decl, context.newline)
+          addEmptyLineBefore(decl, context.newline);
         } else {
-          removeEmptyLinesBefore(decl, context.newline)
+          removeEmptyLinesBefore(decl, context.newline);
         }
 
-        return
+        return;
       }
 
-      const message = expectEmptyLineBefore ? messages.expected : messages.rejected
+      const message = expectEmptyLineBefore
+        ? messages.expected
+        : messages.rejected;
       report({
         message,
         node: decl,
         result,
-        ruleName,
-      })
-    })
-  }
+        ruleName
+      });
+    });
+  };
+};
+
+function isAfterCustomProperty(decl) {
+  const prevNode = getPreviousNonSharedLineCommentNode(decl);
+  return prevNode && prevNode.prop && isCustomProperty(prevNode.prop);
 }
 
-rule.ruleName = ruleName
-rule.messages = messages
-module.exports = rule
+rule.ruleName = ruleName;
+rule.messages = messages;
+module.exports = rule;

@@ -19,6 +19,9 @@
 }
 
 .section-padded {
+	.btn.pull-right {
+		margin-bottom: 10px;
+	}
 	.divider {
 		margin: 10px -20px;
 		clear:both;
@@ -54,6 +57,14 @@
 		margin-right: 5px;
 		margin-bottom: 5px;
 	}
+
+	.selectedMachineTypeElement.btn-combo {
+		.btn.removeMachineType {
+			height: $buttonSquareSize;
+			width: $buttonSquareSize;
+			line-height: $buttonSquareSize;
+		}
+	}
 	.btn-combo + .btn-combo {
 		margin-left: 0;
 	}
@@ -74,16 +85,15 @@
 	.create-drop-down .btn {
 	    font-size: 15px;
 	    padding: 0;
-	    width: 24px;
-	    height: 24px;
-	    line-height: 24px;
+	    width: $buttonSquareSize;
+	    height: $buttonSquareSize;
+	    line-height: $buttonSquareSize;
 
 		margin-left: 5px;
 	}
 }
 /* TODO: make this more reusable */
 .fade-up {
-	@mixin gradient-vertical-three-colors color($black a(0)) , color($black a(0.5)), 5px, color($black a(0.5));
 	background-color: transparent;
 	height: 5px;
 	border-bottom: 1px solid $interactiveBorderColor;

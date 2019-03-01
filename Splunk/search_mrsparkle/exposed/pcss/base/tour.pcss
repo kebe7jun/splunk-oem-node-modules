@@ -1,26 +1,27 @@
-/*  STANDARD TOUR */
-
+/*===============================================================================================*/
+/*  SPLUNK: STANDARD TOUR                                                                        */
+/*===============================================================================================*/
 .tourbar {
-    background-color: $grayDarker;
+    background-color: $gray20;
     min-height: 46px;
     position: relative;
 
     .info-container {
         margin: 0px 200px;
         padding: 10px;
-        background-color: $grayDark;
+        background-color: $gray30;
         min-height: 26px;
 
         .info {
             font-size: 14px;
-            color: $grayLighter;
+            color: $gray92;
         }
     }
     .btn {
         background: transparent;
         filter: none;
         border-color: $borderDarkColor;
-        color: $grayLighter;
+        color: $gray92;
         text-shadow: none;
         box-shadow: none;
         top: 50%;
@@ -83,22 +84,22 @@
     .carousel {
         width: 960px;
         height: 718px;
-        background: $grayDark;
+        background: $gray30;
         margin-bottom: 0;
         .carousel-control {
             top: 52%;
             background: none;
             border: none;
-            color: $splunkGreen;
+            color: $brandColor;
             opacity: 1;
             left: 45px;
             font-size: 48px;
             z-index: 60;
             polygon {
-                fill: $splunkGreen;
+                fill: $brandColor;
             }
             &:hover polygon{
-                fill: color($splunkGreen l(+10%));
+                fill: $brandColorL10;
             }
             &.disabled {
                 display: none;
@@ -115,18 +116,18 @@
             bottom: 18px;
             top: inherit;
             right: 50%;
-            @mixin translate 50%, 0;
+            transform: translate(50%, 0);
             z-index: 60;
             li {
                 height: 6px;
                 width: 6px;
                 cursor: pointer;
-                background: $grayLight;
+                background: $gray60;
                 border: none;
                 margin-left: 10px;
                 margin-bottom: 0px;
                 &.active {
-                    background-color: $splunkGreen;
+                    background-color: $brandColor;
                 }
                 &:first-child {
                     margin-left: 0;
@@ -187,14 +188,14 @@
         font-size: 30px;
         color: $white;
         cursor: pointer;
-        @mixin translate -50%, 0;
+        transform: translate(-50%, 0);
     }
     .start-tour,
     .exit-tour {
-        color: $splunkLiteOrange;
+        color: $brandColor;
     }
     .tour-gutter {
-        background: color($grayDark a(90%));
+        background: color($gray30 a(90%));
         height: 132px;
         width: 962px;
         font-size: 16px;
@@ -203,9 +204,9 @@
         bottom: 0px;
         z-index: 50;
         left: 50%;
-        @mixin translate -50%, 0;
+        transform: translate(-50%, 0);
         div.gutter-text {
-            @mixin translate 0, -50%;
+            transform: translate(0, -50%);
             margin: 0 auto;
             position: relative;
             top: 50%;
@@ -268,18 +269,33 @@
     width: 960px;
     margin-left: -480px;
     height: 716px;
-    background: $grayDark;
+    background: $gray30;
     z-index: calc($zindexPopdown + 2);
     &.fade.in {
         top: 15px;
     }
 }
 .modal-backdrop.tour-backdrop.fade {
-    background: $grayDark;
+    background: $gray30;
     z-index: calc($zindexPopdown + 1);
     &.in {
         opacity: 1;
-        background: $grayDark;
+        background: $gray30;
+    }
+}
+.shared-tour-producttours, .shared-tour-imagetour, .shard-interactivetour {
+    &.modal {
+        background-clip: border-box;
+        .modal-header {
+            padding-bottom: $spacingHalf;
+        }
+        .modal-body {
+            padding: 0 $spacingHalf $spacingHalf;
+            border-top: 0;
+            &:last-child {
+                max-height: none;
+            }
+        }
     }
 }
 
@@ -345,7 +361,7 @@ tr.introjs-showElement > th {
     color: white;
     text-align: center;
     text-shadow: 1px 1px 1px color($black a(30%));
-    background: linear-gradient(to bottom, $red 0%, $interactiveErrorGradientEndColor 100%);  /* W3C */
+    background: linear-gradient(to bottom, $errorColor 0%, $interactiveBackgroundColor 100%);
     width: 20px;
     height:20px;
     line-height: 20px;
@@ -354,7 +370,7 @@ tr.introjs-showElement > th {
     box-shadow: 0 2px 5px color($black a(40%));
 }
 
-$introJSBackground: color($grayDark a(90%));
+$introJSBackground: color($gray30 a(90%));
 
 .introjs-arrow {
     border: 8px solid $introJSBackground;
@@ -447,17 +463,17 @@ $introJSBackground: color($grayDark a(90%));
     overflow: visible;
     padding: 5px;
     margin: 0;
-    color: $splunkGreen;
-    fill: $splunkGreen;
+    color: $brandColor;
+    fill: $brandColor;
     text-decoration: none;
     font-size: 25px;
     cursor: pointer;
     outline: none;
     position: absolute;
     top: 50%;
-    @mixin translate 0, -45%;
+    transform: translate(0, -45%);
     &:hover polygon{
-        fill: color($splunkGreen l(+10%));
+        fill: color($brandColor l(+10%));
     }
     &.introjs-disabled {
         display: none;
@@ -485,7 +501,7 @@ $introJSBackground: color($grayDark a(90%));
     }
 }
 .introjs-skipbutton.done {
-    color: $splunkGreen;
+    color: $brandColor;
 }
 .introjs-prevbutton {
     left: 10px;
@@ -496,7 +512,7 @@ $introJSBackground: color($grayDark a(90%));
 .introjs-disabled,
 .introjs-disabled:hover,
 .introjs-disabled:focus {
-    color: $grayLight;
+    color: $gray60;
     box-shadow: none;
     cursor: default;
     background-image: none;
@@ -519,11 +535,11 @@ $introJSBackground: color($grayDark a(90%));
             display: block;
             width: 6px;
             height: 6px;
-            background: $grayLightMedium;
+            background: $gray80;
             border-radius: 10px;
             text-decoration: none;
             &.active {
-                background: $splunkGreen;
+                background: $brandColor;
             }
         }
     }
@@ -533,7 +549,7 @@ $introJSBackground: color($grayDark a(90%));
     height: 10px;
     margin: 10px 0 5px 0;
     border-radius: 4px;
-    background-color: $grayLighter;
+    background-color: $gray92;
 }
 .introjs-progressbar {
     float: left;
@@ -542,7 +558,7 @@ $introJSBackground: color($grayDark a(90%));
     font-size: 10px;
     line-height: 10px;
     text-align: center;
-    background-color: $blue;
+    background-color: $infoColor;
 }
 .introjsFloatingElement {
     position: absolute;
@@ -557,74 +573,70 @@ $introJSBackground: color($grayDark a(90%));
 }
 
 /*  tour links in product tours modal */
+$tourModalImageSize: 84px;
 .tours-links {
     text-align: center;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+        position: relative;
+        list-style: none;
+        margin-bottom: 20px;
+        display: inline-block;
+        text-align: center;
+    }
+    .mask {
+        position:absolute;
+        top:0;
+        bottom:0;
+        left: 0;
+        right: 0;
+        opacity:0;
+        border-radius: $borderRadius;
+        cursor: pointer;
+        background-color: $brandColor;
+        transition: opacity 0.15s linear;
+        &:hover {
+            opacity:0.1;
+        }
+    }
+    .svg-wrapper {
+        height: $tourModalImageSize;
+        padding: $spacingHalf;
+        box-sizing: border-box;
+        svg {
+            width: $tourModalImageSize;
+            fill: $brandColor;
+        }
+    }
 }
 .tour-link {
     position: relative;
     padding: 10px;
-    margin-right: 20px;
+    margin: $spacingHalf;
     display: inline-block;
-    color: $splunkGreen;
-    border: 1px solid $grayLighter;
-    &:last-child {
-        margin-right: 0;
-    }
-    &:hover,
-    &:focus {
-        background: color($splunkGreen a(10%));
-        transition: background 0.15s linear;
+    color: $largeIconLinkColor !important;
+    font-weight: $fontWeightSemiBold;
+    flex: 1 1 0;
+    max-width: 25%;
+    transition: $transitionLargeIcon;
+
+    &:hover {
+        background: $largeIconBackgroundColorHover;
         text-decoration: none;
     }
+    &:focus {
+        @mixin focus-element;
+    }
     i {
-        font-size: 40px;
-        padding: 26px 32px;
-    }
-}
-
-/*  Lite UI */
-@if $theme == lite {
-    .tour-link {
-        color: $splunkLiteBlack;
-        i {
-            color: $splunkLiteOrange;
-        }
-        &:hover,
-        &:focus {
-            background: color($splunkLiteBlack a(10%));
-        }
-    }
-    .shared-tour-producttours.fade {
-        width: 600px;
-        margin-left: -300px;
-    }
-    .try-it-now.btn-primary,
-    .try-it-now.btn-primary:hover {
-        background: $splunkLiteOrange;
-    }
-    .introjs-button {
-        fill: $splunkLiteOrange;
-        &:hover polygon{
-            fill: color($splunkLiteOrange l(+10%));
-        }
-    }
-    .introjs-bullets ul li a.active {
-        background: $splunkLiteOrange;
-    }
-    .image-tour-container .carousel {
-        .carousel-indicators li.active {
-            background-color: $splunkLiteOrange;
-        }
-        .carousel-control {
-            polygon {
-                fill: $splunkLiteOrange;
-            }
-            &:hover polygon{
-                fill: color($splunkLiteOrange l(+10%));
-            }
-        }
-    }
-    .introjs-skipbutton.done {
-        color: $splunkLiteOrange;
+        height: $tourModalImageSize;
+        padding: 32px 40px;
+        box-sizing: border-box;
+        font-size: 76px;
+        line-height: 60px;
+        color: $brandColor;
     }
 }

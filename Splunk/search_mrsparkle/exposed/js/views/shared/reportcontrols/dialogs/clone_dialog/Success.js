@@ -59,7 +59,8 @@ define([
             },
             'click .openInCreator': function(e) {
                 var openRoute = this.model.inmem.openInView(this.model.user);
-                window.location = route[openRoute](this.model.application.get('root'), this.model.application.get('locale'), this.model.application.get("app"), {data: {s: this.model.inmem.id }});
+                var view = route.getView(openRoute);
+                window.location = view.route(this.model.application.get('root'), this.model.application.get('locale'), this.model.application.get("app"), {data: {s: this.model.inmem.id }});
                 e.preventDefault();
             }
         },
@@ -70,11 +71,12 @@ define([
                 isRealTimeSearch = this.model.inmem.isRealTime(),
                 isPivot = this.model.inmem.isPivotReport(),
                 canEmbed = this.model.user.canEmbed(),
-                openWith = this.model.inmem.openInView(this.model.user) === 'pivot' ? _('Pivot').t() : _('Search').t();
+                openInView = this.model.inmem.openInView(this.model.user);
+            var view = route.getView(openInView);
             this.$el.html(Modal.TEMPLATE);
 
             this.$(Modal.HEADER_TITLE_SELECTOR).html(_("Report has been cloned").t());
-            
+
             this.$(Modal.BODY_SELECTOR).html(this.compiledTemplate({
                 _: _,
                 splunkUtil: splunkUtil,
@@ -89,14 +91,13 @@ define([
             this.children.flashMessage.render().prependTo(this.$(Modal.BODY_SELECTOR));
 
             if (canChangePerms || canScheduleSearch && (!isRealTimeSearch || !isPivot)) {
-                this.$('span.clone-report-success-message').text(splunkUtil.sprintf(_("You may now view your report, add it to a dashboard, change additional settings, or edit it in %s.").t(), openWith));
+                this.$('span.clone-report-success-message').text(_("You may now view your report, add it to a dashboard, change additional settings, or edit it.").t());
             } else {
-                this.$('span.clone-report-success-message').text(splunkUtil.sprintf(_("You may now view your report, add it to a dashboard, or edit it in %s.").t(), openWith));
+                this.$('span.clone-report-success-message').text(_("You may now view your report, add it to a dashboard, or edit it.").t());
                 this.$('p.additional-settings').remove();
             }
-
-            this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn createDashboard pull-left">' + _('Add to Dashboard').t() + '</a>');
-            this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn openInCreator pull-left">' + splunkUtil.sprintf(_('Open in %s').t(), openWith) + '</a>');
+            this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn createDashboard">' + _('Add to Dashboard').t() + '</a>');
+            this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn openInCreator">' + view.openLabel + '</a>');
 
             this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn btn-primary modal-btn-primary routeToReport">' + _('View').t() + '</a>');
 

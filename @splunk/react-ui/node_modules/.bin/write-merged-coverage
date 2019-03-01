@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const utils = require('..');
+
+const mapPaths =
+    process.argv.length === 3
+        ? process.argv[2].split(',')
+        : ['coverage_report/coverage_maps_unit', 'coverage_report/coverage_maps_func'];
+
+const coverageMap = utils.mergeCoverageMaps(mapPaths.map(mapPath => path.resolve(mapPath)));
+utils.writeCoverageReports({
+    outputPath: path.resolve('coverage_report'),
+    reporters: ['html'],
+    coverageMap,
+});

@@ -5,14 +5,17 @@ define(
         'underscore',
         'views/dashboard/Base',
         'views/dashboard/editor/AddInputMenu',
-        'views/dashboard/editor/addcontent/Master'
+        'views/dashboard/editor/addcontent/Master',
+        'views/dashboard/header/ThemeSwitch'
     ],
     function(module,
              $,
              _,
              BaseDashboardView,
              AddInputMenu,
-             AddContent) {
+             AddContent,
+             ThemeSwitch
+        ) {
 
         return BaseDashboardView.extend({
             moduleId: module.id,
@@ -64,6 +67,23 @@ define(
                         return;
                     }
                     this.model.controller.trigger('action:save');
+                }
+            },
+            renderThemeSwitch: function() {
+                var mode = this.model.state.get('mode');
+                if (mode != 'editxml') {
+                    if (!this.children.themeSwitch) {
+                        this.children.themeSwitch = new ThemeSwitch({
+                            model: this.model
+                        });
+                    }
+                    var $themeSwitch = this.children.themeSwitch.render().$el;
+                    this.$el.find('.dashboard-edit-controls').append($themeSwitch);
+                } else {
+                    if (this.children.themeSwitch) {
+                        this.children.themeSwitch.remove();
+                        this.children.themeSwitch = null;
+                    }
                 }
             },
             render: function() {
@@ -120,6 +140,9 @@ define(
                         this.$('.add-form').removeClass('disabled').tooltip('destroy');
                     }
                 }.bind(this));
+                if (!this.model.serverInfo.isLite()) {
+                    this.renderThemeSwitch();
+                }
             },
             template: '\
                  <span class="dashboard-edit-controls">\

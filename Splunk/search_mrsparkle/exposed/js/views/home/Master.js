@@ -30,6 +30,7 @@ function(
 ) {
     return BaseView.extend({
         moduleId: module.id,
+        className: 'section-home',
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
 
@@ -80,15 +81,12 @@ function(
         },
         render: function () {
             this.$el.html(this.template);
-            this.children.apps.appendTo(this.$('.apps')).render();
+            this.children.apps.prependTo(this.$el).render();
             this.children.gettingStarted.appendTo(this.$('.dashboard')).render();
             this.children.dashboard.appendTo(this.$('.dashboard')).render();
         },
         template: '\
-            <div class="section-home section-content">\
-                <div class="apps"></div>\
-                <div class="dashboard scrolling-bar-dashboard"></div>\
-            </div>\
+            <div class="dashboard scrolling-bar-dashboard"></div>\
         '
     });
 });

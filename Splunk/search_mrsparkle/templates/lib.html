@@ -762,10 +762,10 @@ isLite = util.isLite()
 <%def name="generate_master_pagination(countPerPage, offset, numItems, search, ns, pwnr)">
       
         <form name="pagingControl" method="get">
-          <input type="hidden" name="search" value="${search}"/>
-          <input type="hidden" name="offset" value="${offset}"/>
-          <input type="hidden" name="ns" value="${ns}"/>
-          <input type="hidden" name="pwnr" value="${pwnr}"/>
+          <input type="hidden" name="search" value="${search|h}"/>
+          <input type="hidden" name="offset" value="${offset|h}"/>
+          <input type="hidden" name="ns" value="${ns|h}"/>
+          <input type="hidden" name="pwnr" value="${pwnr|h}"/>
 
      
         ## EAI pagination
@@ -971,12 +971,6 @@ isLite = util.isLite()
                 page: '_admin'
             });
 
-            var footer = FooterNav.create({
-                model: {
-                    application: applicationModel
-                }
-            }).render();
-
             var $container = $('.SplunkModule.AccountBar');
             $container.addClass('splunk-components');
 
@@ -1009,7 +1003,6 @@ isLite = util.isLite()
             });
 
             var $footerContainer = $('<div class="splunk-components" />');
-            $footerContainer.append(footer.$el);
             $('body').append($footerContainer);
         });
     });

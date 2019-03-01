@@ -1,30 +1,9 @@
 .search-history {
-  margin-top: -5px;
-  .history-content {
-    padding-top: 10px;
-    margin: 0 -30px;
+    clear: both;
+    padding: $spacing;
+    margin-bottom: $spacing;
+    @mixin create-card;
 
-    .btn {
-      line-height: 16px;
-    }
-
-    .table {
-      margin: 50px 0 -31px 0;
-    }
-
-    .history-filters {
-      position: absolute;
-      float: left;
-      padding-left: 20px;
-    }
-
-    .pagination {
-      padding-right: 20px;
-    }
-
-    .shared-controls-controlgroup {
-      margin-left: 210px
-    }
 
     .time-selected {
       margin: -5px 0 0 10px;
@@ -33,78 +12,118 @@
 
     .count-selected {
       margin: 0 0 0 10px;
-    }
-
-    .time-ran-header {
-      width: 150px;
-    }
-
-    .actions-header {
-      width: 100px;
-    }
-
-    .history-group {
-      padding: 5px;
-    }
-
-    .search-history-row {
-
-      td.search {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-      
-      td.search-action {
-        > a {
-          text-decoration: none;
-        }
-      }
-
-      td.details {
-        > span {
-          word-wrap: break-word;
-          white-space: pre-wrap;
-        }
+      > .btn-pill {
+        vertical-align: middle;
       }
     }
 
-    td.disabled {
-      opacity: 0.1;
-      > a {
-        cursor: default;
-      }
-    }
-
-    tr.waiting, tr.noresults {
-      > td {
-        text-align: center;
-      }
-    }
-  }
-  .search-history-label {
-    padding: 0 0 10px 20px;
-    a.show-history {
-      text-decoration: none;
-      > span {
-        padding-left: 5px;
-      }
-    }
-  }
-}
-
-/*  Lite UI */
-/*  -------------------------------------------------- */
-
-@if $theme == lite {
-  .search-history {
-    border-top: 1px dotted #CCC;
-    clear: both;
     .history-content {
-      margin: 0;
-      .table {
-        margin: 50px 0 -1px;
-      }
+        .table {
+            @mixin create-card-table;
+            border-bottom: 0;
+        }
+        .history-filters {
+            float: left;
+            padding: $spacingHalf 0;
+        }
+
+        .shared-controls-controlgroup {
+            margin-left: 210px
+        }
+
+        .time-ran-header {
+            width: 200px;
+        }
+
+        .actions-header {
+            width: 100px;
+        }
+
+        .history-group {
+            padding: 5px;
+        }
+
+        .search-history-row {
+
+            td.search {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            td.time-ran, td.search-action {
+                height: 100%;
+                width: 50px;
+            }
+
+            td.search-action {
+                > a {
+                    padding: 2px;
+                    border-radius: $borderRadius;
+                }
+            }
+
+            td.details {
+                > span {
+                    word-wrap: break-word;
+                    white-space: pre-wrap;
+                }
+            }
+            &, &.even {
+                td.disabled {
+                    &:hover {
+                        background-color: $tableRowHoverColor !important;
+                    }
+                    > a:focus {
+                        box-shadow: none;
+                    }
+                }
+            }
+            &.more-info {
+                > td.filler-cell {
+                    padding: 0;
+                }
+            }
+        }
+
+        td.disabled {
+            cursor: not-allowed;
+            > a {
+                cursor: default;
+                color: $textDisabledColor;
+                box-shadow: none;
+            }
+        }
+
+        div.table-search-input {
+            position: absolute;
+            float: left;
+            margin: 0;
+        }
+
+        tr.waiting, tr.noresults {
+            > td {
+                text-align: center;
+            }
+        }
     }
-  }
+    .search-history-label {
+        h3 {
+            margin: 0;
+            display: inline-block;
+        }
+        a.show-history {
+            display: inline-block;
+            color: $textColor;
+            border-radius: $borderRadius;
+            text-decoration: none;
+            > i {
+                margin-right: $spacingQuarter;
+            }
+        }
+    }
+    .pagination {
+        padding: $spacingHalf 0;
+        margin-top: $spacingHalf;
+    }
 }

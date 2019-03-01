@@ -3,9 +3,9 @@
 .view {
     composes: menu from '../../MenuDialog.pcssm';
 
-    li {
+    li > a {
+        white-space: nowrap;
     }
-
 }
 
 .primaryLink {

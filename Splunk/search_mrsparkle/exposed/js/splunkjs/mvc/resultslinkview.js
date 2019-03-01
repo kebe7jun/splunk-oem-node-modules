@@ -20,34 +20,34 @@ define(function(require, exports, module) {
      * @constructor
      * @memberOf splunkjs.mvc
      * @name ResultsLinkView
-     * @description The **ResultsLink** view displays a panel with buttons to 
-     * open the search, export results, open the search job inspector, and 
-     * refresh the page. This panel is the same as one that is included with the 
-     * wrapper for converted visualizations, allowing you to use these controls 
+     * @description The **ResultsLink** view displays a panel with buttons to
+     * open the search, export results, open the search job inspector, and
+     * refresh the page. This panel is the same as one that is included with the
+     * wrapper for converted visualizations, allowing you to use these controls
      * with a search directly.
      * @extends splunkjs.mvc.BaseSplunkView
      *
-     * @param {Object} options 
-     * @param {String} options.id - The unique ID for this control. 
+     * @param {Object} options
+     * @param {String} options.id - The unique ID for this control.
      * @param {Boolean} [options.link.exportResults.visible] - Indicates whether to show
      * the **Export** button in the panel.
      * @param {Boolean} [options.link.inspectSearch.visible] - Indicates whether to show
      * the **Inspect** button in the panel.
-     * @param {String} [options.link.openSearch.search] - The alternative search query 
+     * @param {String} [options.link.openSearch.search] - The alternative search query
      * to use for the **Open in Search** button.
-     * @param {String} [options.link.openSearch.searchEarliestTime] - The earliest time 
+     * @param {String} [options.link.openSearch.searchEarliestTime] - The earliest time
      * to use for the alternative search specified by **link.openSearch.search**.
-     * @param {String} [options.link.openSearch.searchLatestTime] - The latest time to 
+     * @param {String} [options.link.openSearch.searchLatestTime] - The latest time to
      * use for the alternative search specified by **link.openSearch.search**.
-     * @param {String} [options.link.openSearch.text="Open in Search"] - The label to 
+     * @param {String} [options.link.openSearch.text="Open in Search"] - The label to
      * use for the **Open in Search** button.
-     * @param {String} [options.link.openSearch.ViewTarget="Search"] - The name of the 
+     * @param {String} [options.link.openSearch.ViewTarget="Search"] - The name of the
      * target view for the **Open in Search** button.
      * @param {Boolean} [options.link.openSearch.visible] - Indicates whether to show the
      * **Open in Search** button in the panel.
-     * @param {Boolean} [options.link.visible=true] - Indicates whether to show link 
+     * @param {Boolean} [options.link.visible=true] - Indicates whether to show link
      * buttons in the panel.
-     * @param {String} [options.managerid=null] - The ID of the search manager to bind 
+     * @param {String} [options.managerid=null] - The ID of the search manager to bind
      * this control to.
      *
      * @example
@@ -61,13 +61,13 @@ define(function(require, exports, module) {
      *         SearchManager,
      *         ResultsLinkView
      *     ) {
-     *         
+     *
      *     // Instantiate the search manager
      *     var mysearch = new SearchManager({
      *         id: "mysearch",
      *         search: "index=_internal | head 1000 | top 3 sourcetype"
      *     });
-     * 
+     *
      *     // Instantiate the results link view
      *     var resultsLink = new ResultsLinkView({
      *         id: "resultsLink",
@@ -75,7 +75,7 @@ define(function(require, exports, module) {
      *         "link.exportResults.visible": false,
      *         el: $("#controlpanel")
      *     });
-     * 
+     *
      *     // Display the results link view
      *     resultsLink.render().$el.appendTo($("controlpanel"));
      * });
@@ -105,21 +105,21 @@ define(function(require, exports, module) {
         },
         initialize: function() {
             this.configure();
-            
+
             this.bindToComponentSetting('managerid', this.onManagerChange, this);
 
             this.searchJobModel = new SearchJobModel();
             this.applicationModel = sharedModels.get("app");
             this.userModel = sharedModels.get("user");
-            
+
             this.showExportResultsButton = this.userModel.canExportResults();
 
-            // If this component is not part of an element, it will not 
+            // If this component is not part of an element, it will not
             // have a ReportModel and needs to create one.
             this.model = this.model || new ReportModel();
-            
+
             //so search/pivot icons re-render whenever panel switches between search/pivot
-            this.listenTo(this.model.entry.content, 'change:search', _.bind(this.render, this)); 
+            this.listenTo(this.model.entry.content, 'change:search', _.bind(this.render, this));
         },
         onManagerChange: function(managers, manager) {
             if (this.manager) {
@@ -138,7 +138,7 @@ define(function(require, exports, module) {
             if (this.manager.hasJob()) {
                 this.onSearchStart();
             }
-            
+
             this.manager.replayLastSearchEvent(this);
         },
 
@@ -147,7 +147,7 @@ define(function(require, exports, module) {
             this.searchJobModel.set("id", sid);
 
             if (this.$pivotButton) {
-                this.$pivotButton.off("click").on("click", this.openPivot.bind(this)).show(); 
+                this.$pivotButton.off("click").on("click", this.openPivot.bind(this)).show();
             }
             if (this.$searchButton) {
                 this.$searchButton.off("click").on("click", this.openSearch.bind(this)).show();
@@ -238,8 +238,9 @@ define(function(require, exports, module) {
                 };
             }
 
+            var viewTarget = this.model.openInView(this.userModel);
             var pageInfo = Utils.getPageInfo();
-            var url = Route.page(pageInfo.root, pageInfo.locale, pageInfo.app, options["link.openSearch.viewTarget"] || "search", { data: params });
+            var url = Route.page(pageInfo.root, pageInfo.locale, pageInfo.app, options["link.openSearch.viewTarget"] || viewTarget, { data: params });
 
             Utils.redirect(url, true);
         },
@@ -252,9 +253,9 @@ define(function(require, exports, module) {
             var exportDialog = new ExportResultsDialog({
                 model: {
                     searchJob: this.searchJobModel,
-                    application: this.applicationModel, 
+                    application: this.applicationModel,
                     report: this.model
-                }, 
+                },
                 usePanelType: true,
                 onHiddenRemove: true
             });
@@ -282,7 +283,7 @@ define(function(require, exports, module) {
             }
             var pageInfo = Utils.getPageInfo(), params, url;
             if(this.model.has('id')){
-                //saved pivot 
+                //saved pivot
                 //URI API: app/search/pivot?s=<reportId>
                 //example id: "/servicesNS/admin/simplexml/saved/searches/Report%20Pivot2"
                 var id = this.model.get('id');
@@ -294,7 +295,7 @@ define(function(require, exports, module) {
                 url = Route.pivot(pageInfo.root, pageInfo.locale, pageInfo.app, { data: params });
                 Utils.redirect(url, true);
             }else{
-                //inline pivot 
+                //inline pivot
                 //URI API: app/search/pivot?q=<search string with pivot command>
                 //example search: "| pivot Debugger RootObject_1 count(RootObject_1) AS "Count of RootObject_1" | stats count"
                 var search = this.model.entry.content.get('search');
@@ -312,16 +313,18 @@ define(function(require, exports, module) {
          * Draws the view to the screen. Called only when you create the view manually.
          */
         render: function() {
-            var template; 
+            var template;
             if(this.model.isPivotReport() && this.userModel.canPivot()){
                 template = _.template(this.pivotTemplate);
             }else{
                 template = _.template(this.template);
             }
-
+            var openInView = this.model.openInView(this.userModel);
+            var view = Route.getView(openInView);
             this.$el.html(template({
                 options: this.options,
-                showExportResultsButton: this.showExportResultsButton
+                showExportResultsButton: this.showExportResultsButton,
+                openLabel: view.openLabel
             }));
 
             if (this.resolveBooleanOptions("link.openPivot.visible", "link.visible", true)) {
@@ -387,7 +390,7 @@ define(function(require, exports, module) {
         template: '\
             <a href="#search" class="search-button btn-pill" title="<%- options[\'link.openSearch.text\'] || _(\'Open in Search\').t() %>">\
                 <i class="icon-search"></i>\
-                <span class="hide-text"><%- options[\'link.openSearch.text\'] || _("Open in Search").t() %></span>\
+                <span class="hide-text"><%- options[\'link.openSearch.text\'] || openLabel %></span>\
             </a>\
             <% if (showExportResultsButton) { %>\
                 <a href="#export" class="export-button btn-pill" title="<%- _(\'Export - You can only export results for completed jobs.\').t() %>">\
@@ -402,7 +405,7 @@ define(function(require, exports, module) {
                 <i class="icon-rotate-counter"></i>\
                 <span class="hide-text"><%- _("Refresh").t() %></span>\
             </a>\
-        ', 
+        ',
 
         pivotTemplate: '\
             <a href="#pivot" class="pivot-button btn-pill" title="<%- _(\'Open in Pivot\').t() %>">\
@@ -424,6 +427,6 @@ define(function(require, exports, module) {
             </a>\
         '
     });
-    
+
     return ResultsLinkView;
 });

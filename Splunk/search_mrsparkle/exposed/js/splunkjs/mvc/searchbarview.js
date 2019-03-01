@@ -107,42 +107,48 @@ define(function(require, exports, module) {
              */
             timerange: true,
             /**
+             * Indicates whether using Ace powered editor for constructing searches. Turn it off will disable syntax highlighting and other features in search bar.
+             * 
+             * @type {Boolean}
+             */
+            useAdvancedEditor: true,
+            /**
              * Indicates whether to display the search assistant.
              *
              * When the framework is in independent-mode the search assistant
              * does not function and this option will be ignored.
              *
              * Initialization-only.
-             * 
+             *
              * @deprecated Use searchAssistant:'full'
              */
             useAssistant: true,
             /**
-             * The type of search assistant to use (full | compact | none). 
-             * 
+             * The type of search assistant to use (full | compact | none).
+             *
              * @type {string} full|compact|none
              */
             searchAssistant: undefined,
             /**
              * Indicates whether to display syntax highlighting for the search string.
-             * 
+             *
              * @deprecated Use syntaxHighlighting:'light'
              */
             useSyntaxHighlighting: true,
             /**
-             * The type of syntax highlighting theme to use (black-white | light | dark). 
-             * 
+             * The type of syntax highlighting theme to use (black-white | light | dark).
+             *
              * @type {string} black-white|light|dark
              */
             syntaxHighlighting: undefined,
             /**
              * Indicates whether auto-format is enabled in the search input.
-             * 
+             *
              * @type {Boolean}
              */
             autoFormat: false,
             /* Indicates whether to show line numbers with the search string.
-             * 
+             *
              * @type {Boolean}
              */
             showLineNumbers: false,
@@ -213,12 +219,12 @@ define(function(require, exports, module) {
                     //       Then enable the search assistant in independent
                     //       mode. (SPL-80734)
                     !splunkConfig.INDEPENDENT_MODE;
-                    
+
                 var searchAssistant =
                     (!_.isUndefined(that.settings.get('searchAssistant')) && splunkConfig.INDEPENDENT_MODE) ?
                     'none':
                     that.settings.get('searchAssistant');
-                    
+
                 var autoOpenAssistant =
                     that.settings.get('autoOpenAssistant') &&
                     useAssistant;
@@ -227,9 +233,10 @@ define(function(require, exports, module) {
                 if (!_.isUndefined(that.settings.get('syntaxHighlighting'))) {
                     syntaxHighlighting = that.settings.get('syntaxHighlighting');
                 }
-                
+
                 that.searchbar = new InternalSearchBar({
                     showTimeRangePicker: true,
+                    useAdvancedEditor: that.settings.get('useAdvancedEditor'),
                     useAssistant: useAssistant,
                     autoOpenAssistant: autoOpenAssistant,
                     searchAssistant: searchAssistant,
@@ -377,15 +384,18 @@ define(function(require, exports, module) {
             // and the search button to display.
             $(this.timerange.el).addClass('btn-group');
 
-            // Patch our time range view to synchronize its state with
-            // the internal search bar's internal time range view.
-            utils.syncModels(
-                // embedded internal time range's model
-                this.timerange.timepicker.model.timeRange,
-                // internal search bar's internal time range's model
-                this.searchbar.children.timeRangePicker.model.timeRange,
-                // bidirectional sync; initialize with first model
-                { auto: true });
+            // two-way sync between embedded internal time range picker and internal search bar's internal time range's model
+            // the initial implementation is to sync between two models, but the time range picker has moved away from backbone
+            // model, so we need to do the manual work instead of using the utils.syncModels() function.
+            this.timerange.on('change', function() {
+                this.searchbar.children.timeRangePicker.model.timeRange.set(this.timerange.val());
+            }, this);
+            this.searchbar.children.timeRangePicker.model.timeRange.on('change', function() {
+                this.timerange.val({
+                    earliest_time: this.searchbar.children.timeRangePicker.model.timeRange.get('earliest_time'),
+                    latest_time: this.searchbar.children.timeRangePicker.model.timeRange.get('latest_time')
+                });
+            }, this);
         },
 
         /**

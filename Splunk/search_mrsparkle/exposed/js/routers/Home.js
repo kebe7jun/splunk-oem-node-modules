@@ -35,7 +35,6 @@ define(
                 var owner = this.model.application.get('owner');
 
                 this.enableAppBar = false;
-                this.enableFooter = false;
                 this.showAppsList = false;
                 this.fetchAppLocals = true;
                 this.fetchUser = true;

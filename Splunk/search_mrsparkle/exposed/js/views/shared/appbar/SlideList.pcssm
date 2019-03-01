@@ -7,7 +7,7 @@
 
 
 .view {
-    composes: menu from "../MenuDialog.pcssm";
+    composes: menuSelectable from "../MenuDialog.pcssm";
     transition: transform 200ms;
     max-height:calc(100vh - 100px);
     width: 300px;

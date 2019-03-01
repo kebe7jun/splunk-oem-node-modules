@@ -3,6 +3,7 @@ define([
     'underscore',
     'module',
     'views/Base',
+    './Apps.pcss',
     'uri/route',
     'util/string_utils',
     'jquery.ui.sortable'//no import
@@ -12,11 +13,13 @@ function (
     _,
     module,
     BaseView,
+    css,
     route,
     string_utils
 ) {
     return BaseView.extend({
         moduleId: module.id,
+        classname: 'apps',
         events: {
             'sortstop .list-apps': 'onSortableStop'
         },
@@ -57,6 +60,7 @@ function (
                 canManageRemoteApps: this.model.user.canViewRemoteApps() && this.model.user.canManageRemoteApps(),
                 showUpdates: this.showUpdates
             });
+
             this.$el.html(html);
             this.$listApps = this.$('.list-apps');
             this.bindDragAndDrop();
@@ -78,24 +82,26 @@ function (
             this.model.userPref.save();
         },
         template: '\
-        <div class="app-title"><h3><%-_("Apps").t()%>\
+        <h3 class="apps-title"><%-_("Apps").t()%>\
             	<a href="<%-manageAppsLink%>" title="<%-_("Manage Apps").t()%>" class="btn-pill manage-apps"><span class="icon-gear"></span></a>\
-        </h3></div>\
+        </h3>\
         <div class="scrolling-bar">\
         <div class="list-apps">\
             <% apps.each(function(app) { %>\
             <% var appNav = appNavs.findByAppName(app.entry.get("name")); %>\
-                <div class="app" data-appid="<%- app.entry.get("name") %>" style="<%- appNav && appNav.getColor() ? ("background-color:" + appNav.getColor()) : "" %>">\
-                    <a href="<%- route.page(\
+                <div class="app" data-appid="<%- app.entry.get("name") %>">\
+                    <a aria-label="<%- _(app.entry.content.get("label")).t() %>" class="app-link" href="<%- route.page(\
                         root,\
                         locale,\
                         app.entry.get("name"),\
                         "") %>">\
-                            <span class="helper"></span><img src="<%- route.appIcon(\
+                            <!--span class="helper"></span--><div class="app-icon-wrapper" style="<%- appNav && appNav.getColor() ? ("background-color:" + appNav.getColor()) : "" %>">\
+                            <img src="<%- route.appIcon(\
                                 root,\
                                 locale,\
                                 owner,\
-                                app.entry.get("name")) %>">\
+                                app.entry.get("name")) %>" class="app-icon" alt="">\
+                            </div>\
                         <div class="app-name"><%- _(app.entry.content.get("label")).t() %></div>\
                         <div class="drag-handle"></div>\
                         <% if (showUpdates && app.entry.links.get("update")) { %>\
@@ -114,13 +120,9 @@ function (
             <% }); %>\
         </div>\
         <% if (canManageRemoteApps) { %>\
-            <div class="add-more-apps" title="<%-_("Find More Apps").t()%>"><a href="<%-findAppsLink%>" class="add-more-apps-link">\
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="36px" height="36px" viewBox="0 0 36 36" version="1.1">\
-                    <g>\
-                        <path d="M17,17 L17,0 L19,0 L19,17 L36,17 L36,19 L19,19 L19,36 L17,36 L17,19 L0,19 L1.2246468e-16,17 L17,17 Z"></path>\
-                    </g>\
-                </a></svg>\
-            </div>\
+            <a href="<%-findAppsLink%>" class="add-more-apps">\
+                <i class="icon-plus"></i> <%-_("Find More Apps").t()%>\
+            </a>\
         <% } %>\
         </div>\
         '

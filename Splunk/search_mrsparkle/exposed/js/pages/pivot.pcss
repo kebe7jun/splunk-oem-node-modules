@@ -2,7 +2,7 @@
 /*  =================== */
 
 $formatBarHeight: 40px;
-$navHeightCollapsed: 6px;
+$navHeightCollapsed: 3px;
 $navHeightExpanded: 65px;
 
 .disabled-screen {
@@ -90,17 +90,6 @@ header {
     }
 }
 
-.share-pivot-dialog {
-    $formLeftOffset: 100px;
-    .control-label {
-        width: $formLeftOffset;
-        text-align: left;
-    }
-    .controls {
-        margin-left: $formLeftOffset;
-    }
-}
-
 .shared-statscontrols-statscontrolsmaster {
     .btn-group + .btn-pill {
         margin-left: 5px;
@@ -121,7 +110,9 @@ header {
     max-width: none;
 }
 
-
+#statistics .scroll-table-wrapper > table.table > tbody {
+    font-family: $monoFontFamily;
+}
 
 
 /*  default sizes */

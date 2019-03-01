@@ -227,10 +227,7 @@ define(['jquery', 'underscore', 'views/shared/delegates/DetachedTableHeader'], f
         },
         syncColumnWidths: function() {
             DetachedTableHeader.prototype.syncColumnWidths.apply(this, arguments);
-            // DCE-OEM-CHANGE
-            // 增加了 左边 200Px 的导航，不能用 position().left（少了 200px ）
-            // this.left = this.$el.position().left;
-            this.left = this.$el.offset().left;
+            this.left = this.$el.position().left;
             this.$header.css({left: this.left});
         },
         syncScrollWidths: function() {

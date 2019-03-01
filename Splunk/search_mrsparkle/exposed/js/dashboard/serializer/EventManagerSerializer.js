@@ -36,7 +36,10 @@ define([
 
     function createActionNode(action, options) {
         var $action = XML.$tag(action.type);
-        action.value && $action.text(action.value);
+        if (action.value) {
+            var value = action.type === 'link' ? encodeURI(action.value) : action.value;
+            $action.text(value);
+        }
         switch (action.type) {
             case 'link':
                 action.target && $action.attr('target', action.target);
@@ -56,7 +59,7 @@ define([
 
     function updateEventNodes($parent, evtManagerState, dashboardState, options) {
         options || (options = {});
-        if (evtManagerState.isDirty() || options.forceDirty === true) {
+        if (evtManagerState && (evtManagerState.isDirty() || options.forceDirty === true)) {
             $parent.find('drilldown,selection').remove();
             _(createEventNodes(evtManagerState, dashboardState, options)).each(function($event) {
                 $parent.append($event);
@@ -71,6 +74,8 @@ define([
     return {
         createEventNodes: createEventNodes,
         updateEventNodes: updateEventNodes,
-        removeEventNodes: removeEventNodes
+        removeEventNodes: removeEventNodes,
+        // export for testing purpose
+        createActionNode: createActionNode
     };
 });

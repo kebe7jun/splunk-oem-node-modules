@@ -296,16 +296,23 @@ define([
 
                 this.toggleByFormat();
 
-                var learnMoreLink = route.docHelp(
-                    this.model.application.get('root'),
-                    this.model.application.get('locale'),
-                    'learnmore.search.export_results'
-                );
-
                 if (this.model.searchJob.searchWillReRun()) {
-                    this.$(Modal.BODY_FORM_SELECTOR).append('<div class="rerun-msg">' + splunkUtil.sprintf(_('Your search will rerun if the number of results is higher than %s. ').t(), splunkUtil.getCommaFormattedNumber(this.model.searchJob.entry.content.get('eventAvailableCount'))) +
-                        '<a href="' + learnMoreLink + '" target="_blank">' + _('Learn more').t() + ' <i class="icon-external"></i></a>' +
-                        '</div>');
+                    var learnMoreLink = route.docHelp(
+                        this.model.application.get('root'),
+                        this.model.application.get('locale'),
+                        'learnmore.search.export_results'
+                    );
+
+                    var reRunMessage = splunkUtil.sprintf(_('Your search will rerun if the number of results is higher than %s. ').t(), splunkUtil.getCommaFormattedNumber(this.model.searchJob.entry.content.get('eventAvailableCount')));
+                    
+                    this.$(Modal.BODY_FORM_SELECTOR).append(
+                        $(_.template(this.reRunMessageTemplate, {
+                            _:_,
+                            reRunMessage: reRunMessage,
+                            learnMoreLink: learnMoreLink,
+                            ariaLabel: reRunMessage + _('Click here to learn more').t()
+                        }))
+                    );
                 }
 
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL);
@@ -313,6 +320,14 @@ define([
 
                 return this;
             }.bind(this));
-        }
+        },
+        
+        reRunMessageTemplate: 
+            '<div class="rerun-msg">\
+                <%- reRunMessage %>\
+                <a href="<%- learnMoreLink %>" target="_blank" aria-label="<%-  ariaLabel %>">\
+                    <%- _("Learn more").t() %>&nbsp;<i class="icon-external"></i>\
+                </a>\
+            </div>'
     });
 });

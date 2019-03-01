@@ -4,47 +4,23 @@
 
 .view {
     display: inline-block;
-    padding: 4px 12px;
     border: 1px solid transparent;
     border-radius: $interactiveBorderRadius;
-    font-size: $baseFontSize;
-    line-height: $baseLineHeight;
+    font-size: $fontSize;
+    line-height: $lineHeight;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
     box-sizing: border-box;
     text-decoration: none;
     background-color: transparent;
+    @mixin button-padding;
 }
 
 .default {
     composes: view;
     @mixin interactive;
-
-    &:not([disabled]):hover {
-        @mixin interactive-hover;
-    }
-
-    &[disabled]{
-        background: $interactiveDisabledBackgroundColor;
-        filter: none;
-        border-color: $borderColor;
-        border-top-color: $borderColor;
-        border-bottom-color: $borderColor;
-        cursor: not-allowed;
-        color: $textGray;
-        text-shadow: none;
-        opacity: 0.65;
-        box-shadow: none;
-    }
-    &[data-status=active],
-    &:active {
-        @mixin interactive-hover;
-        color: $textColor;
-    }
-    &:not([disabled]):focus {
-        @mixin focus-button;
-    }
+    @mixin button-states;
 }
 
 /*  Primary */
@@ -52,69 +28,25 @@
 
 .primary {
     composes: view;
+    @mixin button-padding-primary;
+    font-weight: $fontWeightSemiBold;
+    border: none;
+
     @mixin interactive-primary;
-    &:not([disabled]):hover {
-        @mixin interactive-primary-hover;
-    }
-
-    &[disabled] {
-        background: $interactiveDisabledBackgroundColor;
-        filter: none;
-        border-color: $borderColor;
-        border-top-color: $borderColor;
-        border-bottom-color: $borderColor;
-        cursor: not-allowed;
-        color: $textGray;
-        text-shadow: none;
-        opacity: 0.65;
-        box-shadow: none;
-    }
-
-    &[data-status=active],
-    &:active {
-        @mixin interactive-primary-hover;
-        filter: none;
-        color: $white;
-    }
-    &:focus {
-        @mixin focus-button;
-
-        @if $theme == lite {
-        	background: $splunkLiteBlack;
-        }
-    }
+    @mixin button-states interactive-primary-hover, interactive-primary-active, interactive-primary-disabled, interactive-primary $primaryBackgroundColor;
 }
 
 .pill {
     composes: view;
-    display: inline-block;
-    padding: 0 10px; /*  note the vertical padding will be funky unless it's block, inline-block, or floated */
-    line-height: 27px;
+    line-height: $lineHeight;
+    border-radius: $interactiveBorderRadius;
 
-    box-shadow: none !important;
-    /*  states */
-    &:not([disabled]):hover,
-    &[data-status=active],
-    &:not([disabled]):focus
-    {
-        background-color: $pillBackgroundColorHover;
-        text-decoration: none;
-        border-radius: $interactiveBorderRadius;
-    }
+    @mixin interactive none, transparent, none, $pillTextColor;
+    @mixin button-states pill-hover, pill-active, pill-disabled, pill-style $linkColor;
 
-    &[data-status=active]
-    {
-		color: $textGray;
-    }
-
-    &:not([disabled]):focus {
-        @mixin focus-pill;
-    }
-
-    &[disabled]{
-        color: $textDisabledColor;
-        background: transparent;
-        cursor: default;
+    &[disabled]:focus, &[disabled]:hover {
+        background: none;
+        box-shadow: none;
     }
 }
 
@@ -128,7 +60,7 @@
 
 .label {
     &:not(:last-child) {
-        padding-right: 0.25em;
+        padding-right: $spacingQuarter;
     }
 
     &:not(:first-child) {
@@ -160,20 +92,33 @@
 /*  Button Sizes */
 /*  -------------------------------------------------- */
 .large {
-  padding: $paddingLarge;
-  font-size: $fontSizeLarge;
+  @mixin button-size $buttonPaddingVerticalLarge, calc($buttonPaddingSides * 2), 4px;
+  font-size: $fontSize;
   border-radius: $borderRadiusLarge;
+
+  &.primary {
+    @mixin button-padding-primary $buttonPaddingVerticalLarge, calc($buttonPaddingSides * 2);
+  }
 }
 
 .small {
-  padding: $paddingSmall;
-  font-size: $fontSizeSmall;
+  @mixin button-size $buttonPaddingVerticalSmall;
+  font-size: $fontSize;
   border-radius: $borderRadiusSmall;
+
+  &.primary {
+    @mixin button-padding-primary $buttonPaddingVerticalSmall;
+  }
 }
 
 .mini {
-  padding: $paddingMini;
+  @mixin button-size $buttonPaddingVerticalMini, calc($buttonPaddingSides / 2), -1px;
+  font-size: $fontSizeSmall;
   border-radius: $borderRadiusSmall;
+
+  &.primary {
+    @mixin button-padding-primary $buttonPaddingVerticalMini, calc($buttonPaddingSides / 2);
+  }
 }
 
 /*  Print */

@@ -3,6 +3,10 @@
   padding-top: 20px;
   width: 500px;
   min-height: 300px;
+
+  > .control-switch > .controls > .btn-group > .btn:focus {
+    z-index: 3;
+  }
 }
 
 
@@ -20,6 +24,13 @@
     margin: 5px;
     .search-query {
         width: 190px;
+    }
+}
+
+.inputs-http-globalsettings .modal-body .sourcetypeMenu {
+    width: 100%;
+    > .dropdown-toggle.btn {
+        display: block;
     }
 }
 

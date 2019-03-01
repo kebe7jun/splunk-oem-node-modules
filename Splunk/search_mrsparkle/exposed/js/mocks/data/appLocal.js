@@ -292,6 +292,55 @@ define([], function() {
             "version": "1.0.10",
             "visible": true
         }
+    },
+    {
+        "name": "dynamic-data-self-storage-app",
+        "id": "https:\/\/127.0.0.1:9089\/servicesNS\/nobody\/system\/apps\/local\/dynamic-data-self-storage-app",
+        "updated": "2013-05-16T16:54:58-07:00",
+        "links": {
+            "alternate": "\/servicesNS\/nobody\/system\/apps\/local\/dynamic-data-self-storage-app",
+            "list": "\/servicesNS\/nobody\/system\/apps\/local\/dynamic-data-self-storage-app",
+            "_reload": "\/servicesNS\/nobody\/system\/apps\/local\/dynamic-data-self-storage-app\/_reload",
+            "edit": "\/servicesNS\/nobody\/system\/apps\/local\/dynamic-data-self-storage-app",
+            "remove": "\/servicesNS\/nobody\/system\/apps\/local\/dynamic-data-self-storage-app",
+            "disable": "\/servicesNS\/nobody\/system\/apps\/local\/dynamic-data-self-storage-app\/disable",
+            "package": "\/servicesNS\/nobody\/system\/apps\/local\/dynamic-data-self-storage-app\/package"
+        },
+        "author": "nobody",
+        "acl": {
+            "app": "system",
+            "can_change_perms": true,
+            "can_list": true,
+            "can_share_app": true,
+            "can_share_global": true,
+            "can_share_user": false,
+            "can_write": true,
+            "modifiable": true,
+            "owner": "nobody",
+            "perms": {
+                "read": [
+                    "*"
+                ],
+                "write": [
+                    "admin",
+                    "power"
+                ]
+            },
+            "removable": false,
+            "sharing": "app"
+        },
+        "content": {
+            "author": "SplunkPM",
+            "check_for_updates": true,
+            "configured": true,
+            "description": "SplunkExport",
+            "disabled": false,
+            "eai:acl": null,
+            "label": "dynamic-data-self-storage-app",
+            "state_change_requires_restart": false,
+            "version": "1.0.10",
+            "visible": true
+        }
     }
 ],
     "paging": {

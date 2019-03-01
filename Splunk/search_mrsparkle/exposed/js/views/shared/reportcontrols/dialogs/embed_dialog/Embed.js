@@ -10,12 +10,12 @@ define(
         'collections/services/saved/searches/Histories',
         'views/shared/FlashMessagesLegacy',
         'collections/shared/FlashMessages'
-	], 
+	],
 	function(
         _,
         module,
         route,
-        BaseModel, 
+        BaseModel,
         BaseView,
         ModalView,
         TextareaControl,
@@ -50,7 +50,7 @@ define(
             var src = route.embed(
                     this.model.application.get('root'),
                     this.model.application.get('locale'),
-                    this.model.report.entry.content.get('embed.token'), 
+                    this.model.report.entry.content.get('embed.token'),
                     this.model.report.get('id')
                 ),
                 displayGeneralType = this.model.report.entry.content.get('display.general.type'),
@@ -113,7 +113,7 @@ define(
 	        this.$(ModalView.BODY_SELECTOR).append('<p>' + _('Copy and paste this code into your HTML-based web page.').t() + '</p>');
             this.children.snippet.render().appendTo(this.$(ModalView.BODY_SELECTOR));
 	        this.$(ModalView.BODY_SELECTOR).append('<p>' + _('Disable embedding if you no longer want to share this report outside of Splunk.').t() + '</p>');
-	        this.$(ModalView.FOOTER_SELECTOR).append('<a href="#" class="btn pull-left disableEmbedding">' + _('Disable Embedding').t() + '</a>');
+	        this.$(ModalView.FOOTER_SELECTOR).append('<a href="#" class="btn disableEmbedding">' + _('Disable Embedding').t() + '</a>');
             this.$(ModalView.FOOTER_SELECTOR).append(ModalView.BUTTON_DONE);
 	        return this;
 		}

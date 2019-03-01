@@ -18,7 +18,7 @@
         font-size: 24px;
         vertical-align: middle;
         padding-right: 5px;
-        color: $grayLight;
+        color: $gray60;
     }
 }
 
@@ -62,15 +62,18 @@
   text-align: left;
   &.affix-top  {
     background-color: $white;
-    &.disabled .table-caption-inner-cover {
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-      left: 0px;
-      opacity: 0.30;
-      background-color: $gray;
-      z-index: 404;
+	z-index: calc($zindexHeaderTable + 1);
+    &.disabled {
+      .table-caption-inner-cover {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        opacity: 0.30;
+        background-color: $gray45;
+        z-index: 404;
+      }
     }
   }
 }
@@ -127,7 +130,7 @@
 
 .report-statemessage {
     min-height: 430px;
-    color: $grayDark;
+    color: $gray30;
     text-align: center;
 
     h2 {

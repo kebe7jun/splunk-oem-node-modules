@@ -1,6 +1,4 @@
 
-
-
 /*
  * General container styles
  *
@@ -8,30 +6,52 @@
 body {
     padding: 0;
     margin: 0;
+    background-color: $bodyBackgroundColor;
 }
 .masterHeader {
-    background-color: #222;
-    border-bottom: 1px solid $borderColor;
-    padding: 5px 20px;
-    font-size: $baseFontSize;
+    background-color: $appBarBackground;
+    padding: $spacing;
+    font-size: $fontSize;
+}
+
+.masterContainer, .masterFooter {
+    @mixin create-card;
+    width: $bodyMinWidth;
+    padding: $spacing;
+    margin: $spacing auto;
+    background-color: $white;
+    box-sizing: border-box;
 }
 
 .masterContainer {
-    padding: 10px 10px 20px 10px;
-    background-color: #ededed;
+    padding-top: 10px;
+    font-size: $fontSize;
+
+    .info-schemas {
+        border-top: none;
+    }
+    .info-schemas, .info-references {
+        margin-bottom: $spacing;
+    }
+    .info-references, .info-utilities {
+        dt:not(:first-child) {
+            margin-top: $spacingHalf;
+        }
+        dd {
+            margin-left: 30px;
+        }
+    }
 }
 .masterFooter {
-    border-top: 1px solid $borderColor;
-    padding: 10px;
-    font-size: 10px;
+    font-size: $fontSize;
 }
 
 /*
  * block-level elements
  *
  */
-.masterHeader  h1 {
-    margin: 5px 0;
+.masterHeader h1 {
+    margin: 0;
     color: #fff;
 }
 h2 {
@@ -39,47 +59,60 @@ h2 {
 }
 table {
     margin-bottom: 15px;
-    border-top: 1px dotted $borderColor;
+    border-top: $borderDefault;
     border-collapse: collapse;
+
+    th {
+        padding: $tableCellPadding;
+        text-align: left;
+        background-color: $gray92;
+
+        &:not(:last-child) {
+            border-right: $tableBorderVertical;
+        }
+    }
+
+    td {
+        padding: $tableCellPadding;
+        border-bottom: $borderDefault;
+        background-color: $white;
+        vertical-align: top;
+
+        &.k {
+            font-weight: bold;
+            white-space: nowrap;
+            background-color: $gray92;
+        }
+        &.v {
+            font-weight: normal;
+            font-size: $fontSize;
+        }
+    }
 }
-th {
-    padding: 4px 10px;
-    text-align: left;
-    background-color: #ededed;
-}
-td {
-    padding: 4px 10px;
-    border-bottom: 1px dotted $borderColor;
-    background-color: #ededed;
-    vertical-align: top;
-}
-td.k {
-    font-weight: bold;
-    white-space: nowrap;
-}
-td.v {
-    font-weight: normal;
-    font-size: $baseFontSize;
-    background-color: #fff;
-}
+
 p {
     width: 40em;
     line-height: 140%;
 }
-
 
 /*
  * object-specific styles
  *
  */
 .primaryMessage {
-    font-size: $baseFontSizeLarge;
+    font-size: $fontSizeLarge;
 }
 
 .byline {
-    font-size: $baseFontSizeSmall;
-   color: $textColor;
+    font-size: $fontSizeSmall;
+    color: $textColor;
     width: 100%;
+    &:first-child {
+        margin-top: 0;
+    }
+    &:last-child {
+        margin-bottom: 0;
+    }
 }
 .comment {
     color: #555;

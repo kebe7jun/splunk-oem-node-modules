@@ -260,10 +260,12 @@ export default VisualizationBase.extend({
         // split datasets
         const dataToSplit = $.extend(true, {}, data);
 
-        if (!dataToSplit.split_meta) {
-            dataToSplit.split_meta = {};
+        if (!_.isEmpty(dataToSplit)) {
+            if (!dataToSplit.split_meta) {
+                dataToSplit.split_meta = {};
+            }
+            dataToSplit.split_meta.id = 'viz';
         }
-        dataToSplit.split_meta.id = 'viz';
 
         if (!this.isInFacetMode() || !_.has(dataToSplit, 'fields')) {
             this.isPaging = false;
@@ -570,7 +572,9 @@ export default VisualizationBase.extend({
     appendChild(id, formattedData) {
         debug('appendChild', id, formattedData);
         const options = this.getOptions(formattedData);
-        const viz = new this.options.factory(options); // eslint-disable-line new-cap
+        const viz = new this.options.factory(   // eslint-disable-line new-cap
+            Object.assign({}, options, { parentCid: this.cid }),
+        );
         const declaredScales = _.isFunction(this.options.factory.getDataContract)
             ? this.options.factory.getDataContract().scales : {};
 
@@ -722,9 +726,12 @@ export default VisualizationBase.extend({
         const dataSources = this.children.vizList[id].options.dataSources;
         _.each(dataSources, (ds) => {
             // get data for each data source
-            if (formattedData[ds.name]) {
+            if (!_.isEmpty(formattedData[ds.name])) {
                 // there is data for this data source.
                 ds.setSearchResults(formattedData[ds.name]);
+            } else {
+                // otherwise, clear data
+                ds.clearSearchResults();
             }
         }, this);
         this.listenToOnce(this.children.vizList[id], 'rendered', () => {

@@ -3,7 +3,7 @@
 }
 
 .list-picker-small {
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
 }
 
 .list-picker-overlay {
@@ -38,6 +38,7 @@
     a {
         padding: 0 10px;
         text-decoration: none;
+        outline: 0;
     }
 }
 
@@ -88,6 +89,7 @@
     .list-picker-search {
         position: absolute;
         right: 10px;
+        top: -4px;
         font-size: 16px;
         padding: 2px 5px;
     }
@@ -96,28 +98,30 @@
 
 input.list-picker-filter {
     position: absolute;
-    border-radius: 10px;
-    top: -1px;
+    border-radius: $interactiveBorderRadius;
+    top: -4px;
     right: 0;
-    width: 0 !important;
+    width: 0;
     max-width: none !important;
-    height: 12px;
+    height: 24px;
     opacity: 0;
     margin: 0;
+    font-size: $fontSizeSmall;
 
     transition: width 0.7s, right 0.7s, opacity 0.3s;
 
     &.show {
         right: 4px;
         opacity: 1;
-        width: calc(100% - 22px) !important;
+        width: calc(100% - 22px);
         z-index: 3;
+        height: auto;
     }
 }
 
 .list-picker-filter-hide {
     position: absolute;
-    top: 2px;
+    top: 0;
     right: 30px;
     opacity: 0;
 
@@ -145,23 +149,32 @@ input.list-picker-filter {
         line-height: 13px;
         position: relative;
         word-wrap: break-word;
-    }
 
-    a:not(.selected) .icon-check {
-        display: none;
-    }
+        &:focus {
+            @mixin focus-element-inset;
+            box-shadow: inset 0 0 1px 1px; 
+        }
 
-    a:not(.selected) .icon-x {
-        display: none;
-    }
+        &:not(.selected) .icon-check {
+            display: none;
+        }
 
-    a.disabled {
-        cursor: not-allowed;
-        color: $textDisabledColor;
-    }
+        &:not(.selected) .icon-x {
+            display: none;
+        }
 
-    a.italicize {
-        font-style: italic;
+        &.disabled {
+            cursor: not-allowed;
+            color: $textDisabledColor;
+        }
+
+        &.italicize {
+            font-style: italic;
+        }
+
+        &:not(.disabled) .icon-check {
+            color: $successColor;
+        }
     }
 
     .icon-check, .icon-x {
@@ -170,11 +183,11 @@ input.list-picker-filter {
     }
 
     .icon-x {
-        color: $red;
+        color: $errorColor;
     }
 
     a:not(.disabled) .icon-check {
-        color: $green;
+        color: $successColor;
     }
 }
 
@@ -209,15 +222,16 @@ input.list-picker-filter {
     padding: 8px 10px 4px 24px;
 
     .enter-field-container {
+        .add-field-control {
+            flex-grow: 0.5;
+        }
 
         .add-item-remove {
             float: right;
-            top: 0;
+            margin-top: 4px;
             padding: 6px 10px;
-            line-height: 1;
 
-            &
-            :hover {
+            &:hover {
                 background-color: $pillBackgroundColorHover;
             }
         }
@@ -230,9 +244,9 @@ input.list-picker-filter {
             @mixin display-flex row;
 
             .add-item-button {
-                height: 16px;
+                height: $inputHeight;
                 margin-left: 10px;
-                margin-top: 4px;
+                margin-top: 5px;
             }
         }
     }

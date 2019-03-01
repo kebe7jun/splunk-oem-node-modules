@@ -32,7 +32,8 @@ define([
             var html = this.compiledTemplate({
                 navData: this.options.navData,
                 css: this.css,
-                needsBack: this.options.needsBack
+                needsBack: this.options.needsBack,
+                active: this.options.active || ""
             });
             this.$el.append(html);
             if ( this.options.needsBack) {

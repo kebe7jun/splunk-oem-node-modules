@@ -83,7 +83,7 @@ define([
                         modelAttribute: 'metadata',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     label: _('Metadata Contents').t()
                 });
 
@@ -94,7 +94,7 @@ define([
                         modelAttribute: 'ui.idpSSOUrl',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('This is the protected endpoint on your IdP to which Splunk will send authentication requests.').t(),
                     label: _('Single Sign On (SSO) URL').t()
                 });
@@ -107,7 +107,7 @@ define([
                         model: this.model.saml,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('This is the IdP protocol endpoint. If you do not provide this URL, the user will not be logged out.').t(),
                     label: _('Single Log Out (SLO) URL').t()
                 });
@@ -120,17 +120,16 @@ define([
                         model: this.model.saml,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('Location of IdP certificate file or, if there are multiple IdP certificates, the directory where those certificates reside.').t(),
                     label: _('IdP certificate path').t(),
-                    help: _('Leave blank if you store IdP certificates under $SPLUNK_HOME/etc/auth/idpCerts').t(),
-                    enabled: !this.model.serverInfo.isCloud()
+                    help: _('Leave blank if you store IdP certificates under $SPLUNK_HOME/etc/auth/idpCerts').t()
                 });
 
                 this.children.idpRepCerts = new ControlGroup({
                     controlType: 'SyntheticCheckbox',
                     className: 'saml-idpRepCerts control-group',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.replicateCertificates',
                         model: this.model.saml
@@ -146,7 +145,7 @@ define([
                         modelAttribute: 'ui.idpCertChains',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('Upload the certificate chain in this order - root, intermediate(s) and leaf. This is to ensure that the saml response is verified with the correct chain of trust.').t(),
                     label: _('IdP certificate chains').t()
                 });
@@ -158,7 +157,7 @@ define([
                         modelAttribute: 'ui.issuerId',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('Entity ID of IDP.').t(),
                     label: _('Issuer Id').t()
                 });
@@ -170,7 +169,7 @@ define([
                         modelAttribute: 'ui.entityId',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('An identifier for this Splunk instance that is unique across all entities on the IdP.').t(),
                     label: _('Entity ID').t()
                 });
@@ -178,25 +177,27 @@ define([
                 this.children.signAuthnRequest = new ControlGroup({
                     controlType: 'SyntheticCheckbox',
                     className: 'saml-signAuthnRequest control-group',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.signAuthnRequest',
                         model: this.model.saml
                     },
                     label:  _('Sign AuthnRequest').t()
                 });
-
-                this.children.signedAssertion = new ControlGroup({
-                    controlType: 'SyntheticCheckbox',
-                    className: 'saml-signedAssertion control-group',
-                    controlClass: 'controls-block',
-                    controlOptions: {
-                        modelAttribute: 'ui.signedAssertion',
-                        model: this.model.saml
-                    },
-                    tooltip: _('Enable this setting for verification of the signed SAML response against the IdP certificate.').t(),
-                    label:  _('Verify SAML response').t()
-                });
+		
+		        if (!this.model.serverInfo.isCloud()) {
+                    this.children.signedAssertion = new ControlGroup({
+                        controlType: 'SyntheticCheckbox',
+                        className: 'saml-signedAssertion control-group',
+                        controlOptions: {
+                            modelAttribute: 'ui.signedAssertion',
+                            model: this.model.saml
+                        },
+                        tooltip: _('Enable this setting for verification of the signed SAML response against the IdP certificate.').t(),
+                        label:  _('Verify SAML response').t(),
+		                enabled: !this.model.serverInfo.isCloud()
+                    });
+		        }
 
                 this.children.idpAttributeQueryUrl = new ControlGroup({
                     controlType: 'Text',
@@ -205,7 +206,7 @@ define([
                         modelAttribute: 'ui.idpAttributeQueryUrl',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('This is the endpoint on the IdP to which queries over SOAP should be sent.').t(),
                     label: _('Attribute query URL').t()
                 });
@@ -213,7 +214,7 @@ define([
                 this.children.attributeQueryRequestSigned = new ControlGroup({
                     controlType: 'SyntheticCheckbox',
                     className: 'saml-attributeQueryRequestSigned control-group',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.attributeQueryRequestSigned',
                         model: this.model.saml
@@ -224,7 +225,7 @@ define([
                 this.children.attributeQueryResponseSigned = new ControlGroup({
                     controlType: 'SyntheticCheckbox',
                     className: 'saml-attributeQueryResponseSigned control-group',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.attributeQueryResponseSigned',
                         model: this.model.saml
@@ -239,7 +240,7 @@ define([
                         modelAttribute: 'ui.attributeAliasRole',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     label: _('Role alias').t()
                 });
 
@@ -250,7 +251,7 @@ define([
                         modelAttribute: 'ui.attributeAliasRealName',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     label: _('RealName alias').t()
                 });
 
@@ -261,7 +262,7 @@ define([
                         modelAttribute: 'ui.attributeAliasMail',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-block',
+
                     label: _('Mail alias').t()
                 });
 
@@ -272,7 +273,6 @@ define([
                         modelAttribute: 'ui.attributeQuerySoapUsername',
                         model: this.model.saml
                     },
-                    controlClass: 'controls-halfblock',
                     label: _('Username').t()
                 });
 
@@ -284,7 +284,6 @@ define([
                         model: this.model.saml,
                         password: true
                     },
-                    controlClass: 'controls-halfblock',
                     label: _('Password').t()
                 });
 
@@ -296,7 +295,7 @@ define([
                         model: this.model.saml,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('Provide the host name or IP address. Required if you want to use load balancing.').t(),
                     label: _('Fully qualified domain name or IP of the load balancer').t()
                 });
@@ -309,7 +308,7 @@ define([
                         model: this.model.saml,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('Provide a redirect port for the load balancer.').t(),
                     label: _('Redirect port - load balancer port').t()
                 });
@@ -322,7 +321,7 @@ define([
                         model: this.model.saml,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
+
                     tooltip: _('URL to which the user will be redirected upon a logout.').t(),
                     label: _('Redirect to URL after logout').t()
                 });
@@ -330,13 +329,13 @@ define([
                 this.children.ssoBinding = new ControlGroup({
                     controlType: 'SyntheticRadio',
                     className: 'saml-ssoBinding control-group',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.ssoBinding',
                         model: this.model.saml,
                         items: [
-                            { label: _("HTTP Post").t(), value: 'HTTPPost' },
-                            { label: _("HTTP Redirect").t(), value: 'HTTPRedirect' }
+                            { label: _("HTTP Post").t(), value: 'HTTP-POST' },
+                            { label: _("HTTP Redirect").t(), value: 'HTTP-REDIRECT' }
                         ]
                     },
                     defaultValue: this.model.saml.get('ssoBinding'),
@@ -347,13 +346,13 @@ define([
                 this.children.sloBinding = new ControlGroup({
                     controlType: 'SyntheticRadio',
                     className: 'saml-sloBinding control-group',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.sloBinding',
                         model: this.model.saml,
                         items: [
-                            { label: _("HTTP Post").t(), value: 'HTTPPost' },
-                            { label: _("HTTP Redirect").t(), value: 'HTTPRedirect' }
+                            { label: _("HTTP Post").t(), value: 'HTTP-POST' },
+                            { label: _("HTTP Redirect").t(), value: 'HTTP-REDIRECT' }
                         ]
                     },
                     defaultValue: this.model.saml.get('sloBinding'),
@@ -364,7 +363,7 @@ define([
                 this.children.signatureAlgorithm = new ControlGroup({
                     controlType: 'SyntheticRadio',
                     className: 'saml-signatureAlgorithm control-group',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.signatureAlgorithm',
                         model: this.model.saml,
@@ -381,7 +380,7 @@ define([
                 this.children.nameIdFormat = new ControlGroup({
                     controlType: 'SyntheticSelect',
                     className: 'saml-nameIdFormat control-group',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'ui.nameIdFormat',
                         model: this.model.saml,
@@ -420,7 +419,7 @@ define([
                 }, this);
 
                 this.listenTo(this.model.saml, 'change:ui.ssoBinding', function(e) {
-                    this.model.saml.get('ui.ssoBinding') === 'HTTPRedirect' ?
+                    this.model.saml.get('ui.ssoBinding') === 'HTTP-REDIRECT' ?
                       this.$('.saml-signatureAlgorithm').show() :
                       this.$('.saml-signatureAlgorithm').hide();
                 }, this);
@@ -446,7 +445,7 @@ define([
                 var aliasRealname = this.model.saml.get('ui.attributeAliasRealName');
                 var aliasMail = this.model.saml.get('ui.attributeAliasMail');
                 var showAlias = aliasRole || aliasRealname || aliasMail;
-                var showSignatureAlgorithm = this.model.saml.get('ui.ssoBinding') === 'HTTPRedirect';
+                var showSignatureAlgorithm = this.model.saml.get('ui.ssoBinding') === 'HTTP-REDIRECT';
 
                 this.$el.html(Modal.TEMPLATE);
                 this.$(Modal.HEADER_TITLE_SELECTOR).html(_('SAML Configuration').t());
@@ -470,7 +469,9 @@ define([
                 this.children.ssoBinding.render().appendTo(this.$(".ssoBinding-placeholder"));
                 this.children.sloBinding.render().appendTo(this.$(".sloBinding-placeholder"));
                 this.children.signatureAlgorithm.render().appendTo(this.$(".signatureAlgorithm-placeholder"));
-                this.children.signedAssertion.render().appendTo(this.$(".signedAssertion-placeholder"));
+                if (this.children.signedAssertion) {
+			        this.children.signedAssertion.render().appendTo(this.$(".signedAssertion-placeholder"));
+                }
                 this.children.idpAttributeQueryUrl.render().appendTo(this.$(".idpAttributeQueryUrl-placeholder"));
                 this.children.attributeQueryRequestSigned.render().appendTo(this.$(".attributeQueryRequestSigned-placeholder"));
                 this.children.attributeQueryResponseSigned.render().appendTo(this.$(".attributeQueryResponseSigned-placeholder"));

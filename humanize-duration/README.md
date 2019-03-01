@@ -6,27 +6,27 @@ Humanize Duration
 
 I have the time in milliseconds and I want it to become "30 minutes" or "3 days, 1 hour". Enter Humanize Duration!
 
-**This library is in maintenance mode. New languages and bug fixes will be added but no new features will be. If you're interested in helping out by taking over the project, please see [this GitHub issue](https://github.com/EvanHahn/HumanizeDuration.js/issues/120).**
+**This library is actively maintained but no new features will be added.**
 
 Basic usage
 -----------
 
 This package is available as *humanize-duration* on [npm](https://www.npmjs.com/package/humanize-duration) and Bower. You can also include the JavaScript file in the browser.
 
-In the browser:
+With `require` (like in Node or with common build systems):
+
+```js
+const humanizeDuration = require('humanize-duration')
+humanizeDuration(12000) // '12 seconds'
+```
+
+With a `<script>` tag:
 
 ```html
 <script src="humanize-duration.js"></script>
 <script>
 humanizeDuration(12000)
 </script>
-```
-
-In Node (or Browserify or Webpack or anywhere with CommonJS):
-
-```js
-var humanizeDuration = require('humanize-duration')
-humanizeDuration(12000) // '12 seconds'
 ```
 
 Usage
@@ -152,7 +152,7 @@ humanizeDuration(3602000, {
 If you find yourself setting same options over and over again, you can create a *humanizer* that changes the defaults, which you can still override later.
 
 ```js
-var spanishHumanizer = humanizeDuration.humanizer({
+const spanishHumanizer = humanizeDuration.humanizer({
   language: 'es',
   units: ['y', 'mo', 'd']
 })
@@ -164,18 +164,18 @@ spanishHumanizer(71177400000, { units: ['d', 'h'] })  // '823 días, 19.5 horas'
 You can also add new languages to humanizers. For example:
 
 ```js
-var shortEnglishHumanizer = humanizeDuration.humanizer({
+const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: 'shortEn',
   languages: {
     shortEn: {
-      y: function() { return 'y' },
-      mo: function() { return 'mo' },
-      w: function() { return 'w' },
-      d: function() { return 'd' },
-      h: function() { return 'h' },
-      m: function() { return 'm' },
-      s: function() { return 's' },
-      ms: function() { return 'ms' },
+      y: () => 'y',
+      mo: () => 'mo',
+      w: () => 'w',
+      d: () => 'd',
+      h: () => 'h',
+      m: () => 'm',
+      s: () => 's',
+      ms: () => 'ms',
     }
   }
 })
@@ -186,10 +186,10 @@ shortEnglishHumanizer(15600000)  // '4 h, 20 m'
 You can also add languages after initializing:
 
 ```js
-var humanizer = humanizeDuration.humanizer()
+const humanizer = humanizeDuration.humanizer()
 
 humanizer.languages.shortEn = {
-  y: function(c) { return c + 'y' },
+  y: () => 'y',
   // ...
 ```
 
@@ -203,40 +203,46 @@ Humanize Duration supports the following languages:
 | Language             | Code    |
 |----------------------|---------|
 | Arabic               | `ar`    |
+| Bulgarian            | `bg`    |
 | Catalan              | `ca`    |
 | Chinese, simplified  | `zh_CN` |
 | Chinese, traditional | `zh_TW` |
+| Croatian             | `hr`    |
 | Czech                | `cs`    |
 | Danish               | `da`    |
 | Dutch                | `nl`    |
 | English              | `en`    |
+| Farsi/Persian        | `fa`    |
 | Finnish              | `fi`    |
 | French               | `fr`    |
 | German               | `de`    |
-| Greek                | `gr`    |
+| Greek                | `el`    |
 | Hungarian            | `hu`    |
 | Icelandic            | `is`    |
 | Indonesian           | `id`    |
 | Italian              | `it`    |
 | Japanese             | `ja`    |
 | Korean               | `ko`    |
+| Lao                  | `lo`    |
 | Lithuanian           | `lt`    |
 | Malay                | `ms`    |
 | Norwegian            | `no`    |
 | Polish               | `pl`    |
 | Portuguese           | `pt`    |
 | Russian              | `ru`    |
+| Slovak               | `sk`    |
 | Spanish              | `es`    |
 | Swedish              | `sv`    |
 | Turkish              | `tr`    |
 | Ukrainian            | `uk`    |
+| Urdu                 | `ur`    |
 | Vietnamese           | `vi`    |
 
 For a list of supported languages, you can use the `getSupportedLanguages` function.
 
 ```js
 humanizeDuration.getSupportedLanguages()
-// ['ar', 'ca', 'da', 'de' ...]
+// ['ar', 'bg', 'ca', 'cs', da', 'de', ...]
 ```
 
 This function won't return any new languages you define; it will only return the defaults supported by the library.
@@ -263,12 +269,20 @@ Lovingly made by [Evan Hahn](http://evanhahn.com/) with help from:
 * [Leonard Lee](https://github.com/sheeeng) for Indonesian & Malay support
 * [Jesse Jackson](https://github.com/jsejcksn) for documentation help
 * [Óli Tómas Freysson](https://github.com/olitomas) for Icelandic support
+* [Saeed Ganji](https://github.com/shahabganji) for Farsi/Persian support
+* [Caner Elci](https://github.com/canerelci) for Bulgarian support
+* [Matej Kolesár](https://github.com/rasel-sk) for Slovak support
+* [Abdul Jalil](https://github.com/abduljalilm94) for Urdu support
+* Malikoun for Lao support
 
-Licensed under the permissive [Unlicense](http://unlicense.org/). Enjoy!
+Licensed under the permissive [Unlicense](https://unlicense.org/). Enjoy!
 
 Related modules
 ---------------
 
+* [pretty-ms](https://github.com/sindresorhus/pretty-ms)
 * [angularjs-humanize-duration](https://github.com/sebastianhaas/angularjs-humanize-duration)
 * [millisec](https://github.com/sungwoncho/millisec)
 * [HumanizeDuration.ts](https://github.com/Nightapes/HumanizeDuration.ts), a TypeScript version of this module
+* [aurelia-time](https://github.com/shahabganji/aurelia-time)
+

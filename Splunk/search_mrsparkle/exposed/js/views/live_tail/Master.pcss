@@ -5,8 +5,8 @@
 /* Theme Colors */
 $classic-theme-color: $white;
 $classic-theme-bg-color: $black;
-$green-theme-color: #00CC00;
-$green-theme-bg-color: $black;
+$successColor-theme-color: #00CC00;
+$successColor-theme-bg-color: $black;
 $basic-theme-color: $black;
 $basic-theme-bg-color: $white;
 
@@ -24,27 +24,27 @@ $basic-theme-bg-color: $white;
 
     /* Themes */
     &.green-theme-main {
-        background: $green-theme-bg-color;
-        color: $green-theme-color;
+        background: $successColor-theme-bg-color;
+        color: $successColor-theme-color;
         .blinker img {
-            background: $green-theme-color;
+            background: $successColor-theme-color;
         }
         .livetail-settings-icons a {
-            color: $green-theme-color;
+            color: $successColor-theme-color;
             svg polygon,
             svg path {
-                fill: $green-theme-color;
+                fill: $successColor-theme-color;
             }
         }
         .livetail-search-container .search {
-            border-color: $green-theme-color;
-            color: $green-theme-color;
+            border-color: $successColor-theme-color;
+            color: $successColor-theme-color;
         }
         .livetail-keyword-bar {
-            background: $green-theme-bg-color;
+            background: $successColor-theme-bg-color;
             .keyword-count,
             .timestamp {
-                color: $green-theme-color;
+                color: $successColor-theme-color;
             }
         }
     }
@@ -209,7 +209,7 @@ $basic-theme-bg-color: $white;
     left: 0;
     z-index: 90;
     width: 100%;
-    border-top: 1px solid $grayLight;
+    border-top: 1px solid $gray60;
     background: $classic-theme-bg-color;
     color: $classic-theme-color;
     min-height: 40px;
@@ -257,10 +257,10 @@ $basic-theme-bg-color: $white;
     right: -301px;
     width: 300px;
     background: $white;
-    color: $grayDark;
+    color: $gray30;
     transition: right .5s;
     z-index: 100;
-    border-left: 1px solid $grayLightMedium;
+    border-left: 1px solid $gray80;
     overflow: auto;
     &.open {
         right: 0;
@@ -273,7 +273,7 @@ $basic-theme-bg-color: $white;
     line-height: 27px;
     .close {
         &:before {
-            color: $grayLightMedium;
+            color: $gray80;
         }
         &:hover {
             background: none;
@@ -344,8 +344,8 @@ $basic-theme-bg-color: $white;
         color: $classic-theme-color;
     }
     .green-theme {
-        background: $green-theme-bg-color;
-        color: $green-theme-color;
+        background: $successColor-theme-bg-color;
+        color: $successColor-theme-color;
     }
     .basic-theme{
         background: $basic-theme-bg-color;
@@ -378,7 +378,7 @@ $basic-theme-bg-color: $white;
 }
 .keyword-error {
     position: absolute;
-    color: $red;
+    color: $errorColor;
     top: 30px;
 }
 .keywords-list {
@@ -403,7 +403,7 @@ $basic-theme-bg-color: $white;
     line-height: 26px;
     font-size: 14px;
     margin-left: 5px;
-    color: $grayLightMedium;
+    color: $gray80;
     display: inline-block;
     vertical-align: middle;
 }

@@ -6,7 +6,8 @@ define(
         'views/Base',
         'contrib/text!views/datapreview/settings/Fields.html',
         'views/shared/controls/ControlGroup',
-        'views/shared/controls/SyntheticSelectControl'
+        'views/shared/controls/SyntheticSelectControl',
+        '../Pane.pcss'
     ],
     function(
         _,
@@ -15,7 +16,8 @@ define(
         BaseView,
         fieldsTemplate,
         ControlGroup,
-        SyntheticSelectControl
+        SyntheticSelectControl,
+        css
         ){
         return BaseView.extend({
             moduleId: module.id,

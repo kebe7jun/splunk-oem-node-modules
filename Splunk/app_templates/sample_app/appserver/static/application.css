@@ -325,7 +325,7 @@ _background-image: none;
 
 /* ALL elements with a generic border attribute */
 * { 
-border-color: #ccc;
+border-color: #c3cbd4;
 }
 
 /* refactor to remove these in default.css since they have specific color declarations; should be same value as * elements, above */ 
@@ -338,12 +338,12 @@ border-color: ;
 /* specific overrides */ 
 
 .fieldValuePopup table tr.fieldNameHeaderRow th {
-border-bottom:1px solid #ccc;
+border-bottom:1px solid #c3cbd4;
 }
 
 /* horixontal rules in the sidebar */ 
 .splDivider, .SuggestedFieldViewer .splBorder-n {
-border-color: #ccc;
+border-color: #c3cbd4;
 }
 
 
@@ -605,7 +605,7 @@ border-color: ;
 
 /* resize handle */
 .ui-resizable-s {
-background-color:#ccc !important;
+background-color:#c3cbd4 !important;
 }
 
 /* loading image for jobs */

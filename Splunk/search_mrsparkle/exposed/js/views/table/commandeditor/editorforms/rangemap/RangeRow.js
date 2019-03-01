@@ -48,7 +48,7 @@ define(
                     controlOptions: {
                         modelAttribute: 'upperLimit',
                         model: this.model.command.editorValue,
-                        className: 'range-upper-limit-input',
+                        additionalClassNames: 'range-upper-limit-input',
                         updateOnKeyUp: true
                     },
                     className: 'range-upper-limit'

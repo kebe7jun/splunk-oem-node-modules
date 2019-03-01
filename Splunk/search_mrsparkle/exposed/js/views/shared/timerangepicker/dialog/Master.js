@@ -13,7 +13,7 @@ define([
         'views/shared/delegates/Accordion',
         './Master.pcss'
     ],
-    function($, _, Backbone, module, UserModel, Base, Presets, Relative, RealTime, DateAndTimeRange, Advanced, Accordion, css) {
+    function ($, _, Backbone, module, UserModel, Base, Presets, Relative, RealTime, DateAndTimeRange, Advanced, Accordion, css) {
         /**
          * @param {Object} options {
          *     model: {
@@ -39,21 +39,21 @@ define([
         return Base.extend({
             moduleId: module.id,
             className: 'accordion view-new-time-range-picker-dialog',
-            initialize: function() {
+            initialize: function () {
                 this.model.user = this.model.user || new UserModel();
                 var canRTSearch = this.model.user.canRTSearch(),
                     defaults = {
-                        showPresets:true,
+                        showPresets: true,
                         showPresetsRealTime: canRTSearch,
-                        showPresetsRealTimeOnly:false,
-                        showPresetsRelative:true,
-                        showPresetsAllTime:true,
-                        showCustom:true,
+                        showPresetsRealTimeOnly: false,
+                        showPresetsRelative: true,
+                        showPresetsAllTime: true,
+                        showCustom: true,
                         showCustomRealTime: canRTSearch,
-                        showCustomRelative:true,
-                        showCustomDate:true,
-                        showCustomDateTime:true,
-                        showCustomAdvanced:true,
+                        showCustomRelative: true,
+                        showCustomDate: true,
+                        showCustomDateTime: true,
+                        showCustomAdvanced: true,
                         enableCustomAdvancedRealTime: canRTSearch,
                         appendSelectDropdownsTo: 'body'
                     };
@@ -61,70 +61,99 @@ define([
                 _.defaults(this.options, defaults);
                 Base.prototype.initialize.apply(this, arguments);
 
-                this.renderedDfd = $.Deferred();
+                this.deferred = {
+                    // Defer show() until after render is complete
+                    render: $.Deferred(),
+                    // defer render until after collection/settings has loaded
+                    collection: $.Deferred(),
+                    panels: $.Deferred()
+                };
 
-                //Panels
-                if (this.options.showPresets && this.collection) {
-                    this.children.presets = new Presets({
-                        collection: this.collection,
-                        model: this.model.timeRange,
-                        showRealTime:this.options.showPresetsRealTime,
-                        showRealTimeOnly:this.options.showPresetsRealTimeOnly,
-                        showRelative:this.options.showPresetsRelative,
-                        showAllTime:this.options.showPresetsAllTime
-                    });
-                }
-                if (this.options.showCustom) {
-                    if (this.options.showCustomRelative) {
-                        this.children.relative = new Relative({
-                            model: this.model.timeRange,
-                            appendSelectDropdownsTo: this.options.appendSelectDropdownsTo
-                        });
-                    }
-                    if (this.options.showCustomRealTime) {
-                        this.children.realtime = new RealTime({
-                            model: this.model.timeRange,
-                            appendSelectDropdownsTo: this.options.appendSelectDropdownsTo
-                        });
-                    }
-                    if (this.options.showCustomDate) {
-                        this.children.daterange = new DateAndTimeRange({
-                            model: this.model.timeRange,
-                            canSetTime: false,
-                            label: _("Date Range").t(),
-                            appendSelectDropdownsTo: this.options.appendSelectDropdownsTo
-                        });
-                    }
-                    if (this.options.showCustomDateTime) {
-                        this.children.dateandtimerange = new DateAndTimeRange({
-                            model: this.model.timeRange,
-                            canSetTime: true,
-                            label: _("Date & Time Range").t(),
-                            appendSelectDropdownsTo: this.options.appendSelectDropdownsTo
-                        });
-                    }
-                    if (this.options.showCustomAdvanced) {
-                        this.children.advanced = new Advanced({
-                            model: {
-                                timeRange: this.model.timeRange,
-                                application: this.model.application
-                            },
-                            enableCustomAdvancedRealTime: this.options.enableCustomAdvancedRealTime
-                        });
-                    }
+                // If the collection has already fetched settings, e.g. in tests, we can resolve early
+                // MockCollection does not have a getSettings method.
+                if (this.collection && this.collection.getSettings && this.collection.getSettings()) {
+                    this.deferred.collection.resolve();
                 }
 
-                this.activate({skipOnChange: true});
+                this.setupPanels();
+
+                this.activate({ skipOnChange: true });
             },
-            startListening: function() {
+
+            /**
+             * Setup the individual panels for the time range picker.
+             * Must be done after the collection has resolved so the time settings can be applied
+             * @method setupPanels
+             */
+            setupPanels: function () {
+                // Wait until the collection is resolved
+                $.when(this.deferred.collection).then(function () {
+                    var settings = this.collection.getSettings();
+
+                    if (this.options.showPresets && settings.showPresets && this.collection) {
+                        this.children.presets = new Presets({
+                            collection: this.collection,
+                            model: this.model.timeRange,
+                            showRealTime: this.options.showPresetsRealTime,
+                            showRealTimeOnly: this.options.showPresetsRealTimeOnly,
+                            showRelative: this.options.showPresetsRelative,
+                            showAllTime: this.options.showPresetsAllTime
+                        });
+                    }
+                    if (this.options.showCustom) {
+                        if (this.options.showCustomRelative && settings.showRelative) {
+                            this.children.relative = new Relative({
+                                model: this.model.timeRange,
+                                appendSelectDropdownsTo: this.options.appendSelectDropdownsTo
+                            });
+                        }
+                        if (this.options.showCustomRealTime && settings.showRealtime) {
+                            this.children.realtime = new RealTime({
+                                model: this.model.timeRange,
+                                appendSelectDropdownsTo: this.options.appendSelectDropdownsTo
+                            });
+                        }
+                        if (this.options.showCustomDate && settings.showDate) {
+                            this.children.daterange = new DateAndTimeRange({
+                                model: this.model.timeRange,
+                                canSetTime: false,
+                                label: _("Date Range").t(),
+                                appendSelectDropdownsTo: this.options.appendSelectDropdownsTo
+                            });
+                        }
+                        if (this.options.showCustomDateTime && settings.showDateTime) {
+                            this.children.dateandtimerange = new DateAndTimeRange({
+                                model: this.model.timeRange,
+                                canSetTime: true,
+                                label: _("Date & Time Range").t(),
+                                appendSelectDropdownsTo: this.options.appendSelectDropdownsTo
+                            });
+                        }
+                        if (this.options.showCustomAdvanced && settings.showAdvanced) {
+                            this.children.advanced = new Advanced({
+                                model: {
+                                    timeRange: this.model.timeRange,
+                                    application: this.model.application
+                                },
+                                enableCustomAdvancedRealTime: this.options.enableCustomAdvancedRealTime && settings.showRealtime
+                            });
+                        }
+                    }
+                    this.deferred.panels.resolve();
+                }.bind(this));
+            },
+            startListening: function () {
                 //note this listens for changes on earliest_epoch and latest_epoch because they change after the ajax request completes.
                 this.listenTo(this.model.timeRange, 'change:earliest_epoch change:latest_epoch', _.debounce(this.onChange, 0));
 
                 if (this.collection) {
-                    this.listenTo(this.collection, 'reset', this.onChange);
+                    this.listenTo(this.collection, 'reset', function () {
+                        this.deferred.collection.resolve();
+                        this.onChange();
+                    }.bind(this));
                 }
             },
-            activate: function(options) {
+            activate: function (options) {
                 options = options || {};
                 if (this.active) {
                     return Base.prototype.activate.apply(this, arguments);
@@ -138,16 +167,24 @@ define([
 
                 return this;
             },
-            onChange: function() {
-                $.when(this.renderedDfd).then(function() {
-                    return this.$el.is(":visible") ? false : this.children.accordion.show(this.getBestGroup(), false);
+            /**
+             * Have the accordian make the best available panel active (after render has completed)
+             * @method showBestPanel
+             */
+            showBestPanel: function () {
+                $.when(this.deferred.render).then(function () {
+                    return this.children.accordion.show(this.getBestGroup(), false);
                 }.bind(this));
-
             },
-            getBestGroup: function() {
+            onChange: function () {
+                $.when(this.deferred.render).then(function () {
+                    return this.$el.is(":visible") ? false : this.showBestPanel();
+                }.bind(this));
+            },
+            getBestGroup: function () {
                 var bestPanel = false;
 
-                _.each(this.children, function(panel, key) {
+                _.each(this.children, function (panel) {
                     if (bestPanel) return false;
                     bestPanel = panel.supportsRange() ? panel : bestPanel;
                 }, this);
@@ -156,22 +193,28 @@ define([
 
                 return bestPanel.$el.closest('.accordion-group');
             },
-            render: function() {
-                var template = _.template(this.template, {
-                    cid: this.cid,
-                    panels: this.children
-                });
-                this.$el.html(template);
+            render: function () {
+                // Prevent a race condition by allowing the panels to initialize before rendering the dialog
+                $.when(this.deferred.panels).then(function () {
+                    var template;
 
-                _.each(this.children, function(panel, key) {
-                    panel.render().appendTo(this.$("#" + key + "_" + this.cid + ' .accordion-body'));
-                }, this);
+                    template = _.template(this.template, {
+                        cid: this.cid,
+                        panels: this.children
+                    });
+                    this.$el.html(template);
 
-                this.children.accordion = new Accordion({el: this.el, defaultGroup: this.getBestGroup()});
-                this.renderedDfd.resolve();
-                return this;
+                    _.each(this.children, function (panel, key) {
+                        panel.render().appendTo(this.$("#" + key + "_" + this.cid + ' .accordion-body'));
+                    }, this);
+
+                    this.children.accordion = new Accordion({ el: this.el, defaultGroup: this.getBestGroup() });
+                    this.deferred.render.resolve();
+
+                    return this;
+                }.bind(this));
             },
-            onShown: function() {
+            onShown: function () {
                 this.$('.accordion-group.active a.accordion-toggle').focus();
             },
             template: '\
@@ -187,6 +230,6 @@ define([
                 </div>\
                 <% }); %> \
             '
-      });
-  }
+        });
+    }
 );

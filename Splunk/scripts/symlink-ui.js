@@ -224,6 +224,8 @@ isDirectory(FULL_TEST_FX_PATH)
     console.log(FULL_TEST_FX_PATH, 'does not exist.');
 });
 
+// splunk_monitoring_console was removed from here as it no longer presented in enterprise package. You can symlink the package manually when necessary.
+
 isDirectory(FULL_SPLUNK_MONITORING_CONSOLE_PATH)
 .then(function() {
     replaceLink(path.resolve(FULL_SPLUNK_MONITORING_CONSOLE_PATH, 'appserver'), path.resolve(BUILT_SPLUNK_MONITORING_CONSOLE_PATH, 'appserver'));

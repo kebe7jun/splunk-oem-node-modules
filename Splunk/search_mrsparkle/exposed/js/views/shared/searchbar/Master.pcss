@@ -34,108 +34,96 @@
 </div><!-- /.search-bar-wrapper -->
 
 */
+$searchAssistantTypeaheadWidth:  50%;
+$searchBarHeight: 40px;
+$searchAssistantResizeHeight: 6px;
+
 form.search-form {
     margin-bottom:0;
 }/* form */
 
-.search-bar { /* table */
+.search-bar, .search-bar-primary { /* table */
 
     .btn, .btn.dropdown-toggle {
         border-radius: 0;
         line-height: 28px;
-        height: 28px;
+        height: $searchBarHeight;
         white-space: nowrap;
         border-left: none;
+        box-sizing: border-box;
     }
 
     td {
         padding:0;
         vertical-align:top;
+
+        &.search-timerange {
+            display: flex;
+        }
     }
     td.search-input {
         width: 100%
     }
-    .search-timerange {
+
+    .shared-timerangepicker {
+        max-width: 280px;
+        flex-shrink: 0; /* Bug with button truncating in IE. */
+
         .btn {
-            white-space:nowrap;
             border-radius: 0;
-            min-width: 55px; /*  fix webkit rounding */
+            .caret {
+                line-height: 28px;
+            }
         }
     }
     .search-button{
         .btn {
+            @mixin interactive-primary;
+            padding: calc($buttonPaddingVertical + 2px) calc($buttonPaddingSides + 1px);
+            border: none;
             border-top-right-radius: $interactiveBorderRadius;
             border-bottom-right-radius: $interactiveBorderRadius;
-            margin-left:-2px;/*  extra overlap to cover webkit rounding */
-            font-size: 26px;
+            font-size: $fontSizeXXLarge;
+            position: relative;
+
+            &:hover {
+                @mixin interactive-primary-hover;
+            }
+            &:active {
+                @mixin interactive-primary-active;
+            }
+            &:focus {
+                @mixin focus-element;
+            }
         }
-    } /* td */
-    .search-timerange .shared-timerangepicker .btn .time-label {
-        display: inline-block;
-        vertical-align: middle;
-        max-width: 10em;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
-    
-    .shared-searchbarinput-searchfield {
-        .ace_editor {
+
+    .search-field-wrapper {
+        .ace_editor,
+        textarea.search-field {
             border-top-left-radius: $interactiveBorderRadius;
             border-bottom-left-radius: $interactiveBorderRadius;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
+            border-color: $interactiveBorderColor;
         }
     }
 }/* .search-bar */
 
-.dropdown-menu-apps {
-    li {
-        line-height: 20px;
-        position: relative;
-    }
-/*  prevent menu from breaking */
-    .link-label {
-        display: block;
-        white-space: nowrap;
-        word-wrap:normal;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-right: 28px;
-    }
-
-    .menu-icon {
-        width:18px;
-        height:18px;
-        position: absolute;
-        right: 10px;
-        top: 7px;
-    }
-}
-/*  Lite UI */
-/*  -------------------------------------------------- */
-@if $theme == lite  {
-    .search-bar {
-        .shared-timerangepicker .btn {
-            border-left: none;
-            border-radius:0;
-        }
-        .search-button .btn {
-            @mixin interactive-primary;
-            &:hover {
-                @mixin interactive-primary-hover;
-            }
-        }
-        &:focus {
-            @mixin focus-field;
-        }
-    }
-
-}
 
 /*  Print */
 /*  -------------------------------------------------- */
 
 @media print {
+    .search-bar {
+        width: 100%;
+        display: block;
+
+        td, tbody, tr {
+            display: block;
+            width:100%;
+        }
+    }
     .search-button {
         @mixin print-hide;
     }

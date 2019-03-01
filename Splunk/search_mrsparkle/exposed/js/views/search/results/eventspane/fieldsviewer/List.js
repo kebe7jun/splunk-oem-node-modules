@@ -32,7 +32,7 @@ define(
              */
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
-                this.model.state = new BaseModel(); 
+                this.model.state = new BaseModel();
                 this.model.field = new SummaryModel.Field();
                 this.lastRenderedField = '';
             },
@@ -95,8 +95,8 @@ define(
             },
             openFieldInfo: function(e) {
                 var activeFieldName = $(e.currentTarget).attr('data-field-name');
-                
-                if (this.model.state.get('activeFieldName') == activeFieldName) { 
+
+                if (this.model.state.get('activeFieldName') == activeFieldName) {
                     return;
                 }
                 this.model.state.set('activeFieldName', activeFieldName);
@@ -136,8 +136,8 @@ define(
                     prevFocusedInfo={},
                     $target = this.$('a[data-field-name="' + activeFieldName + '"]'),
                     $onOpenFocus = null;
-                    
-                
+
+
                 if (this.children.fieldInfo) {
                     if (this.children.fieldInfo.shown &&
                         this.lastRenderedField === activeFieldName) {
@@ -178,7 +178,7 @@ define(
                             $onOpenFocus = this.children.fieldInfo.$(prevFocusedInfo['tag'])
                                             .filter(function(){
                                                 return $(this).html() === prevFocusedInfo['html'];
-                                            });   
+                                            });
                         }
                     }
 
@@ -199,11 +199,11 @@ define(
             },
             template: '\
                 <% if (selected.length) { %>\
-                    <h6><%- _("Selected Fields").t() %></h6>\
+                    <h5 aria-label="<%- _("Selected Fields").t() %>" tabindex="0"><%- _("Selected Fields").t() %></h5>\
                     <%= _partial({fields: selected, activeFieldName: activeFieldName, className: selectedClassName}) %>\
                 <% } %>\
                 <% if (interesting.length) { %>\
-                    <h6><%- _("Interesting Fields").t() %></h6>\
+                    <h5 aria-label="<%- _("Interesting Fields").t() %>" tabindex="0"><%- _("Interesting Fields").t() %></h5>\
                     <%= _partial({fields: interesting, activeFieldName: activeFieldName, className: interestingClassName}) %>\
                 <% } %>\
                 <% if (additional > 0) {%>\
@@ -224,10 +224,10 @@ define(
                 <ol class="<%- className%>">\
                     <% _.each(fields, function(field) { %>\
                         <li>\
-                            <a href="#" data-field-name="<%- field.get("name") %>" class="<%= (activeFieldName==field.get("name")) ? "active" : "" %>">\
-                                <span class="fields-type font-icon"><%- field.isNumeric() ? "#" : "a" %></span>\
-                                <span class="field-name"><%- field.get("name") %></span>\
-                                <span class="field-count numeric"><%- field.get("distinct_count") %><%- field.get("is_exact") ? "" : "+" %></span>\
+                            <a  aria-label="<%- field.get("name") %>" href="#" data-field-name="<%- field.get("name") %>" class="<%= (activeFieldName==field.get("name")) ? "active" : "" %>">\
+                                <span tabindex="-1" class="fields-type font-icon"><%- field.isNumeric() ? "#" : "a" %></span>\
+                                <span role="link" tabindex="0" aria-label="<%- field.get("name") %> <%- field.isNumeric() ? _("numeric").t() : _("alphabet").t() %>" class="field-name"><%- field.get("name") %></span>\
+                                <span role="link" tabindex="0" class="field-count numeric"><%- field.get("distinct_count") %><%- field.get("is_exact") ? "" : "+" %></span>\
                             </a>\
                         </li>\
                     <% }); %>\

@@ -13,18 +13,31 @@ define(
     [
         'underscore',
         "models/indexes/cloud/Index",
-        "collections/services/data/Indexes"
+        "collections/services/data/Indexes",
+        'splunk.util'
     ],
     function(
         _,
         IndexModel,
-        BaseIndexesCollection
+        BaseIndexesCollection,
+        splunkUtil
     ) {
         return BaseIndexesCollection.extend({
             model: IndexModel,
             url: 'cluster_blaster_indexes/sh_indexes_manager',
             initialize: function() {
                 BaseIndexesCollection.prototype.initialize.apply(this, arguments);
+            },
+            isDataArchiveEnabled: function() {
+                // Getting the enableDataArchive from the main index is reliable as it 
+                // cannot be deleted by customers.
+                var mainIndex = this.findByEntryName('main');
+                return mainIndex && splunkUtil.normalizeBoolean(
+                    mainIndex.entry.content.get('archiver.enableDataArchive'));
+            },
+            getMaxDataArchiveRetentionPeriod: function() {
+                var mainIndex = this.findByEntryName('main');
+                return mainIndex && mainIndex.entry.content.get('archiver.maxDataArchiveRetentionPeriod');
             }
         });
     }

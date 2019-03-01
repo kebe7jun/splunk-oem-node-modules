@@ -28,7 +28,7 @@ define(
                     controlType: 'Text',
                     size: 'small',
                     label: _('Field name').t(),
-                    controlClass: 'controls-fill',
+
                     controlOptions: {
                         model: this.model.command,
                         modelAttribute: 'newFieldName',
@@ -37,7 +37,7 @@ define(
                 });
 
                 this.children.evalExpressionBox = new TextareaControl({
-                    className: 'eval-box',
+                    additionalClassName: 'eval-box',
                     model: this.model.command,
                     modelAttribute: 'expression',
                     size: 'small'
@@ -117,10 +117,10 @@ define(
                         _: _,
                         helpLink: this.getHelpLink('learnmore.about.eval')
                     }));
-                    
+
                     this.children.evalExpressionControl.activate({ deep: true }).render().$el.prependTo(this.$('.commandeditor-section-padded'));
                     this.children.newFieldName.activate({ deep: true }).render().$el.prependTo(this.$('.commandeditor-section-padded'));
-                    
+
                     this.appendButtons();
                     if (this.model.state.get('previousJSON')) {
                         this.appendAdvancedEditorReturnLink();

@@ -1,5 +1,7 @@
 # FAQ
 
+<!-- TOC -->
+
 ## How do I turn off, disable or ignore a rule?
 
 You can turn off a rule by setting its config value to `null`.
@@ -43,7 +45,7 @@ The stylelint community also maintains a [handful of plugins](complementary-tool
 
 ## How do I lint SCSS, Less, or other non-standard syntax?
 
-stylelint can *parse* any the following non-standard syntaxes by default: SCSS, Less and SugarSS. Non-standard syntaxes can automatically be inferred from the following file extensions `.scss`, `.less`, and `.sss`; or else you can specify the syntax yourself.
+stylelint can *parse* any the following non-standard syntaxes by default: Sass, Less and SugarSS. Non-standard syntaxes can automatically be inferred from the following file extensions `.sass`, `.scss`, `.less`, and `.sss`; or else you can specify the syntax yourself.
 
 Additionally, stylelint can accept any [PostCSS-compatible syntax](https://github.com/postcss/postcss#syntaxes) when using the CLI or Node API. Note, however, that stylelint can provide no guarantee that core rules will work with syntaxes other than the defaults listed above.
 
@@ -83,7 +85,7 @@ Yes, you can either use the [`message` secondary option](configuration.md#custom
 
 Use the [stylelint-selector-bem-pattern](https://github.com/davidtheclark/stylelint-selector-bem-pattern) plugin to ensure your selectors conform to a chosen BEM-flavor pattern.
 
-You can also take advantage of the `selector-*` rules to ban certain types of selectors (e.g. id selectors) and control specificity.
+You can also take advantage of the `selector-*` rules to ban certain types of selectors (e.g. ID selectors) and control specificity.
 
 If you're using SUITCSS, you might want to use [their shareable config](https://github.com/suitcss/stylelint-config-suitcss).
 

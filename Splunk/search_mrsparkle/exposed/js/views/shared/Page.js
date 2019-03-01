@@ -1,5 +1,6 @@
 define(
     [
+        'underscore',
         'jquery',
         'module',
         'views/Base',
@@ -11,6 +12,7 @@ define(
         'helpers/TourHelper'
     ],
     function(
+        _,
         $,
         module,
         BaseView,
@@ -81,12 +83,6 @@ define(
             render: function() {
                 this.renderLoadingMessage();
                 this.renderHeader();
-                // DCE-OEM-CHANGE 有 appNav 的增加 marginLeft
-                if (this.options.showAppNav !== false &&
-                        this.model.appNav || this.options.showAppNav) {
-                    this.$('.main-section-body').css('margin-left', '200px');
-                }
-
                 // If we're on cloud, or the user does not have the capability to edit instrumentation settings,
                 // just skip trying to load the opt-in modal.
                 var notCloud = this.model.serverInfo && !this.model.serverInfo.isCloud(),
@@ -96,7 +92,6 @@ define(
                 } else {
                     this.renderTour();
                 }
-
                 return this;
             },
             renderHeader: function() {
@@ -143,13 +138,18 @@ define(
                 TourHelper.killTour();
             },
             renderLoadingMessage: function() {
-                var html = this.compiledTemplate({loadingMessage: this.options.loadingMessage || ''});
+                var html = this.compiledTemplate({
+                    loadingMessage: this.options.loadingMessage || '',
+                    _: _
+                });
                 this.$el.html(html);
             },
             template: '\
-                <a class="navSkip" href="#navSkip" tabIndex="1" style="position: absolute; top: 0; left: -1000px;">Screen reader users, click here to skip the navigation bar</a>\
+                <a aria-label="<%- _("Screen reader users, click here to skip the navigation bar").t() %>"\
+                    class="navSkip" href="#navSkip" tabIndex="1"><%- _("Skip Navigation").t() %> \>\
+                </a>\
                 <header role="banner"></header>\
-                <a id="navSkip"></a> \
+                <div id="navSkip"></div> \
                 <div class="main-section-body" role="main">\
                     <% if (loadingMessage) { %>\
                         <div class="loading-message"><%- loadingMessage %></div>\

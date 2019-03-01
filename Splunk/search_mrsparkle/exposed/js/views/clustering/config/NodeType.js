@@ -5,7 +5,8 @@ define([
     'module',
     'views/Base',
     'views/shared/Modal',
-    'contrib/text!views/clustering/config/NodeType.html'
+    'contrib/text!views/clustering/config/NodeType.html',
+    './NodeType.pcss'
 ],
     function(
         $,
@@ -14,7 +15,8 @@ define([
         module,
         BaseView,
         Modal,
-        ConfigTemplate
+        ConfigTemplate,
+        css
         ) {
         return BaseView.extend({
             /**

@@ -11,7 +11,8 @@ define([
         'splunk.util',
         'views/shared/FlashMessages',
         'views/shared/Modal',
-        'views/shared/waitspinner/Master'
+        'views/shared/waitspinner/Master',
+        './DeleteIndexDialog.pcss'
     ],
 
     function(
@@ -22,7 +23,8 @@ define([
         splunkUtil,
         FlashMessages,
         Modal,
-        Spinner
+        Spinner,
+        css
     ) {
 
         return Modal.extend({
@@ -32,7 +34,12 @@ define([
                 Modal.prototype.initialize.call(this, arguments);
 
                 // Create flash messages view
-                this.children.flashMessagesView = new FlashMessages({model:this.model});
+                this.children.flashMessagesView = new FlashMessages({
+                    model:this.model,
+                    helperOptions: {
+                        postProcess: this.postProcess
+                    }
+                });
 
                 if (this.options.showSpinner){
                     // Show spinner to show feedback that index is being deleted.
@@ -49,7 +56,7 @@ define([
                 'click .modal-btn-delete': function(e) {
                     if (this.children.spinner){
                         this.children.spinner.start();
-                        this.children.spinner.$el.show();
+                        this.children.spinner.$el.removeClass('hide');
                     }
                     var deleteIndexDeferred = this.model.destroy({wait:true});
 
@@ -62,12 +69,19 @@ define([
                     }).bind(this));
                     $.when(deleteIndexDeferred).fail(_(function() {
                         if (this.children.spinner) {
-                            this.children.spinner.$el.hide();
+                            this.children.spinner.$el.addClass('hide');
                             this.children.spinner.stop();
                         }
                     }).bind(this));
                 }
             }),
+
+            postProcess: function(messages) {
+                if (messages.length) {
+                    messages[0].set({'html': _.unescape(messages[0].get('html'))});
+                }
+                return messages;
+            },
 
             render: function() {
                 this.$el.html(Modal.TEMPLATE);
@@ -77,20 +91,20 @@ define([
                 this.$(Modal.BODY_FORM_SELECTOR).html(_(this.dialogFormBodyTemplate).template({
                   confirmationMessage: splunkUtil.sprintf(
                     _("Are you sure you want to delete the index named <i>%s</i>?").t(),
-                    this.model.entry.get("name")
+                    _.escape(this.model.entry.get("name"))
                   ),
                   deletionWarning: splunkUtil.sprintf(
                     _("Any data in index <i>%s</i> will be deleted and irrecoverable!").t(),
-                    this.model.entry.get("name")
+                    _.escape(this.model.entry.get("name"))
                   )
                 }));
                 this.children.flashMessagesView.render().appendTo(this.$(".flash-messages-view-placeholder"));
-                this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL_PRIMARY);
-                this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_DELETE_SECONDARY);
                 if (this.children.spinner) {
                     this.$(Modal.FOOTER_SELECTOR).append(this.children.spinner.render().el);
-                    this.children.spinner.$el.hide();
+                    this.children.spinner.$el.addClass('hide');
                 }
+                this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL_PRIMARY);
+                this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_DELETE_SECONDARY);
                 return this;
             },
 

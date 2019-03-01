@@ -25,6 +25,7 @@ define([
         events: {
             'click [data-has-children]': 'next',
             'click [data-role="back"]': function(e) {
+                e.preventDefault();
                 e.stopPropagation();
                 this.back();
             }
@@ -32,13 +33,15 @@ define([
         addLevel: function(navData, needsBack){
             var newLevel = new SlideListView({
                 navData: navData,
-                needsBack: needsBack
+                needsBack: needsBack,
+                active: this.options.active
             });
             this.children.list.push(newLevel);
             newLevel.appendTo(this.$el);
             return newLevel;
         },
         next: function(e){
+            e.preventDefault();
             e.stopPropagation();
             var selectedIndex = $(e.currentTarget).attr('data-last-section', 'true').attr('data-index');
             var current = this.children.list[this.children.list.length-1];

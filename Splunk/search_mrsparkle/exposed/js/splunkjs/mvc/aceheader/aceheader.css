@@ -3,11 +3,11 @@ header.splunk-ace-header {
     background: #000 url(/en-US/static/img/skins/default/bg_appHeaderWrapper.png) repeat-x;
 	color: #666;
 	font-family: Arial,Helvetica,sans-serif;
-	font-size: 11px;
+	font-size: $fontSizeS;
 }
 
 header.splunk-ace-header a {
-	color: #CCC;
+	color: #c3cbd4;
 	text-decoration: none;
 }
 
@@ -33,7 +33,7 @@ header.splunk-ace-header .splunk-account-bar-items li a:hover {
 header.splunk-ace-header .splunk-account-bar-items li.splunk-account-divider {
 	margin: 0 6px 0 1px;
 	padding: 0;
-} 
+}
 
 header.splunk-ace-header .splunk-app-logo-container {
 	padding-left: 10px;
@@ -85,7 +85,7 @@ header.splunk-ace-header .splunk-navigation-header ul li {
  header.splunk-ace-header .splunk-navigation-header ul li a {
  	display: block;
  	padding: 0 10px;
- 	font-size: 11px;
+ 	font-size: $fontSizeS;
  	font-weight: bold;
     outline: none;
 }
@@ -156,7 +156,7 @@ div.splunk-splMenu-primary.splunk-app-menu ul li a {
     padding-top: 5px;
     padding-bottom: 5px;
     line-height: 14px;
-    color: #CCC;
+    color: #c3cbd4;
 }
 
 div.splunk-splMenu-primary.splunk-app-menu .splunk-innerMenuWrapper {

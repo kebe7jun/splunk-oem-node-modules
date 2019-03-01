@@ -14,6 +14,7 @@ define(function(require, exports, module) {
     var route = require('uri/route');
     var UserModel = require('models/services/authentication/User');
     var ModelHelper = require('controllers/dashboard/helpers/ModelHelper');
+    var theme_utils = require('util/theme_utils');
     require('bootstrap.tooltip');
 
     var DynamicOptionsControl = Base.extend({
@@ -42,9 +43,8 @@ define(function(require, exports, module) {
             this.children.elementCreateType = new ControlGroup({
                 label: _("Content Type").t(),
                 controlType: 'SyntheticRadio',
-                controlClass: 'controls-thirdblock',
                 controlOptions: {
-                    className: 'btn-group btn-group-3 add-panel-select',
+                    additionalClassNames: 'btn-group-3 add-panel-select',
                     items: [
                         {value: 'inline', label: '<i class="icon-search-thin"></i>', tooltip: _("Inline Search").t()},
                         {value: 'saved', label: '<i class="icon-report"></i>', tooltip: _("Report").t()}
@@ -130,7 +130,7 @@ define(function(require, exports, module) {
     });
 
     var InlineForm = Base.extend({
-
+        className: 'inline-search-options',
         initialize: function() {
             Base.prototype.initialize.apply(this, arguments);
 
@@ -143,7 +143,8 @@ define(function(require, exports, module) {
                 collection: {
                     searchBNFs: this.collection.searchBNFs
                 },
-                searchAssistant: UserModel.SEARCH_ASSISTANT.NONE
+                searchAssistant: UserModel.SEARCH_ASSISTANT.NONE,
+                syntaxHighlighting: theme_utils.getSearchEditorTheme()
             });
 
             this.children.timeRangeView = new TimeRangeView({

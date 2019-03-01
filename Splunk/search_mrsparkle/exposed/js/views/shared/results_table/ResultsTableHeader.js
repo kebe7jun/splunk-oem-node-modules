@@ -59,7 +59,8 @@ define([
                     this.formattedFields[i] = i18n.format_date(timeUtils.isoToDateObject(fields), timestampFormat);
                 }
                 else{
-                    this.formattedFields[i] = fields;
+                    // Attempt to get the column header title for the current locale
+                    this.formattedFields[i] = _(fields).t();
                 }
             }, this);
             var html = this.compiledTemplate({
@@ -125,33 +126,7 @@ define([
             return '';
         },
 
-        template: '\
-            <tr class="">\
-                <% if(rowExpansion) { %>\
-                    <th class="col-info" style="width: 15px;"><i class="icon-info"></i></th>\
-                <% } %>\
-                <% if(rowNumbers) { %>\
-                    <th class="row-number"></th>\
-                <% } %>\
-                <% _(fields).each(function(field, i) { %>\
-                    <% if (sortableFields && !_.contains(sortableFieldsExcluded, field)) { %>\
-                        <th class="sorts <%- columnClasses[field] %>" <%- sortKeyAttribute %>="<%- field %>">\
-                            <% if (enableEditing && (columnTypes[field] !== "timestamp") && (columnTypes[field] !== "sparkline")) { %>\
-                                <a class="btn-col-format suppress-sort pull-right" href="#"><i class="icon-paintbrush "></i></a>\
-                            <% } %>\
-                            <a href="#"><%- formattedFields[i] %><i class="icon-sorts "></i></a>\
-                        </th>\
-                    <% } else { %>\
-                        <th class="<%- columnClasses[field] %>" <%- sortKeyAttribute %>="<%- field %>">\
-                            <% if (enableEditing && (columnTypes[field] !== "timestamp") && (columnTypes[field] !== "sparkline")) { %>\
-                                <a class="btn-col-format suppress-sort pull-right" href="#"><i class="icon-paintbrush "></i></a>\
-                            <% } %>\
-                            <span><%- formattedFields[i] %></span>\
-                        </th>\
-                    <% } %>\
-                <% }) %>\
-            </tr>\
-        '
+        template: '<tr class=""><% if(rowExpansion) { %><th class="col-info" style="width: 15px;"><i class="icon-info"></i></th><% } %><% if(rowNumbers) { %><th class="row-number"></th><% } %><% _(fields).each(function(field, i) { %><% if (sortableFields && !_.contains(sortableFieldsExcluded, field)) { %><th class="sorts <%- columnClasses[field] %>" <%- sortKeyAttribute %>="<%- field %>"><% if (enableEditing && (columnTypes[field] !== "timestamp") && (columnTypes[field] !== "sparkline")) { %><a class="btn-col-format suppress-sort pull-right" href="#"><i class="icon-paintbrush "></i></a><% } %><a href="#"><%- formattedFields[i] %><i class="icon-sorts "></i></a></th><% } else { %><th class="<%- columnClasses[field] %>" <%- sortKeyAttribute %>="<%- field %>"><% if (enableEditing && (columnTypes[field] !== "timestamp") && (columnTypes[field] !== "sparkline")) { %><a class="btn-col-format suppress-sort pull-right" href="#"><i class="icon-paintbrush "></i></a><% } %><span><%- formattedFields[i] %></span></th><% } %><% }) %></tr>'
 
     });
 

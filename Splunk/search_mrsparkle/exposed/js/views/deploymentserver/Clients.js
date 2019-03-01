@@ -99,7 +99,8 @@ define(
                 this.children.paginator = new Paginator(
                     {
                         model: this.model.paginator, 
-                        collection: this.collection
+                        collection: this.collection,
+						countLabel: _('Clients').t()
                     }
                 );
 

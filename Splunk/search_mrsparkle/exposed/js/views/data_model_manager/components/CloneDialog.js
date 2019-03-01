@@ -71,7 +71,6 @@ function (
                     modelAttribute: "displayName",
                     model: this.model.source.entry.content
                 },
-                controlClass: 'controls-block',
                 label: _("Data Model").t()
             });
 
@@ -83,13 +82,11 @@ function (
 
             this.children.titleField = new ControlGroup({
                 controls: this.textDisplayNameControl,
-                controlClass: 'controls-block',
                 label: _('New Title').t()
             });
 
             this.children.idField = new ControlGroup({
                 controls: this.textModelNameControl,
-                controlClass: 'controls-block',
                 label: _('New ID').t(),
                 tooltip: _('The ID is used as the filename on disk and used in the data model search command. Cannot be changed later.').t(),
                 help: _('Can only contain letters, numbers and underscores.').t()
@@ -128,7 +125,6 @@ function (
 
             this.children.selectApp = new ControlGroup({label:_("App").t(),
                 controlType: "SyntheticSelect",
-                controlClass: 'controls-block',
                 controlOptions: {modelAttribute:"app",
                     model:this.model.createDataModel,
                     toggleClassName: 'btn',
@@ -144,13 +140,11 @@ function (
                     modelAttribute: 'description',
                     model: this.model.createDataModel
                 },
-                controlClass: 'controls-block',
                 label: _('New Description').t()
             });
 
             this.children.clonePermissionsControl = new ControlGroup({
                 controlType: 'SyntheticRadio',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'clonePermissions',
                     model: this.model.createDataModel,
@@ -188,8 +182,8 @@ function (
                 // unset id
                 this.clonedDataModel.unset("id");
 
-                // Don't copy over acceleration settings
-                this.clonedDataModel.entry.content.acceleration.clear({silent:true});
+                // Copy over acceleration settings, but disable acceleration
+                this.clonedDataModel.entry.content.acceleration.set({enabled:false});
 
                 // set displayName, modelName, description
                 this.clonedDataModel.entry.content.set({

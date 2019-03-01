@@ -50,6 +50,10 @@ define(
                 this.reloadProgress = [];
                 this.dryRunProgress = [];
                 this.peersChecksumUpdated = [];  // to track peers have the updated checksum after every action.
+                this.errorLabels = {
+                    pushUnnecessary: _('Push Unnecessary').t(),
+                    rollingRestartError: _('Rolling Restart Error').t()
+                };
 
                 this.deferreds.masterInfo = $.Deferred();
                 this.deferreds.peers = $.Deferred();
@@ -194,7 +198,7 @@ define(
                     var _applyBundleStatus = this.masterInfo.entry.content.get('apply_bundle_status');
                     this.masterApplyBundleStatus = _applyBundleStatus.status;
                     this.masterValidationErrors = _applyBundleStatus.invalid_bundle.bundle_validation_errors_on_master;
-                    
+
                     var label = this.masterInfo.entry.content.get('label');
 
                     if (this.masterValidationErrors && this.masterValidationErrors.length) {
@@ -227,7 +231,12 @@ define(
                             this.monitorPushStatus();
                         }.bind(this))
                         .fail(function(respErr) {
-                            this.handleFail(_('Push Unnecessary').t(), respErr.responseJSON.messages[0].text);
+                            var errorText = respErr.responseJSON.messages[0].text;
+                            if (errorText.toLowerCase().indexOf('rolling restart') !== -1) {
+                                this.handleFail(this.errorLabels.rollingRestartError, errorText);
+                            } else {
+                                this.handleFail(this.errorLabels.pushUnnecessary, errorText);
+                            }
                         }.bind(this));
                 }, this);
 
@@ -323,12 +332,15 @@ define(
             isActionSuccessful: function() {
                 var hasNoCriticalErrors = true;
                 var hasNoPushUnnecessaryError = true;
+                var hasNoRollingRestartError = true;
 
                 _.each(this.errors, function(instance) {
                     var instanceErrors = instance['errors'];
 
-                    if (instance['label'] === "Push Unnecessary") {
+                    if (instance['label'] === this.errorLabels.pushUnnecessary) {
                         hasNoPushUnnecessaryError = false;
+                    } else if (instance['label'] === this.errorLabels.rollingRestartError) {
+                        hasNoRollingRestartError = false;
                     }
 
                     if (!_.isArray(instanceErrors)) {
@@ -342,7 +354,7 @@ define(
                             hasNoCriticalErrors = false;
                         }
                     });
-                });
+                }, this);
 
                 var applyBundleStatus = this.masterInfo.entry.content.get('apply_bundle_status');
                 var hasNoInvalidBundle =true;
@@ -351,7 +363,7 @@ define(
                 }
 
                 return (this.masterActiveBundle === this.masterLatestBundle) &&
-                    hasNoCriticalErrors && hasNoPushUnnecessaryError && hasNoInvalidBundle;
+                    hasNoCriticalErrors && hasNoPushUnnecessaryError && hasNoInvalidBundle && hasNoRollingRestartError;
             },
 
             monitorPushStatus: function() {

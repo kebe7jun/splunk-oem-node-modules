@@ -8,8 +8,8 @@ define([
     'backbone',
     'models/classicurl',
     'views/Base',
-    'views/shared/controls/ControlGroup',
     'views/shared/controls/SyntheticRadioControl',
+    'views/shared/controls/SyntheticSelectControl',
     'views/shared/CollectionPaginator',
     'views/shared/TableHead',
     'views/clustering/master/bucketdetails/components/TableRow',
@@ -26,8 +26,8 @@ define([
         Backbone,
         classicurl,
         BaseView,
-        ControlGroup,
         SyntheticRadioControl,
+        SyntheticSelectControl,
         Paginator,
         TableHead,
         TableRow,
@@ -90,25 +90,21 @@ define([
                     ]
                 });
 
-                this.children.fixupTime = new ControlGroup({
-                    controlType: 'SyntheticSelect',
-                    className: 'fixup-time control-group',
-                    controlOptions: {
-                        modelAttribute: 'filter',
-                        model: this.fixupLevelsModel,
-                        items: [
-                            { label: _('Unconstrained').t(), value: 'minutes_in_fixup>0' },
-                            { label: _('1 hour').t(), value: 'minutes_in_fixup>60' },
-                            { label: _('4 hours').t(), value: 'minutes_in_fixup>240' },
-                            { label: _('24 hours').t(), value: 'minutes_in_fixup>1440' },
-                            { label: _('7 days').t(), value: 'minutes_in_fixup>10080' }
-                        ],
-                        popdownOptions: {
-                            attachDialogTo: '.modal:visible',
-                            scrollContainer: '.modal:visible .modal-body:visible'
-                        }
+                this.children.fixupTime = new SyntheticSelectControl({
+                    model: this.fixupLevelsModel,
+                    modelAttribute: 'filter',
+                    items: [
+                        { label: _('Unconstrained').t(), value: 'minutes_in_fixup>0' },
+                        { label: _('1 hour').t(), value: 'minutes_in_fixup>60' },
+                        { label: _('4 hours').t(), value: 'minutes_in_fixup>240' },
+                        { label: _('24 hours').t(), value: 'minutes_in_fixup>1440' },
+                        { label: _('7 days').t(), value: 'minutes_in_fixup>10080' }
+                    ],
+                    popdownOptions: {
+                        attachDialogTo: '.modal:visible',
+                        scrollContainer: '.modal:visible .modal-body:visible'
                     },
-                    controlClass: 'controls-block btn'
+                    toggleClassName: 'btn'
                 });
 
                 this.children.fixupLevels.render().$el.appendTo(this.$el.find('.fixup-level-select'));

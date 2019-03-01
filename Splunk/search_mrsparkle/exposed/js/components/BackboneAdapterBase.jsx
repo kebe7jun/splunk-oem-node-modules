@@ -31,7 +31,7 @@ class BackboneAdapterBase extends Component {
         return (
             <div
                 {...this.getContainerProps()}
-                ref={c => (this.container = c)}
+                ref={(c) => { this.container = c; }}
             />
         );
     }

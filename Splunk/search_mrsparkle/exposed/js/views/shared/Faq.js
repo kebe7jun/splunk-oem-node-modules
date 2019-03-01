@@ -54,7 +54,7 @@ define(
                 return this;
             },
 
-            headerTemplate: '<h1>' + _('FAQ').t() + '</h1>',
+            headerTemplate: '<h3>' + _('FAQ').t() + '</h3>',
 
             groupTemplate:
                 '<div class="faq-group">\

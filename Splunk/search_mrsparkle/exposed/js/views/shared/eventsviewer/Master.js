@@ -105,8 +105,7 @@ define(
                     allowRowExpand: this.options.allowRowExpand,
                     allowModalize: this.options.allowModalize,
                     showWarnings: this.options.showWarnings,
-                    highlightExtractedTime: this.options.highlightExtractedTime,
-                    clickFocus: 'tr.tabbable-list-row'
+                    highlightExtractedTime: this.options.highlightExtractedTime
                 });
 
                 this.children.table = new EventsTableView({

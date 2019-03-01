@@ -5,30 +5,31 @@ define(function(require, exports, module) {
     var BaseInputView = require("./baseinputview");
     var Messages = require("./messages");
     var Tooltip = require("bootstrap.tooltip");
-
-    require("css!../css/choice.css");
+    var React = require('react');
+    var ReactDOM = require('react-dom');
+    var ChoiceViewMessage = require('./components/ChoiceViewMessage');
 
     /**
      * @constructor
      * @memberOf splunkjs.mvc
      * @name BaseChoiceView
      * @private
-     * @description The **BaseChoiceView** base class is a 
-     * private abstract base class for form input views that 
-     * present static and dynamic choices. 
+     * @description The **BaseChoiceView** base class is a
+     * private abstract base class for form input views that
+     * present static and dynamic choices.
      *
-     * This class presents choices, which consist of a value 
+     * This class presents choices, which consist of a value
      * and an optional label to display.  If the label is not
      * provided, the value will be displayed.
      * This class is not designed to be instantiated directly.
-     * 
+     *
      * @extends splunkjs.mvc.BaseInputView
      *
      * @param {Object} choices - An array of choices.
      * @param {Object} options
-     * @param {*} options.valueField - Field to use for the option value (and 
+     * @param {*} options.valueField - Field to use for the option value (and
      * optionally, the option label).
-     * @param {String} options.labelField - Field to use for option label, 
+     * @param {String} options.labelField - Field to use for option label,
      * defaults to **valueField** if not provided.
      */
     var BaseChoiceView = BaseInputView.extend(/** @lends splunkjs.mvc.BaseChoiceView.prototype */{
@@ -37,7 +38,7 @@ define(function(require, exports, module) {
             /**
              * If true then choice view defaults its value to the first
              * available choice.
-             * 
+             *
              * This setting does not apply to BaseMultiChoiceView subclasses.
              */
             selectFirstChoice: false
@@ -45,8 +46,11 @@ define(function(require, exports, module) {
 
         initialize: function() {
             this._baseChoiceViewInitialized = false;
-            
-            this._$messageEl = this.$(".splunk-choice-input-message span");
+
+            // Create elements for the control and message
+            this._$ctrl = $("<div/>");
+            this._$msg = $("<div/>").addClass("splunk-choice-input-message");
+            this.$el.html('').append(this._$ctrl, this._$msg);
 
             this.options = _.extend({}, BaseInputView.prototype.options, this.options);
             BaseInputView.prototype.initialize.apply(this, arguments);
@@ -54,34 +58,40 @@ define(function(require, exports, module) {
             this.manager = null;
             this.resultsModel = null;
 
-            this.settings.on("change:value", this._onValueChange, this);
-            this.settings.on("change:choices change:valueField change:labelField change:default",
-                             _.debounce(this.render, 0), this);
-
             this.settings.enablePush("selectedLabel");
-            this.settings.on("change:value change:choices", this.updateSelectedLabel, this);
-
-            this._displayedChoices = [];
+            this.listenTo(this.settings, 'change:value', this.updateSelectedLabel);
+            this.listenTo(this.settings, 'change:choices', function () {
+                // make sure not accidentally pass argument to _updateDisplayedChoice
+                this._updateDisplayedChoices();
+            });
 
             this._baseChoiceViewInitialized = true;
+
+            // TODO: refactor the 'selectFirstChoice' logic
+            // My understanding of this._hasUserInput is, it is a flag intended to be used as part of
+            // the 'selectFirstChoice' logic, which is really hard to keep track. We should find a simpler
+            // way to implement 'selectFirstChoice'.
             this._hasUserInput = false;
+
             // a flag that check whether this input has initial value, selectFirstChoice will be skipped if it's true
             this._hasInitialValue = !_.isUndefined(this.settings.get('value')) || !_.isUndefined(this.settings.get('default'));
+
+            this._updateDisplayedChoices();
             this.updateSelectedLabel();
+        },
+
+        getReactRoot: function() {
+            // Override the default getReactRoot
+            // Point the control at the DOM we allocated for it.
+            return this._$ctrl[0];
         },
 
         onUserInput: function() {
             this._hasUserInput = true;
         },
 
-        updateDomVal: function(value) {
-            // Given the value passed in, change the HTML of this
-            // control to reflect the current value.
-            throw new Error("Abstract method.  Must override");
-        },
-
         updateSelectedLabel: function() {
-            // If this method will try to set selectedLabel when push is not  
+            // If this method will try to set selectedLabel when push is not
             // enabled yet (see initialize method) - this will clear all bindings.
             // Property _baseChoiceViewInitialized helps us to synchronize initialization.
             if (this._baseChoiceViewInitialized) {
@@ -94,18 +104,22 @@ define(function(require, exports, module) {
             }
         },
 
+        _handleSelectFirstChoice: function() {
+            if (!this._hasUserInput && !this._isMultiChoiceView && this.settings.get('selectFirstChoice') && !this._hasInitialValue) {
+                var currentVal = this.val();
+                var firstValue = _(this._displayedChoices).chain().pluck('value').first().value();
+                if (currentVal != firstValue) {
+                    this.settings.set('value', firstValue);
+                }
+            }
+        },
+
         _onSearchStart: function() {
             this._hasUserInput = false;
             BaseInputView.prototype._onSearchStart.apply(this, arguments);
         },
 
-        _onValueChange: function(ctx, value, options) {
-            this.updateDomVal(value);
-            this.updateSelectedLabel(value);
-            this.trigger('change', this.val(), this);
-        },
-        
-        _displayMessage: function(messageName) {
+        displayMessage: function(messageName) {
             var info = messageName;
             if (_.isString(messageName)) {
                 info = Messages.resolve(messageName);
@@ -123,7 +137,7 @@ define(function(require, exports, module) {
                 case "no-stats": {
                     message = _("Search produced no results.").t();
                     originalMessage = "";
-                    
+
                     // We need to update the view with the empty search results,
                     // otherwise we may end up displaying stale data.
                     this._updateView(this._viz, []);
@@ -149,68 +163,81 @@ define(function(require, exports, module) {
                         message = "";
                         originalMessage = "";
                     }
-                    
+
                     // We need to update the view with the empty search results,
                     // otherwise we may end up displaying stale data.
                     this._updateView(this._viz, []);
                     break;
                 }
             }
-            
-            // Put the message as the text, but also put the original message
-            // as the tooltip.
-            this._$messageEl.text(message);
-            this._$messageEl.attr("title", originalMessage);
-            try {
-                this._$messageEl.tooltip('destroy');
-                this._$messageEl.tooltip({animation: false});
-            } catch (e) {
-                // DVPL-3306: Avoid manipulating tooltip if it isn't ready.
-                // Unfortunately I can't reproduce the problem consistently
-                // enough to identify a better fix.
-                var tooltipIsNotReady = (e && e.message && e.message.indexOf(
-                    'cannot call methods on tooltip prior to initialization') >= 0);
-                if (!tooltipIsNotReady) {
-                    throw e;
-                } // else ignore and continue
-            }
+
+            this._renderMessage({
+                message: message,
+                originalMessage: originalMessage
+            });
         },
 
-        convertDataToChoices: function(data) {
+        _renderMessage: function(props) {
+            ReactDOM.render(
+                React.createElement(ChoiceViewMessage, props),
+                this._$msg[0]
+            );
+        },
+
+
+        _updateDisplayedChoices: function(data) {
             // Given a new set of dynamic data, transforms all sources
             // of choices into a value/label pair suitable for DOM
             // rendering.  Merges static and dynamic data into a
             // single array.
+            // TODO: we may want to implement a generic method that can merge choices from multiple sources
+            // into one. For example, static choices + dymanic choices + custom input values form the filter.
             data = data || this._data;
             var valueField = this.settings.get("valueField") || 'value';
             var labelField = this.settings.get("labelField") || valueField;
-            var choices = Array.prototype.slice.call(this.settings.get('choices') || []);
 
-            choices = choices.concat(_.map((data || []), function(row) {
+            var dataChoices = _.map((data || []), function(row) {
                 return {
-                    label: row[labelField],
+                    // note: if label does not exist, value will be used as label. This is to align
+                    // with the behavior in versions <= 7.0 (minty). SPL-152554
+                    label: row[labelField] || row[valueField],
                     value: row[valueField]
                 };
-            }));
+            }).filter(function(choice) {
+                // there's a scenario that the search returns some results while the view doesn't set
+                // correct 'valueField' or 'labelField', so the _.map function generates
+                // [{ label: undefined, value: undefined }].
+                // This is an invalid option which caused DVPL-3292 and some unit tests were force to
+                // pass when the DOM renders 3 choices while only 2 choices are provided.
+                return choice.label != null && choice.value != null;
+            });
+
+            var choices = Array.prototype.slice.call(this.settings.get('choices') || []);
+
+            choices = choices.concat(dataChoices);
 
             // De-duplicate values list, as HTML controls don't handle
             // them well.
             var originalChoicesLength = choices.length;
             choices = _.uniq(choices, false, function(i) { return i.value; });
             if (originalChoicesLength != choices.length) {
-                this._displayMessage('duplicate');
+                this.displayMessage('duplicate');
                 console.log("Choice control received search result with duplicate values. Recommend dedupe of data source.");
             }
-            return choices;
+            this._displayedChoices = choices;
+
+            // make sure call _handleSelectFirstChoice and updateSelectedLabel here, because any changes to _displayedChoices can affect them.
+            this._handleSelectFirstChoice();
+            this.updateSelectedLabel();
         },
 
         _getSelectedData: function() {
             return _.extend(
-                BaseInputView.prototype._getSelectedData.call(this), 
+                BaseInputView.prototype._getSelectedData.call(this),
                 this._selectedDataForValue(this.val())
             );
         },
-        
+
         _selectedDataForValue: function(value){
             var valueField = this.settings.get('valueField') || 'value';
             var selected = _(this._data || []).find(function(d) { return d[valueField] === value; });
@@ -224,63 +251,57 @@ define(function(require, exports, module) {
 
         _updateView: function(viz, data) {
             if (!this._viz) {
-                this._createView(this._displayedChoices); 
+                this._createView(this._displayedChoices);
                 if (!this._viz) {
-                    return; 
+                    return;
                 }
-            }            
-            // Create the message area if one does not exist, and clear it.
-            if (!this._$messageEl.length) {
-                var $messageContainer = $("<div class='splunk-choice-input-message'></div>").appendTo(this.el);
-                this._$messageEl = $("<span></span>").appendTo($messageContainer);
             }
-            this._$messageEl.text('');
-            this._displayedChoices = this.convertDataToChoices(data);
-            this.updateView(this._viz, this._displayedChoices);
 
-            // We need to cover two cases, one where value is set first and 
-            // choices later, and second when choices are set first and value later.
-            // This call covers first case, subscription on value change 
-            // in initialize covers second case.
-            this.updateSelectedLabel();
-            if (!this._hasUserInput && !this._isMultiChoiceView && this.settings.get('selectFirstChoice') && !this._hasInitialValue) {
-                var currentVal = this.val();
-                var firstValue = _(this._displayedChoices).chain().pluck('value').first().value();
-                if (currentVal != firstValue) {
-                    this.val(firstValue);
-                }
-            }
-            
-            // If there is no data, we disable the input, but if there is,
-            // we may still need to disable it.
-            if (!this._displayedChoices || this._displayedChoices.length === 0) {
-                // We use the raw disable mechanism, because we don't want to
-                // change our disabled state.
-                this._disable(true);
-            }
-            else {
-                this._onDisable();    
-            }
+            // clear message. Not sure why it was implemented this way originally, need further investigation.
+            this._renderMessage();
+
+            this._updateDisplayedChoices(data);
+            this.updateView(this._viz, this._displayedChoices);
+        },
+
+        // override BaseInputView because BaseChoiceView has choices.
+        updateView: function(viz, data) {
+            // Save data to a temporary place so that getState() can access it.
+            // We should figure out better way to handle it.
+            this._choicesData = data;
+            // have to manually re-render
+            this.renderReactComponent();
+        },
+
+        getState: function() {
+            var baseState = BaseInputView.prototype.getState.apply(this, arguments);
+
+            return _.extend({}, baseState, {
+                choices: this._choicesData,
+                disabled: !this._displayedChoices || this._displayedChoices.length === 0 || this.settings.get('disabled'),
+                onChange: function(value) {
+                    this.onUserInput();
+                    this.val(value);
+                }.bind(this)
+            });
         },
 
         _findDisplayedChoice: function(value) {
             return _.find(
-                this._displayedChoices, 
+                this._displayedChoices,
                 function(ch) { return ch.value === value; });
         },
 
-        val: function(newValue) {
-            if (arguments.length === 0) {
-                return this.settings.get("value");
+        // WARNING: if this method is used to set value, it will be treated as an user input, thus it
+        // affects the 'selectFirstChoice' option.
+        val: function() {
+            if (arguments.length > 0 && !this._isMultiChoiceView) {
+                this._hasUserInput = true;
             }
 
-            if (newValue !== this.settings.get("value")) {
-                this.settings.set('value', newValue);
-            }
-            
-            return this.settings.get('value');
+            return BaseInputView.prototype.val.apply(this, arguments);
         },
-        
+
         /**
          * @returns displayedChoices
          * Retrieves an array of the selected choices and their values in the following format:
@@ -294,8 +315,18 @@ define(function(require, exports, module) {
          */
         getDisplayedChoices: function() {
             return this._displayedChoices || [];
+        },
+
+        // This logic applies what Dashboards expects in order for an input to have a "value" - it is not a generally
+        // applicable construct, and should only be used by the Dashboard helpers
+        // Note this function overrides the function in baseinputview.js, make sure they are aligned.
+        _hasValueForDashboards: function() {
+            var value = this.settings.get("value");
+            var defaultValue = this.settings.get("default");
+            var valueIsDefined = value !== undefined && value !== null && value.length > 0;
+            return valueIsDefined || defaultValue === undefined || value === defaultValue;
         }
     });
-    
+
     return BaseChoiceView;
 });

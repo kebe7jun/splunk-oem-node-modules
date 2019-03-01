@@ -29,14 +29,13 @@
         width: 10px;
         top: 5px;
         bottom: 0;
-        @mixin gradient-horizontal color($black a(0)), color($black a(0.15));
-        background-color: transparent; /*  override rgba fallback */
+        background-image: linear-gradient(to right, color($black a(0)), color($black a(0.15)));
     }
 
     /*  top gradient */
     .divider-gradient {
         clear:both;
-        @mixin gradient-vertical color($black a(0)), color($black a(0.05));
+        background-image: linear-gradient(to bottom, color($black a(0)), color($black a(0.05)));
         background-color: transparent; /*  override fallback for rgba */
         height: 5px;
         border-bottom: 1px solid $interactiveBorderColor;
@@ -59,7 +58,7 @@
         padding: 10px 0 0 0;
         color: $textColor;
         font-weight: normal;
-        font-size: $baseFontSizeLarge;
+        font-size: $fontSizeLarge;
         line-height: 1;
     }
 
@@ -88,14 +87,14 @@
 
 
     .ui-sortable-helper {
-        background-color: $grayLight;
+        background-color: $gray60;
         cursor: move;
-        @mixin gradient-vertical $grayLighter, $grayLight;
+        background-image: linear-gradient(to bottom, $gray92, $gray60);
         width: 100%;
     }
 
     .ui-sortabale-placeholder {
-        background-color: $grayLighter;
+        background-color: $gray92;
         border: 1px dashed $borderColor;
         box-sizing: border-box;
     }
@@ -125,7 +124,7 @@
         padding-right: 20px;
 
         &:focus {
-        	@mixin focus-pill;
+        	@mixin focus-element;
         }
     }
 
@@ -212,7 +211,7 @@
     margin-left: 110px;
 
     &:focus {
-    	@mixin focus-pill;
+    	@mixin focus-element-inset;
     }
   }
 
@@ -260,7 +259,7 @@
         }
 
         td.hidden, td.required {
-            font-size: $baseFontSizeLarge;
+            font-size: $fontSizeLarge;
             width: 20px;
             color:  $textColor;
             opacity: 0.90;
@@ -270,7 +269,7 @@
             }
 
             > i.icon-hidden, > i.icon-visible {
-                font-size: calc($baseFontSizeLarge * 1.2);
+                font-size: calc($fontSizeLarge * 1.2);
             }
         }
 
@@ -359,11 +358,11 @@
         }
         /*  focus non-selected */
         &:focus {
-            @mixin focus-pill;
+            @mixin focus-element;
         }
         /*  selected state */
         &.selected {
-            border-color: $gray;
+            border-color: $gray45;
             background-color: $white;
             color: $black;
             font-weight: bold;
@@ -475,7 +474,7 @@
         cursor: pointer;
         padding-top: 10px;
         &:hover {
-            background-color: $tableBackgroundHover;
+            background-color: $tableRowHoverColor;
         }
     }
     td.col-info {
@@ -494,6 +493,7 @@
 
     td.col-description {
         padding-top: 9px;
+        max-width: 230px;
     }
 
     .col-rename {
@@ -501,6 +501,7 @@
     }
     .col-type {
         width: 300px; /*  300? */
+        min-width: 300px;
         .dropdown {
         }
     }
@@ -535,7 +536,7 @@
 
     .link-label {
         display: inline-block;
-        max-width: 95px;
+        max-width: 94px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -583,6 +584,7 @@
     .select-sample-size-placeholder {
         display: inline-block;
         margin-right: 10px;
+        margin-bottom: 12px;
     }
     .job-status-placeholder {
         display: inline-block;
@@ -592,6 +594,9 @@
         }
         .shared-jobstatus-spinner {
             margin-right: 1em;
+        }
+        .icon-check {
+            color: $successColor;
         }
     }
     .add-fields-placeholder {

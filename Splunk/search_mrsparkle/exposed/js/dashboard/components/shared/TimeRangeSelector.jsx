@@ -1,81 +1,73 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import Backbone from 'backbone';
-import _ from 'underscore';
-import BackboneAdapterBase from 'components/BackboneAdapterBase';
-import TimeRangePicker from 'views/shared/timerangepicker/Master';
-import TimeRangeModel from 'models/shared/TimeRange';
-import ControlGroup from 'splunk-ui/components/ControlGroup';
-import ModelHelper from 'controllers/dashboard/helpers/ModelHelper';
 import { createTestHook } from 'util/test_support';
-import css from './TimeRangeSelector.pcssm';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
+import WaitSpinner from '@splunk/react-ui/WaitSpinner';
+import TimeRangeDropdown from '@splunk/react-time-range/Dropdown';
 
 const propTypes = {
-    activeTimeRange: React.PropTypes.object,
-    onTimeRangeChange: React.PropTypes.func.isRequired,
+    label: PropTypes.string,
+    activeTimeRange: PropTypes.shape({
+        earliest: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        latest: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }).isRequired,
+    onTimeRangeChange: PropTypes.func.isRequired,
+    isFetchingPresets: PropTypes.bool.isRequired,
+    presets: PropTypes.arrayOf(PropTypes.object).isRequired,
+    locale: PropTypes.string.isRequired,
+    parseEarliest: PropTypes.shape({
+        error: PropTypes.string,
+        iso: PropTypes.string,
+        time: PropTypes.string,
+    }),
+    parseLatest: PropTypes.shape({
+        error: PropTypes.string,
+        iso: PropTypes.string,
+        time: PropTypes.string,
+    }),
+    onRequestParseEarliest: PropTypes.func.isRequired,
+    onRequestParseLatest: PropTypes.func.isRequired,
+    documentationURL: PropTypes.string,
 };
 
-class TimeRangeSelector extends BackboneAdapterBase {
-    constructor(props, context) {
-        super(props, context);
-        this.model = Object.assign({}, this.context.model, {
-            timeRange: new TimeRangeModel(props.activeTimeRange),
-            searchModel: new Backbone.Model(props.activeTimeRange),
-        });
-        this.model.timeRange.initialDfd = this.model.timeRange.save();
-        this.collection = Object.assign({}, this.context.collection, {
-            timeRanges: ModelHelper.getCachedModel('times', {
-                app: this.model.application.get('app'),
-                owner: this.model.application.get('owner'),
-                count: -1,
-            }),
-        });
-        this.model.searchModel.on('change', this.handleTimeRangeChange, this);
-    }
+const defaultProps = {
+    label: '',
+    parseEarliest: null,
+    parseLatest: null,
+    documentationURL: null,
+};
 
-    handleTimeRangeChange() {
-        this.props.onTimeRangeChange(null, { value: this.model.searchModel.toJSON() });
-    }
-
-    getView() {
-        return new TimeRangePicker({
-            timeRangeAttrNames: {
-                earliest: 'earliest',
-                latest: 'latest',
-            },
-            model: {
-                state: this.model.searchModel,
-                timeRange: this.model.timeRange,
-                appLocal: this.model.appLocal,
-                user: this.model.user,
-                application: this.model.application,
-            },
-            collection: this.collection.timeRanges,
-            timerangeClassName: `btn ${css.main}`,
-            popdownOptions: {
-                // this is to override the default settings in timerangepicker/Master.js, so that
-                // the dropdown menu will not scroll as the background scrolls.
-                attachDialogTo: '',
-            },
-        });
-    }
-
-    render() {
-        return (
-            <ControlGroup label={_('').t()} {...createTestHook(module.id)}>
-                <div
-                    className={css.main} {..._.omit(this.props, _.keys(propTypes))}
-                    ref={c => (this.container = c)}
-                />
-            </ControlGroup>
-        );
-    }
-}
+const TimeRangeSelector = ({
+    label,
+    activeTimeRange,
+    onTimeRangeChange,
+    isFetchingPresets,
+    presets,
+    locale,
+    parseEarliest,
+    parseLatest,
+    onRequestParseEarliest,
+    onRequestParseLatest,
+    documentationURL,
+}) => (
+    <ControlGroup label={label} {...createTestHook(module.id)} controlsLayout="none">
+        {isFetchingPresets ? (<WaitSpinner size="medium" />) : (<TimeRangeDropdown
+            onChange={onTimeRangeChange}
+            earliest={activeTimeRange.earliest || ''}
+            latest={activeTimeRange.latest || ''}
+            inline={false}
+            presets={presets}
+            locale={locale}
+            parseEarliest={parseEarliest}
+            parseLatest={parseLatest}
+            onRequestParseEarliest={onRequestParseEarliest}
+            onRequestParseLatest={onRequestParseLatest}
+            documentationURL={documentationURL}
+        />)}
+    </ControlGroup>
+);
 
 TimeRangeSelector.propTypes = propTypes;
-
-TimeRangeSelector.contextTypes = {
-    model: React.PropTypes.object.isRequired,
-    collection: React.PropTypes.object.isRequired,
-};
+TimeRangeSelector.defaultProps = defaultProps;
 
 export default TimeRangeSelector;

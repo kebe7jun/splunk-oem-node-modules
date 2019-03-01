@@ -4,7 +4,9 @@ define([
     'backbone',
     'module',
     'views/Base',
-    './DCENavButton',
+    './Menu',
+    './SlideNav',
+    './Button',
     './AppNav.pcssm'
 ],
 function(
@@ -13,81 +15,106 @@ function(
     Backbone,
     module,
     BaseView,
+    MenuView,
+    MenuContentsView,
     ButtonView,
     css
 ){
     return BaseView.extend({
         moduleId: module.id,
         css: css,
-        events: {
-            'sortstop .list-apps': 'onSortableStop'
-        },
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
             this.listenTo(this.model.appNav, 'change:nav', this.debouncedRender);
             this.listenTo(this.model.application, 'change:page', this.setActiveItem);
         },
+
+        /**
+         * Determine if given viewName is in list of nav items.
+         * @param items navItems.
+         * @param viewName Name of current view.
+         * @param isActive Current active state of menu item.
+         * @returns If viewName exists in items.
+         */
+        findActiveInMenu: function(items, viewName, isActive) {
+            var isMenuActive = isActive || !!_.findWhere(items, {'viewName': viewName});
+            var subMenuItems = _.filter(items, function(item) { return item.submenu; });
+
+            // For each submenu, find if viewName matches current viewName and traverse other submenus.
+            if (!isMenuActive && subMenuItems.length) {
+                var self = this;
+                _.each(subMenuItems, function(menuItem) {
+                    if (self.findActiveInMenu(menuItem.submenu, viewName, isMenuActive)) {
+                        isMenuActive = true;
+                    }
+                });
+            }
+            return isMenuActive;
+        },
+
         render: function() {
             var self = this;
             var navData = this.model.appNav.get('nav');
             var currentSection = this.model.application.get('page');
+            var isLite = this.model.serverInfo.isLite();
+
             if(!navData){return this;}
 
-            this.$el.html('');
+            this.$el.html(this.compiledTemplate({
+                css: this.css
+            }));
 
             $.each(navData, function(index, item){
-                var itemView,
-                    iconType;
+                var itemView;
 
-                // workaround, add a gap to keep visual consistency
-                if (index == 0) {
-                    self.$el.append('<div class="' + css['blank-gap'] + '"></div>');
-                }
+                if (item.divider) {
+                    var className = isLite ? css.dividerLite : css.dividerEnterprise;
+                    self.$('[data-role=app-nav-container]').append('<span class="' + className + '" data-role="divider"></span>');
+                } else if (item.submenu && item.submenu.length && item.submenu.length > 0) {
+                    //create a menu object
 
-                // add section title
-                var sectionTitle = '<div class="' + css['section-title'] + '">' + item.label + '</div>';
-                self.$el.append(sectionTitle);
-
-                if (!item.submenu) {
+                    itemView = new MenuView({
+                        contentView: new MenuContentsView({
+                            model: {
+                                serverInfo: self.model.serverInfo
+                            },
+                            navData: item
+                        }),
+                        toggleView: new ButtonView({
+                            label: item.label,
+                            title: item.label,
+                            menu: true,
+                            action: 'toggle',
+                            active: self.findActiveInMenu(item.submenu, currentSection),
+                            appColor: self.options.getAppColor(),
+                            isLite: isLite
+                        })
+                    });
+                } else {
                     itemView = new ButtonView({
                         href: item.uri,
+                        external: item.external,
                         title: item.label,
                         label: item.label,
-                        icon: '',
-                        iconSize: 1.5,
-                        active: currentSection == item.viewName,
+                        active: currentSection === item.viewName,
                         preventDefault: false,
-                        dataAttributes: {targetView: item.viewName}
+                        dataAttributes: {targetView: item.viewName},
+                        appColor: self.options.getAppColor(),
+                        isLite: isLite
                     });
-
-                    itemView && self.$el.append(itemView.render().$el);
                 }
 
-                // 可能由于配置错误没有子目录，所以这里要做一下容错
-                $.each(item.submenu || [], function(index, sub){
-                    itemView = new ButtonView({
-                        href: sub.uri,
-                        title: sub.label,
-                        label: sub.label,
-                        icon: '',
-                        iconSize: 1.5,
-                        active: currentSection == sub.viewName,
-                        preventDefault: false,
-                        dataAttributes: {targetView: sub.viewName}
-                    });
-
-                    itemView && self.$el.append(itemView.render().$el);
-                });
+                itemView && self.$('[data-role=app-nav-container]').append(itemView.render().$el);
             });
 
             this.setActiveItem.call(this);
+            this.model.appNav.trigger('rendered');
 
             return this;
         },
-        bindDragAndDrop: function() {
-            var self = this;
-            this.$listApps.sortable({ axis: "y" });
-        },
+        template: '\
+            <div data-role="app-nav-container" class="<%-css.appNavInner%>"></div>\
+        ',
         setActiveItem: function(){
             if(this.model.application.get('page')){
                 //really should be figuring out which button is for this and calling set.

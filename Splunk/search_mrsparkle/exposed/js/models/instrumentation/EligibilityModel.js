@@ -10,7 +10,7 @@ define(
     function(_, BaseModel, SplunkUtil) {
         return BaseModel.extend({
             url: function() {
-                return SplunkUtil.make_url('/custom/splunk_instrumentation/instrumentation_controller/' +
+                return SplunkUtil.make_url('/splunkd/__raw/servicesNS/nobody/splunk_instrumentation/instrumentation_controller/' +
                                            'instrumentation_eligibility?optInVersion=3');
             },
             initialize: function(options) {

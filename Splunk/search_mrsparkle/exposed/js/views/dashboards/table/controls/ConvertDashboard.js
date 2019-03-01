@@ -88,9 +88,8 @@ define([
 
             this.children.mode = new ControlGroup({
                 controlType: 'SyntheticRadio',
-                controlClass: 'controls-halfblock',
                 controlOptions: {
-                    className: "btn-group btn-group-2",
+                    additionalClassNames: "btn-group-2",
                     modelAttribute: 'mode',
                     model: this.model.convertMode,
                     items: [
@@ -100,7 +99,7 @@ define([
                     save: false
                 },
                 label: _("Dashboard").t(),
-                help: _("Recommended").t()
+                help: _("Create New is Recommended").t()
 
             });
 
@@ -130,9 +129,8 @@ define([
 
             this.children.permissions = new ControlGroup({
                 controlType: 'SyntheticRadio',
-                controlClass: 'controls-halfblock',
                 controlOptions: {
-                    className: "btn-group btn-group-2",
+                    additionalClassNames: "btn-group-2",
                     modelAttribute: 'perms',
                     model: this.model.perms,
                     items: [

@@ -9,6 +9,9 @@
     <% } %>
 </div>
 
-<% if (canEditUsers && isSplunkAuth && (numUsers < maxUsers)) { %>
-    <button class="btn btn-primary pull-right add-new"><%- _("Add new").t() %></button>
+<% if (canEditUsers && isSplunkAuth) { %>
+	<a class="btn btn-primary password-management" href="<%-passwordManagementUrl%>"><%- _("Password management").t() %></a>
+	<% if (numUsers < maxUsers) { %>
+    	<button class="btn btn-primary pull-right add-new"><%- _("Add new account").t() %></button>
+    <% } %>
 <% } %>

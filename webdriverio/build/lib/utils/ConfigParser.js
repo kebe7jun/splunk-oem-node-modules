@@ -4,6 +4,14 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _set = require('babel-runtime/core-js/set');
+
+var _set2 = _interopRequireDefault(_set);
+
 var _getIterator2 = require('babel-runtime/core-js/get-iterator');
 
 var _getIterator3 = _interopRequireDefault(_getIterator2);
@@ -39,7 +47,7 @@ var _detectSeleniumBackend2 = _interopRequireDefault(_detectSeleniumBackend);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var HOOKS = ['before', 'beforeSession', 'beforeSuite', 'beforeHook', 'beforeTest', 'beforeCommand', 'afterCommand', 'afterTest', 'afterHook', 'afterSuite', 'afterSession', 'after', 'beforeFeature', 'beforeScenario', 'beforeStep', 'afterFeature', 'afterScenario', 'afterStep', 'onError', 'onReload'];
-
+var MERGE_OPTIONS = { clone: false };
 var DEFAULT_TIMEOUT = 10000;
 var NOOP = function NOOP() {};
 var DEFAULT_CONFIGS = {
@@ -49,6 +57,7 @@ var DEFAULT_CONFIGS = {
     exclude: [],
     logLevel: 'silent',
     coloredLogs: true,
+    deprecationWarnings: true,
     baseUrl: null,
     bail: 0,
     waitforInterval: 500,
@@ -103,6 +112,7 @@ var DEFAULT_CONFIGS = {
     afterScenario: [],
     afterStep: []
 };
+var FILE_EXTENSIONS = ['.js', '.ts', '.feature', '.coffee', '.es6'];
 
 var ConfigParser = function () {
     function ConfigParser() {
@@ -129,9 +139,9 @@ var ConfigParser = function () {
 
             try {
                 /**
-                 * clone the orginal config
+                 * clone the original config
                  */
-                var fileConfig = (0, _deepmerge2.default)(require(filePath).config, {});
+                var fileConfig = (0, _deepmerge2.default)(require(filePath).config, {}, MERGE_OPTIONS);
 
                 if (typeof fileConfig !== 'object') {
                     throw new Error('configuration file exports no config object');
@@ -140,7 +150,8 @@ var ConfigParser = function () {
                 /**
                  * merge capabilities
                  */
-                this._capabilities = (0, _deepmerge2.default)(this._capabilities, fileConfig.capabilities || {});
+                var defaultTo = Array.isArray(this._capabilities) ? [] : {};
+                this._capabilities = (0, _deepmerge2.default)(this._capabilities, fileConfig.capabilities || defaultTo, MERGE_OPTIONS);
                 delete fileConfig.capabilities;
 
                 /**
@@ -172,14 +183,14 @@ var ConfigParser = function () {
                     }
                 }
 
-                this._config = (0, _deepmerge2.default)(this._config, fileConfig);
+                this._config = (0, _deepmerge2.default)(this._config, fileConfig, MERGE_OPTIONS);
 
                 /**
                  * detect Selenium backend
                  */
-                this._config = (0, _deepmerge2.default)((0, _detectSeleniumBackend2.default)(this._config), this._config);
+                this._config = (0, _deepmerge2.default)((0, _detectSeleniumBackend2.default)(this._config), this._config, MERGE_OPTIONS);
             } catch (e) {
-                console.error('Failed loading configuration file: ' + filePath);
+                console.error(`Failed loading configuration file: ${filePath}`);
                 throw e;
             }
         }
@@ -192,49 +203,79 @@ var ConfigParser = function () {
     }, {
         key: 'merge',
         value: function merge() {
+            var _this = this;
+
             var object = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-            this._config = (0, _deepmerge2.default)(this._config, object);
+            this._config = (0, _deepmerge2.default)(this._config, object, MERGE_OPTIONS);
 
             /**
-             * run single spec file only
+             * overwrite config specs that got piped into the wdio command
+             */
+            if (object.specs && object.specs.length > 0) {
+                this._config.specs = object.specs;
+            }
+
+            /**
+             * merge capabilities
+             */
+            var defaultTo = Array.isArray(this._capabilities) ? [] : {};
+            this._capabilities = (0, _deepmerge2.default)(this._capabilities, this._config.capabilities || defaultTo, MERGE_OPTIONS);
+
+            /**
+             * run only specified spec files, regardless of multiple-spec specification
+             * If spec is a file on disk, it is set as the current spec, if it is not, it
+             * is treated as a string match filter for the multiple-spec specification.
              */
             if (typeof object.spec === 'string') {
-                var specs = [];
-                var specList = object.spec.split(/,/g);
+                (function () {
+                    var specs = new _set2.default();
+                    var specList = object.spec.split(/,/g);
+                    var specsList = ConfigParser.getFilePaths(_this._config.specs);
 
-                var _iteratorNormalCompletion2 = true;
-                var _didIteratorError2 = false;
-                var _iteratorError2 = undefined;
-
-                try {
-                    for (var _iterator2 = (0, _getIterator3.default)(specList), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                        var spec = _step2.value;
-
-                        if (_fs2.default.existsSync(spec)) {
-                            specs.push(_path2.default.resolve(process.cwd(), spec));
+                    var _loop = function _loop(spec) {
+                        if (_fs2.default.existsSync(spec) && _fs2.default.lstatSync(spec).isFile()) {
+                            specs.add(_path2.default.resolve(process.cwd(), spec));
+                        } else {
+                            specsList.forEach(function (file) {
+                                if (file.match(spec)) {
+                                    specs.add(file);
+                                }
+                            });
                         }
-                    }
-                } catch (err) {
-                    _didIteratorError2 = true;
-                    _iteratorError2 = err;
-                } finally {
+                    };
+
+                    var _iteratorNormalCompletion2 = true;
+                    var _didIteratorError2 = false;
+                    var _iteratorError2 = undefined;
+
                     try {
-                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                            _iterator2.return();
+                        for (var _iterator2 = (0, _getIterator3.default)(specList), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                            var spec = _step2.value;
+
+                            _loop(spec);
                         }
+                    } catch (err) {
+                        _didIteratorError2 = true;
+                        _iteratorError2 = err;
                     } finally {
-                        if (_didIteratorError2) {
-                            throw _iteratorError2;
+                        try {
+                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                                _iterator2.return();
+                            }
+                        } finally {
+                            if (_didIteratorError2) {
+                                throw _iteratorError2;
+                            }
                         }
                     }
-                }
 
-                if (specs.length === 0) {
-                    throw new Error('spec file ' + object.spec + ' not found');
-                }
+                    if (specs.size === 0) {
+                        throw new Error(`spec file ${object.spec} not found`);
+                    }
 
-                this._config.specs = specs;
+                    _this._config.specs = [].concat((0, _toConsumableArray3.default)(specs));
+                })();
             }
 
             /**
@@ -248,7 +289,7 @@ var ConfigParser = function () {
                 delete this._config.port;
             }
 
-            this._config = (0, _deepmerge2.default)((0, _detectSeleniumBackend2.default)(this._config), this._config);
+            this._config = (0, _deepmerge2.default)((0, _detectSeleniumBackend2.default)(this._config), this._config, MERGE_OPTIONS);
         }
 
         /**
@@ -362,10 +403,10 @@ var ConfigParser = function () {
                 }
 
                 if (suiteSpecs.length === 0) {
-                    throw new Error('The suite(s) "' + suites.join('", "') + '" you specified don\'t exist ' + 'in your config file or doesn\'t contain any files!');
+                    throw new Error(`The suite(s) "${suites.join('", "')}" you specified don't exist ` + 'in your config file or doesn\'t contain any files!');
                 }
 
-                specs = suiteSpecs;
+                specs = typeof this._config.spec === `string` ? [].concat((0, _toConsumableArray3.default)(specs), (0, _toConsumableArray3.default)(suiteSpecs)) : suiteSpecs;
             }
 
             if (Array.isArray(capSpecs)) {
@@ -435,7 +476,7 @@ var ConfigParser = function () {
                     var filenames = _glob2.default.sync(pattern);
 
                     filenames = filenames.filter(function (filename) {
-                        return filename.slice(-3) === '.js' || filename.slice(-3) === '.ts' || filename.slice(-8) === '.feature' || filename.slice(-7) === '.coffee';
+                        return FILE_EXTENSIONS.indexOf(_path2.default.extname(filename)) !== -1;
                     });
 
                     filenames = filenames.map(function (filename) {
@@ -446,7 +487,7 @@ var ConfigParser = function () {
                         console.warn('pattern', pattern, 'did not match any file');
                     }
 
-                    files = (0, _deepmerge2.default)(files, filenames);
+                    files = (0, _deepmerge2.default)(files, filenames, MERGE_OPTIONS);
                 }
             } catch (err) {
                 _didIteratorError6 = true;

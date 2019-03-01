@@ -118,7 +118,7 @@ define([
                     this.children.fieldNameDropdown = new ControlGroup({
                         label: _("Field Name").t(),
                         controlType: "SyntheticSelect",
-                        controlClass: 'controls-block',
+
                         controlOptions: {
                             modelAttribute: "fieldName",
                             model: this.model.fieldExtraction,
@@ -258,7 +258,7 @@ define([
         masterExtractTemplate: '\
             <div class="control-group">\
                 <label class="control-label"><%- _("Field Name").t() %></label>\
-                <div class="controls">\
+                <div class="controls controls-join">\
                     <div class="control">\
                         <input type="text" class="input-medium field-name-input" />\
                     </div>\
@@ -266,7 +266,7 @@ define([
             </div>\
              <div class="control-group">\
                 <label class="control-label"><%- _("Sample Value").t() %></label>\
-                <div class="controls">\
+                <div class="controls controls-join">\
                     <div class="control selected-text-control">\
                         <span class="input-label selected-text"><%- selection.selectedText %></span>\
                     </div>\
@@ -278,7 +278,7 @@ define([
              <div class="extraction-dropdown-wrapper"></div>\
              <div class="control-group sample-value-control">\
                 <label class="control-label"><%- _("Sample Value").t() %></label>\
-                <div class="controls">\
+                <div class="controls controls-join">\
                     <div class="control selected-text-control">\
                         <span class="input-label selected-text"><%- selection.selectedText %></span>\
                     </div>\

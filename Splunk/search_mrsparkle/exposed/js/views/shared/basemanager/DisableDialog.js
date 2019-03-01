@@ -46,7 +46,7 @@ define([
             makeDialogBody: function() {
                 return splunkUtil.sprintf(_('Are you sure you want to disable the %s named <i>%s</i>?').t(),
                     this.options.entitySingular.toLowerCase(),
-                    this.targetEntity.entry.get('name')
+                    _.escape(this.targetEntity.entry.get('name'))
                 );
             },
 

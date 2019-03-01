@@ -95,7 +95,7 @@ define([
                 if(this.model.extraction.isNew()) {
                     this.children.name = new ControlGroup({
                         controlType: 'Text',
-                        controlClass: 'controls-block',
+
                         controlOptions: {
                             modelAttribute: this.options.nameKey,
                             model: this.model.extraction.entry.content
@@ -106,7 +106,7 @@ define([
                 else {
                     this.children.name = new ControlGroup({
                         controlType: 'Label',
-                        controlClass: 'controls-block',
+
                         controlOptions: {
                             modelAttribute: this.options.nameKey,
                             model: this.model.extraction.entry
@@ -117,7 +117,7 @@ define([
             } else if (this.model.state.get('method') === 'delim') {
                 this.children.name = new ControlGroup({
                     controlType: 'Text',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'reportName',
                         model: this.model.state

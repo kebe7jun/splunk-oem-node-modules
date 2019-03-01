@@ -14,8 +14,14 @@ define(
             },
             getCategories: function(){
                 //TODO this could probably be a little more efficient (a lot of loops). ideally backend would give us a cached list of categories.
-                var categories = [{value: 'Custom',label: _('Custom').t()}];
-                var byId = {'custom':true};
+                var categories = [
+                    {value: 'Custom',label: _('Custom').t()},
+                    {value: 'Log to Metrics',label: _('Log to Metrics').t()}
+                ];
+                var byId = {
+                    'custom': true,
+                    'log to metrics': true
+                };
 
                 this.each(function(model){
                     var name = model.entry.content.get('category');

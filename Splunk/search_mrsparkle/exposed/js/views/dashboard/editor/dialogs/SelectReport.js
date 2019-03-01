@@ -58,7 +58,6 @@ define(
                         this.children.reportsControlGroup = new ControlGroup({
                             label: _("Select Report").t(),
                             controlType: 'SyntheticSelect',
-                            controlClass: 'controls-block',
                             controlOptions: {
                                 model: this.model.workingReport,
                                 modelAttribute: 'id',
@@ -75,7 +74,6 @@ define(
                         this.children.reportsControlGroup = new ControlGroup({
                             label: _("Select Report").t(),
                             controlType: 'SyntheticSelect',
-                            controlClass: 'controls-block',
                             controlOptions: {
                                 model: this.model.workingReport,
                                 modelAttribute: 'id',
@@ -93,7 +91,6 @@ define(
                 this.children.panelTitleControlGroup = new ControlGroup({
                     label: _("Panel Title").t(),
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.workingReport,
                         modelAttribute: 'title',

@@ -30,6 +30,7 @@ define(
     {
         return BaseView.extend({
             moduleId: module.id,
+            className: 'table-padded',
             /**
              * @param {Object} options {
              *     model: {
@@ -51,7 +52,7 @@ define(
                 this.children.tableRowToggle = new TableRowToggleView({el: this.el, collapseOthers: true });
 
                 this.tableHeaders = [];
-                this.tableHeaders.push({ label: 'i', className: 'col-info', html: '<i class="icon-info"></i>' });
+                this.tableHeaders.push({ label: 'i', ariaLabel: _('More Info').t(), className: 'col-info', html: '<i class="icon-info"></i>' });
                 this.tableHeaders.push({ label: _("Title").t(), sortKey: 'label' });
                 this.tableHeaders.push({ label: _("Actions").t(), className: 'col-actions' });
                 this.tableHeaders.push({ label: _("Owner").t(), sortKey: 'eai:acl.owner,label', className: 'col-owner' });
@@ -67,7 +68,7 @@ define(
                 this.children.rows = this.rowsFromCollection();
                 this.children.tableDock = new TableDock({
                     el: this.el,
-                    offset: 36,
+                    offset: 42,
                     dockScrollBar: false,
                     defaultLayout: 'fixed',
                     flexWidthColumn: 1

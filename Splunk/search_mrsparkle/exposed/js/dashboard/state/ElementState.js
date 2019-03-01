@@ -15,12 +15,12 @@ define(['underscore', './ItemState', 'views/dashboard/element/Html'], function(_
                 var stateContent = _.omit(elementReport.toJSON(_.extend({tokens: true}, options)));
                 if (options.tokens === false) {
                     stateContent['dashboard.element.title'] = elementReport.get('dashboard.element.title', {
-                        tokens: true,
+                        tokens: false,
                         retainUnmatchedTokens: true
                     });
                 }
                 _(stateContent).each(function(value, key) {
-                    if (key.indexOf('dashboard.element.') === 0 || key.indexOf('display.') === 0) {
+                    if (key.indexOf('dashboard.element.') === 0 || key.indexOf('display.') === 0 || key === 'displayview') {
                         state[key] = value;
                     }
                 });

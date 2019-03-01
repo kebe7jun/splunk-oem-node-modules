@@ -593,13 +593,13 @@ define([
                         <td>\
                             <div class="element-list" data-elem-type="filter">\
                                 <h6 class="list-header"><%- _("Filters").t() %></h6>\
-                                <a href="#" class="btn add-button">+</a>\
+                                <a href="#" class="btn add-button square-button">+</a>\
                             </div>\
                         </td>\
                         <td>\
                             <div class="element-list connected-list" data-elem-type="column">\
                                 <h6 class="list-header"><%- _("Split Columns").t() %></h6>\
-                                <a href="#" class="btn add-button">+</a>\
+                                <a href="#" class="btn add-button square-button">+</a>\
                             </div>\
                         </td>\
                     </tr>\
@@ -607,13 +607,13 @@ define([
                         <td>\
                             <div class="element-list connected-list" data-elem-type="row">\
                                 <h6 class="list-header"><%- _("Split Rows").t() %></h6>\
-                                <a href="#" class="btn add-button">+</a>\
+                                <a href="#" class="btn add-button square-button">+</a>\
                             </div>\
                         </td>\
                         <td>\
                             <div class="element-list connected-list" data-elem-type="cell">\
                                 <h6 class="list-header"><%- _("Column Values").t() %></h6>\
-                                <a href="#" class="btn add-button">+</a>\
+                                <a href="#" class="btn add-button square-button">+</a>\
                             </div>\
                         </td>\
                     </tr>\

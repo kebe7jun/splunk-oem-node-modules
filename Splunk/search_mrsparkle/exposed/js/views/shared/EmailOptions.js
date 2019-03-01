@@ -39,9 +39,9 @@ define(
                 this.children.toEmailAddresses = new ControlGroup({
                     className: 'control-group',
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'action.email.to',
+                        ariaLabel: this.options.toLabel,
                         model: this.model.state
                     },
                     label: this.options.toLabel,
@@ -51,10 +51,10 @@ define(
                 this.children.ccEmailAddresses = new ControlGroup({
                     className: 'control-group',
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'action.email.cc',
                         model: this.model.state,
+                        ariaLabel: _('CC').t(),
                         placeholder: _('optional').t()
                     },
                     label: _('CC').t()
@@ -63,10 +63,10 @@ define(
                 this.children.bccEmailAddresses = new ControlGroup({
                     className: 'control-group',
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'action.email.bcc',
                         model: this.model.state,
+                        ariaLabel: _('BCC').t(),
                         placeholder: _('optional').t()
                     },
                     label: _('BCC').t()
@@ -75,7 +75,6 @@ define(
                 this.children.emailPriority = new ControlGroup({
                     className: 'control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'action.email.priority',
                         model: this.model.state,
@@ -109,24 +108,24 @@ define(
                 this.children.emailSubject = new ControlGroup({
                     className: 'control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: subjectModelAttribute,
                         model: this.model.state,
+                        ariaLabel: _('Subject').t(),
                         placeholder: this.options.includeSubjectDefaultPlaceholder? _('Default').t() : ''
                     },
                     label: _('Subject').t(),
-                    help: splunkUtil.sprintf(_('The email subject, recipients and message can include tokens that insert text based on the results of the search. %s').t(), ' <a href="' + configTokenHelpLink + '" target="_blank" title="' + _("Splunk help").t() +'">' + _("Learn More").t() + ' <i class="icon-external"></i></a>')
+                    help: splunkUtil.sprintf(_('The email subject, recipients and message can include tokens that insert text based on the results of the search. %s').t(), ' <a class="help-link" href="' + configTokenHelpLink + '" target="_blank" title="' + _("Splunk help").t() +'">' + _("Learn More").t() + ' <i class="icon-external"></i></a>')
                 });
 
                 this.children.emailMessage = new ControlGroup({
                     className: 'control-group',
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'action.email.message.' + this.options.suffix,
                         model: this.model.state,
                         placeholder: _('Default').t(),
+                        ariaLabel: _("Message").t(),
                         textareaClassName: 'messagearea'
                     },
                     label: _('Message').t()
@@ -135,6 +134,7 @@ define(
                 if (this.options.includeControls && this.options.includeControls.length) {
                     this.children.emailInclude = new ControlGroup({
                         controlClass: 'email-include',
+                        controlsLayout: 'wrap',
                         controls: this.options.includeControls,
                         label: _('Include').t()
                     });
@@ -143,7 +143,6 @@ define(
                 this.children.emailContentType = new ControlGroup({
                     className: 'control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'action.email.content_type',
                         model: this.model.state,

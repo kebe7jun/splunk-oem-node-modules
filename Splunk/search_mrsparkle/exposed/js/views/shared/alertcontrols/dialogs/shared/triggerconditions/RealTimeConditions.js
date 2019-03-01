@@ -6,7 +6,7 @@ define(
         'views/shared/controls/ControlGroup',
         'views/shared/controls/SyntheticSelectControl',
         'views/shared/controls/TextControl'
-    ], 
+    ],
     function(
         _,
         BaseView,
@@ -22,7 +22,6 @@ define(
 
             this.children.triggerCondition = new  ControlGroup({
                 controlType: 'SyntheticSelect',
-                controlClass: 'controls-block',
                 label: _('Trigger alert when').t(),
                 controlOptions: {
                     items: [
@@ -64,9 +63,9 @@ define(
             });
 
             this.children.comparativeGroup = new ControlGroup({
-                controlClass: 'controls-split input-prepend',
                 controls: [
                     new SyntheticSelectControl ({
+                        ariaLabel: _('Trigger alert when : Comparator').t(),
                         modelAttribute: 'ui.realtime.resultscomparator',
                         model: this.model.alert.entry.content,
                         items: [
@@ -82,6 +81,7 @@ define(
                         }
                     }),
                     new TextControl({
+                        ariaLabel: _('Trigger alert when : Compare with this input').t(),
                         modelAttribute: 'ui.realtime.resultscomparatorinput',
                         model: this.model.alert.entry.content
                     })
@@ -91,9 +91,9 @@ define(
             this.children.customInput = new ControlGroup({
                 className: 'alert-name custom-condition control-group',
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 help: _('e.g. "search count > 10". Evaluated against the results of the base search.').t(),
                 controlOptions: {
+                    ariaLabel: _('Trigger alert when : custom search').t(),
                     model: this.model.alert.entry.content,
                     modelAttribute: 'ui.realtime.customsearch'
                 }
@@ -104,10 +104,12 @@ define(
                 controlClass: 'controls-split input-append',
                 controls: [
                     new TextControl({
+                        ariaLabel: _('Trigger alert when : in results time').t(),
                         modelAttribute: 'ui.realtime.resultstime',
                         model: this.model.alert.entry.content
                     }),
                     new SyntheticSelectControl({
+                        ariaLabel: _('Trigger alert when : in results time unit').t(),
                         modelAttribute: 'ui.realtime.resultstimeunit',
                         model: this.model.alert.entry.content,
                         items: [
@@ -156,4 +158,3 @@ define(
         }
     });
 });
-

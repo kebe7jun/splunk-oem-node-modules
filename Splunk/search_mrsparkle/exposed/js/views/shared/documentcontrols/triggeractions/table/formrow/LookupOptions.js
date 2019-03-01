@@ -25,7 +25,6 @@ define(
                 this.children.lookupName = new ControlGroup({
                     label: _('File name').t(),
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.document.entry.content,
                         modelAttribute: 'action.lookup.filename'
@@ -35,7 +34,6 @@ define(
 
                 this.children.appendCheckbox = new ControlGroup({
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'action.lookup.append',
                         model: this.model.document.entry.content,

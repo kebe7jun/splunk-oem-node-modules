@@ -66,6 +66,10 @@ define([
             this.removePreload = _.once(this.removePreload);
             this.initState = _.once(this.initState);
         },
+        isThemeChanged: function() {
+            var diff = this.state.dashboard.getDiff();
+            return diff && diff.changed.theme;
+        },
         handleControllerEvent: function(event, data) {
             console.debug(sprintf('Handling controller event %(event)s', {
                 event: event
@@ -91,8 +95,16 @@ define([
 
             switch (event) {
                 case 'action:save':
+                    var themeChanged = this.isThemeChanged();
                     this.saveState().then(function() {
                         this.handleModeChangeEvent('view');
+                        if (themeChanged) {
+                            _.defer(function() {
+                                ActionHelper.confirmPageRefresh().then(function() {
+                                    location.reload();
+                                });
+                            }.bind(this));
+                        }
                     }.bind(this));
                     return;
                 case 'action:edit-cancel':
@@ -254,7 +266,8 @@ define([
                     deferreds: {
                         tour: this.deferreds.tour,
                         scheduledView: this.deferreds.scheduledView,
-                        reportDefaults: this.deferreds.reportDefaults
+                        reportDefaults: this.deferreds.reportDefaults,
+                        xmlParsed: this.deferreds.xmlParsed
                     }
                 });
                 this.pageView.render();
@@ -280,7 +293,8 @@ define([
         },
         updateDirtyState: function() {
             this.model.state.set({
-                dirty: this.state.isDirty() || this.state.xml.isDirty()
+                dirty: this.state.isDirty() || this.state.xml.isDirty(),
+                themeDirty: this.isThemeChanged()
             });
         },
         saveState: function() {

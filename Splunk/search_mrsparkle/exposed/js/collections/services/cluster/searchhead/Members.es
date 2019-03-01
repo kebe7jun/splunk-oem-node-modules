@@ -7,6 +7,7 @@
 
 import $ from 'jquery';
 import Backbone from 'backbone';
+import _ from 'underscore';
 import Model from 'models/services/cluster/searchhead/Member';
 import SplunkDsBaseCollection from 'collections/SplunkDsBase';
 import SplunkDBaseModel from 'models/SplunkDBase';
@@ -50,6 +51,7 @@ const RollingRestartModel = SplunkDBaseModel.extend({
         defaults.processData = true;
         $.extend(true, defaults, options);
 
+        this.url += `?searchable=${model.get('searchable')}&force=${model.get('force')}`;
         return Backbone.sync.call(null, method, model, defaults);
     },
 
@@ -164,16 +166,24 @@ export default SplunkDsBaseCollection.extend({
         return $captainTransferPromise;
     },
 
-    beginRollingRestart() {
+    beginRollingRestart(workingModel) {
         const $rollingRestartPromise = $.Deferred();
 
-        this.model.rollingRestartInstance.save({}, {
+        this.model.rollingRestartInstance.save({
+            searchable: workingModel.get('searchable'),
+            force: workingModel.get('force'),
+        }, {
             output_mode: 'json',
             type: 'POST',
         })
-        .done(null, () => {
-            this.model.rollingRestartInstance.pollRollingRestartReady()
-            .then(() => { $rollingRestartPromise.resolve(); });
+        .done(null, (response) => {
+            const responseContent = _.isUndefined(response.entry[0]) ? {} : response.entry[0].content;
+            if (responseContent.success) {
+                this.model.rollingRestartInstance.pollRollingRestartReady()
+                .then(() => { $rollingRestartPromise.resolve(); });
+            } else {
+                $rollingRestartPromise.reject(responseContent);
+            }
         })
         .error(null, () => {
             $rollingRestartPromise.reject();

@@ -1,17 +1,8 @@
-@import '../../../pcss/base/variables-oem.pcss';
-
 .view {
-    background-color: $interactiveColor;
-    border: none;
-    /* border-bottom-color: $interactiveBorderBottomColor; */
-    /* border-top-color: $interactiveBorderTopColor; */
-
-    /*  remove gradient for IE to fix clipping */
-    @mixin reset-filter;
-
-    box-shadow: 1px 2px 5px rgba(0,0,0,0.2);
-
+    background-color: $popupBackgroundColor;
+    border: $interactiveBorder;
     border-radius: $containerOuterBorderRadius;
+    box-shadow: 1px 2px 5px rgba(0,0,0,0.2);
 
     top:100%;
     left: 50%;
@@ -20,6 +11,8 @@
     display:none;
     position:absolute;
     z-index: $zindexPopdown;
+    line-height: $lineHeight;
+
     /*  placement of arrow */
 
     white-space: normal; /* prevent inheriting nowrap from btn-group */
@@ -53,67 +46,41 @@
 }
 
 .arrow {
-    width: 0;
-    height: 0;
-    border: none;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-
-    border-bottom: 8px solid $second;
-    position: absolute;
-    top: -8px;
+    @mixin arrow up, $popupBorderColor;
+    top: -$popdownArrowSize;
     left: 50%;
     margin-left: -4px;
 
     /*  generated arrow */
     &:before {
-        content: "";
-        display: block;
-        width: 0;
-        height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-
-        border-bottom: 8px solid $second;
-        position: absolute;
+        @mixin arrow up, $popupBackgroundColor;
         top: 1px;
         left:0;
-        margin-left: -8px;
+        margin-left: -$popdownArrowSize;
     }
 
-    [data-placement=over] > & { // point up
-        border-top: 8px solid $interactiveBorderBottomColor;
-        border-bottom: none;
+    [data-placement=over] > & { /* point down */
+        @mixin arrow down, $popupBorderColor;
         top: auto;
-        bottom: -8px;
+        bottom: -$popdownArrowSize;
 
         &:before {
-            border-top: 8px solid $white;
-            border-bottom: none;
-            position: absolute;
+            @mixin arrow down, $popupBackgroundColor;
             top: auto;
             bottom: 1px;
         }
     }
-    &[data-placement=right] > & { // point left
-        border-right: 8px solid $interactiveBorderBottomColor;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-left: none;
+    [data-placement=right] > & { /* point left */
+        @mixin arrow left, $popupBorderColor;
         top: 50%;
-        left: -8px;
-        margin: -8px 0 0 0 ;
+        left: -$popdownArrowSize;
+        margin: -$popdownArrowSize 0 0 0;
 
         &:before {
-            border-right: 8px solid $white;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-left: none;
-
-            position: absolute;
+            @mixin arrow left, $popupBackgroundColor;
             top: 0;
             left: 1px;
-            margin: -8px 0 0 0 ;
+            margin: -$popdownArrowSize 0 0 0;
         }
     }
 }
@@ -122,7 +89,7 @@
 .body {
     margin: 0;
     border-radius: $containerInnerBorderRadius;
-    background-color: $second;
+    background-color: $popupBackgroundColor;
     @mixin clearfix;
 }
 
@@ -131,11 +98,8 @@
     padding: 5px;
     border-bottom-left-radius: $containerInnerBorderRadius;
     border-bottom-right-radius: $containerInnerBorderRadius;
+    background-color: $popupFooterBackgroundColor;
     @mixin clearfix;
-
-    @if $theme == lite {
-        background: $offWhite;
-    }
 }
 
 
@@ -173,14 +137,9 @@
     max-width: 100%;
     max-height: 270px;
     box-sizing: border-box;
-    border-radius: 4px;
 
-	+ .menu {
-        border-top: 1px solid $interactiveBorderTopColor;
-
-        @if $theme == lite {
-            border-color: $borderColor;
-        }
+    + .menu {
+        border-top: 1px solid $interactiveBorderColor;
     }
 
     li {
@@ -190,33 +149,57 @@
             display: block;
             clear: both;
             font-weight: normal;
-            line-height: $baseLineHeight;
+            line-height: $lineHeight;
             position: relative;
-            color: white;
+            color: $menuItemTextColor;
             padding: 5px 10px ;
             white-space: normal;
             text-decoration: none;
-            line-height: $baseLineHeight;
+            line-height: $lineHeight;
 
             &:focus:not(.disabled) {
-                @mixin focus-pill;
+                @mixin focus-element-inset $menuItemBackgroundColorHover;
             }
 
             &:hover:not(.disabled) {
-                color: white;
-                background: rgba(255,255,255,0.1);
-                @mixin gradient-vertical $pillBackgroundColorHover, $pillBackgroundColorHover;
+                color: $menuItemTextColorHover;
+                background: $menuItemBackgroundColorHover;
             }
 
 			&.disabled {
 	            color: $textDisabledColor;
 	        }
-       }
-
-	   + li > a {
-	       border-top: 1px dotted $borderColor;
-	   }
+        }
+        &[data-active="active"] > a:after, > a[data-selected="selected"]:after {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 7px;
+            height: 8px;
+            width: 4px;
+            border-right: 0.15em solid currentColor;
+            border-bottom:0.15em solid currentColor;
+            transform: rotate(42deg) scaleX(0.9);
+        }
     }
+}
+
+/*  Selectable dropdown */
+/*  ------------------- */
+
+.menuSelectable {
+    composes: menu;
+    li > a {
+        padding-left: 24px;
+    }
+}
+
+.header {
+    display: block;
+    padding: 3px 20px;
+    font-size: 12px;
+    line-height: 1.42857143;
+    color: $textGray;
 }
 
 /* link info style */
@@ -233,10 +216,9 @@
 
 li > a.primaryLink {
     margin-right: 40px;
+    padding-left: 24px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    border-right: 1px dotted  $borderColor;
-    white-space: nowrap;
     flex: 1 0 0;
 }
 
@@ -246,7 +228,7 @@ li > a.secondaryLink {
     top: 0;
     bottom: 0;
     width: 40px;
-    padding-left:0;
+    padding-left: 0;
     padding-right: 0;
     font-size: 16px;
     text-align: center;
@@ -261,11 +243,10 @@ li > a.secondaryLink {
 
 .menu > li.startGroup > a,
 .menu .divider + li > a  {
-    border-top-style: solid;
-    border-color: $borderColor;
+    border-top: $borderDefault;
 }
 
-.selected:before {
+.selected:after {
     content: '';
     position: absolute;
     left: 9px;
@@ -296,25 +277,6 @@ li > a.secondaryLink {
 }
 
 
-/*  Selectable dropdown */
-/*  ------------------- */
-
-.menuSelectable {
-    composes: menu;
-    li > a {
-        padding-left: 24px;
-    }
-}
-
-.header {
-    display: block;
-    padding: 3px 20px;
-    font-size: 12px;
-    line-height: 1.42857143;
-    color: $textGray;
-}
-
-
 /*  fixed height dropdowns & popdowns */
 /*  --------------------------------- */
 
@@ -333,5 +295,5 @@ li > a.secondaryLink {
 .typeahead {
     z-index: 1051;
     margin-top: 2px; /*  give it some space to breathe */
-    border-radius: $baseBorderRadius;
+    border-radius: $borderRadius;
 }

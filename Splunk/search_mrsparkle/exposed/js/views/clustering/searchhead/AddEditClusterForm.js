@@ -47,7 +47,6 @@ function(
             this.children.masteruri = new ControlGroup({
                 className: 'cluster-masterip control-group',
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'ui.master_uri',
                     model: this.model,
@@ -60,7 +59,6 @@ function(
             this.children.secret = new ControlGroup({
                 className: 'cluster-secret control-group',
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'ui.secret',
                     model: this.model,
@@ -96,7 +94,3 @@ function(
         }
     });
 });
-
-
-
-

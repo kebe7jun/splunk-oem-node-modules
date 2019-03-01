@@ -20,7 +20,7 @@ define(
         'views/shared/timerangepicker/dialog/Master',
         'util/pdf_utils',
         'util/splunkd_utils'
-        
+
     ],
     function(
         $,
@@ -67,7 +67,7 @@ define(
          */
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
-            
+
             var defaults = {
                 mode: 'create',
                 showSearch: false,
@@ -92,7 +92,7 @@ define(
                     owner: this.model.application.get("owner")
                 }
             });
-            
+
             // TODO: this creation of collections is repeated in edit actions
             this.collection = this.collection || {};
 
@@ -101,7 +101,8 @@ define(
             this.deferredAlertActionUIsCollection = this.collection.alertActionUIs.fetch({
                 data: {
                     app: this.model.application.get("app"),
-                    owner: this.model.application.get("owner")
+                    owner: this.model.application.get("owner"),
+                    count: 1000
                 }
             });
 
@@ -117,7 +118,7 @@ define(
                     addListInTriggeredAlerts: true
                 });
             }
-            
+
             this.children.flashMessages = new FlashMessagesView({
                 model: {
                     alert: this.model.alert,
@@ -137,7 +138,7 @@ define(
                     }
                 });
             }
-            
+
             this.children.settings = new SettingsView({
                 model: {
                     alert: this.model.alert,
@@ -155,7 +156,7 @@ define(
                 showAppSelector: this.canShowAppSelector,
                 mode: this.options.mode
             });
-            
+
             this.children.triggerConditions = new TriggerConditionsView({
                 model: {
                     alert: this.model.alert
@@ -181,7 +182,7 @@ define(
             this.model.alert.workingTimeRange.on('applied', function() {
                 this.timeRangeDelegate.closeTimeRangePicker();
             }, this);
-    
+
             $.when(this.deferredPdfAvailable, this.deferredManagerAvailable, this.deferredAlertActionCollection)
                 .then(function(pdfAvailable, managerAvailable) {
                     this.children.triggerActions = new TriggerActionsView({
@@ -203,15 +204,19 @@ define(
         events: {
             'click .btn-primary': function(e) {
                 e.preventDefault();
+				var uiExecuteActionsChanged = this.model.alert.entry.content.hasChanged("ui.executeactions");
                 var removedAttr = this.model.alert.unsetUnselectedActionArgs(),
                     saveDeferred = $.Deferred();
+				if (uiExecuteActionsChanged) {
+	                this.model.alert.entry.content.changed["ui.executeactions"] = uiExecuteActionsChanged;
+				}
                 if (this.options.mode === 'create') {
                     saveDeferred = this.saveAlert();
                 } else {
                     saveDeferred = this.model.alert.save({});
                 }
 
-                // if save fails due to validation error we need to reset unset unselected alert actions args 
+                // if save fails due to validation error we need to reset unset unselected alert actions args
                 $.when(saveDeferred).done(function() {
                     if (!this.model.alert.entry.content.isValid()) {
                         this.model.alert.entry.content.set(removedAttr);
@@ -302,7 +307,7 @@ define(
                     '</div>' +
                 '</div>'
             );
-            
+
             this.$visArea = this.$('.vis-area').eq(0);
             this.$slideArea = this.$('.slide-area').eq(0);
             this.$contentWrapper = this.$('.content-wrapper').eq(0);
@@ -321,7 +326,7 @@ define(
                 backButtonSelector: 'a.btn.back'
             });
 
-            this.$(ModalView.BODY_SELECTOR).append(ModalView.FORM_HORIZONTAL_COMPLEX);
+            this.$(ModalView.BODY_SELECTOR).append(ModalView.FORM_HORIZONTAL);
             this.$(ModalView.BODY_SELECTOR).addClass('modal-body-scrolling');
             this.children.flashMessages.render().appendTo(this.$(ModalView.BODY_FORM_SELECTOR));
             this.children.settings.render().appendTo(this.$(ModalView.BODY_FORM_SELECTOR));

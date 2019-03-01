@@ -17,9 +17,9 @@ const ComponentBindingMixin = {
         if (!fn) {
             throw new Error('callback function is required');
         }
+        const splunkjsRegistry = this.registry || mvc.Components;
         const ids = (_.isArray(id) ? id : [id]).filter(_.identity);
-        const onComponentChange = (registry, changedId) => {
-            const changedComponent = registry.get(changedId) || null;
+        const onComponentChange = (registry, changedComponent) => {
             // changedComponent could be null in this case.
             const allComponents = ids.map(cid => registry.get(cid)).filter(_.identity);
             fn.call(fnContext, allComponents, changedComponent);
@@ -28,7 +28,7 @@ const ComponentBindingMixin = {
             dispose: () => {
                 _.each(ids, (cid) => {
                     // We register on the "change:{id}" event
-                    this.stopListening(mvc.Components, `change:${cid}`, onComponentChange);
+                    this.stopListening(splunkjsRegistry, `change:${cid}`, onComponentChange);
                 }, this);
             },
         };
@@ -39,14 +39,16 @@ const ComponentBindingMixin = {
         }
         _.each(ids, (cid) => {
             // We register on the "change:{id}" event
-            this.listenTo(mvc.Components, `change:${cid}`, onComponentChange);
+            this.listenTo(splunkjsRegistry, `change:${cid}`, onComponentChange);
         }, this);
         // initial call
         _.defer(() => {
-            _.each(ids, (cid) => {
-                // We register on the "change:{id}" event
-                onComponentChange(mvc.Components, cid);
-            }, this);
+            if (!this._removed) { // eslint-disable-line
+                _.each(ids, (cid) => {
+                    // We register on the "change:{id}" event
+                    onComponentChange(splunkjsRegistry, splunkjsRegistry.get(cid));
+                }, this);
+            }
         });
         return ret;
     },

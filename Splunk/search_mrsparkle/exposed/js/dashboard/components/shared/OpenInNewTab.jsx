@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import _ from 'underscore';
-import ControlGroup from 'splunk-ui/components/ControlGroup';
-import Switch from 'splunk-ui/components/Switch';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
+import Switch from '@splunk/react-ui/Switch';
 import { createTestHook } from 'util/test_support';
 
 const isSelected = (value) => {

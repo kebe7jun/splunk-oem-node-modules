@@ -8,6 +8,7 @@
 var colors = require('colors');
 var ProgressBarPlugin = require('progress-bar-webpack-plugin');
 var webpack = require('webpack');
+var crypto = require('crypto');
 
 var msgs = [
     'Really loving IT',
@@ -54,7 +55,10 @@ var progressPlugin = new ProgressBarPlugin({
 module.exports = {
     devtool: '#eval-source-map',
     plugins: [
-        new webpack.DefinePlugin({'process.env.NODE_ENV': "'development'"}),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': "'development'",
+            'process.env.SC_ATTR': JSON.stringify(`core_sc${crypto.randomBytes(8).toString('hex')}`),
+        }),
         progressPlugin
     ]
 };

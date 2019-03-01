@@ -442,7 +442,9 @@ define(
             /**
              * Save changes to the currently edited model and update the concise version
              */
-            saveDataModelHandler: function() {
+            saveDataModelHandler: function(skipDescription) {
+                //the default behavior should be saving the description
+                skipDescription = skipDescription != undefined ? skipDescription : false;
                 if (this.dataModelToEdit) {
                     var id = this.dataModelToEdit.get("id");
 
@@ -450,7 +452,7 @@ define(
                     this.updateDataModel(id, {enabled: this.dataModelToEdit.entry.content.acceleration.get("enabled")},
                                              {displayName: this.dataModelToEdit.entry.content.get("displayName"),
                                               description: this.dataModelToEdit.entry.content.get("description")});
-                    $.when(this.dataModelToEdit.save()).then(_.bind(function() {
+                    $.when(this.dataModelToEdit.save({}, {skipDescription: skipDescription})).then(_.bind(function() {
                         this.fetchConciseDataModel(id);
                         delete this.dataModelToEdit;
                     }, this));

@@ -75,9 +75,6 @@ function(
             }
 
             this.addSections($body);
-            if(this.sectionCount < 2) {
-                $body.attr('class' , css.menuNarrow);
-            }
 
             this.$el.html($html);
 
@@ -87,7 +84,7 @@ function(
         },
         addSections: function($body){
             var self = this;
-            this.sectionCount = 0;
+            var sectionCount = 0;
             this.collection.sections.each(function(section){
                 if (section.get('items') && section.get('items').length === 0) {
                     return;
@@ -95,10 +92,11 @@ function(
                 var sectionView = self.children[section.get('id')] = new Section({
                     model: section
                 });
-
+                sectionCount++;
                 self.sectionCount++;
                 $body.append(sectionView.render().el);
             });
+            this.$el.attr('data-menu-sections', sectionCount);
         },
         showAllSections: function(evt) {
             this.children.dialog = new SettingsModal({

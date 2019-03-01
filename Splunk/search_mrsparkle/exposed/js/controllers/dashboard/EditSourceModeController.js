@@ -65,32 +65,29 @@ define([
 
         validateAndSaveXML: function() {
             var xml = this.model.editor.get('code');
-            var annotations = this.validateXML(xml);
-
-            // TODO: Only propagate XML if we don't have errors?
-            // if (_(annotations).filter(function(a) { return a.type == 'error'; }).length === 0) {}
-
+            this.validateXML(xml);
             this.saveDashboard(xml);
         },
 
         validateXML: function() {
             // Potentially move to XMLEditor view or separate validation helper
-
             var xml = this.editorView.getEditorValue();
-            var annotations = [];
-            var parser = this.dashboardParser;
-            var result = parser.validateDashboard(xml);
-            this.model.editor.set('parseResults', result);
+            var validateResults = {warnings: [], errors: []};
+            var parserOutput = null;
+            try {
+                parserOutput = this.dashboardParser.parseDashboard(xml, _.extend({}, { validator: validateResults }));
+            } catch (e) {
+                validateResults = { errors: [{ msg: e.message, line: e.line || -1 }], warnings: [] };
+            }
+            this.model.editor.set('validateResults', validateResults);
+            if (parserOutput && parserOutput.settings) {
+                this.model.page.setFromDashboardXML(parserOutput.settings);
+            }
             this.editorView.applyAnnotations();
-            return annotations;
+            this.deferreds.xmlParsed.resolve();
         },
 
         tearDown: function() {
-            //TODO validate before teardown, and interrupt the tear down if there's error or warning
-            //var result = this.validateXML();
-            //if (result.length){
-            //    return false;
-            //}
             this._tearDownEditor();
         },
 

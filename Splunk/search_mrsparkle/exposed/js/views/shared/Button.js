@@ -63,8 +63,8 @@ define([
 
               menu:      false,
               icon:      undefined,
-              iconSize:  1
-              //external:  false     /* Not implemented yet */
+              iconSize:  1,
+              external:  false
               //tooltip:   false     /* Not implemented yet */
             };
 
@@ -101,15 +101,21 @@ define([
                         'default': '',
                         large: this.css.large
                     }[this.options.size],
-                blockClassName = this.options.fullWidth ? this.css.block : this.css.inline;
+                blockClassName = this.options.fullWidth ? this.css.block : this.css.inline,
+                externalClassName = this.options.external ? 'external' : '';
 
             // Attributes
             this.$el.attr('href', this.options.href);
-            this.$el.attr('class', className + ' ' + sizeClassName + ' ' + (blockClassName || '') );
+            this.$el.attr('class', className + ' ' + sizeClassName + ' ' + (blockClassName || '') + ' ' + externalClassName);
             this._setOrRemoveAttr('disabled', this.options.enabled ? false : 'disabled');
+            this._setOrRemoveAttr('tabindex', this.options.enabled ? '' : '-1');
             this._setOrRemoveAttr('title', this.options.title || this.options.label);
             this._setOrRemoveAttr('data-action', this.options.action);
             this._setOrRemoveAttr('data-active', this.options.active ? 'active' : false);
+            this._setOrRemoveAttr('target', this.options.external ? '_blank' : '');
+            // https://mathiasbynens.github.io/rel-noopener/
+            // https://jakearchibald.com/2016/performance-benefits-of-rel-noopener/
+            this._setOrRemoveAttr('rel', this.options.external ? 'noopener' : '');
 
             // Contents
             var contents = (this.options.html) ? this.options.html : _.escape(this.options.label);
@@ -122,7 +128,7 @@ define([
 
             // Caret
             if (this.options.menu) {
-                this.children.caret = this.children.caret || new Icon({icon: 'caret'});
+                this.children.caret = this.children.caret || new Icon({icon: 'triangleDownSmall'});
                 this.children.caret.render().appendTo(this.$el);
             } else if (this.children.caret) {
                 this.children.caret.$el.detach();

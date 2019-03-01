@@ -1,295 +1,396 @@
-$container-width: 485px;
+$accountContainerWidth: 485px;
+$accountInputWidth: 200px;
+$accountInputHeight: 36px;
+$accountMessageBackgroundColor: $gray20;
+
+@define-mixin create-message-container {
+    padding: $spacing;
+    margin: $spacing 0;
+    background-color: $accountMessageBackgroundColor;
+    box-sizing: border-box;
+
+    p {
+        max-width: calc($accountContainerWidth - $spacingDouble);
+        margin-left: auto;
+        margin-right: auto;
+    }
+    p:last-child, .alert:last-child{
+        margin-bottom: 0;
+    }
+}
+@define-mixin create-message-container-centered {
+    @mixin create-message-container;
+    text-align: center;
+}
 
 body {
-    font-size: $baseFontSize;
-    font-family: $baseFontFamily;
-    line-height: 20px;
-    color: $textDisabledColor;
-    background-color: $grayDarker;
+    font-size: $fontSize;
+    font-family: $fontFamily;
+    line-height: $lineHeight;
+    color: $gray96;
+    min-width: $accountContainerWidth;
+    background-color: #06070B;
     margin: 0;
 }
 .body-default {
     background-size: cover;
+    background-position: top center;
     background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
 }
+
 .body-default-img {
     @if $theme == enterprise {
-        background: url("./login_bg_enterprise.jpg") no-repeat center center fixed;
+        background: url("./enterprisebackground.jpg") no-repeat top center fixed;
+        background-color: #06070B;
+        background-size: auto;
     }
     @if $theme == lite {
         background: url("./litebackground.jpg") no-repeat center center fixed;
+        background-size: cover;
     }
-    background-size: cover;
 }
 
 header {
     line-height: 32px;
-    text-align: center;
 }
 h2.title {
-    color: $textDisabledColor;
+    color: $white;
     font-weight: normal;
-    font-size: 27px;
+    font-size: $fontSizeLarge;
     white-space: nowrap;
 }
 a {
     color: $textGray;
     text-decoration: none;
-}
-a:hover {
-    color: $white;
+
+    &:hover {
+        color: $white;
+    }
+
+    &.external {
+        white-space: nowrap;
+
+        &:after {
+            padding-left: 0.2em;
+        }
+    }
 }
 
-/* logo */
+/*************************************************************************************************/
+/*  LOGO                                                                                         */
+/*************************************************************************************************/
 #brand{
     font-family: "Splunk Icons";
     color: $white;
-    font-size: 48px;
-    padding-bottom: 30px;
-    margin: 8px 0;
-    font-weight: normal;
-}
-#brand > span.prompt {
-    color: $splunkGreen;
-    font-weight: normal;
+    font-size: 32px;
+    padding-bottom: $spacingHalf;
+    font-weight: $fontWeight;
+    text-rendering: geometricPrecision;
+
+    > span.prompt {
+        color: $brandColor;
+        font-weight: normal;
+    }
 }
 .custom-logo {
     max-height:100px;
     margin-bottom: 15px;
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-/* layout */
+/*************************************************************************************************/
+/*  LAYOUT                                                                                       */
+/*************************************************************************************************/
 .account {
-    position: absolute;
-    top: 33%;
+    display: flex;
     width: 100%;
+    height: 100vh;
+    flex-direction: column;
 }
 .wrapper-container {
-    width: $container-width;
-    margin: 0 auto;
+    min-width: $accountContainerWidth;
+    margin: 25vh auto auto;
+    transition: $transitionMargin;
+    align-self: center;
 }
-.content {
-    margin-bottom: 40px;
+@if $theme == 'lite' {
+    .wrapper-container {
+        padding: 25px;
+        background-color: rgba(0,0,0,0.5);
+    }
+}
+.account > .wrapper-container > .content {
+    margin-bottom: $spacingDouble;
 }
 footer {
-    position: fixed;
-    bottom: 6px;
-    color: $textGrayDark;
-    width: 100%
+    bottom: $spacingQuarter;
+    left: 0;
+    color: $gray60;
+    width: 100%;
 }
 p.copyright {
-    width: $container-width;
-    margin: 0 auto;
-    text-align:center;
+    text-align: center;
+    min-width: $accountContainerWidth;
+    margin: auto;
 }
 
-/* form elements */
+/*************************************************************************************************/
+/*  FORM ELEMENTS                                                                                */
+/*************************************************************************************************/
+.loginForm {
+    margin-bottom: $spacingHalf;
+}
 fieldset {
     clear: both;
     position: relative;
 }
 input {
     box-sizing: border-box;
+    border: none;
 }
 .shared-controls-textcontrol,
 .account-login-textcontrol {
     float: left;
+    .placeholder {
+       top: 10px;
+   }
 }
-.shared-controls-textcontrol .placeholder,
-.account-login-textcontrol .placeholder {
-    top: 11px;
-}
-input[type=text],
-input[type=password] {
-    width: 200px;
-    height: 40px;
-    padding: 0 6px;
-    border-color: $interactiveBorderColor;
-    border-right-width: 0;
+
+.control input[type=text],
+.control input[type=password] {
+    width: calc($accountInputWidth - 1);
+    height: $accountInputHeight;
+    padding: $inputPadding;
+    border: none;
     border-radius: 0;
+    margin-right: 1px;
     margin-bottom: 0px;
+
+    &:focus {
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        border-color: $interactiveBorderColor;
+        outline: none;
+    }
 }
+
 input[type=text]::-ms-clear,
-input[type=password]::-ms-reveal
-{
+input[type=password]::-ms-reveal {
      display: none;
 }
-input[type=text]:focus,
-input[type=password]:focus {
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    border-color: $interactiveBorderColor;
-    outline: none;
+
+[data-name="username"] input[type=text],
+[data-name="newpassword"] input[name=newpassword] {
+    border-radius: $inputBorderRadiusLeft;
 }
-input[name=username], input[name=newpassword] {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-}
+
 input[type=submit] {
-    /* ensure the button in different locales is never pushed below */
-    position: absolute;
-    bottom: 0px;
-    left: 400px;
-    height: 40px;
-    min-width: 60px;
-
-    /* DCE-OEM-CHANGE
-       keep input field centered
-    */
-    width: 80px;
-    text-align: center;
-
+    height: $accountInputHeight;
+    min-width: 85px;
     padding: 4px 12px;
-    border-radius: 0 $interactiveBorderRadius $interactiveBorderRadius 0;
+    border-radius: $inputBorderRadiusRight;
 }
 
-/* Messaging */
+/*************************************************************************************************/
+/*  MESSAGING                                                                                    */
+/*************************************************************************************************/
+.account-login-error {
+    min-width: $accountContainerWidth;
+
+    .error-messages {
+        @mixin create-message-container-centered;
+        @if $theme == 'lite' {
+            background-color: transparent;
+        }
+    }
+    p + .error-messages {
+        margin-top: 0;
+    }
+}
 p.error {
-    color: $red;
-    padding: 0px;
-    margin: 5px 0;
-    width: 485px;
+    color: $white;
+    svg {
+        vertical-align: middle;
+        margin: -2px $spacingHalf 0 0;
+    }
+}
+.error {
+    svg .stroke-svg {
+        stroke: $errorColor;
+    }
+    svg .fill-svg {
+        fill: $errorColor;
+    }
 }
 .messaging {
     min-height: 20px;
     margin-bottom: 10px;
 }
+.account-passwordchange {
+    > .spl-change-password-skip {
+        margin: $spacingHalf 0;
+        &:not(.hidden) + .alerts {
+            margin-top: $spacingHalf;
+        }
+    }
+    > .alerts {
+        @mixin create-message-container-centered;
+    }
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+.account-mfaduo .duo-loading {
+    @mixin create-message-container-centered;
+}
+.login-content{
+    max-width: 485px;           /* Width on the parent container is 485px and To wrap words inside the container */
+    word-wrap: break-word;
+}
 
-/* First time login slide in */
+/*************************************************************************************************/
+/*  FIRST TIME LOGIN                                                                             */
+/*************************************************************************************************/
 .account-login-firsttime {
-    /* jquery slidein requires a width and float otherwise jumps @ end */
-    float: left;
-    width: $container-width;
-    padding-bottom: 16px;
+    /* jquery slidein requires a width */
+    min-width: $accountContainerWidth;
+    @mixin create-message-container;
+
     h2 {
-        font-weight: normal;
-        color: $textDisabledColor;
+        margin-top: 0;
+        color: $textGray;
     }
     p, td {
         color: $textGray;
-    }
-    tr {
-        line-height: 12px;
+        max-width: calc($accountContainerWidth - $spacingDouble);
     }
     td {
         padding-right: 10px;
     }
+    table {
+        margin: $spacing 0;
+    }
 }
-/* TOS */
+
+@if $theme == 'lite' {
+    .account-login-firsttime {
+        background-color: transparent;
+
+        h2 {
+            color: $white;
+        }
+
+        p, td {
+            color: $white;
+        }
+    }
+}
+
+
+/*************************************************************************************************/
+/*  TOS                                                                                          */
+/*************************************************************************************************/
 div[data-page=tosaccept] footer {
     position: relative;
 }
 .account[data-page=tosaccept] {
     top: 15%;
 }
-.account-tosaccept .content {
-    background: $white;
-    border-radius: $baseBorderRadius;
-    color: $grayDark;
-    padding: 17px;
-    overflow-x: auto;
-    max-height: 300px;
-    margin-bottom: 14px;
-}
-.account-tosaccept .alert {
-    padding: 0px;
-    color: #F06363;
-}
-.account-tosaccept .icon-alert {
-    display: none;
-}
-.account-tosaccept label {
-    display: inline;
-    font-size: $baseFontSizeLarge;
-    font-weight: bold;
-}
-.account-tosaccept input {
-    margin-top: -1px;
-}
-.account-tosaccept button {
-    margin-top: -3px
-}
-.account-tosaccept label, .account-tosaccept input {
-    margin-right: 10px;
-}
-body.lite {
-    #brand {
-        color: $white;
-        font-size: 32px;
-        padding-bottom: 10px;
 
-        span.prompt {
-            color: $splunkLiteOrange;
-            font-weight: normal;
-            -webkit-font-smoothing: antialiased;
+.account-tosaccept {
+    .content {
+        min-width: $accountContainerWidth;
+        width: calc(100vw - 80px);
+        max-width: 1200px;
+        min-height: 100px;
+        max-height: 300px;
+        padding: $spacing;
+        margin-bottom: $spacingThreeQuarters;
+        max-height: 300px;
+        margin-bottom: 14px;
+        box-sizing: border-box;
+        overflow-y: scroll;
+    }
+    .alerts {
+        @mixin create-message-container-centered;
+
+        .alert {
+            padding: 0px;
+            margin-bottom: $spacingHalf;
+            color: $errorColorL10;
         }
     }
-    footer {
-        background: none;
-        text-align: center;
-        color: $textDisabledColor;
-        width: 100%;
+    .icon-alert {
+        display: none;
     }
-    .account {
-        position: static;
+    label {
+        display: inline;
     }
+    input {
+        margin-top: -1px;
+    }
+    .btn {
+        margin-top: -3px;
+        min-width: $buttonMinWidth;
+    }
+    label, input {
+        margin-right: 10px;
+    }
+}
+@if $theme == 'lite' {
+    body {
+        .btn-primary {
+            background-color: $splunkLiteColor;
+            &:hover {
+                background-color: $splunkLiteColorD20;
+            }
+            &:active {
+                background-color: $splunkLiteColorD30;
+            }
+        }
+    }
+}
+
+@media only screen and (max-height: 600px) {
     .wrapper-container {
-        padding: 20px 50px;
-        width: 620px;
-        background: color($grayDark a(0.75));
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        @mixin translate -50%, -50%;
+        margin-top: 20vh;
     }
-    form table {
-        border-collapse: separate;
+}
+@media only screen and (max-height: 400px) and (max-width: 650px){
+    .wrapper-container {
+        margin-top: $spacing;
     }
-    input[type=submit] {
-        position: static;
-        border-radius: 0px;
-        background: none;
-        border: 1px solid $splunkLiteOrange !important;
-        box-shadow: none;
-        color: $splunkLiteOrange;
-        margin-left: 6px;
-        font-size: 16px;
-        line-height: 35px;
-        height: 35px;
-        padding: 0 12px;
-        filter: none;
-        text-shadow: none;
+}
+@media only screen and (max-width: 650px) and (-webkit-min-device-pixel-ratio: 1.5),
+       only screen and (max-width: 650px){
+    *:not(svg):not(footer) {
+        max-width: calc(100vw - $spacingDouble) !important;
+        min-width: calc(100% - $spacingDouble) !important;
+        margin: auto;
     }
-    form table td:first-child .input-wrapper,
-    table input[type=text], #newpassword {
-        border-radius: 0px;
+    #brand {
+        text-align: center;
+        margin-bottom: $spacingQuarter;
     }
     input[type=text],
-    input[type=password] {
-        width: 230px;
-        height: 35px;
-        border-radius: 0;
+    input[type=password],
+    input.splButton-primary {
+        min-width: auto;
+        width: 100% !important;
+        margin: auto auto $spacingQuarter !important;
+        border-radius: $borderRadius !important;
+        display: block;
     }
-    table input[type=text],
-    table input[type=password],
-    table,
-    table td {
-        border: none;
-        box-shadow: none;
+    .account-tosaccept {
+        .content {
+            width: calc(100vw - 40px);
+        }
+        .btn {
+            margin-top: $spacingHalf;
+        }
     }
-    .placeholder-text {
-        padding: 11px 9px;
-    }
-    div[data-page=tosaccept] .wrapper-container {
-        position: static;
-        transform: initial;
-        margin-bottom: 15px;
-    }
-    .account[data-page=tosaccept] {
-        position: absolute;
+    .shared-controls-textcontrol,
+    .account-login-textcontrol,
+    .accept-tos-button {
+        float: none;
+        display: block;
     }
 }

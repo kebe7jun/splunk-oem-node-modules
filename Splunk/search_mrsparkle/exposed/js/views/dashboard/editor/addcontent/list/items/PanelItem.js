@@ -87,12 +87,14 @@ define(
                 }
             },
             template: '\
-                <a href="#" title="<%- title %>">\
+                <a style="padding-left: 48px;" href="#" title="<%- title %>">\
                     <div class="icons">\
                         <i class="<%- icon %>"></i>\
                         <% if (hasPlusIcon) { %><i class="icon-plus"/><% } %>\
                     </div>\
-                    <%- name %>\
+                    <span>\
+                        <%- name %>\
+                    </span>\
                 </a>\
             '
         });

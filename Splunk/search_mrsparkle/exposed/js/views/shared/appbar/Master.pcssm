@@ -1,33 +1,21 @@
 /*  App Bar */
 /*  ========== */
 /*  Note, the menus that open from the app bar are in a separate file navs-app */
-@import '../../../../pcss/base/variables-oem.pcss';
+
 
 .view {
     all: initial;
-    display: inline-block;
+    display: flex;
 
     color: $white;
-    background-color: $dce-pale;
-
-    height: 100vh;
-    top: 0;
-
-    /*
-      DCE-OEM-CHANGE
-      固定 200像素宽度的 AppBar
-    */
-    width: 200px;
-
-    position: absolute;
-    clear:both;
-    z-index: 2 !important;
+    background-color: $appBarBackground;
+    min-height: $appBarHeight;
+    position: relative;
+    clear: both;
     @mixin clearfix;
 
-    font-size: $baseFontSize;
-    font-family: $baseFontFamily;
-
-    transition: width 0.3s linear;
+    font-size: $fontSize;
+    font-family: $fontFamily;
 
     /*  override normal pills style for header */
 
@@ -39,32 +27,14 @@
     ul.slidenavList li > a {
         border-top: none;
     }
-
-    /*
-      DCE-OEM-CHANGE
-      为了和 DCE 的导航栏保持一致，这里不再响应媒体查询
-      @media(min-width: $large) {
-          width: $appbar-lg;
-      }
-    */
-
-   &:before {
-    display: inline-block;
-    position: fixed;
-    left: 0;
-    height: 100%;
-    width: 200px;
-    background: $dce-pale;
-    border-right: 1px solid #ccd1d9;
-   }
 }
 
 .name {
     margin: 0;
-    line-height: 40px;
-    font-weight:200;
-    font-size:18px;
-    height: 40px;
+    line-height: $appBarHeight;
+    font-weight: 200;
+    font-size: $fontSizeXLarge;
+    height: $appBarHeight;
     font-weight: 200;
     overflow: hidden;
     float: right;
@@ -72,7 +42,7 @@
      a {
         color: $white;
         display: block;
-        padding: 0 20px;
+        padding: 0 $spacing;
         position: relative;
         text-decoration: none;
 
@@ -92,7 +62,7 @@
 
 .link
 .logo img {
-    max-height: 40px;
+    max-height: $appBarHeight;
 }
 
 [data-action=resizing-nav-right] {

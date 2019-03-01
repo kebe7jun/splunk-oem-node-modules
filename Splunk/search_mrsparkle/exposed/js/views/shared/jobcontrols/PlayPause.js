@@ -43,9 +43,9 @@ define(['jquery', 'underscore', 'module', 'views/Base', 'util/splunkd_utils', 'b
                 }
             }
         },
-        
+    
         isActive: function() {
-            return (this.model.isRunning() || this.model.entry.content.get('isPaused')) && this.model.entry.acl.canWrite();
+            return (this.model.isRunning() || this.model.entry.content.get('isPaused')) && this.model.entry.acl.canWrite() && (typeof this.model.isDataFabricEnabled !== 'function' || !this.model.isDataFabricEnabled());
         },
         
         render: function() {

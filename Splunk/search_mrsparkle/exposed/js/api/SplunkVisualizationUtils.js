@@ -4,7 +4,8 @@ define([
             'util/general_utils',
             'util/time',
             'moment',
-            'splunk/palettes/ColorCodes'
+            'splunk/palettes/ColorCodes',
+            'util/theme_utils'
         ],
         function(
             _,
@@ -12,7 +13,8 @@ define([
             generalUtils,
             timeUtils,
             moment,
-            ColorCodes
+            ColorCodes,
+            themeUtils
         ) {
 
     /*
@@ -21,8 +23,14 @@ define([
      * - splunkSemantic
      */
     var COLOR_PALETTES = {
-        'splunkCategorical': ColorCodes.CATEGORICAL,
-        'splunkSemantic': ColorCodes.SEMANTIC
+        light: {
+            'splunkCategorical': ColorCodes.CATEGORICAL,
+            'splunkSemantic': ColorCodes.SEMANTIC
+        },
+        dark: {
+            'splunkCategorical': ColorCodes.CATEGORICAL_DARK,
+            'splunkSemantic': ColorCodes.SEMANTIC_DARK
+        }
     };
 
     /*
@@ -48,12 +56,16 @@ define([
      * This utility function can be used to get a pre-defined color palette for categorical colorization.
      * It returns an array of color strings. If no argument is provided it returns the splunk color palette.
      */
-    var getColorPalette = function(palette) {
+    var getColorPalette = function(palette, theme) {
+        theme = theme || 'light';
         palette = palette || 'splunkCategorical';
-        if (!_.has(COLOR_PALETTES, palette)) {
+        if(!_.has(COLOR_PALETTES, theme)) {
+            throw new Error('The specified theme does not exist');
+        }
+        if (!_.has(COLOR_PALETTES[theme], palette)) {
             throw new Error('The specified color palette does not exist');
         }
-        return COLOR_PALETTES[palette];
+        return COLOR_PALETTES[theme][palette];
     };
 
     /*
@@ -79,7 +91,8 @@ define([
         makeSafeUrl: makeSafeUrl,
         normalizeBoolean: generalUtils.normalizeBoolean,
         getColorPalette: getColorPalette,
-        parseTimestamp: parseTimestamp
+        parseTimestamp: parseTimestamp,
+        getCurrentTheme: themeUtils.getCurrentTheme
     };
 
 });

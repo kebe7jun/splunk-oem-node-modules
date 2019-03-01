@@ -1,9 +1,0 @@
-.text[data-inline] {
-    width: 90px;
-    flex-basis: 90px;
-
-    &[data-size=large] {
-        width: 115px;
-        flex-basis: 115px;
-    }
-}

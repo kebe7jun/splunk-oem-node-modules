@@ -1,5 +1,6 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import TimeRangeTokenEditor from 'dashboard/components/shared/TimeRangeTokenEditor';
 import TimeRangeSelector from 'dashboard/components/shared/TimeRangeSelector';
 import ItemSelector from 'dashboard/components/shared/ItemSelector';
@@ -11,6 +12,13 @@ import {
 import { createTestHook } from 'util/test_support';
 
 const TimeRangeEditor = ({
+    isFetchingPresets,
+    presets,
+    locale,
+    parseEarliest,
+    parseLatest,
+    onRequestParseEarliest,
+    onRequestParseLatest,
     extraOptions,
     activeOption,
     onOptionChange,
@@ -20,6 +28,7 @@ const TimeRangeEditor = ({
     onTimeRangeTokenChange,
     earliestTokenError,
     latestTokenError,
+    timeRangePickerDocsURL,
 }) => {
     const options = (extraOptions || []).concat([
         {
@@ -45,8 +54,16 @@ const TimeRangeEditor = ({
             latestTokenError={latestTokenError}
         />,
         [EXPLICIT_OPTION]: <TimeRangeSelector
+            isFetchingPresets={isFetchingPresets}
+            presets={presets}
+            locale={locale}
+            parseEarliest={parseEarliest}
+            parseLatest={parseLatest}
+            onRequestParseEarliest={onRequestParseEarliest}
+            onRequestParseLatest={onRequestParseLatest}
             activeTimeRange={activeTimeRange}
             onTimeRangeChange={onTimeRangeChange}
+            documentationURL={timeRangePickerDocsURL}
         />,
     };
 
@@ -54,7 +71,7 @@ const TimeRangeEditor = ({
         <div {...createTestHook(module.id)}>
             <ItemSelector
                 activeItem={activeOption}
-                label={_('Time range').t()}
+                label={_('Time Range').t()}
                 items={options}
                 onChange={onOptionChange}
                 {...createTestHook(null, 'timeRangeType')}
@@ -65,6 +82,21 @@ const TimeRangeEditor = ({
 };
 
 TimeRangeEditor.propTypes = {
+    isFetchingPresets: PropTypes.bool.isRequired,
+    presets: PropTypes.arrayOf(PropTypes.object).isRequired,
+    locale: PropTypes.string.isRequired,
+    parseEarliest: PropTypes.shape({
+        error: PropTypes.string,
+        iso: PropTypes.string,
+        time: PropTypes.string,
+    }),
+    parseLatest: PropTypes.shape({
+        error: PropTypes.string,
+        iso: PropTypes.string,
+        time: PropTypes.string,
+    }),
+    onRequestParseEarliest: PropTypes.func.isRequired,
+    onRequestParseLatest: PropTypes.func.isRequired,
     extraOptions: PropTypes.arrayOf(PropTypes.object),
     activeOption: PropTypes.string.isRequired,
     onOptionChange: PropTypes.func.isRequired,
@@ -80,12 +112,16 @@ TimeRangeEditor.propTypes = {
     onTimeRangeTokenChange: PropTypes.func.isRequired,
     earliestTokenError: PropTypes.string,
     latestTokenError: PropTypes.string,
+    timeRangePickerDocsURL: PropTypes.string,
 };
 
 TimeRangeEditor.defaultProps = {
     extraOptions: [],
     earliestTokenError: '',
     latestTokenError: '',
+    parseEarliest: null,
+    parseLatest: null,
+    timeRangePickerDocsURL: null,
 };
 
 export default TimeRangeEditor;

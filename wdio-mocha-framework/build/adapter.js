@@ -141,7 +141,7 @@ var MochaAdapter = function () {
     }, {
         key: 'run',
         value: function () {
-            var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+            var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
                 var _this = this;
 
                 var mochaOpts, mocha, result;
@@ -300,6 +300,10 @@ var MochaAdapter = function () {
                 if (params.type.match(/Test/)) {
                     message.passed = params.payload.state === 'passed';
                     message.duration = params.payload.duration;
+                }
+
+                if (params.payload.context) {
+                    message.context = params.payload.context;
                 }
             }
 
@@ -481,7 +485,7 @@ var _MochaAdapter = _get__('MochaAdapter');
 var adapterFactory = {};
 
 _get__('adapterFactory').run = function () {
-    var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(cid, config, specs, capabilities) {
+    var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(cid, config, specs, capabilities) {
         var adapter, result;
         return _regenerator2.default.wrap(function _callee2$(_context2) {
             while (1) {

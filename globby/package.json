@@ -1,6 +1,6 @@
 {
   "name": "globby",
-  "version": "6.1.0",
+  "version": "4.1.0",
   "description": "Extends `glob` with support for multiple patterns and exposes a Promise API",
   "license": "MIT",
   "repository": "sindresorhus/globby",
@@ -13,8 +13,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "bench": "npm update glob-stream && matcha bench.js",
-    "test": "xo && ava"
+    "bench": "npm update globby glob-stream && matcha bench.js",
+    "test": "xo && mocha"
   },
   "files": [
     "index.js"
@@ -53,17 +53,24 @@
   ],
   "dependencies": {
     "array-union": "^1.0.1",
-    "glob": "^7.0.3",
+    "arrify": "^1.0.0",
+    "glob": "^6.0.1",
     "object-assign": "^4.0.1",
     "pify": "^2.0.0",
     "pinkie-promise": "^2.0.0"
   },
   "devDependencies": {
-    "ava": "*",
-    "glob-stream": "gulpjs/glob-stream#master",
+    "glob-stream": "wearefractal/glob-stream#master",
     "globby": "sindresorhus/globby#master",
     "matcha": "^0.7.0",
+    "mocha": "*",
     "rimraf": "^2.2.8",
-    "xo": "^0.16.0"
+    "xo": "*"
+  },
+  "xo": {
+    "envs": [
+      "node",
+      "mocha"
+    ]
   }
 }

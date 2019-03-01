@@ -171,6 +171,8 @@ function(
                 'ATARI', 'ATARIST',
                 'RISCOS-LATIN1'];            
             
+            // add AUTO for auto detection
+            this.charsets.unshift("AUTO");    
             StaticDynamicFieldsView.prototype.initialize.apply(this, arguments);
         },
        

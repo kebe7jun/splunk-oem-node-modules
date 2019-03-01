@@ -33,7 +33,7 @@ define(
             },
             bodyTemplate: '\
                 <a href="#" class="close"><i class="icon-close"></i></a>\
-                <h2 class="drilldown-poptart-header"><%- header %></h2>\
+                <h2 class="drilldown-poptart-header" tabindex="0"><%- header %></h2>\
                 <div class="divider"></div>\
                 <div class="drilldown-poptart-body"></div>\
             '

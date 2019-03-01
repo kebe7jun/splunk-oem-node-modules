@@ -1,5 +1,5 @@
 define(
-    [   
+    [
         'jquery',
         'underscore',
         'backbone',
@@ -7,7 +7,8 @@ define(
         'views/Base',
         'views/shared/Modal',
         'uri/route',
-        'splunk.util'
+        'splunk.util',
+        './TouchJobModal.pcssm'
      ],
      function(
         $,
@@ -17,7 +18,8 @@ define(
         Base,
         Modal,
         route,
-        splunkUtil
+        splunkUtil,
+        css
     ){
         return Modal.extend({
             /**
@@ -45,9 +47,10 @@ define(
                         isBulk: isBulk,
                         time: isBulk ? '' : this.model.searchJob.getExpirationString(),
                         _: _,
-                        splunkUtil: splunkUtil
+                        splunkUtil: splunkUtil,
+                        css: css
                     });
-                
+
                 this.$el.html(Modal.TEMPLATE);
 
                 this.$(Modal.HEADER_TITLE_SELECTOR).html(_("Extend Job Lifetime").t());
@@ -55,7 +58,7 @@ define(
                 this.$(Modal.BODY_SELECTOR).append(template);
 
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CLOSE);
-                
+
                 return this;
             },
             template: '\
@@ -65,7 +68,7 @@ define(
                     <% } else { %>\
                         <%= splunkUtil.sprintf(_("The lifetime of the job was extended to %s.").t(), time) %> \
                     <% } %>\
-                    <a href="<%= learnMoreLink%>" target="_blank">\
+                    <a class="<%= css.learnMoreLink %>" href="<%= learnMoreLink%>" target="_blank">\
                         <%- _("Learn More").t() %> <i class="icon-external"></i>\
                     </a>\
                 </p>\

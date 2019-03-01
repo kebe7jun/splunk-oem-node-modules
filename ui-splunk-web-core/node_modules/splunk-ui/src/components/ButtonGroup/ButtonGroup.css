@@ -1,7 +1,0 @@
-.main {
-    position: relative;
-
-    + .main {
-        margin-left: 10px;
-    }
-}

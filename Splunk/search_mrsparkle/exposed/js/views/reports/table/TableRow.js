@@ -89,19 +89,20 @@ define(
                     if (openInApp === "system") {
                         openInApp = app;
                     }
+                    var view = route.getView(openInView);
                     var reportLink   = route.report(
                                     this.model.application.get("root"),
                                     this.model.application.get("locale"),
                                     openInApp,
                                     { data: { s: this.model.report.id}}),
-                    openLink = route[openInView](
+                    openLink = view.route(
                                     this.model.application.get("root"),
                                     this.model.application.get("locale"),
                                     openInApp,
                                     { data: { s: this.model.report.id }});
                 this.$el.html(this.compiledTemplate({
                     reportName: reportName,
-                    openInText: openInView === 'pivot' ? _('Open in Pivot').t() : _('Open in Search').t(),
+                    openInText: view.openLabel,
                     reportLink: reportLink,
                     link: openLink,
                     app: this.model.report.entry.acl.get('app'),
@@ -116,15 +117,14 @@ define(
             },
             template: '\
                 <td class="expands">\
-                    <a href="#"><i class="icon-triangle-right-small"></i></a>\
+                    <a href="#" aria-label="<%-_("Expand Table Row").t()%>"><i class="icon-triangle-right-small"></i></a>\
                 </td>\
                 <td class="title">\
                     <a href="<%= reportLink %>" title="<%- reportName %>"><%- reportName %></a>\
                 </td>\
-                <td class="actions">\
+                <td class="actions actions-edit">\
                     <a class="openInLink" href="<%= link %>"><%- openInText %></a>\
                 </td>\
-                <td class="actions actions-edit"></td>\
                 <td class="scheduled_time"><%- scheduled_time %></td>\
                 <td class="owner"><%- owner %></td>\
                 <% if(canUseApps) { %>\
@@ -135,4 +135,3 @@ define(
         });
     }
 );
-

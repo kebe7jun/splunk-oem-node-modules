@@ -9,7 +9,7 @@ define(function(require) {
         },
         render: function() {
             if(this.model.has('description')) {
-                var txt = _(this.model.get('description') || '').t(),
+                var txt = this.model.get('description') || '',
                     edit = this.model.get('edit');
                 this.$el.text(txt)[ txt && !edit ? 'show' : 'hide' ]();
             }

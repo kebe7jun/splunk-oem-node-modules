@@ -322,7 +322,6 @@ define([
                 controls.push({
                     type: 'SyntheticSelect',
                     options: {
-                        className: Control.prototype.className + ' input-prepend',
                         model: this.model,
                         modelAttribute: 'ruleComparator',
                         toggleClassName: 'btn',
@@ -351,7 +350,6 @@ define([
             }
             else {
                 controls.push(new CompareToTextControl({
-                    className: Control.prototype.className + ' input-prepend',
                     model: this.model,
                     modelAttribute: 'ruleCompareTo',
                     inputClassName: 'input-small',
@@ -361,7 +359,6 @@ define([
                 }));
                 if(dataType === 'string' || dataType === 'ipv4') {
                     controls.push(new CompareToListTextControl({
-                        className: Control.prototype.className + ' input-prepend',
                         model: this.model,
                         modelAttribute: 'ruleCompareTo',
                         inputClassName: 'input-medium'
@@ -422,13 +419,11 @@ define([
                 if(this.ruleCompareToListControl) {
                     this.ruleCompareToListControl.detach();
                 }
-                this.ruleComparatorControl.$el.removeClass('input-prepend');
                 this.setHelpText('');
             }
             else if(newComparator === 'in') {
                 this.ruleCompareToControl.detach();
                 this.ruleCompareToListControl.insertAfter(this.ruleComparatorControl.el);
-                this.ruleComparatorControl.$el.addClass('input-prepend');
                 this.setHelpText(this.matchListComparatorHelpText);
             }
             else {
@@ -436,7 +431,6 @@ define([
                     this.ruleCompareToListControl.detach();
                 }
                 this.ruleCompareToControl.insertAfter(this.ruleComparatorControl.el);
-                this.ruleComparatorControl.$el.addClass('input-prepend');
                 this.setHelpText('');
             }
         },

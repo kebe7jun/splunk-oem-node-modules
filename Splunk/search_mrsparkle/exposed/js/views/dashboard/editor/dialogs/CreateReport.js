@@ -32,7 +32,6 @@ define(
                 this.children.reportNameControlGroup = new ControlGroup({
                     label: _("Report Title").t(),
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.newReport.entry.content,
                         modelAttribute: 'name'
@@ -42,7 +41,6 @@ define(
                 this.children.reportDescriptionControlGroup = new ControlGroup({
                     label: _("Description").t(),
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.newReport.entry.content,
                         modelAttribute: 'description',

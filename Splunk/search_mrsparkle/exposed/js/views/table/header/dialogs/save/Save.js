@@ -28,7 +28,6 @@ define(
                 this.children.displayName = new ControlGroup({
                     label: _('Table Title').t(),
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.inmem.entry.content,
                         modelAttribute: 'displayName'
@@ -43,11 +42,10 @@ define(
                         modelAttribute: 'name'
                     }
                 });
-                
+
                 this.children.description = new ControlGroup({
                     label: _('Description').t(),
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.inmem.entry.content,
                         modelAttribute: 'dataset.description',
@@ -62,7 +60,7 @@ define(
                     e.preventDefault();
                 }
             },
-            
+
             submit: function() {
                 this.model.inmem.entry.content.set({
                     'request.ui_dispatch_view': this.model.application.get('page')
@@ -97,7 +95,7 @@ define(
 
                 return this;
             },
-            
+
             warningTemplate: '\
                 <div class="alert alert-warning">\
                     <i class="icon-alert"></i>\

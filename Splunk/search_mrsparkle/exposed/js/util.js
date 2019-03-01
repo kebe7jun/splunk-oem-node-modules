@@ -46,12 +46,19 @@ Splunk.util = {
         var key;
         var value;
         var equalsSegments;
-        var lim = parts.length;
-        for (var i=0,l=lim; i<l; i++) {
+        for (var i = 0; i < parts.length; i++) {
             equalsSegments = parts[i].split('=');
-            key = decodeURIComponent(equalsSegments.shift());
-            value = equalsSegments.join("=");
-            output[key] = decodeURIComponent(value.replace(/\+/g, ' '));
+            try {
+                key = decodeURIComponent(equalsSegments.shift());
+            } catch(e) {
+                continue;
+            }
+            try {
+                value = decodeURIComponent(equalsSegments.join('=').replace(/\+/g, ' '));
+            } catch(e) {
+                continue;
+            }
+            output[key] = value;
         }
         return output;
     },

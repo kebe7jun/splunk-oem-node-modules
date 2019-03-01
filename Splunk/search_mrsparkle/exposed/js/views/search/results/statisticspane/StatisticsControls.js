@@ -131,6 +131,9 @@ define(
                     // and show the pagination controls (in case they were hidden before)
                     this.children.preview.$el.hide();
                     this.children.searchResultsPaginator.$el.show();
+                } else if (this.model.searchJob.isDataFabricEnabled()) {
+                    // No preview support in data fabric search, so get rid of the toggle switch.
+                    this.children.preview.$el.hide();
                 } else {
                     this.children.preview.$el.show();
                 }

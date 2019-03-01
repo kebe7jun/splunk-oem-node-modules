@@ -31,7 +31,7 @@ table.splTable {
 /* filters */
 .JobManager .jobManagerFilters {
     padding:10px 0px;
-    border-bottom: 1px solid #CCC;
+    border-bottom: 1px solid #c3cbd4;
     font-size: 12px;
     margin-bottom: 10px;
 }
@@ -114,7 +114,7 @@ table.splTable {
 
 .JobManager tr.childRow td {
     padding-bottom: 14px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #c3cbd4;
 }
 
 
@@ -146,7 +146,7 @@ a.viewJobLabel {
 
 .JobManager th {
     text-align: left;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #c3cbd4;
 }
 
 .JobManager th a {
@@ -239,7 +239,7 @@ a.viewJobLabel {
 }
 
 .JobManager .jmBatchActions {
-	border-top: 1px solid #CCC;
+	border-top: 1px solid #c3cbd4;
     _background: #edede7 none; 
     padding: 5px 10px;
     _padding-top: 0px;

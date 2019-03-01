@@ -9,6 +9,7 @@
 
 search_mrsparkle/exposed/js/build
 search_mrsparkle/exposed/js/contrib
+search_mrsparkle/exposed/js/patches
 search_mrsparkle/exposed/js/profiles
 search_mrsparkle/exposed/js/splunkjs/contrib
 

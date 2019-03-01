@@ -1,5 +1,6 @@
 .view {
     composes: menu from '../../MenuDialog.pcssm';
+    min-width: 150px;
 }
 
 .iconUser {

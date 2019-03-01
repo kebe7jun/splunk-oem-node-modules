@@ -60,7 +60,6 @@ define([
                 this.children.controlSwitch = new ControlGroup({
                     className: 'control-switch control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'ui.disabled',
                         model: this.model.settings,
@@ -89,7 +88,6 @@ define([
                 });
                 this.children.sourcetype = new ControlGroup({
                     controls: [_sourcetypeMenuControl],
-                    controlClass: 'controls-block',
                     label: _('Default Source Type').t(),
                     required: false
                 });
@@ -103,12 +101,11 @@ define([
                     this.children.outputs = new ControlGroup({
                         className: 'output-group control-group',
                         controlType: 'SyntheticSelect',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: 'ui.outputgroup',
                             model: this.model.settings,
                             items: items,
-                            className: 'btn-group view-count',
+                            additionalClassNames: 'view-count',
                             menuWidth: 'wide',
                             toggleClassName: 'btn',
                             popdownOptions: {
@@ -123,7 +120,6 @@ define([
                     this.children.useds = new ControlGroup({
                         className: 'http-useds control-group',
                         controlType: 'SyntheticCheckbox',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: 'ui.useDeploymentServer',
                             model: this.model.settings,
@@ -136,7 +132,6 @@ define([
                 this.children.enableSSL = new ControlGroup({
                     className: 'http-enablessl control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.enableSSL',
                         model: this.model.settings,
@@ -149,7 +144,6 @@ define([
                 this.children.port = new ControlGroup({
                     className: 'http-port control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.port',
                         model: this.model.settings,
@@ -174,12 +168,11 @@ define([
                 this.children.index = new ControlGroup({
                     className: 'index control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.index',
                         model: this.model.settings,
                         items: indexes,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'narrow',
                         toggleClassName: 'btn',
                         save: false,
@@ -221,5 +214,3 @@ define([
             template: '<div class="settingsform_wrapper form-horizontal"></div>'
         });
     });
-
-

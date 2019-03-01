@@ -74,7 +74,9 @@ define(
                 // Setup the settings
                 this.settings = new Backbone.Model();
                 this.settings.set("footerTemplate",this._footerTemplate);
-                this.settings.set("headerTemplate",this._headerTemplate);
+                this.settings.set("headerTemplate", this.compileTemplate(this._headerTemplate)({
+                    _: _
+                }));
 
                 // Re-render if any of the labels have changed
 
@@ -269,11 +271,11 @@ define(
                 <% } %>\
             ',
             _footerTemplate: '\
-                <a href="#" class="btn btn-dialog-cancel label_from_data" data-dismiss="modal"></a>\
-                <a href="#" class="btn btn-primary btn-dialog-primary label_from_data pull-right"></a>\
+                <a href="#" class="btn btn-secondary btn-dialog-cancel label_from_data" data-dismiss="modal"></a>\
+                <a href="#" class="btn btn-primary btn-dialog-primary label_from_data"></a>\
             ',
             _headerTemplate: '\
-                <button type="button" class="close btn-dialog-close" data-dismiss="modal">x</button>\
+                <button aria-label="<%- _("Close").t() %>" type="button" class="close btn-dialog-close" data-dismiss="modal">x</button>\
                 <h3 class="text-dialog-title"></h3>\
             '
         });

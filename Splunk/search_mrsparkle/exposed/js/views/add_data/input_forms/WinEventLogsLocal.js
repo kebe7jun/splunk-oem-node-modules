@@ -48,7 +48,6 @@ define(
                     this.children.eventLogs = new ControlGroup({
                         className: 'evt-logs control-group',
                         controlType: 'Accumulator',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: 'ui.logs',
                             model: this.model.input,
@@ -77,7 +76,6 @@ define(
                         this.children.eventLogs = new ControlGroup({
                             className: 'evt-logs control-group',
                             controlType: 'Accumulator',
-                            controlClass: 'controls-block',
                             controlOptions: {
                                 modelAttribute: 'ui.logs',
                                 model: this.model.input,
@@ -104,19 +102,19 @@ define(
             faqList: function() {
                 return [
                 {
-                    question: _('What event logs does this Splunk instance have access to?').t(),
-                    answer: _('It depends on how you installed Splunk. If you installed it as the "Local \
-                            System" user, it has access to all event logs on the local machine. If you installed it as \
-                            a domain user, it has access to only the event logs that you give that user access to, on \
-                            either local or remote Windows machines.').t()
+                    question: _('What event logs does this Splunk platform instance have access to?').t(),
+                    answer: _('It depends on how you installed the Splunk platform instance. If you installed it as the "Local ' +
+                            'System" user, it has access to all event logs on the local machine. If you installed it as ' +
+                            'a domain user, it has access to only the event logs that you give that user access to, on ' +
+                            'either local or remote Windows machines.').t()
                 },
                 {
                     question: _('What is the best method for monitoring event logs of remote Windows machines?').t(),
-                    answer: _('If possible, use a universal forwarder rather than WMI to collect data from remote \
-                            machines. The resource load of WMI can exceed that of a Splunk universal \
-                            forwarder in many cases. In particular, consider a forwarder if you collect multiple event \
-                            logs or performance counters from each host, or from very busy hosts like domain \
-                            controllers. ').t() +
+                    answer: _('If possible, use a universal forwarder rather than WMI to collect data from remote ' +
+                            'machines. The resource load of WMI can exceed that of a Splunk universal ' +
+                            'forwarder in many cases. In particular, consider a forwarder if you collect multiple event ' +
+                            'logs or performance counters from each host, or from very busy hosts like domain ' +
+                            'controllers. ').t() +
                             '<a class="external" href="' + arguments[0] + '" target="_blank">' + _("Learn More").t() + '</a>'
                 }
                 ];
@@ -131,7 +129,7 @@ define(
                     <% } else { %>\
                     <%= _("Configure selected Splunk Universal Forwarders to monitor local Windows event log \
                     channels, which contain log data published by installed applications, services, and system processes. \
-                    The event log monitor runs once for every event log input defined in Splunk. ").t() %> \
+                    The event log monitor runs once for every event log input defined in the Splunk platform. ").t() %> \
                     <% } %> \
                     <a class="external" href="<%- helpLink %>" target="_blank"> <%= _("Learn More").t() %> </a>\
                     </p>\

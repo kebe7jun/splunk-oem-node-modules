@@ -60,7 +60,6 @@ define(
                 this.children.scriptFile = new ControlGroup({
                     className: 'control-group control-group-run-script',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'action.script.filename',
                         model: this.model.document.entry.content

@@ -118,7 +118,7 @@ define(function(require) {
         },
         addReadyDep: function(dfd) {
             console.trace('controller addReadyDep');
-            // Wrap the given deferred object into a new one, which always resolves when the original one is 
+            // Wrap the given deferred object into a new one, which always resolves when the original one is
             // resolved or rejected.
             var wrapperDfd = $.Deferred();
             dfd.always(_.bind(wrapperDfd.resolve, wrapperDfd));
@@ -163,7 +163,7 @@ define(function(require) {
         updatePageTitle: function() {
             console.trace('controller updatePageTitle');
             var titleFormat = _('%s | Splunk').t();
-            document.title = SplunkUtil.sprintf(titleFormat, this.model.view.getLabel());
+            document.title = SplunkUtil.sprintf(titleFormat, _(this.model.view.getLabel()).t());
         },
         _signalReadyByMainController: function(options) {
             this.model.view.setFromSplunkD(options.model.view.toSplunkD());

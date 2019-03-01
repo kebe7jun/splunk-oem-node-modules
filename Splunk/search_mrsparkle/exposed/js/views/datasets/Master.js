@@ -134,11 +134,10 @@ define(
             template: '\
                 <div class="section-padded section-header">\
                     <div class="add-table-controls pull-right"></div>\
-                    <h2 class="section-title"><i class="icon-table"></i>&nbsp;<%= _("Datasets").t() %></h2>\
+                    <h2 class="section-title"><%= _("Datasets").t() %></h2>\
                     <p class="section-description"><%= _("Use the Datasets listing page to view and manage your existing datasets. Click a dataset name to view its contents. Click Pivot to design a visualization-rich report based on the dataset. Click Explore in Search to extend a dataset in Search and save it as a new report, alert, or dashboard panel.").t() %></p>\
                     <a class="external datasets-help-link" href="<%- helpLink %>" target="_blank"><span><%- _("Learn more about Datasets.").t() %></span></a>\
                 </div>\
-                <div class="divider"></div>\
             '
         });
     }

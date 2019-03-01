@@ -22,7 +22,9 @@ define([
     'dashboard/state/DashboardMasterState',
     'dashboard/serializer/DashboardSerializer',
     'util/pdf_utils',
-    'util/console'
+    'util/console',
+    'util/theme_utils',
+    'util/url'
 ], function($,
             _,
             ReportModel,
@@ -46,10 +48,12 @@ define([
             DashboardMasterState,
             DashboardSerializer,
             PDFUtils,
-            console) {
+            console,
+            themeUtils,
+            urlUtils
+        ) {
 
     var sprintf = SplunkUtil.sprintf;
-
     var ActionHelper = {
         // Handle action is called with the scope bound to the viewmode controller
         handleAction: function(action, state, model, collection, deferreds) {
@@ -239,8 +243,7 @@ define([
 
             dialog.once('click:primaryButton', function() {
                 view.destroy().done(function() {
-                    // DCE-OEM-CHANGE
-                    MvcUtils.redirect(Route.page(model.application.get('root'), model.application.get('locale'), model.application.get('app'), 'dce_dashboards'));
+                    MvcUtils.redirect(Route.page(model.application.get('root'), model.application.get('locale'), model.application.get('app'), 'dashboards'));
                     dialog.remove();
                 });
             }, this);
@@ -296,6 +299,22 @@ define([
                 saveAsDialog.show();
             });
             return result.promise();
+        },
+        confirmPageRefresh: function() {
+            var dfd = $.Deferred();
+            var dialog = new TextDialog({
+                id: "modal_inline",
+                onHiddenRemove: true
+            });
+            dialog.settings.set("primaryButtonLabel", _("Refresh").t());
+            dialog.settings.set("cancelButtonLabel", _("Not Now").t());
+            dialog.settings.set("titleLabel", _("Page refresh required").t());
+            dialog.setText(sprintf(_("You have changed the dashboard theme. To see this change, you must refresh the page.\n Would you like to refresh the page now?").t()));
+            $("body").append(dialog.render().el);
+            dialog.once('click:primaryButton', dfd.resolve);
+            dialog.once('hide hidden', dfd.reject);
+            dialog.show();
+            return dfd.promise();
         }
     };
     return ActionHelper;

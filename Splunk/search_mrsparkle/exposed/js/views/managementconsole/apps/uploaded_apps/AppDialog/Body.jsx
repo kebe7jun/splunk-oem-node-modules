@@ -1,8 +1,8 @@
 import _ from 'underscore';
-import { createTestHook } from 'util/test_support';
-import React, { PropTypes } from 'react';
-import Modal from 'splunk-ui/components/Modal';
-import Message from 'splunk-ui/components/Message';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Modal from '@splunk/react-ui/Modal';
+import Message from '@splunk/react-ui/Message';
 
 const STRINGS = {
     GENERIC_ERROR: _('Unknown failure: Contact your administrator for details or try again later.').t(),
@@ -11,7 +11,7 @@ const STRINGS = {
 // Since this component only has the render function,
 // it has been written as a React Pure Component
 const Body = props =>
-    <Modal.Body {...createTestHook(module.id)}>
+    <Modal.Body data-test="UploadedApps-AppDialog-Body">
         { props.status &&
             <Message
                 type={props.status}

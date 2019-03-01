@@ -54,7 +54,7 @@ selected_heading = _("Selected %(fields)s") % { 'fields': _(element.get('label',
 if fetch_error:
     fetch_error = _("Failed to fetch data: ") + str(fetch_error)
     if elementName in ['srchIndexesDefault', 'srchIndexesAllowed']:
-        fetch_error += _(" Clicking save when no indexes are listed will remove all the previously selected indexes.")
+        context.kwargs["uiHelper"]["disableSaveButton"] = True
 %>
 
 ## Note: onChange events are wired up by initAccumulators() in admin.js

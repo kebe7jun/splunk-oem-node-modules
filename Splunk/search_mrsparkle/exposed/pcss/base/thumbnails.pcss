@@ -1,7 +1,6 @@
-
-/*  Thumbnails */
-/*  -------------------------------------------------- */
-
+/*===============================================================================================*/
+/*  SPLUNK: THUMBNAILS                                                                           */
+/*===============================================================================================*/
 
 /*  Note: `.thumbnails` and `.thumbnails > li` are overriden in responsive files */
 
@@ -19,7 +18,7 @@
 /*  Float li to make thumbnails appear in a row */
 .thumbnails > li {
   float: left; /*  Explicity set the float since we don't require .span* classes */
-  margin-bottom: $baseLineHeight;
+  margin-bottom: $lineHeight;
   margin-left: $gridGutterWidth;
 }
 
@@ -27,9 +26,9 @@
 .thumbnail {
   display: block;
   padding: 4px;
-  line-height: $baseLineHeight;
+  line-height: $lineHeight;
   border: 1px solid #ddd;
-  border-radius: $baseBorderRadius;
+  border-radius: $borderRadius;
   box-shadow: 0 1px 3px rgba(0,0,0,.055);
   transition: all .2s ease-in-out;
 }
@@ -49,5 +48,5 @@ a.thumbnail:focus {
 }
 .thumbnail .caption {
   padding: 9px;
-  color: $gray;
+  color: $gray45;
 }

@@ -9,6 +9,7 @@ define([
         'backbone',
         'module',
         'controllers/BaseManagerPageController',
+        'models/services/data/transforms/MetricSchema',
         'collections/knowledgeobjects/Sourcetypes',
         'models/knowledgeobjects/SourcetypeFetchData',
         'models/knowledgeobjects/Sourcetype',
@@ -26,6 +27,7 @@ define([
         Backbone,
         module,
         BaseController,
+        MetricTransformsModel,
         SourcetypesCollection,
         EAIFilterFetchData,
         SourcetypeModel,
@@ -93,7 +95,21 @@ define([
                 if (this.model.serverInfo && this.model.serverInfo.isCloud() && !options.isSingleInstanceCloud) {
                     options.showRollingRestartWarning = true;
                 }
-                
+
+                this.listenTo(this.model.controller, 'actionSuccess', function(action, entity) {
+                    if (action.action !== 'delete') {
+                        return;
+                    }
+                    var schemaName = action.entity.get('ui.metric_transforms.schema_name');
+                    if(!_.isEmpty(schemaName)) {
+                        schemaName = schemaName.split('metric-schema:')[1];
+                        var metricTransformsModel = new MetricTransformsModel({
+                            isCloud: this.model.serverInfo.isCloud()
+                        });
+                        metricTransformsModel.deleteMetricTranform(schemaName, this.model.entity);
+                    }
+                });
+
                 BaseController.prototype.initialize.call(this, options);
             },
 
@@ -101,6 +117,5 @@ define([
                 return splunkUtils.sprintf(
                     _("Deleting a source type can result in data being indexed incorrectly. Configurations that the source type used, such as field extractions and index-time filtering, will be irretrievably lost.  Once you perform this action, it cannot be undone.<br><br>Are you sure you want to delete source type %s?").t(), '<em>' + _.escape(entityToDelete.entry.get('name')) + '</em>');
             }
-
         });
     });

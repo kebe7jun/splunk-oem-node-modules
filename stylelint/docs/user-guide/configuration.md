@@ -2,6 +2,8 @@
 
 The linter *expects a configuration object*. You can either craft your own config or extend an existing one.
 
+<!-- TOC -->
+
 ## Loading the configuration object
 
 Finding and loading of your configuration object is done with [cosmiconfig](https://github.com/davidtheclark/cosmiconfig). Starting from the current working directory, it will look for the following possible sources, in this order:
@@ -22,7 +24,7 @@ The configuration object can have the following properties.
 
 ### `rules`
 
-Rules determine what the linter looks for and complains about. There are [over 150](rules.md) built into stylelint. *No rules are turned on by default*, so this is where you turn on everything you want to check. All the rules must be explicitly configured as *there are no default values*.
+Rules determine what the linter looks for and complains about. There are [over 160](rules.md) built into stylelint. *No rules are turned on by default*, so this is where you turn on everything you want to check. All the rules must be explicitly configured as *there are no default values*.
 
 The `rules` property is *an object whose keys are rule names and values are rule configurations*. Each rule configuration fits one of the following formats:
 
@@ -36,7 +38,7 @@ The `rules` property is *an object whose keys are rule names and values are rule
     "block-no-empty": null,
     "color-no-invalid-hex": true,
     "comment-empty-line-before": [ "always", {
-      "ignore": ["stylelint-command", "after-comment"]
+      "ignore": ["stylelint-commands", "after-comment"]
     } ],
     "declaration-colon-space-after": "always",
     "indentation": ["tab", {
@@ -278,7 +280,7 @@ If your processor has options, make that item an array whose first item is the "
 
 Provide a glob or array of globs to ignore specific files.
 
-(An alternative method is to use a `.stylelintignore` file, described below.)
+*Note that this is not an efficient method for ignoring lots of files.* If you want to ignore a lot of files efficiently, use `.stylelintignore` or adjust your files globs.
 
 If the globs are absolute paths, they are used as is. If they are relative, they are analyzed relative to
 
@@ -286,7 +288,7 @@ If the globs are absolute paths, they are used as is. If they are relative, they
 -   the config's filepath, if the config is a file that stylelint found a loaded;
 -   or `process.cwd()`.
 
-`node_modules` and `bower_components` are always ignored.
+By default, all `node_modules` and `bower_components` are ignored. Default values will be overridden if `ignoreFiles` is set.
 
 The `ignoreFiles` property is stripped from extended configs: only the root-level config can ignore files.
 
@@ -301,10 +303,8 @@ The default severity level for all rules that do not have a severity specified i
 
 You can use a `.stylelintignore` file (or point to another ignore patterns file) to ignore specific files.
 
-(An alternative method is to use a `config.ignoreFiles`, described above.)
+These files will be excluded from the files glob before the file system is check at all, so it is an efficient method for ignoring lots of files.
 
 The patterns in your `.stylelintignore` file must match [`.gitignore` syntax](https://git-scm.com/docs/gitignore). (Behind the scenes, [`node-ignore`](https://github.com/kaelzhang/node-ignore) parses your patterns.) One implication of this is that *your patterns in `.stylelintignore` are always analyzed relative to `process.cwd()`.*
 
 stylelint will look for a `.stylelintignore` file in `process.cwd()`. You can also specify a path to your ignore patterns file (absolute or relative to `process.cwd()`) using the `--ignore-path` (in the CLI) and `ignorePath` (in JS) options.
-
-`node_modules` and `bower_components` are always ignored.

@@ -1,29 +1,31 @@
-/*  Splunk: jquery UI theme */
-/*  ======================= */
-
+/*===============================================================================================*/
+/*  SPLUNK: JQUERY UI THEME                                                                      */
+/*===============================================================================================*/
 
 /*  generic widgets */
 /*  --------------- */
 
+$jquerySquareButtonSize: 32px;
+
 .ui-widget {
-	font-family: inherit;
+    font-family: inherit;
 }
 .ui-widget-header {
-	font-weight: normal;
-	background: transparent;
-	border: 0;
-	color: $grayDark;
-	a {
-		color: $black;
-	}
+    font-weight: normal;
+    background: transparent;
+     border: 0;
+    color: $textColor;
+    a {
+        color: $black;
+    }
 }
 .ui-corner-all {
 	border-radius: $containerBorderRadius;
 }
 .ui-icon {
 	font-family: "Splunk Icons";
-	width: $baseLineHeight;
-	height: $baseLineHeight;
+	width: $lineHeight;
+	height: $lineHeight;
 }
 
 
@@ -79,16 +81,15 @@
 }
 
 .ui-datepicker {
+
+	@mixin popdown-dialog;
+    background-color: $popupBackgroundColor;
 	width: 17em;
 	height: auto;
 	position: relative;
 	padding: 5px;
+    margin: 0;
 
-	box-shadow: 1px 2px 5px rgba(0,0,0,0.3);
-	border: 1px solid $interactiveBorderColor;
-	border-top-color: $interactiveBorderTopColor;
-	border-bottom-color: $interactiveBorderBottomColor;
-	background-color: $interactiveColor;
 
 	.ui-datepicker-header {
 		position: relative;
@@ -98,56 +99,44 @@
 
 	.ui-datepicker-title {
 		margin: 0 2.3em;
-		line-height: 1.8em;
+		line-height: $jquerySquareButtonSize;
 		text-align: center;
 	}
 
 	.ui-datepicker-prev, .ui-datepicker-next {
 		position: absolute;
 		text-decoration: none;
-		width: 24px;
-		height: 24px;
+
 		.ui-icon{
 			@mixin hide-text;
+			left: 0;
 			/*  override hide-text for ie-7 */
 		}
 		.ui-icon:after {
 			display: block;
 			position: absolute;
-
-			left: 50%;
-			top: 50%;
-			width: $baseLineHeight;
-			height: $baseLineHeight;
-
-			margin-left: -8px;
-			margin-top: -9px;
+            top: 0;
+            left: 0;
+            text-align: center;
+            width: $jquerySquareButtonSize;
+            line-height: $jquerySquareButtonSize;
+            color: $pillTextColor;
 
 			text-indent: 0;
-			font-size: 11px;
+			font-size: $fontSizeSmall;
 			font-family: "Splunk Icons";
-			line-height: 20px;
-			text-decoration: none;
-			color: $textColor;
 		}
 	}/* prev-next */
 
-	.ui-datepicker-prev {
-		top: 0;
-		left: 0;
-		border-radius: $interactiveBorderRadius;
-		.ui-icon:after {
+	.ui-datepicker-prev .ui-icon:after {
 			content: "\25C0";
-			margin-left: -4px
-		}
 	}
 	.ui-datepicker-next {
 		top: 0;
 		right: 0;
-		border-radius: $interactiveBorderRadius;
+
 		.ui-icon:after {
 			content: "\25B6";
-			margin-left: -3px; /*  not sure why this doesn't match up */
 		}
 	}
 
@@ -164,7 +153,7 @@
 			line-height: 10px;
 			padding: 0.7em 0.3em;
 			padding-top: 20px;
-			color: $textGray;
+			color: $dayOfWeekColor;
 			text-align: center;
 			border: 0;
 			font-weight: normal;
@@ -175,6 +164,7 @@
 				display: block;
 				padding: 0.2em;
 				text-align: right;
+                color: $pillTextColor;
 			}
 		}
 		a {
@@ -184,53 +174,47 @@
 		a:hover {text-decoration: none;}
 
 		.ui-state-default {
-			background: $offWhite;
-			border:1px solid $borderColor;
-			color: $linkColor;
+			background: $dateBackgroundColor;
+			border:1px solid $dateBorderColor;
+			color: $pillTextColor;
 		}
 		.ui-state-active {
-			@mixin gradient-vertical $grayLightMedium, $grayLighter;
-			box-shadow: $interactiveBoxShadowActive;
-			border-color: $interactiveBorderColor;
-			border-top-color: $interactiveBorderBottomColor;
-			font-weight: bold;
-			color: $textColor;
+			background-color: $dateBackgroundColorSelected;
+			border-color: $accentColor;
+			color: $linkColorHover;
 		}
 		.ui-state-hover {
-			border: 1px solid $linkColorHover;
-			background: $white;
-			font-weight: bold;
+			border-color: $accentColorL10;
+			background: $dateBackgroundColorHover;
 			color: $linkColorHover;
 		}
 	} /*  calendar */
 
 	a.ui-corner-all {
-		padding: 0;
-		/*  txt */
-		font-size: $baseFontSize;
-		font-weight: normal;
-		line-height: 25px;
-		/*  color */
-		color: $textColor;
-		background-color: $interactiveColor;
-		@mixin gradient-vertical color($interactiveColor l(-4%)), color($interactiveColor l(+4%));
-		/*  border */
-		border: 1px solid $white;
-		border-radius: $interactiveBorderRadius;
-		border-color: $interactiveBorderColor;
-		border-top-color: $interactiveBorderTopColor;
-		border-bottom-color: $interactiveBorderBottomColor;
-		box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+
+        display: inline-block;
+        @mixin button-padding; /*  note the vertical padding will be funky unless it's block, inline-block, or floated */
+        border-radius: $interactiveBorderRadius;
+
+        @mixin interactive none, transparent, none, $pillTextColor;
+        @mixin button-states link-style $linkColor, link-style, link-style $textDisabledColor, link-style-underline $linkColor;
+
+        width: $jquerySquareButtonSize;
+        height: $jquerySquareButtonSize;
+        text-align: center;
+        padding:0;
+
 	}
 
 	a.ui-corner-all:hover {
 		cursor: pointer; /*  ensure pointer if missing href */
-		border-color: $interactiveBorderColor;
-		border-top-color: $interactiveBorderTopColor;
-		border-bottom-color: $interactiveBorderBottomColor;
-		color: $textColor;
-		background: $white;
+		color: $linkColorHover;
+		background: $gray98;
 		font-weight: normal;
+
+		.ui-icon:after {
+    		color: $linkColorHover;
+        }
 	}
 
 }/* .ui-datepicker */
@@ -272,7 +256,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        @mixin translate -50%, -50%;
+        transform: translate(-50%, -50%);
         margin-top:-1px;
         display: block;
         border-radius: 3px;

@@ -194,6 +194,7 @@ define(
 
                 this.children.waitSpinner.stop();
                 this.children.waitSpinner.$el.hide();
+                this.children.methodPicker.activate();
 
                 if (!this.children.sidebar) {
                     this.createSidebar();
@@ -217,7 +218,7 @@ define(
                 this.children.table.$el.hide();
                 this.children.jobStatus.$el.hide();
                 this.children.searchbar.$el.hide();
-                this.children.methodPicker.$el.hide();
+                this.children.methodPicker.deactivate().$el.hide();
                 this.children.searchFlashMessage.$el.hide();
 
                 this.children.waitSpinner.$el.show();

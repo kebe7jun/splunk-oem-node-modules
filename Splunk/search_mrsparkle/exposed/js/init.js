@@ -126,8 +126,9 @@ if ( $.browser.msie && parseInt($.browser.version,10) < 8 ) {
 }
 
 Splunk.init508 = function(){
-	var navLink = '<a class="navSkip" href="#navSkip" tabIndex="1">' + _("Screen reader users, click here to skip the navigation bar") + '</a>';
-	var navAnchor = '<a name="navSkip" />';
+    var label = _('Screen reader users, click here to skip the navigation bar');
+	var navLink = '<a aria-label="' + label + '" class="navSkip" href="#navSkip" tabIndex="1">'+ _('Skip Navigation') + ' &gt; </a>';
+	var navAnchor = '<div id="navSkip" />';
 	if($('.appHeaderWrapper')){
         $(navLink).insertBefore('.appHeaderWrapper');
 

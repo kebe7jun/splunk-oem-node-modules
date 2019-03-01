@@ -71,8 +71,8 @@ define([
                 });
 
                 options.header = {
-                    pageDesc: _("Map the groups from your SAML server to roles in Splunk Enterprise. <br>").t() +
-                    _("Once mapped, SAML groups possess the abilities and permissions of the assigned Splunk roles. <br>").t() +
+                    pageDesc: _("Map the groups from your SAML server to roles in Splunk Enterprise.").t() + '<br/>' +
+                    _("Once mapped, SAML groups possess the abilities and permissions of the assigned Splunk roles.").t() + '<br/>' +
                     _("Click SAML Configuration to modify your existing SAML setup. Click New Group to add a new SAML group.").t(),
                     learnMoreLink: 'learnmore.launcher.saml'
                 };

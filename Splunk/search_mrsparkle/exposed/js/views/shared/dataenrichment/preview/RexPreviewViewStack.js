@@ -139,7 +139,9 @@ define([
                         results: this.model.eventResults
                     },
                     label: inputField === '_raw' ? _('Events').t() : inputField,
-                    resultsTableMasterOptions: this.model.state.pick('regex', 'inputField', 'requiredText'),
+                    resultsTableMasterOptions: $.extend(this.model.state.pick('regex', 'inputField', 'requiredText'), {
+                        enableTableDock: false
+                    }),
                     resultsTableMasterClass: MatchResultsTableMaster,
                     resultsControlBarClass: MatchResultsControlBar,
                     controlBarOptions: { showMatchControl: !!regex },
@@ -153,7 +155,7 @@ define([
                 this.listenTo(this.eventsPane, 'action:removeExtraction', _(this.trigger).partial('action:removeExtraction'));
                 this.listenTo(this.eventsPane, 'action:selectEvent', _(this.trigger).partial('action:selectEvent'));
                 this.listenTo(this.eventsPane, 'action:nextStep', _(this.trigger).partial('action:nextStep'));
-                
+
                 // For each output field, create a ViewValues Pane
                 this.viewValuesPanes = [];
                 _(outputFields).each(function(field) {
@@ -171,7 +173,7 @@ define([
                             html: _("The attribute was not found in the events. Try changing the sample size or the regular expression.").t()
                         }
                     });
-                    this.viewValuesPanes.push(valuesPane); 
+                    this.viewValuesPanes.push(valuesPane);
                     valuesPane.on('cellClick', this.handleCellClick, this);
                 }, this);
 
@@ -373,4 +375,3 @@ define([
         return RexPreviewViewStack;
 
     });
-

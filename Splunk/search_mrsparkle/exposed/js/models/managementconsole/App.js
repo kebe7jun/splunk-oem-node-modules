@@ -52,6 +52,10 @@ define([
                     return groups.length === 1 && groups[0] === INTERNAL_GROUP_NAMES.indexers;
                 },
 
+                isDisabled: function() {
+                    return this.entry.content.get('@disabled');
+                },
+
                 getPrefix: function() {
                     return _('App').t();
                 },
@@ -116,6 +120,10 @@ define([
                     } else {
                         return _('No description').t();
                     }
+                },
+
+                getTemplate: function() {
+                    return this.entry.content.get('template');
                 },
 
                 getViewObjectsUrl: function() {
@@ -229,6 +237,10 @@ define([
 
                 getLaunchUrl: function() {
                     return urlHelper.appUrl(this.entry.get('name'));
+                },
+
+                getSetupUrl: function() {
+                    return urlHelper.setupUrl(this.entry.get('name'));
                 }
             },
             {

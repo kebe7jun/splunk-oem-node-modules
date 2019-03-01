@@ -14,9 +14,7 @@ define([
         var defaults = {
           offset: 0,
           affix: '> div',
-          affixTopClassName: 'affix-top',
-          // DCE-OEM-CHANGE 根据 affix 自动监测位置
-          auto: false,
+          affixTopClassName: 'affix-top' 
         };
         _.defaults(options, defaults);
         DelegateBase.prototype.initialize.apply(this, arguments);
@@ -74,18 +72,7 @@ define([
         if (this.affixed === affix) return;
     
         this.affixed = affix;
-        // DCE-OEM-CHANGE 增加自动监测 affixElem 位置，确定其 left 选项
-        var affixElem = this.$(this.options.affix);
-        if (this.options.auto && affix) {
-          var left = affixElem.offset().left;
-          this.$(this.options.affix).css('left', left + 'px');
-        }
-
-        this.$(this.options.affix)[affix ? 'addClass' : 'removeClass'](this.options.affixTopClassName);
-        // DCE-OEM-CHANGE 增加自动监测 affixElem 位置，恢复其原 left 值
-        if (this.options.auto && !affix) {
-          this.$(this.options.affix).css('left', '');
-        }
+        this.$(this.options.affix)[affix ? 'addClass' :  'removeClass'](this.options.affixTopClassName);
       },
       disable: function() {
         this.$(this.options.affix).addClass('disabled');

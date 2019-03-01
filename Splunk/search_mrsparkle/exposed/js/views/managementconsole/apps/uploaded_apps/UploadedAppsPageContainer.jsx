@@ -2,7 +2,8 @@ import _ from 'underscore';
 import splunkUtils from 'splunk.util';
 import Package from 'models/managementconsole/Package';
 import TaskModel from 'models/managementconsole/Task';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import UploadedAppsPage from 'views/managementconsole/apps/uploaded_apps/UploadedAppsPage';
 
 const DOM_EXCEPTION_IS_DEFINED = typeof DOMException !== 'undefined';
@@ -11,9 +12,12 @@ const DOM_ERROR_IS_DEFINED = typeof DOMError !== 'undefined';
 const UPLOAD_READ_PERMISSION_ERROR = _('Upload failed: Could not read the package, enable read permissions.').t();
 const ACTION_CONFIRM_MESSAGE = [
     _('Are you sure you want to %s ').t(),
-    _(' (version %s').t(),
-    _(')? %s this app might cause Splunk Cloud to restart and be unavailable for some time.').t(),
+    _(' (version %s)').t(),
+    _('?').t(),
+    _(' This app might not run on a search head cluster deployment.').t(),
+    _(' %s this app might cause Splunk Cloud to restart and be unavailable for some time.').t(),
 ];
+const ACTION_DELETE_COMPLETE_MESSAGE = _(' has been deleted successfully.').t();
 const ACTION_IN_PROGRESS_MESSAGE = [
     _('Splunk Cloud is %s ').t(),
     _(' (version %s').t(),
@@ -35,6 +39,7 @@ const DUPLICATE_VERSION_ERROR_MESSAGE = [
     _(' (version %s) has already been uploaded.').t(),
     _('Update your package with a unique version and try again.').t(),
 ];
+const APP_VALIDATION_UNSUPPORTED_DEPLOYMENT = _('App validation failed: App does not support %s deployments.').t();
 
 const LABELS = {
     Upload: _('Upload').t(),
@@ -43,6 +48,7 @@ const LABELS = {
     Continue: _('Continue').t(),
     Install: _('Install').t(),
     Update: _('Update').t(),
+    Delete: _('Delete').t(),
     More_Info: _('More Info').t(),
     Action_Confirm: _(' - Confirm').t(),
     Action_Complete: _(' - Complete').t(),
@@ -56,6 +62,10 @@ const STATES = {
     SUCCESS: 3,
     STARTED: 4,
 };
+const DEPLOYMENT_TYPES = {
+    _search_head_clustering: _('search head cluster').t(),
+    _distributed: _('distributed').t(),
+};
 
 class UploadedAppsPageContainer extends React.Component {
     constructor(props) {
@@ -66,6 +76,35 @@ class UploadedAppsPageContainer extends React.Component {
         this.props.deployTask.entry.content.on('change:state', this.handleDeployTaskChange);
         this.state = this.getDefaultState();
         this.authToken = undefined;
+    }
+
+    /**
+     * Return a confirmation message
+     * @packageModel
+     *
+     * @operationLabels     An array of words describing the operation, with different tenses and capitalization.
+     *                      Refer to message templates and calling examples.
+     *
+     */
+    getConfirmationMessage(packageModel, operationLabels) {
+        const manifest = packageModel.entry.content.get('@manifest');
+
+        const showSHCWarning = this.props.isSHC && !(
+            manifest &&
+            manifest.supported_deployments && (
+                _.contains(manifest.supported_deployments, '_search_head_clustering') ||
+                _.contains(manifest.supported_deployments, '*')
+            )
+        );
+
+        return [
+            splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[0], operationLabels[0]),
+            <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
+            splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[1], this.packageModel.getApp().version),
+            ACTION_CONFIRM_MESSAGE[2],
+            showSHCWarning ? ACTION_CONFIRM_MESSAGE[3] : '',
+            splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[4], operationLabels[1]),
+        ];
     }
 
     getDefaultState = () => ({
@@ -96,6 +135,8 @@ class UploadedAppsPageContainer extends React.Component {
         canEdit: this.props.canEdit,
         onUpdatePackageOpen: this.handleUpdatePackageOpen,
         onUpdatePackage: this.handleUpdatePackage,
+        onDeletePackageOpen: this.handleDeletePackageOpen,
+        onDeletePackage: this.handleDeletePackage,
         onMoreInfoOpen: this.handleMoreInfoOpen,
         currentAppInstallDialog: undefined,
         loginDialogOpen: false,
@@ -257,6 +298,10 @@ class UploadedAppsPageContainer extends React.Component {
                     </ul>,
                     DUPLICATE_VERSION_ERROR_MESSAGE[2],
                 ];
+            } else if (errors[0].type === 'AppInstall_UnsupportedDeployment') {
+                title = splunkUtils.sprintf('%s - %s', APP_VALIDATION_FAILED_TITLE, LABELS.More_Info);
+                message = [splunkUtils.sprintf(APP_VALIDATION_UNSUPPORTED_DEPLOYMENT,
+                                               DEPLOYMENT_TYPES[errors[0].payload.deployment])];
             } else {
                 title = splunkUtils.sprintf('%s - %s', APP_VALIDATION_FAILED_TITLE, LABELS.More_Info);
                 message = [this.packageModel.getDmcErrorMessage()];
@@ -295,12 +340,9 @@ class UploadedAppsPageContainer extends React.Component {
             buttonLabel: LABELS.Cancel,
             status: 'info',
             taskStatus: STATES.NEW,
-            responseMessage: [
-                splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[0], _('install').t()),
-                <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
-                splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[1], this.packageModel.getApp().version),
-                splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[2], _('Installing').t()),
-            ],
+            responseMessage: this.getConfirmationMessage(packageModel,
+                [_('install').t(), _('Installing').t()],
+            ),
         });
     }
 
@@ -328,34 +370,46 @@ class UploadedAppsPageContainer extends React.Component {
                 ],
             });
 
-            this.installTask.beginPolling()
-            .done(() => {
-                this.setState({
-                    status: 'success',
-                    responseMessage: [
-                        <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
-                        splunkUtils.sprintf(ACTION_SUCCESS_MESSAGE, this.packageModel.getApp().version,
-                                            _('installed').t()),
-                    ],
-                    actionDialogTitle: LABELS.Install + LABELS.Action_Complete,
-                    buttonLabel: LABELS.Close,
-                    taskStatus: STATES.SUCCESS,
+            const pollInstallTask = () => {
+                this.installTask.beginPolling()
+                .done(() => {
+                    this.setState({
+                        status: 'success',
+                        responseMessage: [
+                            <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
+                            splunkUtils.sprintf(ACTION_SUCCESS_MESSAGE, this.packageModel.getApp().version,
+                                                _('installed').t()),
+                        ],
+                        actionDialogTitle: LABELS.Install + LABELS.Action_Complete,
+                        buttonLabel: LABELS.Close,
+                        taskStatus: STATES.SUCCESS,
+                    });
+                    this.props.packages.fetch();
+                })
+                .fail(() => {
+                    this.setState({
+                        status: 'error',
+                        responseMessage: [
+                            <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
+                            splunkUtils.sprintf(ACTION_FAIL_MESSAGE, this.packageModel.getApp().version,
+                                                _('installed').t()),
+                        ],
+                        actionDialogTitle: LABELS.Install_Fail,
+                        buttonLabel: LABELS.Close,
+                        taskStatus: STATES.FAIL,
+                    });
                 });
-                this.props.packages.fetch();
-            })
-            .fail(() => {
-                this.setState({
-                    status: 'error',
-                    responseMessage: [
-                        <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
-                        splunkUtils.sprintf(ACTION_FAIL_MESSAGE, this.packageModel.getApp().version,
-                                            _('installed').t()),
-                    ],
-                    actionDialogTitle: LABELS.Install_Fail,
-                    buttonLabel: LABELS.Close,
-                    taskStatus: STATES.FAIL,
-                });
-            });
+            };
+
+            pollInstallTask();
+            this.installTask.on('serverValidated', (success, context, messages) => {
+                const netErrorMsg = _.find(messages, msg =>
+                    msg.type === 'network_error' || msg.text === 'Server error',
+                );
+                if (netErrorMsg) {
+                    pollInstallTask();
+                }
+            }, this);
         })
         .fail((xhrArgs, responseMessage) => {
             let message;
@@ -393,12 +447,9 @@ class UploadedAppsPageContainer extends React.Component {
             buttonLabel: LABELS.Cancel,
             status: 'info',
             taskStatus: STATES.NEW,
-            responseMessage: [
-                splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[0], _('update').t()),
-                <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
-                splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[1], this.packageModel.getApp().version),
-                splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[2], _('Updating').t()),
-            ],
+            responseMessage: this.getConfirmationMessage(packageModel,
+                [_('update').t(), _('Updating').t()],
+            ),
         });
     }
 
@@ -426,34 +477,46 @@ class UploadedAppsPageContainer extends React.Component {
                 ],
             });
 
-            this.installTask.beginPolling()
-            .done(() => {
-                this.setState({
-                    status: 'success',
-                    responseMessage: [
-                        <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
-                        splunkUtils.sprintf(ACTION_SUCCESS_MESSAGE, this.packageModel.getApp().version,
-                                            _('updated').t()),
-                    ],
-                    actionDialogTitle: LABELS.Update + LABELS.Action_Complete,
-                    buttonLabel: LABELS.Close,
-                    taskStatus: STATES.SUCCESS,
+            const pollInstallTask = () => {
+                this.installTask.beginPolling()
+                .done(() => {
+                    this.setState({
+                        status: 'success',
+                        responseMessage: [
+                            <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
+                            splunkUtils.sprintf(ACTION_SUCCESS_MESSAGE, this.packageModel.getApp().version,
+                                                _('updated').t()),
+                        ],
+                        actionDialogTitle: LABELS.Update + LABELS.Action_Complete,
+                        buttonLabel: LABELS.Close,
+                        taskStatus: STATES.SUCCESS,
+                    });
+                    this.props.packages.fetch();
+                })
+                .fail(() => {
+                    this.setState({
+                        status: 'error',
+                        responseMessage: [
+                            <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
+                            splunkUtils.sprintf(ACTION_FAIL_MESSAGE, this.packageModel.getApp().version,
+                                                _('updated').t()),
+                        ],
+                        actionDialogTitle: LABELS.Update + LABELS.Action_Fail,
+                        buttonLabel: LABELS.Close,
+                        taskStatus: STATES.FAIL,
+                    });
                 });
-                this.props.packages.fetch();
-            })
-            .fail(() => {
-                this.setState({
-                    status: 'error',
-                    responseMessage: [
-                        <b key={this.packageModel.id}>{ this.packageModel.getApp().label }</b>,
-                        splunkUtils.sprintf(ACTION_FAIL_MESSAGE, this.packageModel.getApp().version,
-                                            _('updated').t()),
-                    ],
-                    actionDialogTitle: LABELS.Update + LABELS.Action_Fail,
-                    buttonLabel: LABELS.Close,
-                    taskStatus: STATES.FAIL,
-                });
-            });
+            };
+
+            pollInstallTask();
+            this.installTask.on('serverValidated', (success, context, messages) => {
+                const netErrorMsg = _.find(messages, msg =>
+                    msg.type === 'network_error' || msg.text === 'Server error',
+                );
+                if (netErrorMsg) {
+                    pollInstallTask();
+                }
+            }, this);
         })
         .fail((xhrArgs, responseMessage) => {
             this.setState({
@@ -500,6 +563,64 @@ class UploadedAppsPageContainer extends React.Component {
         return promise;
     }
 
+
+    handleDeletePackageOpen = (packageModel) => {
+        this.packageModel = packageModel;
+
+        const app = this.packageModel.getApp();
+        const responseMessage = [splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[0], _('delete').t())];
+
+        if (app) {
+            responseMessage.push(
+                <b key={this.packageModel.id}>{ app.label }</b>,
+                splunkUtils.sprintf(ACTION_CONFIRM_MESSAGE[1], app.version),
+            );
+        } else {
+            responseMessage.push(<b key={this.packageModel.id}>{ this.packageModel.getUploadedFileName() }</b>);
+        }
+        responseMessage.push(ACTION_CONFIRM_MESSAGE[2]);
+        this.setState({
+            action: LABELS.Delete,
+            actionDialogOpen: true,
+            actionDialogTitle: LABELS.Delete + LABELS.Action_Confirm,
+            buttonLabel: LABELS.Cancel,
+            status: 'info',
+            taskStatus: STATES.NEW,
+            responseMessage,
+        });
+    }
+
+    handleDeletePackage = () => {
+        this.setState({
+            taskStatus: STATES.STARTED,
+        });
+        this.packageModel.delete(this.state.action)
+        .done(() => {
+            const app = this.packageModel.getApp();
+            const appId = app ? app.label : this.packageModel.getUploadedFileName();
+            const responseMessage = [
+                <b key={this.packageModel.id}>{appId}</b>,
+                ACTION_DELETE_COMPLETE_MESSAGE,
+            ];
+            this.setState({
+                status: 'success',
+                actionDialogTitle: LABELS.Delete + LABELS.Action_Complete,
+                responseMessage,
+                buttonLabel: LABELS.Close,
+                taskStatus: STATES.SUCCESS,
+            });
+        })
+        .fail((xhrArgs, responseMessage) => {
+            this.setState({
+                status: 'error',
+                actionDialogTitle: LABELS.Delete + LABELS.Action_Fail,
+                responseMessage: responseMessage.t(),
+                buttonLabel: LABELS.Cancel,
+                taskStatus: STATES.FAIL,
+            });
+        });
+    }
+
     render() {
         return <UploadedAppsPage {...this.state} />;
     }
@@ -521,6 +642,7 @@ UploadedAppsPageContainer.propTypes = {
         inProgress: PropTypes.func,
     }),
     canEdit: PropTypes.bool,
+    isSHC: PropTypes.bool,
 };
 
 UploadedAppsPageContainer.defaultProps = {
@@ -528,6 +650,7 @@ UploadedAppsPageContainer.defaultProps = {
     pollPackagesCollection: undefined,
     deployTask: undefined,
     canEdit: false,
+    isSHC: false,
 };
 
 export default UploadedAppsPageContainer;

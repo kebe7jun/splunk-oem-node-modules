@@ -4,13 +4,13 @@
  *
  * <example>
     :pushFile.js
-    var data = new Buffer("Hello World").toString('base64'))
+    var data = new Buffer("Hello World").toString('base64')
     browser.pushFile('/data/local/tmp/file.txt', data)
  * </example>
  *
  * @param {String} path  local path to file
  *
- * @see  https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/appium-bindings.md#push-file
+ * @see  https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/other/appium-bindings.md#push-file
  * @type mobile
  * @for ios, android
  *

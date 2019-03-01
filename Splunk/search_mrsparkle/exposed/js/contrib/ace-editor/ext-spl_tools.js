@@ -71,6 +71,9 @@ function(require, exports, module) {
             // Overrides the cursor style default set in the init.
             this.popup.renderer.content.style.cursor = "pointer";
             
+            // hide textarea element from screen readers
+            this.popup.renderer.textarea.setAttribute('aria-hidden', 'true');
+            
             // Overrides show method to adjust popup position.
             var originalShow = this.popup.show.bind(this.popup);
             this.popup.show = function(pos, lineHeight, topdownOnly) {

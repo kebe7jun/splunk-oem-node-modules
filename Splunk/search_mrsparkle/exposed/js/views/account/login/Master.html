@@ -1,10 +1,11 @@
 <% if (!model.serverInfo.isFreeLicense()) { %>
     <form method="post" class="loginForm" action="<%- route.proxyLogin(model.application.get("root"), model.application.get("locale")) %>">
         <fieldset>
+            <legend class="visuallyhidden" ><%- _('Sign In').t() %></legend>
             <% if (model.serverInfo.isLicenseStatePreviouslyKeyed()) { %>
-                <input class="splButton-primary btn" type="submit" value="<%- _('N/A').t() %>" disabled />
+                <input class="splButton-primary btn btn-primary" type="submit" value="<%- _('N/A').t() %>" disabled />
             <% } else { %>
-                <input class="splButton-primary btn" type="submit" value="<%- _('Sign in').t() %>" />
+                <input class="splButton-primary btn btn-primary" type="submit" value="<%- _('Sign In').t() %>" />
             <% } %>
             <input type="hidden" name="cval" value="<%- model.session.entry.content.get("cval") || "" %>">
             <input type="hidden" name="return_to" value="<%- model.application.get("return_to") || "" %>">

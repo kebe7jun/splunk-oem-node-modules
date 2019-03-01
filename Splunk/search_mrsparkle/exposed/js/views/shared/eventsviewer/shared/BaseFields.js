@@ -280,7 +280,7 @@ define(
                         '<%  _(fieldlist).each(function(mv_field, j) { %>' +
                             '<tr>' +
                                '<% if(i==0 && j==0 && label) { %>'+
-                                   '<td rowspan="<%= m.getFieldsLength(fields) %>" class="field-type"><%- label %></td>'+
+                                   '<td rowspan="<%= m.getFieldsLength(fields) %>" class="field-type" tabindex="0"><%- label %></td>'+
                                '<% } %>'+
                                '<% if(selectableFields && j==0) { %>'+
                                    '<td rowspan="<%= fieldlist.length %>" class="col-visibility"><label class="checkbox" data-field-name="<%- field %>">'+
@@ -305,12 +305,12 @@ define(
                                    '<a data-field-name="<%- field %>"  class="f-v" href="#"><%- mv_field %></a>'+
                                    '<% var tags = m.getTags(field, mv_field); %>'+
                                    '<% if (tags.length) { %>'+
-                                       '(<% _(tags).each(function(tag, idx){ %>'+
+                                       ' (<% _(tags).each(function(tag, idx){ %>'+
                                             '<% var taggedFieldName = "tag::"+field %>'+
                                             '<a data-field-name="<%- field %>" data-field-value="<%- mv_field %>" data-tagged-field-name="<%- taggedFieldName %>"'+
                                             'class="tag<%- m.highlighted.hasFieldValue(taggedFieldName, tag) ? " a" : ""%>" href="#">'+
                                             '<%- tag %><%if(idx!=tags.length-1){%> <%}%></a>'+
-                                        '<% }); %>)'+
+                                        '<% }); %>) '+
                                    '<% } %>'+
                                '</td>'+
                                '<td  class="actions popdown">'+
@@ -323,7 +323,7 @@ define(
                     '<% } else { %>'+
                         '<tr>'+
                            '<% if(i==0 && label) { %>'+
-                               '<td rowspan="<%= m.getFieldsLength(fields) %>" class="field-type"><%- label %></td>'+
+                               '<td rowspan="<%= m.getFieldsLength(fields) %>" class="field-type" tabindex="0"><%- label %></td>'+
                            '<% } %>'+
                            '<% if(selectableFields) { %>'+
                                '<td rowspan="<%= fieldlist.length %>" class="col-visibility"><label class="checkbox" data-field-name="<%- field %>">'+
@@ -348,12 +348,12 @@ define(
                                '<a data-field-name="<%- field %>"  class="f-v" href="#"><%- m.get(field)[0] %></a>'+
                                '<% var tags = m.getTags(field, m.get(field)); %>'+
                                '<% if (tags.length > 0) { %>'+
-                                   '(<% _(tags).each(function(tag, idx){ %>'+
+                                   ' (<% _(tags).each(function(tag, idx){ %>'+
                                         '<% var taggedFieldName = "tag::"+field %>'+
                                         '<a data-field-name="<%- field %>" data-field-value="<%- m.get(field)[0] %>" data-tagged-field-name="<%- taggedFieldName %>"'+ 
                                         'class="tag<%- m.highlighted.hasFieldValue(taggedFieldName, tag) ? " a" : ""%>" href="#">'+
                                         '<%- tag %><%if(idx!=tags.length-1){%> <%}%></a>'+
-                                    '<% }); %>)'+
+                                    '<% }); %>) '+
                                '<% } %>'+
                            '</td>'+
                            '<td  class="actions">'+

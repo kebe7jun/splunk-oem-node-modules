@@ -12,7 +12,6 @@ define(function(require, exports, module) {
     var LazyEventsViewer = require("views/shared/eventsviewer/LazyEventsViewer");
     var BaseSplunkView = require("./basesplunkview");
     var Messages = require("./messages");
-    var mvc = require("./mvc");
     var PaginatorView = require("./paginatorview");
     var Utils = require("./utils");
     var sharedModels = require('./sharedmodels');
@@ -220,7 +219,9 @@ define(function(require, exports, module) {
 
         initialize: function(options) {
             this.configure();
-            this.model = this.options.reportModel || TokenAwareModel._createReportModel(this.reportDefaults);
+            this.model = this.options.reportModel || TokenAwareModel._createReportModel(this.reportDefaults, {
+                _tokenRegistry: this.options.settingsOptions.registry
+            });
             this.settings._sync = Utils.syncModels({
                 source: this.settings,
                 dest: this.model,
@@ -310,7 +311,7 @@ define(function(require, exports, module) {
             // kick the manager change machinery so that it does whatever is
             // necessary when no manager is present.
             if (!this.manager) {
-                this.onManagerChange(mvc.Components, null);
+                this.onManagerChange(this.registry, null);
             }
         },
         configure: function() {

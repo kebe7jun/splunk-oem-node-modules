@@ -1,9 +1,10 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import BackboneAdapterBase from 'components/BackboneAdapterBase';
 import SearchControl from 'views/shared/controls/SearchTextareaControl';
 import Backbone from 'backbone';
 import ModelHelper from 'controllers/dashboard/helpers/ModelHelper';
 import UserModel from 'models/services/authentication/User';
+import { getSearchEditorTheme } from 'util/theme_utils';
 import { createTestHook } from 'util/test_support';
 
 class SearchEditor extends BackboneAdapterBase {
@@ -63,18 +64,19 @@ class SearchEditor extends BackboneAdapterBase {
             collection: {
                 searchBNFs: this.collection.searchBNFs,
             },
+            syntaxHighlighting: getSearchEditorTheme(),
         });
     }
 }
 
 SearchEditor.propTypes = {
-    value: React.PropTypes.string,
-    onChange: React.PropTypes.func.isRequired,
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
 };
 
 SearchEditor.contextTypes = {
-    model: React.PropTypes.object.isRequired,
-    collection: React.PropTypes.object.isRequired,
+    model: PropTypes.object.isRequired,
+    collection: PropTypes.object.isRequired,
 };
 
 export default SearchEditor;

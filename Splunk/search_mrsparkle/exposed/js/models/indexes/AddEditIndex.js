@@ -74,7 +74,7 @@ define([
                 {
                     fn: function(value, attr, computedState){
                         value += "";
-                        if (computedState.enableTsidxReduction && !value.match(/^[\d]+$/)) {
+                        if (computedState.enableTsidxReduction && computedState.dataType === 'event' && !value.match(/^[\d]+$/)) {
                             return _("Age has to be a positive integer.").t();
                         }
                         return;

@@ -102,6 +102,8 @@ a {
 
 Reverse the primary option for declarations that come after a comment.
 
+Shared-line comments do not trigger this option.
+
 For example, with `"always"`:
 
 The following patterns are considered violations:
@@ -114,11 +116,27 @@ a {
 }
 ```
 
+```css
+a {
+  bottom: 5px; /* comment */
+  top: 5px;
+}
+```
+
 The following patterns are *not* considered violations:
 
 ```css
 a {
   /* comment */
+  top: 5px;
+}
+
+```
+
+```css
+a {
+  bottom: 5px; /* comment */
+
   top: 5px;
 }
 
@@ -128,6 +146,8 @@ a {
 
 Reverse the primary option for declarations that come after another declaration.
 
+Shared-line comments do not affect this option.
+
 For example, with `"always"`:
 
 The following patterns are considered violations:
@@ -141,12 +161,29 @@ a {
 }
 ```
 
+```css
+a {
+
+  bottom: 15px; /* comment */
+
+  top: 5px;
+}
+```
+
 The following patterns are *not* considered violations:
 
 ```css
 a {
 
   bottom: 15px;
+  top: 5px;
+}
+```
+
+```css
+a {
+
+  bottom: 15px; /* comment */
   top: 5px;
 }
 ```
@@ -178,7 +215,7 @@ a {
 }
 ```
 
-### `ignore: ["after-comment", "after-declaration", "inside-single-line-block"]`
+### `ignore: ["after-comment", "after-declaration", "first-nested", "inside-single-line-block"]`
 
 #### `"after-comment"`
 
@@ -228,6 +265,22 @@ a {
 
   bottom: 15px;
   top: 15px;
+}
+```
+
+#### `"first-nested"`
+
+Ignore declarations that are nested and the first child of their parent node.
+
+For example, with `"always"`:
+
+The following patterns are *not* considered violations:
+
+```css
+a {
+  bottom: 15px;
+
+  top: 5px;
 }
 ```
 

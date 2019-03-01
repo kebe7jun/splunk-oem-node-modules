@@ -87,8 +87,8 @@ define(
                 }, this);
     
                 if (this.model.masterInfo) {
-                    this.model.masterInfo.entry.content.on('change:rolling_restart_flag', function(){
-                        if (this.model.masterInfo.entry.content.get('rolling_restart_flag')) {
+                    this.model.masterInfo.entry.content.on('change:rolling_restart_or_upgrade', function() {
+                        if (this.model.masterInfo.entry.content.get('rolling_restart_or_upgrade')) {
                             this.$el.find('a#rollingRestart').addClass('disabled');
                         } else {
                             this.$el.find('a#rollingRestart').removeClass('disabled');
@@ -153,6 +153,7 @@ define(
                     e.preventDefault();
                     this.children.rollingRestartConfirmation = new RollingRestartDialog({
                         model: {
+                            restartClusterStatus: this.model.restartClusterStatus,
                             restartCluster: this.model.restartCluster,
                             clusterConfig: this.model.clusterConfig,
                             masterInfo: this.model.masterInfo,
@@ -191,7 +192,7 @@ define(
                     });
                 }
                 if (this.model.masterInfo &&
-                    this.model.masterInfo.entry.content.get('rolling_restart_flag')) {
+                    this.model.masterInfo.entry.content.get('rolling_restart_or_upgrade')) {
                     this.$el.find('a#rollingRestart').addClass('disabled');
                 } else {
                     this.$el.find('a#rollingRestart').removeClass('disabled');

@@ -67,7 +67,7 @@ define(
                     e.preventDefault();
                     this.handleFieldHover(e);
                 },
-                'mouseover .list-picker-heading': function(e) {
+                'mouseover .list-picker-heading, .add-missing-item': function(e) {
                     this.removeFieldInfo();
                     e.preventDefault();
                 }

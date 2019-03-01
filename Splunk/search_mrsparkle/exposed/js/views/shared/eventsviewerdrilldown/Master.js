@@ -80,9 +80,7 @@ define(
                 });
 
                 this.lastTargetElement = $target[0];
-                this.children.tagDrilldown.render().appendTo($('body')).show($target, {
-                    onClickCloseFocus: $target.closest('tr.tabbable-list-row, tr.tabbable-table-primary-row, tr.tabbable-table-secondary-row')
-                });
+                this.children.tagDrilldown.render().appendTo($('body')).show($target);
             },
             openSegmentationDrilldown: function(drilldownInfo) {
                 var $target = drilldownInfo.$target,
@@ -119,9 +117,7 @@ define(
                 });
 
                 this.lastTargetElement = $target[0];
-                this.children.segmentationDrilldown.render().appendTo($('body')).show($target, {
-                    $onClickCloseFocus: $target.closest('tr.tabbable-list-row, tr.tabbable-table-primary-row, tr.tabbable-table-secondary-row')
-                });
+                this.children.segmentationDrilldown.render().appendTo($('body')).show($target);
                 this.listenToOnce(this.children.segmentationDrilldown, 'hidden', function() {
                     $target.removeClass('selected-segment');
                 });
@@ -167,8 +163,7 @@ define(
 
                 this.lastTargetElement = $pointTo[0];
                 this.children.fieldValueDrilldown.render().appendTo($('body')).show($pointTo, {
-                    $toggle: drilldownInfo.$target,
-                    $onClickCloseFocus: $pointTo.closest('tr.tabbable-list-row, tr.tabbable-table-primary-row, tr.tabbable-table-secondary-row')
+                    $toggle: drilldownInfo.$target
                 });
                 this.listenToOnce(this.children.fieldValueDrilldown, 'hidden', function() {
                     $pointTo.removeClass('selected-segment');
@@ -199,9 +194,8 @@ define(
                 });
 
                 this.children.timeInfoDrilldown.render().appendTo($('body')).show(drilldownInfo.$anchor, {
-                    $toggle: drilldownInfo.$target,
-                    $onClickCloseFocus: drilldownInfo.$anchor.closest('tr.tabbable-list-row, tr.tabbable-table-primary-row, tr.tabbable-table-secondary-row')
-                });         
+                    $toggle: drilldownInfo.$target
+                });
             },
             drilldownHandler: function(drilldownInfo) {
                 var newWindow, domEvent, drilldown, ddDeferred;

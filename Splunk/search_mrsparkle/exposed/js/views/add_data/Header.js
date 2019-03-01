@@ -74,7 +74,7 @@ define(
                     {
                         label: _('Done').t(),
                         value: 'success',
-                        nextLabel: _('').t()
+                        nextLabel: ''
                     }
                 ]);
 

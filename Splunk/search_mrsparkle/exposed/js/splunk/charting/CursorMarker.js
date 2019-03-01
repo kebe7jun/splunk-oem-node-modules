@@ -71,11 +71,11 @@ define(function(require, exports, module) {
 
             this.addStyleClass("splunk-charting-CursorMarker");
 
-            this._fillBrush = new SolidFillBrush(Color.fromNumber(0xD9D9D9), 1);
+            this._fillBrush = new SolidFillBrush(Color.fromNumber(0x007DB3), 1);
 
-            this._lineBrush = new SolidStrokeBrush(Color.fromNumber(this.getInternal("foregroundColor")), 0.4).set("caps", "square");
+            this._lineBrush = new SolidStrokeBrush(Color.fromNumber(0x03A2D6), 1).set("caps", "square");
 
-            this._backgroundBrush = new SolidFillBrush(Color.fromNumber(0xEAEAEA), 0.66);
+            this._backgroundBrush = new SolidFillBrush(Color.fromNumber(0x1796D1), 0.2);
 
             this._labelGraphics = new Canvas();
             this._labelGraphics.element.style.position = "absolute";
@@ -168,7 +168,7 @@ define(function(require, exports, module) {
 
             if ((relativeValue > 0) && (relativeValue <= 1)) {
                 var lineBrush = this._lineBrush;
-                lineBrush.set("color", Color.fromNumber(this.getInternal("foregroundColor")));
+                lineBrush.set("color", Color.fromNumber(0x03A2D6));
                 lineBrush.beginBrush(graphics);
                 lineBrush.moveTo(x2, y1);
                 lineBrush.lineTo(x2, y2);

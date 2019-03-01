@@ -3,7 +3,6 @@ define([
     'underscore',
     'module',
     'views/Base',
-    'views/shared/Icon',
     'contrib/text!./Section.html',
     './Section.pcssm'
 ],
@@ -12,7 +11,6 @@ function(
     _,
     module,
     BaseView,
-    IconView,
     systemMenuSectionTemplate,
     css
 ){
@@ -26,14 +24,11 @@ function(
             itemsArray.sort(function(a,b){
                 return parseInt(a.get('order'), 10) - parseInt(b.get('order'), 10);
             });
-
-            this.children.icon = new IconView({icon: this.model.get('icon')});
         },
         render: function() {
             var html = this.compiledTemplate({model: this.model, css: css});
             this.$el.html(html);
 
-            this.children.icon.render().appendTo(this.$('[data-role=icon]'));
             return this;
         }
     });

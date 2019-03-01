@@ -41,7 +41,7 @@ define([
                         modelAttribute: 'name',
                         model: this.model.entity.entry
                     },
-                    controlClass: 'controls-block',
+
                     label: _('Group Name').t()
                 });
 
@@ -58,7 +58,7 @@ define([
                         availableItems: availableItems,
                         selectedItems: selectedItems
                     },
-                    controlClass: 'controls-block',
+
                     label: _('Splunk Roles').t()
                 });
             },

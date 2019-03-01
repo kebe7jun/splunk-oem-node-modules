@@ -24,7 +24,8 @@ define(
             render: function() {
                 var description = this.model.get('description');
                 this.$el[description ? 'removeClass' : 'addClass']('hidden');
-                this.$el.text(_(description || '').t());
+                this.$el.text(description || '');
+
                 return this;
             }
         });

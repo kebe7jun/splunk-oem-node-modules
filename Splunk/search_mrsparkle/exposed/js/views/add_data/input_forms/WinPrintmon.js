@@ -43,7 +43,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'print-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -59,7 +58,6 @@ define(
                 this.children.eventTypes = new ControlGroup({
                     className: 'reg-eventTypes control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.type',
                         model: this.model.input,
@@ -74,7 +72,6 @@ define(
                 this.children.baseline = new ControlGroup({
                     className: 'reg-baseline control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'ui.baseline',
                         model: this.model.input,
@@ -91,19 +88,19 @@ define(
             faqList: [
                 {
                     question: _('What information does the Windows print monitoring input gather?').t(),
-                    answer: _('The print monitoring input retrieves information on the Windows print subsystem. This \
-                    includes the number of printers, the number and status of jobs, the installed drivers, and the \
-                    available printer ports.').t()
+                    answer: _('The print monitoring input retrieves information on the Windows print subsystem. This ' +
+                    'includes the number of printers, the number and status of jobs, the installed drivers, and the ' +
+                    'available printer ports.').t()
                 },
                 {
-                    question: _('Does Splunk need to run as an administrative user to access print monitoring information?').t(),
-                    answer: _('Yes. You must run Splunk as the "Local System" user or as a domain user that is a member of the local Administrators group.').t()
+                    question: _('Does the Splunk platform need to run as an administrative user to access print monitoring information?').t(),
+                    answer: _('Yes. You must run the Splunk platform as the "Local System" user or as a domain user that is a member of the local Administrators group.').t()
                 },
                 {
                     question: _('Can I configure Windows print monitoring on remote Windows machines?').t(),
-                    answer: _('Yes, if you install a universal forwarder on the machines that you want to get this \
-                    information from. You can\’t collect this type of data from remote machines from this Splunk \
-                    instance.').t()
+                    answer: _('Yes, if you install a universal forwarder on the machines that you want to get this ' +
+                    'information from. You can\'t collect this type of data from remote machines from this Splunk platform ' +
+                    'instance.').t()
                 }
              ],
 

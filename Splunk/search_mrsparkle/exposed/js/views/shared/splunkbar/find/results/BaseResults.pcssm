@@ -22,6 +22,9 @@
 
 .primaryLink {
     composes: primaryLink from '../../../MenuDialog.pcssm';
+    > i {
+        padding-right: $spacingQuarter;
+    }
 }
 .secondaryLink {
     composes: secondaryLink from '../../../MenuDialog.pcssm';
@@ -29,6 +32,6 @@
 
 .header {
     padding: 5px 10px;
-    color: $textGray;
+    color: $placeholderText;
     border-bottom: 1px solid $borderColor;
 }

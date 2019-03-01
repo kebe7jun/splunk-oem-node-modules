@@ -72,7 +72,6 @@ define([
 
                 this.children.sharingRadioGroup = new ControlGroup({
                     controls: [this.children.sharingRadio],
-                    controlClass: 'controls-thirdblock',
                     label: _("Sharing Context:").t()});
 
                 this.children.flashMessagesView = new FlashMessagesView({model:this.model});
@@ -143,5 +142,3 @@ define([
 
         });
     });
-
-

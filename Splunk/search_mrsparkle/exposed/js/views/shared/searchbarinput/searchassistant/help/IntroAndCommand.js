@@ -93,10 +93,9 @@ define(
                 return this;
             },
             two_step_intro_template: '\
-                <h5><%- _("How To Search").t() %></h5>\
+                <h3><%- _("How To Search").t() %></h3>\
                 <span class="intro-and-command-steps"><%- _("Step 1: Retrieve Events").t() %></span>\
-                <p><%- _("The simplest searches return events that match terms you type into the \
-                    search bar:").t() %></p>\
+                <p><%- _("The simplest searches return events that match terms you type into the search bar:").t() %></p>\
                 <table>\
                     <tbody>\
                         <tr>\
@@ -132,7 +131,7 @@ define(
                 </p>\
             ',
             using_search_commands_template:'\
-                <h5><%- _("How To Search").t() %></h5>\
+                <h3><%- _("How To Search").t() %></h3>\
                 <span class=intro-and-command-steps><%- _("Using Search Commands").t() %></span>\
                 <%- _("More advanced searches use commands to transform, filter, and report on the events you retrieved.").t() %>\
                 <ul>\
@@ -145,7 +144,7 @@ define(
             ',
             command_template: '\
                 <div class="intro-and-command-header">\
-                    <h5><%- _(command.get("name")).t() %></h5>\
+                    <h3><%- _(command.get("name")).t() %></h3>\
                     <a class="external" href="<%= commandHelpLink %>" target="_blank" title="<%- _(\"Splunk Help\").t() %>"><%- _("Help").t() %></a>\
                     <a class="saMoreLink" href="#" title="<%- _(\"See complete description\").t() %>" id="detailsLabel" divToShow="#detailsdiv"><%= _("More &raquo;").t() %></a>\
                 </div>\
@@ -153,13 +152,13 @@ define(
                         <div><%= _(shortDesc).t() %></div>\
                         <dl id="detailsdiv" style="display: none">\
                             <dt>\
-                                <h5><%- _("Details").t() %></h5>\
+                                <h3><%- _("Details").t() %></h3>\
                             </dt>\
                             <dd>\
                                 <%= _(details).t() %>\
                             </dd>\
                             <dt class="syntax-header">\
-                                <h5><%-_("Syntax").t() %></h5>\
+                                <h3><%-_("Syntax").t() %></h3>\
                                 <a class="saMoreLink" href="#" title="See syntax description" divtoshow=".syntaxDetails"><%= _("More &raquo;").t() %></a>\
                             </dt>\
                             <dd>\
@@ -180,14 +179,14 @@ define(
                                 </div>\
                             </dd>\
                             <dt>\
-                                <h5><%- _("Related").t() %></h5>\
+                                <h3><%- _("Related").t() %></h3>\
                             </dt>\
                             <dd>\
                                 <%= _(command.get("related")).t() %>\
                             </dd>\
                         </dl>\
                         <% if (command.get("examples").length > 0) {%>\
-                            <h5><%- _("Examples").t() %></h5>\
+                            <h3><%- _("Examples").t() %></h3>\
                             <dl>\
                             <%for(var i = 0; i < command.get("examples").length && i < 3; i++) {%>\
                                 <dt><%- _(command.get("examples")[i][1]).t() %></dt>\

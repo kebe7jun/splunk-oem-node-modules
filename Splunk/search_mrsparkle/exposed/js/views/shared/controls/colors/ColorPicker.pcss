@@ -1,5 +1,5 @@
 .color-picker-container {
-	$swatchSize: 25px;
+	$swatchSize: $inputHeight;
 	$swatchMargin: 5px;
 	$swatchesPerRow: 5;
 	$totalWidth: calc($swatchSize * $swatchesPerRow + $swatchMargin * ($swatchesPerRow - 1));
@@ -13,7 +13,7 @@
 			margin: 0;
 
 			li {
-				line-height: $baseLineHeight;
+				line-height: $lineHeight;
 				height: $swatchSize;
 				width: $swatchSize;
 				float: left;
@@ -35,26 +35,44 @@
 				box-sizing: border-box;
 
                 &:focus {
-                    @mixin focus-button;
+                    @mixin focus-element;
                 }
 			}
 		}
 	}
 
+
+	.hex-input-container {
+		display: flex;
+		width: $totalWidth;
+	}
+
+	.hex-input-prepend {
+		flex: 0 0 $inputHeight;
+		width: $inputHeight;
+		text-align: center;
+		padding-top: 5px;
+		border: 1px solid $inputBorderColor;
+		border-right: none;
+		border-radius: 3px 0 0 3px;
+		box-sizing: border-box;
+		background-color: $inputBackground;
+        color: $inputTextColor
+	}
+
 	.hex-input {
-		/*  Have to hard-code the width of the prepended/appended parts of the text input */
-		/*  and subtract it so that the input fills the full width. */
-		width: calc($totalWidth - 66px);
+		flex: 1 0 auto;
+		margin-bottom: 0;
+		border-radius: 0;
+		border-right: none;
+		color: $textColor;
+		width: 0;
 	}
 
-	.mini-swatch {
-		display: block;
-		height: 15px;
-		width: 15px;
-
-		&:focus {
-			@mixin focus-button;
-		}
+	.hex-input-submit {
+		width: $inputHeight;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		box-shadow: none;
 	}
-
 }

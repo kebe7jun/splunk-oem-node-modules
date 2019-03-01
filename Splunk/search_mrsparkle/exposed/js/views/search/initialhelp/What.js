@@ -173,16 +173,16 @@ define(
                     <div class="what-columns">\
                         <% if (hasResult) { %>\
                             <div style="float:left; width: 30%;">\
-                                <%- format_decimal(cntEvents) %> <%- _("Events").t() %><br>\
-                                <span style="text-transform: uppercase; color: #999; font-size: 11px;"><%- _("Indexed").t() %></span>\
+                                <h2 class="results-heading"><%- format_decimal(cntEvents) %> <%- _("Events").t() %></h2>\
+                                <span class="section-heading-small"><%- _("Indexed").t() %></span>\
                             </div>\
                             <div style="float:left;  width: 30%;">\
-                                <%= earliestRel %> <br>\
-                                <span style="text-transform: uppercase; color: #999; font-size: 11px;"><%- _("Earliest Event").t() %></span>\
+                                <h2 class="results-heading"><%= earliestRel %></h2>\
+                                <span class="section-heading-small"><%- _("Earliest Event").t() %></span>\
                             </div>\
                             <div style="float:left; width: 30%;">\
-                                <%= latestRel %> <br>\
-                                <span style="text-transform: uppercase; color: #999; font-size: 11px;"><%- _("Latest Event").t() %></span>\
+                                <h2 class="results-heading"><%= latestRel %></h2>\
+                                <span class="section-heading-small"><%- _("Latest Event").t() %></span>\
                             </div>\
                         <% } else { %>\
                             <%- _("Waiting for data...").t() %>\
@@ -190,7 +190,9 @@ define(
                     </div>\
                 <% } %>\
                 <% if (showDataSummary) { %>\
-                    <a href="#" class="btn btn-data-summary" style="margin-bottom: 10px<% if (!enableMetaData) { %>;margin-top: 60px<% } %>" title="<%- _("View sources, source types and hosts.").t() %>"><%- _("Data Summary").t() %></a>\
+                    <div class="button-container">\
+                        <a href="#" class="btn btn-data-summary" title="<%- _("View sources, source types and hosts.").t() %>"><%- _("Data Summary").t() %></a>\
+                    </div>\
                 <% } %>\
             '
         });

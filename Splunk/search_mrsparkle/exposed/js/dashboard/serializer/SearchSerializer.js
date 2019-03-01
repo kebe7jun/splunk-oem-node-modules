@@ -37,7 +37,7 @@ define([
         if (!$search) {
             $search = XML.$tag('search');
         }
-        $search.empty();
+        $search.children("query, earliest, latest, sampleRatio, refresh, refreshType").remove();
         switch (settings.searchType) {
             case 'inline':
                 $search.removeAttr('ref');

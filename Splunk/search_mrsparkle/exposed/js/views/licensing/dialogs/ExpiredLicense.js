@@ -78,12 +78,12 @@ define(
                     _ : _
                 }));
                 this.$(Modal.BODY_SELECTOR).find('.splunk-free-error').hide();
-                this.$(Modal.FOOTER_SELECTOR).html('<a href="#" class="btn btn-primary modal-btn-primary pull-right add-license-btn">' + _('Add License').t() + '</a>');
-                this.$(Modal.FOOTER_SELECTOR).append('<a target="_blank" href="http://www.splunk.com/goto/estore" class="btn modal-btn-primary get-license-btn pull-right">' + _('Get License').t() + '</a>');
+                this.$(Modal.FOOTER_SELECTOR).html('<a href="#" class="btn btn-primary add-license-btn">' + _('Add License').t() + '</a>');
+                this.$(Modal.FOOTER_SELECTOR).prepend('<a target="_blank" href="http://www.splunk.com/goto/estore" class="btn get-license-btn">' + _('Get License').t() + '</a>');
 
                 var linkText = _('Change to Splunk Light Free').t();
                 if (!this.model.serverInfo.isLiteFree()) {
-                    this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="change-spl-light-free pull-left">' + linkText + '</a>');
+                    this.$(Modal.FOOTER_SELECTOR).prepend('<a href="#" class="change-spl-light-free pull-left">' + linkText + '</a>');
                 }
 
                 return this;

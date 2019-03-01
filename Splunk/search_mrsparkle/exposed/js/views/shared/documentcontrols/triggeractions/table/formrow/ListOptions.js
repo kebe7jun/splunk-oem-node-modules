@@ -22,7 +22,6 @@ define(
                 this.children.severity = new ControlGroup({
                     className: 'control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'alert.severity',
                         model: this.model.alert.entry.content,

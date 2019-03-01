@@ -34,7 +34,7 @@
         .pattern-controls {
             min-height: 15px;
             border-bottom: 1px solid lightgray;
-            padding: 0 20px 20px 20px;
+            padding: $spacingHalf $spacing $spacing $spacing;
             position: relative;
             .alerts {
                 clear: right;
@@ -57,6 +57,7 @@
         .pattern-table {
             width: 100%;
             cursor: default;
+            font-family: $monoFontFamily;
 
             tbody.patterns {
                 tr {
@@ -81,16 +82,8 @@
                         padding-right: 20px;
                         padding-left: 8px;
 
-                        @if $theme == enterprise {
-	                        span.includeterm {
-	                            color: $splunkGreen;
-	                        }
-                        }
-
-                        @if $theme == lite {
-                            span.includeterm {
-                        		color: $splunkLiteOrange;
-                        	}
+                        span.includeterm {
+                            color: $brandColor;
                         }
 
                         span.timestamp {
@@ -123,7 +116,7 @@
                     	    top: 42px;
                     	    height: 16px;
                     	    transition: background .2s linear;
-                    	    @mixin gradient-vertical color($white a(0)), $white;
+                    	    background-image: linear-gradient(to bottom, color($white a(0)), $white);
                     	    background-color: transparent;
                     	}
                     }
@@ -131,19 +124,16 @@
                     &.expanded {
                         div.sample-event {
                             max-height: 200px;
-                            color: #b3b3b3;
+                            color: $gray80;
                         }
                     }
                     &.selected {
-                        background-color: $blueDark;
+                        background-color: $accentColorD20;
                         color: $white;
 
-
-						@if $theme == enterprise {
-						    span.includeterm {
-						        color: $green;
-						    }
-						}
+                        span.includeterm {
+                            color: $successColor;
+                        }
 
                         .sample-event:after {
                         	display: none;
@@ -153,10 +143,9 @@
             }
 
             &:not(.search-disabled) tbody.patterns tr:hover:not(.selected)  td {
-                $rolloverColor: color($blueDark l(+50%));
-                background-color: $rolloverColor;
+                background-color: $accentColorL50;
                     .sample-event:after {
-                        @mixin gradient-vertical color($rolloverColor a(0%)), $rolloverColor;
+                        background: linear-gradient(color($accentColorL50 a(0%)), $accentColorL50);
                     }
             }
         }
@@ -165,7 +154,7 @@
             width: 401px;
             position: absolute;
             right: 0;
-            top: -20px;
+            top: -10px;
             bottom: 0;
             background-color: $bodyBackgroundColor;
             box-sizing: border-box;
@@ -180,6 +169,7 @@
                 overflow: hidden;
                 text-align: center;
                 padding-top: 80px;
+                clear: right;
 
                 .instruction {
                     margin-bottom: 30px;
@@ -214,7 +204,7 @@
                 }
 
                 .subtitle {
-                    font-size: 11px;
+                    font-size: $fontSizeSmall;
                     color: #aaa;
                     text-transform: uppercase;
                 }
@@ -252,10 +242,10 @@
                 height: 0;
                 border-bottom: 8px solid transparent;
                 border-top: 8px solid transparent;
-                border-right: 8px solid $grayLighter;
+                border-right: 8px solid $gray96;
                 position: absolute;
                 top: 0px;
-                left: -9px;
+                left: -8px;
             }
         }
 

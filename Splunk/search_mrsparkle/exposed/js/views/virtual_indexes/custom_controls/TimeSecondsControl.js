@@ -126,7 +126,8 @@ define(
                 // style the input box, to make sure it looks like 'input-append' style.
                 this.$el.addClass('input-append').css('margin-bottom', '0px');
                 this.children.number.$el.css('float', 'left');
-                this.children.unit.$el.css('float', 'right');
+                this.children.unit.$el.css('width', 'auto');
+                this.children.number.$el.css('min-width', '25px');
 
                 this.$el.append(this.children.number.render().el);
                 this.$el.append(this.children.unit.render().el);

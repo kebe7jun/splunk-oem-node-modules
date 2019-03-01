@@ -447,7 +447,9 @@ define([
                 delete json[key];
             }, this);
 
-            returnValue.description = JSON.stringify(json);
+            if (!options || !options.skipDescription) {
+                returnValue.description = JSON.stringify(json);
+            }
 
             return returnValue;
         }

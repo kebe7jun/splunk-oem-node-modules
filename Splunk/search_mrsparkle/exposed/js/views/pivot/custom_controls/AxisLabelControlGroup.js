@@ -40,7 +40,7 @@ define([
                 {
                     type: 'SyntheticSelect',
                     options: {
-                        className: Control.prototype.className + ' input-prepend',
+                        additionalClassNames: 'input-prepend',
                         model: this.options.visualization,
                         modelAttribute: this.axisTitleVisibilityAttr,
                         toggleClassName: 'btn',
@@ -55,7 +55,7 @@ define([
                 {
                     type: 'Text',
                     options: {
-                        className: Control.prototype.className + ' input-prepend',
+                        addtionalClassNames: 'input-prepend',
                         model: this.model,
                         modelAttribute: 'label',
                         placeholder: _('optional').t(),

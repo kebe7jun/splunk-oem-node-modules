@@ -13,6 +13,8 @@ define(
         'uri/route',
         'views/dashboards/table/controls/CloneDashboard',
         'views/dashboards/table/controls/ConvertDashboard',
+        'views/dashboards/table/controls/ViewDashboardQrCode',
+        'views/dashboards/table/controls/ViewDashboardNfcUrl',
         'models/search/Dashboard',
         'models/ACLReadOnly'
     ],
@@ -30,6 +32,8 @@ define(
         route,
         CloneDialog,
         ConvertDialog,
+        QrCodeDialog,
+        NfcUrlDialog,
         DashboardModel,
         ACLReadOnlyModel
     )
@@ -190,6 +194,25 @@ define(
 
                         convertDialog.render().show();
                     }.bind(this));
+                },
+                'click a.get-qr-code': function(e) {
+                    e.preventDefault();
+                    var qrCodeDialog = new QrCodeDialog({
+                        model: {
+                            dashboardId: this.model.dashboard.id
+                        }
+                    });
+
+                    qrCodeDialog.render().show();
+                },
+                'click a.get-nfc-url': function(e) {
+                    e.preventDefault();
+                    var nfcUrlDialog = new NfcUrlDialog({
+                        model: {
+                            dashboardId: this.model.dashboard.id
+                        }
+                    });
+                    nfcUrlDialog.render().show();
                 }
             },
             openPermissionsDialog: function() {
@@ -260,7 +283,8 @@ define(
                                      redirect_override: window.location.pathname }
                            }
                        ),
-                    dashboardId: this.model.dashboard.id
+                    dashboardId: this.model.dashboard.id,
+                    mobileAppInstalled: !!this.collection.appLocalsUnfiltered.get('/servicesNS/nobody/system/apps/local/spacebridge-app')
                 });
 
                 this.el.innerHTML = PopTartView.prototype.template_menu;
@@ -328,6 +352,12 @@ define(
                     <% if(removable) { %>\
                         <li><a href="#" class="delete"><%- _("Delete").t() %></a></li>\
                     <% } %>\
+                </ul>\
+                <% } %>\
+                <% if (mobileAppInstalled && !isHTML && !isForm) { %>\
+                <ul class="fourth-group">\
+                    <li><a href="#" class="get-qr-code"><%- _("Get QR Code").t() %></a></li>\
+                    <li><a href="#" class="get-nfc-url"><%- _("Get NFC URL").t() %></a></li>\
                 </ul>\
                 <% } %>\
             '

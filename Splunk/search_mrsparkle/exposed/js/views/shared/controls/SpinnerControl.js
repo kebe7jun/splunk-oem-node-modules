@@ -362,8 +362,6 @@ define([
         template: '\
             <span class="uneditable-input <%= options.inputClassName %>" \
                 <% if(options.enabled){ %>style="display:none"<%}%>><%- value %></span>\
-            <a href="#" class="increment-down" \
-                <% if(!options.enabled){ %>style="display:none"<%}%>><i class="icon-minus"></i></a>\
             <input type="text" \
                name="<%- options.modelAttribute || "" %>" \
                class="<%- options.canClear ? "text-clear " : "" %><%- options.inputClassName%>"\
@@ -373,6 +371,8 @@ define([
                <% if(options.placeholder && !options.useSyntheticPlaceholder){ %>placeholder="<%- options.placeholder %>"<%}%> \
                <% if(!options.enabled){ %>style="display:none"<%}%>>\
             <% if (options.useSyntheticPlaceholder) { %> <span class="placeholder"><%- options.placeholder %></span><% } %>\
+        <a href="#" class="increment-down" \
+            <% if(!options.enabled){ %>style="display:none"<%}%>><i class="icon-minus"></i></a>\
             <a href="#" class="increment-up" \
                 <% if(!options.enabled){ %>style="display:none"<%}%>><i class="icon-plus"></i></a>\
         '

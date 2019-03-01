@@ -17,7 +17,7 @@ define(
              * @param options {Object} {
              *      url: string,
              *      title: string,
-             *      description: string 
+             *      description: string
              * }
              */
             initialize: function() {
@@ -40,7 +40,6 @@ define(
                         <%= icon %>\
                     <% } %>\
                     <%- title %><% if (external) { %> <i class="icon-external"></i><% } %>\
-                    <div class="mask"></div>\
                 </a>\
                 <p class="description"><%= description %></p>\
             '

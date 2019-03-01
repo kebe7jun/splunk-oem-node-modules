@@ -24,6 +24,7 @@ function(
     return BaseView.extend({
         template: template,
         moduleId: module.id,
+        className: 'gdi-overview-main-container',
 
         initialize: function () {
             BaseView.prototype.initialize.apply(this, arguments);
@@ -53,8 +54,7 @@ function(
 
                 this.model.wizard.setInputMode(inputMode);
                 this.model.wizard.set(wizardSet);
-
-                $(".adddata-header").show();
+                $(".adddata-header").css("display", "block");
             }.bind(this);
 
             if (targetId == 'btn-upload') {
@@ -116,7 +116,7 @@ function(
             });
             this.$el.html(template);
 
-            $(".adddata-header").hide();
+            $(".adddata-header").css("display", "none");
             return this;
         }
     });

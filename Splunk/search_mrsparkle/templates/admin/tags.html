@@ -9,8 +9,8 @@ from splunk.appserver.mrsparkle.lib import util, i18n
 
 %>
 
-<div class="dataInputsWrapper">
-    <div class="dataInputsDesc">${_('Manage tags on field values.')}</div>
+<div class="dataInputsWrapper settingsIndex">
+    <div class="settingsIndexDesc">${_('Manage tags on field values.')}</div>
 
     <table class="splTable">
             <tr>
@@ -19,15 +19,15 @@ from splunk.appserver.mrsparkle.lib import util, i18n
             </tr>
             <tr>
                 <td class="input_name"><a href="${make_url(['manager', namespace, 'saved', 'fvtags'])}">${_('List by field value pair')}</a></td>
-                <td><a href="${make_url(['manager', namespace, 'saved', 'fvtags', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
+                <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'saved', 'fvtags', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
             </tr>
             <tr>
                 <td class="input_name"><a href="${make_url(['manager', namespace, 'saved', 'ntags'])}">${_('List by tag name')}</a></td>
-                <td><a href="${make_url(['manager', namespace, 'saved', 'ntags', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
+                <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'saved', 'ntags', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
             </tr>
             <tr>
                 <td class="input_name"><a href="${make_url(['manager', namespace, 'admin', 'tags'])}">${_('All unique tag objects')}</a></td>
-                <td><a href="${make_url(['manager', namespace, 'admin', 'tags', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
+                <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'admin', 'tags', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
             </tr>
     </table>
-</div>        
+</div>

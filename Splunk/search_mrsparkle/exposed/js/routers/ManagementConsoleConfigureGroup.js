@@ -47,8 +47,6 @@ define(
             initialize: function() {
                 DmcBaseRouter.prototype.initialize.apply(this, arguments);
 
-                this.enableFooter = false;
-
                 this.children = this.children || {};
 
                 this.model.state = new Backbone.Model({

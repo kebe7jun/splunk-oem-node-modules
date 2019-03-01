@@ -33,7 +33,6 @@ define([
                 this.model.tableData.set("earliest_time", this.model.uiPrefs.entry.content.get("display.page.search.searchHistoryTimeFilter"));
                 this.children.input = new FilterInputView({
                     model: this.model.tableData,
-                    rawSearch: this.model.searchHistoryResults,
                     key: "search"
                 });
                 this.children.tableRowToggle = new TableRowToggleDelegate({
@@ -163,7 +162,8 @@ define([
                     'display.page.search.searchHistoryTimeFilter': this.model.tableData.get("earliest_time")
                 });
                 this.model.uiPrefs.save();
-                this.model.tableData.set({offset: 0});
+                // Don't trigger a change event to get new results.
+                this.model.tableData.set({offset: 0}, {silent: true});
                 if (!this.model.searchHistoryJob.isNew()) {
                     this.clearSearchHistory();
                 }
@@ -180,16 +180,18 @@ define([
                 this.render();
             },
             fetchSearchHistoryResults: function() {
-                this.showLoading(true);
                 var id = this.model.searchHistoryJob.entry.links.get(SearchHistoryModel.RESULTS);
-                this.model.searchHistoryResults.set({id: id});
-                this.model.searchHistoryResults.safeFetch({
-                    data: {
-                        offset: this.model.tableData.get("offset"),
-                        count: this.model.tableData.get("count"),
-                        search: this.buildSearch()
-                    }
-                });
+                if (!_.isUndefined(id)) {
+                    this.showLoading(true);
+                    this.model.searchHistoryResults.set({id: id});
+                    this.model.searchHistoryResults.safeFetch({
+                        data: {
+                            offset: this.model.tableData.get("offset"),
+                            count: this.model.tableData.get("count"),
+                            search: this.buildSearch()
+                        }
+                    });
+                }
             },
             buildSearch: function() {
                 var search = "| search " + (this.model.tableData.get("search") || "");
@@ -234,7 +236,7 @@ define([
                     $noResults.show();
                 } else {
                     $noResults.hide();
-                    _.each(this.model.searchHistoryResults.results.models, function(search) {
+                    _.each(this.model.searchHistoryResults.results.models, function(search, index) {
                         var row = new TableRow({
                                 model: {
                                     application: this.model.application,
@@ -242,7 +244,8 @@ define([
                                     searchBar: this.model.searchBar,
                                     tableData: this.model.tableData
                                 },
-                                isAccordion: false
+                                isAccordion: false,
+                                striped: index % 2
                             }),
                             accordionRow = new TableRow({
                                 model: {
@@ -251,7 +254,8 @@ define([
                                     searchBar: this.model.searchBar,
                                     tableData: this.model.tableData
                                 },
-                                isAccordion: true
+                                isAccordion: true,
+                                striped: index % 2
                             });
 
                         row.render().$el.appendTo($tableBody);
@@ -265,7 +269,7 @@ define([
             template: '\
                 <div class="history-filters">\
                 </div>\
-                <table class="table table-chrome table-listing table-row-expanding">\
+                <table class="table table-chrome table-listing table-striped table-hover table-row-expanding">\
                     <tbody class="history-group search-content">\
                         <tr class="waiting"><td colspan="4"><%- _("Waiting for results...").t() %></td></tr>\
                         <tr class="noresults" style="display:none"><td colspan="4"><%- _("No results found.").t() %></td></tr>\

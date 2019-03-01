@@ -58,6 +58,8 @@ define(
      * @param {String} options.controlType The attribute on the model to observe and update on
      * selection
      * @param {Object} options.controlOptions dictionary passed to the control
+     * @param {String} options.controlsLayout How controls should fill or connect:
+     *              join, separate, wrap or stack
      * @param {Backbone.View|Backbone.View[]|Object[]} options.controls An array of
      * dictionaries with types and options, and/or views, or a View
      * @param {String} [options.label] the contents of the label tag
@@ -76,12 +78,16 @@ define(
         className: 'control-group',
         moduleId: module.id,
         initialize: function() {
-            var defaults = {
+            var controlType = this.options.controlType ||
+                    this.options.controls && this.options.controls.length && this.options.controls[0].type,
+                isListControl = controlType == 'CheckboxGroup',
+                defaults = {
                     label: '',
                     controls:[],
                     error: false,
                     _errorMsg : "",
                     controlClass: '',
+                    controlsLayout: isListControl ? 'stack' : 'join',
                     enabled: true,
                     size: 'default',
                     additionalClassNames: []
@@ -116,6 +122,7 @@ define(
 
             if(!this.options.enabled) {
                 this.$el.addClass('disabled');
+                this.$el.attr('aria-disabled', 'true');
             }
 
             // normalize controls to an array if it's a single item
@@ -142,6 +149,7 @@ define(
                     var controlOptions = $.extend(
                         true,
                         {
+                            ariaLabel: this.options.label,
                             validate: !!this.options.validate,
                             forceUpdate: !!this.options.forceUpdate,
                             enabled: !!this.options.enabled,
@@ -187,31 +195,44 @@ define(
         },
         render: function() {
             if(!this.el.innerHTML) {
+                // From accessibility aspect, control-viewxxxx is applied on Text control, Text Area control, and Synthetic Checkbox control
+                // control-container-viewxxxx is applied on other controls like synthetic select control
+                var labelForValue = this.children.child0 instanceof TextControl
+                                    || this.children.child0 instanceof TextareaControl
+                                    || this.children.child0 instanceof SyntheticCheckboxControl
+                                    ? 'control-' : 'control-container-';
                 var template = _.template(this.template, {
                     _: _,
-                    controlCid: this.children.child0.cid,
                     label: this.options.label,
+                    labelFor: (this.options.controlOptions && this.options.controlOptions.elementId) || labelForValue + this.children.child0.cid,
                     help: this.options.help,
                     controlClass: this.options.controlClass,
+                    layout: this.options.controlsLayout,
                     helpClass: this.options.helpClass,
                     tooltip: this.options.tooltip
                 });
                 this.$el.html(template);
 
                 if (this.options.tooltip) {
+                    var tooltip = this.options.tooltip;
                     this.$('.tooltip-link').tooltip({animation:false, title: this.options.tooltip, container: 'body'});
+                    this.$('.tooltip-link').focus(function() {
+                        var $tooltipLink = $(this);
+                        $tooltipLink.attr('aria-label', tooltip);
+                    });
+                    this.$('.tooltip-link').blur(function() {
+                        var $tooltipLink = $(this);
+                        $tooltipLink.attr('aria-label', '');
+                    });
                 }
 
                 _.each(this.childList, function(child, i) {
                     this.$('.controls').append(child.render().$el);
                     if (!i) {
-                        child.$el.attr('id', "control-" + this.children.child0.cid);
+                        child.$el.attr('id', "control-container-" + this.children.child0.cid);
                     }
                 }, this);
-                if (this.options.help) {
-                    this.$('.controls').append(this.$('.help-block')); //move the help block back to the end
-                }
-                
+
                 this.$el.addClass('control-group-' + this.options.size);
                 _.each(this.options.additionalClassNames, function(className) {
                     this.$el.addClass(className);
@@ -237,10 +258,12 @@ define(
         },
         enable: function() {
             this.$el.removeClass('disabled');
+            this.$el.attr('aria-disabled', 'false');
             _(this.getAllControls()).invoke('enable');
         },
         disable: function() {
             this.$el.addClass('disabled');
+            this.$el.attr('aria-disabled', 'true');
             _(this.getAllControls()).invoke('disable');
         },
         getModelAttributes: function() {
@@ -265,18 +288,16 @@ define(
         setHelpText: function(helpText) {
             var $helpBlock = this.$('.help-block');
             if ($helpBlock.length === 0) {
-                $helpBlock = $('<span></span>').addClass('help-block').appendTo(this.$('.controls'));
+                $helpBlock = $('<span></span>').addClass('help-block').appendTo(this.$el);
             }
             $helpBlock.html(helpText);
         },
-        // TODO: the `for` control-controlCid needs to be hooked up to the input with same `id`
         template: '\
-                <label class="control-label" for="control-<%- controlCid %>">\
+                <label class="control-label" for="<%- labelFor %>">\
                 <%- label %><% if (tooltip) { %><a href="#" class="tooltip-link"><%- _("?").t() %></a><% } %>\
                 </label>\
-                <div class="controls <%- controlClass %>">\
-                <% if (help) { %> <span class="help-block <%- helpClass %>"><%= help %></span><% } %>\
-                </div>\
+                <div class="controls controls-<%- layout %> <%- controlClass %>"></div>\
+                <% if (help) { %> <div class="help-block <%- helpClass %>"><%= help %></div><% } %>\
                 \
         '
     });

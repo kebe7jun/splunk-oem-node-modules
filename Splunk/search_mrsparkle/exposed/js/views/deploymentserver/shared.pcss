@@ -19,7 +19,7 @@
 	margin: 20px 10px;
   }
   .under-label {
-	color: $grayLight;
+	color: $gray60;
 	display: inline-block;
 	margin: 5px;
   }
@@ -113,14 +113,14 @@
 		content: "";
 		border: 1px solid $white;
 		border-bottom: none;
-		border-right-color: $tableBorder;
+		border-right-color: $tableBorderColor;
 		border-radius: inherit;
 		position: absolute;
 		top: 0;
 		left: 0;
 		bottom: 0;
 		right: 0;
-		border-bottom: 1px solid $tableBorder;
+		border-bottom: $tableBorder;
 		z-index:-1;
 	}
 
@@ -141,8 +141,8 @@
 }
 
 .paginator_container {
-	border-top: 1px solid $tableBorder;
-	border-bottom: 1px solid $white;
+	border-top: $tableBorder;
+	border-bottom: $borderWhite;
 	padding-top: 5px;
 	padding-bottom: 3px;
 

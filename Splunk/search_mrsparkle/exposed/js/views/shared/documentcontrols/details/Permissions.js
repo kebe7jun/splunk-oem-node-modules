@@ -12,8 +12,20 @@ define(
             tagName: 'span',
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
-                var render = _.debounce(this.render, 0);
-                this.model.report.entry.acl.on('change:sharing change:owner', render, this);
+                this.activate();
+            },
+            activate: function(options) {
+                if (this.active) {
+                    return Base.prototype.activate.call(this, options);
+                }
+                Base.prototype.activate.call(this, options);
+                if (this.el.innerHTML) {
+                    this.render();
+                }
+                return this;
+            },
+            startListening: function() {
+                this.listenTo(this.model.report.entry.acl, 'change:sharing change:owner', this.debouncedRender);
             },
             render: function() {
                 var sharing = this.model.report.entry.acl.get("sharing"),

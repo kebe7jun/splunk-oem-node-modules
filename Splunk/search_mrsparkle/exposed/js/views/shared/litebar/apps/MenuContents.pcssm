@@ -21,7 +21,7 @@
 }
 
 .label {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 
 .currentAppCheck {
@@ -36,7 +36,7 @@
     top: 0;
     right: 16px;
     text-align: center;
-    color: $splunkLiteOrange;
+    color: $brandColor;
     font-size: 30px;
 
     > img {

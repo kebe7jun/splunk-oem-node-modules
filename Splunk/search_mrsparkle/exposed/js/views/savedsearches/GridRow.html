@@ -28,7 +28,7 @@
 </td>
 <td class="cell-schedule"><%- _(model.entry.content.get("next_scheduled_time")||"none").t() %></td>
 <td class="cell-display"><%- _(model.entry.content.get("displayview")||"none").t() %></td>
-<td class="cell-owner"><%- _(model.entry.acl.get("owner")||"").t() %></td>
+<td class="cell-owner"><%- model.entry.acl.get("owner") %></td>
 <td class="cell-app"><%- model.entry.acl.get("app") %></td>
 <td class="cell-alerts"><%- alertCount %></td>
 <td class="sharing">

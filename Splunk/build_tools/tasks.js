@@ -79,11 +79,6 @@ function buildThemedLessTasks(lessTasks, themes) {
 
 function buildSplunkJsCssTasks(themes) {
     var splunkJsCssDirTasks = {
-        'css:dmc:indexer_clustering_status': {
-            'src': path.join(constants.lessSource, 'components', 'bucket-bar-bootstrap.less'),
-            'dst': path.join(process.env.SPLUNK_HOME, 'etc', 'apps', 'splunk_monitoring_console', 'appserver', 'static', 'bucket-bar%s.css'),
-            'clean': true
-        },
         'css:splunkjs:dashboard': {
             'src': path.join(constants.lessSource, 'pages', 'dashboard-lite', 'bootstrap.less'),
             'dst': path.join(constants.splunkJsCssDir, 'dashboard%s.css'),

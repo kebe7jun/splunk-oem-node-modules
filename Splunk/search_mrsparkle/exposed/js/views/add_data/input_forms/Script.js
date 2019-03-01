@@ -50,7 +50,6 @@ define(
                 this.children.command = new ControlGroup({
                     className: 'net-port control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -63,7 +62,6 @@ define(
                 this.children.intervalManual = new ControlGroup({
                     className: 'net-port control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.interval',
                         model: this.model.input,
@@ -79,7 +77,7 @@ define(
                     controlOptions: {
                         modelAttribute: 'ui.intervalSelection',
                         model: this.model.input,
-                        items: [    
+                        items: [
                             {value: 'In Seconds'},
                             {value: 'Cron Schedule'}
                         ],
@@ -88,7 +86,6 @@ define(
                             attachDialogTo: 'body'
                         }
                     },
-                    controlClass: 'controls-block',
                     label: _('Interval Input').t(),
                     tooltip: _('Number of seconds to wait before running the command again, or a valid cron schedule.').t()
                 });
@@ -111,7 +108,6 @@ define(
                 this.children.sourceOverride = new ControlGroup({
                     className: 'net-port control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.source',
                         model: this.model.input,
@@ -222,12 +218,11 @@ define(
                     this.children.paths = new ControlGroup({
                         className: 'paths control-group',
                         controlType: 'SyntheticSelect',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: 'path',
                             model: this.model.input,
                             items: this.newpaths(),
-                            className: 'btn-group view-count',
+                            additionalClassNames: 'view-count',
                             menuWidth: 'wide',
                             toggleClassName: 'btn',
                             prompt: _('-- Select script path --').t()
@@ -283,12 +278,11 @@ define(
                 this.children.scriptlist = new ControlGroup({
                     className: 'script-list control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'script',
                         model: this.model.input,
                         items: newFilelist,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'wide',
                         toggleClassName: 'btn'
                     },
@@ -326,11 +320,11 @@ define(
                 return [
                 {
                     question: _('What kind of scripts can I run?').t(),
-                    answer: _('It depends on the operating system that this machine runs. If it runs a *nix OS, you can \
-                    create and run shell scripts or binaries that send text output to the stdout or stderr output \
-                    channels. If it runs Windows, you can deploy batch files or PowerShell scripts. You can create and \
-                    use scripts to get data from APIs. You can also use a wrapper to execute a script that Splunk \
-                    would not otherwise support. ').t() +
+                    answer: _('It depends on the operating system that this machine runs. If it runs a *nix OS, you can ' +
+                    'create and run shell scripts or binaries that send text output to the stdout or stderr output ' +
+                    'channels. If it runs Windows, you can deploy batch files or PowerShell scripts. You can create and ' +
+                    'use scripts to get data from APIs. You can also use a wrapper to execute a script that the Splunk platform ' +
+                    'would not otherwise support. ').t() +
                     '<a class="external" href="' + arguments[0] + '" target="_blank">' + _("Learn More").t() + '</a>'
                 },
                 {

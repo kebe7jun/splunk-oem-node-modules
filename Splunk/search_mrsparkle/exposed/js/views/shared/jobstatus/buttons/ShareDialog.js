@@ -41,7 +41,7 @@ define(
                     controlType:'Text',
                     help: _('Copy or bookmark the link by right-clicking the icon, or drag the icon into your bookmarks bar.').t(),
                     controlOptions: {
-                        className: 'job-link',
+                        additionalClassNames: 'job-link',
                         defaultValue: this.linkToJob,
                         append: '<a class="add-on bookmark" href="' + this.linkToJob + '"><i class="icon-bookmark"></i><span class="hide-text">' + _("Splunk Search Job").t() + '</span></a>'
                     }

@@ -74,7 +74,6 @@ define([
             });
             this.model.page = new DashboardDisplayProps({
                 loading: true,
-                hideFooter: true,
                 showToolbar: false
             });
             // dashboard view model
@@ -153,6 +152,8 @@ define([
                     dfd: this.deferreds.visualizations
                 }
             });
+            // This deferred stops DashboardPage from rendering header until resolved
+            this.deferreds.xmlParsed = $.Deferred();
 
             LegacyController._populateSharedModels(SharedModels);
 

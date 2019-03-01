@@ -15,16 +15,8 @@ define(
             THREE_MONTHS = '-3mon',
             ONE_YEAR = '-1y',
             ALL_TIME = '0',
-            CUSTOM = 'custom',
-            NON_CUSTOM_VALUE_MAP = {};
-            
-        NON_CUSTOM_VALUE_MAP[ONE_DAY] = _('1 Day').t();
-        NON_CUSTOM_VALUE_MAP[SEVEN_DAYS] = _('7 Days').t();
-        NON_CUSTOM_VALUE_MAP[ONE_MONTH] = _('1 Month').t();
-        NON_CUSTOM_VALUE_MAP[THREE_MONTHS] = _('3 Months').t();
-        NON_CUSTOM_VALUE_MAP[ONE_YEAR] = _('1 Year').t();
-        NON_CUSTOM_VALUE_MAP[ALL_TIME] = _('All Time').t();
-
+            CUSTOM = 'custom';
+        
         var RelativeTimeScheduleWindow = BaseModel.extend({
             initialize: function() {
                 BaseModel.prototype.initialize.apply(this, arguments);
@@ -40,13 +32,14 @@ define(
             },
             
             getItems: function() {
+                var valueMap = RelativeTimeScheduleWindow.getValueMap();
                 return [
-                    {label: NON_CUSTOM_VALUE_MAP[ONE_DAY], value: ONE_DAY},
-                    {label: NON_CUSTOM_VALUE_MAP[SEVEN_DAYS], value: SEVEN_DAYS},
-                    {label: NON_CUSTOM_VALUE_MAP[ONE_MONTH], value: ONE_MONTH},
-                    {label: NON_CUSTOM_VALUE_MAP[THREE_MONTHS], value: THREE_MONTHS},
-                    {label: NON_CUSTOM_VALUE_MAP[ONE_YEAR], value: ONE_YEAR},
-                    {label: NON_CUSTOM_VALUE_MAP[ALL_TIME], value: ALL_TIME},
+                    {label: valueMap[ONE_DAY], value: ONE_DAY},
+                    {label: valueMap[SEVEN_DAYS], value: SEVEN_DAYS},
+                    {label: valueMap[ONE_MONTH], value: ONE_MONTH},
+                    {label: valueMap[THREE_MONTHS], value: THREE_MONTHS},
+                    {label: valueMap[ONE_YEAR], value: ONE_YEAR},
+                    {label: valueMap[ALL_TIME], value: ALL_TIME},
                     {label: _('Custom').t(), value: CUSTOM}
                 ];
             },
@@ -56,7 +49,8 @@ define(
             },
             
             setScheduleWindow: function(schedule_window) {
-                if (NON_CUSTOM_VALUE_MAP[schedule_window]) {
+                var valueMap = this.constructor.getValueMap();
+                if (valueMap[schedule_window]) {
                     this.set({
                         schedule_window_option: schedule_window,
                         custom_window: schedule_window
@@ -78,7 +72,18 @@ define(
             ONE_YEAR: ONE_YEAR,
             ALL_TIME: ALL_TIME,
             CUSTOM: CUSTOM,
-            NON_CUSTOM_VALUE_MAP: NON_CUSTOM_VALUE_MAP
+            
+            getValueMap: function() {
+                var valueMap = {};
+                valueMap[ONE_DAY] = _('1 Day').t();
+                valueMap[SEVEN_DAYS] = _('7 Days').t();
+                valueMap[ONE_MONTH] = _('1 Month').t();
+                valueMap[THREE_MONTHS] = _('3 Months').t();
+                valueMap[ONE_YEAR] = _('1 Year').t();
+                valueMap[ALL_TIME] = _('All Time').t();
+                
+                return valueMap;
+            }
         });
         
         return RelativeTimeScheduleWindow;

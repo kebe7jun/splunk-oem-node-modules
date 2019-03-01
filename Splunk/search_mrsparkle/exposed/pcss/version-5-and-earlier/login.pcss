@@ -1,21 +1,9 @@
+@import '../base/fonts.pcss';
 
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('/static/fonts/roboto-regular-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-    font-family: 'Splunk Icons';
-    src: url('/static/fonts/splunkicons-regular-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
 body {
-    font: 12px roboto, helvetica, arial, sans-serif;
+    font: 12px $fontFamily;
     line-height: 20px;
-    color: #ccc;
+    color: $gray80;
     background-color: #222222;
     margin: 0;
 }
@@ -75,7 +63,7 @@ label {
 }
 label.license_label {
     text-transform: none;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     margin-left: 3px;
 }
 
@@ -113,7 +101,7 @@ p.copyright {
     font-weight: normal;
 }
 #brand > span.prompt {
-    color: $splunkGreen;
+    color: $brandColor;
     font-weight: normal;
 }
 
@@ -152,7 +140,7 @@ p.licensePageError {
 /* password hint popup */
 #passwordHint {
    position: relative;
-   border-radius: $baseBorderRadius;
+   border-radius: $borderRadius;
 }
 #passwordHintContent {
     margin-bottom: 0px;
@@ -258,7 +246,7 @@ iframe {
     top:82px;
 }
 .licensingPage #mainPanel a {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 .licenseExpiredForm {
     margin-bottom: 10px;
@@ -352,7 +340,7 @@ form table td+td .input-wrapper {
 table input[type=text],
 table input[type=password] {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     padding: 0 6px;
     box-sizing: border-box;
     margin: 0;
@@ -402,7 +390,7 @@ table tr .splButton-primary  {
     display: inline-block;
     padding: 4px 12px;
     margin-bottom: 0px;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     line-height: 16px;
     text-align: center;
     vertical-align: middle;
@@ -444,8 +432,8 @@ p.loginButtonRow {
     bottom: 0px;
     padding-bottom: 10px;
     color:  #555;
-    font-size: $baseFontSizeSmall;
-	@mixin gradient-vertical rgba(32,32,32,0), #222222;
+    font-size: $fontSizeSmall;
+    background-image: linear-gradient(to bottom, rgba(32,32,32,0), #222222);
 }
 
 /* noscript message */
@@ -505,14 +493,14 @@ button:hover
         width: 200px;
         margin: 0 auto;
         background: #EAEAEA; /* Old browsers */
-		@mixin gradient-vertical #fbfbfb, #D0D0D0;
+		background-image: linear-gradient(to bottom, #fbfbfb, #D0D0D0); 
 
         padding: 10px;
         box-shadow: 0px 1px 1px rgba(0,0,0,0.08);
         border: 1px solid #E0E0E0;
         border-top-color: $white;
         border-bottom-color: #CFCFCF;
-        border-radius: $baseBorderRadius;
+        border-radius: $borderRadius;
     }
     form table .input-wrapper {
         background: transparent;
@@ -549,7 +537,7 @@ body.lite {
 .lite footer {
     background: none;
     text-align: center;
-    color: #CCC;
+    color: $gray80;
     width: 100%;
 }
 .lite .wrapper-container {
@@ -568,7 +556,7 @@ body.lite {
     box-shadow: none;
     color: #E8B258;
     margin-left: 6px;
-    font-size: $baseFontSizeLarge;
+    font-size: $fontSizeLarge;
     line-height: 35px;
     height: 35px;
     padding: 0 12px;

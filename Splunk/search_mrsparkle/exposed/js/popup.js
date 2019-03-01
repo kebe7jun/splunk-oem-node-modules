@@ -14,7 +14,7 @@
  *                          passing a reference to an existing element that you wish to leave untouched, for example a dom scaffolding you intend to reuse.
  *        buttons: (array/object lit) Array to define buttons and their handlers.
  *                 properties:
- *                    label: (string) button text to display (ex: 'Ok')
+ *                    label: (string) button text to display (ex: 'OK')
  *                    type: (string) type of button.  expected value is either 'primary' or 'secondary'
  *                    callback: (function) callback to fire on button click.  callback should return true to close popup, false to leave it open.
  *        inlineMode: setting this to true invokes 'minimally invasive' mode. see more explanation below
@@ -155,7 +155,7 @@ Splunk.Popup = $.klass({
         Splunk.Popup._globalPopupCount += 1;
 
         Splunk.util.focusFirstField(this._popup);
-        
+
         if ( this._options['isModal'] ) {
             $(this._popup).trap();//SPL-48440 trap tabbing to popup only
          }
@@ -238,6 +238,10 @@ Splunk.Popup = $.klass({
                     this.destroyPopup();
                 }
             }.bind(this));
+
+        if ($( "#appContextSelect_New" ).attr( "disabled" ) === 'disabled') {
+            newbutton.attr('disabled', 'disabled');
+        }
     },
     createOverlay: function(popupParent) {
         if (Splunk.Popup._globalPopupCount > 0) return;
@@ -264,7 +268,7 @@ Splunk.Popup = $.klass({
     },
     setPopupDimensions: function(popupContents) {
         //var popupContentsHeight = $(popupContents).outerHeight();
-        var popupContentWidth = $(popupContents).outerWidth();
+        var popupContentWidth = $(popupContents).outerWidth(false);
 
         //var popupChromeHeight = parseInt($(this._popup).find('.splHeader-popup').outerHeight(),10) + parseInt($(this._popup).find('.popupFooter').outerHeight(),10);
 
@@ -275,8 +279,8 @@ Splunk.Popup = $.klass({
     },
     positionPopup: function() {
         var posX, posY,
-            height = this._popup.outerHeight(),
-            width = this._popup.outerWidth(),
+            height = this._popup.outerHeight(false),
+            width = this._popup.outerWidth(false),
             wst, //window scroll top
             wsl, //window scroll left
             ww = $(window).width(),
@@ -325,9 +329,9 @@ Splunk.Popup = $.klass({
     },
     destroyPopup: function(){
         Splunk.Popup._globalPopupCount -= 1;
-        
+
         if (this._options['onBeforeDestroy']) this._options['onBeforeDestroy'](this);
-        
+
         if ( this._options['inlineMode'] ) {
             $(this._popup).hide();
         } else {
@@ -337,7 +341,7 @@ Splunk.Popup = $.klass({
         if ( this._options['isModal'] ) {
             this.destroyOverlay();
         }
-        
+
         if ( $.browser.mozilla && $.browser.version.substr(0,3) < "1.9" ){
                $('.FlashWrapperContainer').css('z-index','auto');
         }
@@ -499,12 +503,12 @@ Splunk.Popup.createSchedulePDFForm = function(formContainer, title) {
 
     getArgs["pdfPreviewUrl"] = pdfUrl;
 
-    if (typeof Splunk !== "undefined" && 
-        typeof Splunk.ViewConfig !== "undefined" && 
+    if (typeof Splunk !== "undefined" &&
+        typeof Splunk.ViewConfig !== "undefined" &&
         typeof Splunk.ViewConfig.view !== "undefined" &&
         typeof Splunk.ViewConfig.view.label === "string" &&
         Splunk.ViewConfig.view.label.length > 0) {
-        
+
         getArgs["viewLabel"] = Splunk.ViewConfig.view.label;
     }
 
@@ -849,7 +853,7 @@ Splunk.Popup.createTagFieldForm = function(formContainer, title, fieldName, fiel
                 callback: function(){ return true; }
             },
             {
-                label: _("Ok"),
+                label: _("OK"),
                 type: 'primary',
                 callback: function(){ return false; }
             }
@@ -972,7 +976,7 @@ Splunk.Popup.IFramer = function(path, title, options) {
         if (contents.find("div.ui-close-popup").length > 0) {
 			// if the loaded page has a div with class ui-close-popup
 			// then automatically close the popup
-			setTimeout(function(){popup.destroyPopup();}, 0);        
+			setTimeout(function(){popup.destroyPopup();}, 0);
         }
 
         contents.find("div.information input").click(function() {
@@ -987,7 +991,7 @@ Splunk.Popup.IFramer = function(path, title, options) {
                 options.onDone.apply(this,[e]);
             });
         }
-        
+
         contents.find('body').trap(); //SPL-48440 trap tabbing to popup only
 
     });
@@ -1095,8 +1099,8 @@ Splunk.Popup.PeerDecomissionConfirm = function(peername, options) {
     options = options || {};
     var path = Splunk.util.make_url("/manager/system/clustering/master/confirmDecommission");
     var title = options.title || _("Decommission Peer");
- 
-    var data = {}; 
+
+    var data = {};
     data['peername'] = peername;
 
   $(document).trigger('SessionTimeout.Jobber');
@@ -1111,7 +1115,7 @@ Splunk.Popup.PeerDecomissionConfirm = function(peername, options) {
       cancel.ajaxSubmit();//calling the actual dom element and invoking submit does not work on chrome
   };
   return Splunk.Popup.IFramer(path, title, {data: data, onBeforeDestroy: onBeforeDestroy, pclass: 'wizardPopup', onDone: onDone });
-}; 
+};
 
 
 /**
@@ -1246,22 +1250,6 @@ Splunk.Popup.TreePopup = function(elTarget, title, data, style) {
     return popup;
 };
 
-
-/**
- * Static method to launch wall application.
- */
-Splunk.Popup.Wall = function() {
-    var path = Splunk.util.make_url("/wall/" + encodeURIComponent(Splunk.util.getCurrentApp()) + "/new");
-    var onBeforeDestroy = function(popup) {
-        Splunk.Messenger.System.getInstance().getServerMessages();
-        var iframe = $("iframe", popup.getPopup());
-        var cancel = iframe.contents().find("form.cancel");
-        cancel.unbind();//remove bound submit handler to eliminate recursion error
-        cancel.ajaxSubmit();//calling the actual dom element and invoking submit does not work on chrome
-    };
-    return Splunk.Popup.IFramer(path, _('Wall'), {data: {}, onBeforeDestroy: onBeforeDestroy, pclass: 'wizardPopup', isModal: false});
-};
-
 /**
  * Schedule pdf popup helper. This could be much more simplified via an iframe and a
  * classic MVC based work for this.
@@ -1290,7 +1278,7 @@ Splunk.Popup.SchedulePDF = function($targetContainer, error) {
     function displaySchedulePDFForm(pdfService) {
         Splunk.Popup.createSchedulePDFForm($targetContainer, _('Schedule for PDF Delivery'), pdfService);
     }
-    
+
     function displaySchedulePDFUnavailable() {
     	Splunk.Popup.DisplayPDFUnavailable($targetContainer);
     }

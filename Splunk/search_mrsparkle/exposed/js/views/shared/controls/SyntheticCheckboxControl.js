@@ -3,13 +3,15 @@ define( [
     'module',
     'views/shared/controls/Control',
     'util/keyboard',
-    'splunk.util'
+    'splunk.util',
+    './SyntheticCheckboxControl.pcssm'
 ], function(
     _,
     module,
     Control,
     keyboard,
-    splunk_util
+    splunk_util,
+    css
     )
 {
     /**
@@ -36,7 +38,7 @@ define( [
      * @param {String} [options.additionalClassNames] Class attribute(s) to add to control
      */
     var SyntheticCheckboxControl = Control.extend(/** @lends views.SyntheticCheckboxControl.prototype */{
-        className: 'control',
+        className: 'control ' + css.syntheticCheckbox,
         moduleId: module.id,
         initialize: function(){
             var defaults = {
@@ -46,7 +48,7 @@ define( [
             };
 
             _.defaults(this.options, defaults);
-            
+
             Control.prototype.initialize.apply(this, arguments);
         },
         events: {
@@ -69,48 +71,56 @@ define( [
         },
         disable: function(){
             this.options.enabled = false;
-            this.$('label').addClass('disabled');
-            this.$('.btn').addClass('disabled');
+            this.$('label').addClass(css.disabled);
+            this.$('.btn').addClass(css.disabled);
         },
         enable: function(){
             this.options.enabled = true;
-            this.$('label').removeClass('disabled');
-            this.$('.btn').removeClass('disabled');
+            this.$('label').removeClass(css.disabled);
+            this.$('.btn').removeClass(css.disabled);
         },
         normalizeValue: function(value) {
             return splunk_util.normalizeBoolean(value) ? 1 : 0;
         },
         render: function(){
-            var checked = this.options.invertValue ? !this.getValue() : this.getValue();
+            var checked = this.options.invertValue ? !this.getValue() : this.getValue(),
+                checkedClassName = 'checked';
 
             if (!this.el.innerHTML) {
                 var template = _.template(this.template, {
-                                options: this.options,
-                                checked: checked
-                        });
+                    id: 'control-' + this.cid,
+                    options: this.options,
+                    checked: checked,
+                    checkedClassName: checked ? ' ' + checkedClassName : ''
+                });
                 this.$el.html(template);
-                
+
                 if (!this.options.enabled) {
                     this.disable();
                 }
             } else {
                 this.$('.icon-check')[checked ? 'show' : 'hide']();
+                this.$('.checkbox')[checked ? 'addClass' : 'removeClass'](checkedClassName);
             }
 
             var additionalClassNames = this.options.additionalClassNames;
-            if(additionalClassNames) {
-                this.$el.addClass(additionalClassNames); 
+            if (additionalClassNames) {
+                this.$el.addClass(additionalClassNames);
             }
 
             return this;
         },
         template: '\
-            <label class="checkbox">\
-                  <a href="#" data-name="<%- options.modelAttribute || "" %>" class="<%- options.checkboxClassName %>"><i class="icon-check" <% if (!checked) {%>style="display:none"<% } %>></i></a>\
-                  <%- options.label%>\
+            <label class="checkbox<%- checkedClassName %>">\
+                <a href="#" id="<%- id %>" \
+                    data-name="<%- options.modelAttribute || "" %>" class="<%- options.checkboxClassName %>" \
+                    aria-label="<%- options.ariaLabel || options.modelAttribute || "" %>" \
+                    role="checkbox" aria-checked="<%- checked ? "true" : "false" %>" \
+                    ><i class="icon-check" <% if (!checked) {%>style="display:none"<% } %>></i></a>\
+                <%- options.label%>\
             </label>\
         '
     });
-    
+
     return SyntheticCheckboxControl;
 });

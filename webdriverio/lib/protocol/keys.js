@@ -18,8 +18,10 @@
  *
  */
 
+import GraphemeSplitter from 'grapheme-splitter'
+
 import { UNICODE_CHARACTERS } from '../helpers/constants'
-import depcrecateCommand from '../helpers/depcrecationWarning'
+import { isUnknownCommand } from '../helpers/utilities'
 import { ProtocolError } from '../utils/ErrorHandler'
 
 module.exports = function keys (value) {
@@ -38,9 +40,22 @@ module.exports = function keys (value) {
         throw new ProtocolError('number or type of arguments don\'t agree with keys protocol command')
     }
 
-    depcrecateCommand('keys')
-    return this.requestHandler.create('/session/:sessionId/keys', {
-        'value': key
+    return this.requestHandler.create('/session/:sessionId/keys', { value: key }).catch((err) => {
+        /**
+         * use W3C path if old path failed
+         */
+        if (isUnknownCommand(err)) {
+            const keyDownActions = key.map((value) => ({ type: 'keyDown', value }))
+            const keyUpActions = key.map((value) => ({ type: 'keyUp', value }))
+
+            return this.actions([{
+                type: 'key',
+                id: 'keys',
+                actions: [...keyDownActions, ...keyUpActions]
+            }])
+        }
+
+        throw err
     })
 }
 
@@ -50,5 +65,5 @@ module.exports = function keys (value) {
  * @return {Array}         set of characters or unicode symbols
  */
 function checkUnicode (value) {
-    return UNICODE_CHARACTERS.hasOwnProperty(value) ? [UNICODE_CHARACTERS[value]] : value.split('')
+    return UNICODE_CHARACTERS.hasOwnProperty(value) ? [UNICODE_CHARACTERS[value]] : new GraphemeSplitter().splitGraphemes(value)
 }

@@ -72,7 +72,7 @@ define(
         var getDocumentTitle = function(defaultDocumentTitleText, option, customDocumentTitleText) {
             if (option === DOCUMENT_TITLE_OPTIONS.DEFAULT_DOCUMENT_TITLE) {
                 // No need to translate Splunk
-                return splunkUtil.sprintf("%s %s", defaultDocumentTitleText, " | DCE Monitor");
+                return splunkUtil.sprintf("%s %s", defaultDocumentTitleText, " | Splunk");
             } else if (option === DOCUMENT_TITLE_OPTIONS.CUSTOM_DOCUMENT_TITLE) {
                 return customDocumentTitleText;
             } else {

@@ -52,7 +52,6 @@ define([
 
                 this.children.timeThreshold = new ControlGroup({
                     className: 'control-group',
-                    controlClass: 'controls-block',
                     controls: [this.timeThresholdControl],
                     label: _('Older Than').t(),
                     help: _('Archive if the bucket is older than this value').t()

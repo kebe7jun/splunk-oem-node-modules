@@ -4,8 +4,12 @@
     composes: view from '../../Menu.pcssm';
     height: 40px;
     float: left;
-    border-left: 1px solid $gray;
-    border-right: 1px solid $gray;
+    border-left: 1px solid $gray45;
+    border-right: 1px solid $gray45;
+
+    i {
+        line-height: 40px;
+    }
 }
 
 .toggle {

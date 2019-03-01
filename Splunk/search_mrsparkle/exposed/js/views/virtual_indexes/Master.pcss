@@ -9,6 +9,9 @@
 {
 	clear: both;
 	padding-top: 10px;
+    > table {
+        @mixin create-card-table;
+    }
 }
 
 /*  TODO: why isn't this common? */
@@ -57,15 +60,21 @@ td span + a {
 .disableAction {
   margin-left: 13px;
 }
+.virtualindexes-providersgrid {
+  .table td .tooltip-link {
+    top: unset;
+    font-size: unset;
+  }
+}
 .virtualindexes-userimpersonationtab .uneditable-input {
   width: 600px;
   padding-left: 0px;
   padding-right: 0px;
 }
 .virtualindexes-archivegrid {
-    .expanded-info {
-        padding-top: 1em;
-    }
+  .expanded-info {
+    padding-top: 1em;
+  }
 
   .col-info {
     width: 1em;
@@ -83,6 +92,20 @@ td span + a {
     white-space: nowrap;
   }
 
+  .select-all-checkbox {
+    min-width: 16px;
+  }
+
+  .selected-checkbox {
+    padding-top: 10px;
+  }
+
+  table > tbody > tr > td.selected-checkbox:not(:first-child) {
+      border-left: 1px solid transparent;
+  }
+}
+.virtualindexes-buttons-placeholder {
+    margin-bottom: $spacingThreeQuarters;
 }
 .virtualindexes-archivegridrow {
   .checkbox {
@@ -92,8 +115,12 @@ td span + a {
     width: 140px;
   }
 }
-.unified-search-placeholder{
+.unified-search-placeholder {
   display: inline-block;
+  width: 400px;
+  float: left;
+  margin-right: $spacingQuarter;
+
   .control-group {
     .control-label {
       margin-right: 3px;
@@ -103,4 +130,18 @@ td span + a {
       margin-right: 2px;
     }
   }
+}
+.filter-button-placeholder {
+    background-color: $white;
+}
+.control.shared-findinput {
+    margin-top: 0;
+}
+.virtualindexes {
+    > .section-header {
+        padding-bottom: 0;
+    }
+    > .nav-tabs {
+        background-color: transparent;
+    }
 }

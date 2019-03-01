@@ -2,14 +2,13 @@
 /*  ================================ */
 
 .datamodelmanager-datamodelmanager > .btn-toolbar {
-	 margin-left: 10px;
+    margin-left: 10px;
 }
 
 .main-section {
     background: $bodyBackgroundColor;
-    
+
     .table-toolbar {
-        padding: 8px 8px 0;
 
         > * {
             min-height: 28px;
@@ -20,29 +19,30 @@
 
             }
         }
-        
+
+        .collection-count {
+            height: 24px;
+            vertical-align: middle;
+        }
+
         .filter-container {
-            border-top: 1px solid$grayLightMedium;
+            border-top: 1px solid $borderColor;
             padding-top: 10px;
-                 
-            .collection-count {
-                margin-left: 13px;
-            } 
-            
+
             .select-page-count {
-            	float: right;
-            }          
+                float: right;
+            }
         }
-        
+
         .paginator-container {
-			min-height: initial;
+            min-height: initial;
         }
-    }    
+    }
 }
-        
+
 .data-model-table-body  {
     td {
-        overflow: hidden; 
+        overflow: hidden;
     }
 }
 
@@ -54,14 +54,12 @@
 	color: $textGray;
 	cursor: default;
 	font-size: 18px;
-	height: $baseLineHeight;
 	display: block;
 	overflow: hidden;
 }
 
 .icon-lightning-selected {
-	color: $yellow;
-	text-shadow: 0 1px 0 color($yellow l(-20%));
+	color: $warningColor;
 }
 
 .datamodelmanager-components-editmenu {
@@ -69,10 +67,10 @@
 }
 
 .data-model-title {
-	font-size: 14px;
 	display: block;
-	margin: -8px;
-	padding: 8px;
+    min-height: 20px;
+	margin: -4px;
+	padding: 4px;
 }
 
 .col-title {
@@ -93,14 +91,17 @@
 	ul {
 	    word-break: break-word;
 	}
+    > .expanded-info {
+        word-break: break-word;
+    }
 }
 
 .col-accelerate {
-		width: 15px;
+		width: 8px;
 }
 
 .col-actions {
-	width: 180px;
+	width: 100px;
 
 	> .dropdown, > a {
 		display: inline-block;
@@ -108,7 +109,7 @@
 
 	> .dropdown:first-child, > a:first-child {
 		min-width: 40px;
-		margin-right: 20px;
+		margin-right: 15px;
 	}
 }
 
@@ -126,6 +127,17 @@
 	width: 70px;
 }
 
+@media only screen and (max-width: 980px) and (-webkit-min-device-pixel-ratio: 1.5),
+       only screen and (max-width: 980px) {
+       .col-title {
+            width: 220px;
+       }
+
+       .col-app, .col-owner {
+       	    width: 100px;
+       }
+}
+
 
 .text-name-filter-placeholder {
 	display: inline-block;
@@ -136,6 +148,7 @@
 
 .dm-list-placeholder {
 	clear: both;
+	@mixin create-card;
 }
 
 .collection-paginator-placeholder {
@@ -168,14 +181,14 @@
 
     .isFocused{
         .btn-file {
-            @mixin focus-button;
+            @mixin focus-element;
         }
     }
 
 	span.filename.uneditable-input {
 		width: calc(100% - 80px);
 		box-sizing: border-box;
-		height: 26px;
+		height: $inputHeight;
 		border-right: none;
 		margin-right: 0;
 		border-top-right-radius: 0;
@@ -210,7 +223,7 @@
 
   .control {
     display: inline-block;
-    
+
     .uneditable-input {
         width: 8em;
     }

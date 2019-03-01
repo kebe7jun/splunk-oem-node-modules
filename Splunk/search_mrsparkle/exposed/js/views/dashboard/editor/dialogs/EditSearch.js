@@ -25,6 +25,7 @@ define([
         'controllers/dashboard/helpers/ModelHelper',
         'splunkjs/mvc/tokenawaremodel',
         'util/moment/relative',
+        'util/theme_utils',
         'splunkjs/mvc/tokenutils',
         './EditSearch.pcss'
 ], function(_,
@@ -53,6 +54,7 @@ define([
              ModelHelper,
              TokenAwareModel,
              RelativeTimeUtil,
+             theme_utils,
              TokenUtils,
              css) {
 
@@ -123,7 +125,6 @@ define([
                 this.children.title = new ControlGroup({
                     label: _("Title").t(),
                     controlType: 'Label',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.report.entry.content,
                         modelAttribute: 'dashboard.element.title'
@@ -145,7 +146,8 @@ define([
                     },
                     collection: {
                         searchBNFs: this.collection.searchBNFs
-                    }
+                    },
+                    syntaxHighlighting: theme_utils.getSearchEditorTheme()
                 });
                 this.listenTo(this.children.searchStringInput, 'runSearch', this.runSearch);
 
@@ -216,9 +218,8 @@ define([
                 ];
 
                 this.children.refreshTimeInput = new ControlGroup({
-                    label: _('Auto refresh delay').t(),
+                    label: _('Auto Refresh Delay').t(),
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     tooltip: _('Automatically refresh the search after a specified delay').t(),
                     controlOptions: {
                         model: this.model.refreshProxy,
@@ -258,9 +259,8 @@ define([
                 this.listenTo(this.model.refreshProxy, 'change', this.updateRefreshInput);
 
                 this.children.refreshDisplay = new ControlGroup({
-                    label: _('Refresh indicator').t(),
+                    label: _('Refresh Indicator').t(),
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.searchModel,
                         modelAttribute: 'refreshDisplay',
@@ -420,6 +420,7 @@ define([
                 this.children.searchFlashMessages.$el.addClass("search");
                 $modalBody.append(Modal.FORM_HORIZONTAL_JUSTIFIED);
                 var $modalFormBody = this.$(Modal.BODY_FORM_SELECTOR);
+                $modalFormBody.addClass('edit-search-form-main');
                 this.children.title.render().appendTo($modalFormBody);
                 this.children.searchStringInput.render().appendTo($modalFormBody);
 

@@ -2,11 +2,12 @@
     title = 'App Install'
 %>
 <%namespace name="lib" file="//lib.html" import="*"/>
+<%namespace name="helpers" file="//admin/_helpers.html"/>
 <%inherit file="//layout/admin.html" />
 <%
-import splunk
-from splunk.appserver.mrsparkle.lib import util, i18n
-appText = 'add-on' if util.isLite() else 'app'
+	import splunk
+	from splunk.appserver.mrsparkle.lib import util, i18n
+	appText = util.getAppType()
 %>
 
 <div class="spl-gdi-wrapper spl-prompt-message-layout"> 

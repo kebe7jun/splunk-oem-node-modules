@@ -1,15 +1,14 @@
 import _ from 'underscore';
-import { createTestHook } from 'util/test_support';
-import React, { Component, PropTypes } from 'react';
-import Button from 'splunk-ui/components/Button';
-import Link from 'splunk-ui/components/Link';
-import ColumnLayout from 'splunk-ui/components/ColumnLayout';
-import Table from 'splunk-ui/components/Table';
-import WaitSpinner from 'splunk-ui/components/WaitSpinner';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import Button from '@splunk/react-ui/Button';
+import Link from '@splunk/react-ui/Link';
+import ColumnLayout from '@splunk/react-ui/ColumnLayout';
+import Table from '@splunk/react-ui/Table';
+import WaitSpinner from '@splunk/react-ui/WaitSpinner';
 import ActionLink from './ActionLink';
 import AppDialog from './AppDialog/AppDialog';
 import './PackagesTable.pcss';
-import './UploadedApps.pcss';
 
 const STRINGS = {
     NO_APPS_ALERT: _('You have not uploaded any private apps yet.').t(),
@@ -22,12 +21,14 @@ const ACTIONS = {
     UPDATE: 'Update',
     MORE_INFO: 'More Info',
     VIEW_REPORT: 'View Report',
+    DELETE: 'Delete',
 };
 
 const ACTION_LINKS = {
     INSTALL: 'install',
     UPDATE: 'update',
     REPORT: 'report',
+    DELETE: 'delete',
 };
 
 const STATES = {
@@ -42,10 +43,18 @@ class PackagesTable extends Component {
 
     handleAppAction = (e) => {
         e.preventDefault();
-        if (this.props.action === ACTIONS.INSTALL) {
-            this.props.onInstallPackage();
-        } else if (this.props.action === ACTIONS.UPDATE) {
-            this.props.onUpdatePackage();
+        switch (this.props.action) {
+            case ACTIONS.INSTALL:
+                this.props.onInstallPackage();
+                break;
+            case ACTIONS.UPDATE:
+                this.props.onUpdatePackage();
+                break;
+            case ACTIONS.DELETE:
+                this.props.onDeletePackage();
+                break;
+            default:
+                break;
         }
     }
 
@@ -64,6 +73,12 @@ class PackagesTable extends Component {
             onActionDialogOpen: this.props.onUpdatePackageOpen,
             deploymentInProgress: this.props.deploymentInProgress,
             disabledDuringDeployment: true,
+        };
+
+        const deleteAppLinkProps = {
+            action: ACTIONS.DELETE,
+            actionDialogOpen: this.props.actionDialogOpen,
+            onActionDialogOpen: this.props.onDeletePackageOpen,
         };
 
         const moreInfoProps = {
@@ -101,7 +116,7 @@ class PackagesTable extends Component {
         };
 
         return (
-            <div {...createTestHook(module.id)}>
+            <div data-test="UploadedApps-PackagesTable">
                 <Table stripeRows>
                     <Table.Head>
                         <Table.HeadCell>{_('App').t()}</Table.HeadCell>
@@ -113,12 +128,12 @@ class PackagesTable extends Component {
                     <Table.Body>
                         {this.props.packages.map(row => (
                             <Table.Row data-row-id={row.id} key={row.id}>
-                                <Table.Cell className="cell-name">
+                                <Table.Cell data-test="cell-name">
                                     {
                                         row.getApp() ? row.getApp().label : row.getUploadedFileName()
                                     }
                                 </Table.Cell>
-                                <Table.Cell className="cell-status">
+                                <Table.Cell data-test="cell-status">
                                     {
                                         row.isVetting() &&
                                         <WaitSpinner />
@@ -136,7 +151,7 @@ class PackagesTable extends Component {
                                         />
                                     }
                                 </Table.Cell>
-                                <Table.Cell className="cell-actions">
+                                <Table.Cell data-test="cell-actions">
                                     {
                                         this.props.canEdit && row.getLink(ACTION_LINKS.INSTALL) &&
                                         <ActionLink
@@ -152,19 +167,26 @@ class PackagesTable extends Component {
                                         />
                                     }
                                     {
+                                        this.props.canEdit && row.getLink(ACTION_LINKS.DELETE) &&
+                                        <ActionLink
+                                            {...deleteAppLinkProps}
+                                            package={row}
+                                        />
+                                    }
+                                    {
                                         this.props.canEdit && row.getLink(ACTION_LINKS.REPORT) &&
                                         !row.getVettingErrors() &&
                                         <Link
                                             to={row.getFullLink(ACTION_LINKS.REPORT)}
                                             openInNewContext
-                                            {...createTestHook(null, ACTIONS.VIEW_REPORT)}
+                                            data-test="UploadedApps-ActionLink-ViewReport"
                                         >
                                             { ACTIONS.VIEW_REPORT }
                                         </Link>
                                     }
                                 </Table.Cell>
-                                <Table.Cell className="cell-submitted">{row.getSubmittedAt()}</Table.Cell>
-                                <Table.Cell className="cell-version">{row.getVersion()}</Table.Cell>
+                                <Table.Cell data-test="cell-submitted">{row.getSubmittedAt()}</Table.Cell>
+                                <Table.Cell data-test="cell-version">{row.getVersion()}</Table.Cell>
                             </Table.Row>
                         ))}
                     </Table.Body>
@@ -189,7 +211,7 @@ class PackagesTable extends Component {
                             <Button
                                 disabled={this.props.taskStatus === STATES.STARTED}
                                 {...cancelButtonProps}
-                                {...createTestHook(null, 'cancel-close')}
+                                data-test="UploadedApps-CancelCloseButton"
                             />
                         }
                         {
@@ -197,6 +219,7 @@ class PackagesTable extends Component {
                             <Button
                                 disabled={this.props.taskStatus === STATES.STARTED}
                                 {...continueButtonProps}
+                                data-test="UploadedApps-ContinueButton"
                             />
                         }
                     </AppDialog.Footer>
@@ -230,6 +253,8 @@ PackagesTable.propTypes = {
     canEdit: PropTypes.bool,
     onUpdatePackageOpen: PropTypes.func.isRequired,
     onUpdatePackage: PropTypes.func.isRequired,
+    onDeletePackageOpen: PropTypes.func.isRequired,
+    onDeletePackage: PropTypes.func.isRequired,
     onMoreInfoOpen: PropTypes.func.isRequired,
 };
 

@@ -105,7 +105,7 @@ define(function(require, exports, module) {
         },
 
         clearSelectionTemplate: '\
-            <a class="default-clear-selection btn-link" href="#"><%- _("Clear Selection").t() %></a>\
+            <div><a class="default-clear-selection btn-link" href="#"><%- _("Clear Selection").t() %></a></div>\
         '
 
     });

@@ -32,7 +32,6 @@ Splunk.Module.LiteBar = $.klass(Splunk.Module, {
             'models/services/data/UserPrefGeneral',
             'collections/services/data/ui/Tours',
             'collections/services/AppLocals',
-            'views/shared/footer/Master',
             'models/config',
             'models/shared/User',
             'util/splunkd_utils'
@@ -44,7 +43,6 @@ Splunk.Module.LiteBar = $.klass(Splunk.Module, {
             UserPrefModel,
             ToursCollection,
             AppsCollection,
-            FooterView,
             configModel,
             UserModel,
             splunkd_utils
@@ -123,15 +121,6 @@ Splunk.Module.LiteBar = $.klass(Splunk.Module, {
                 });
                 self.container.html(this.litebar.$el);
             }.bind(this));
-
-            var footerView = FooterView.create({
-                model: {
-                    application: applicationModel
-                }
-            });
-            var $footerContainer = $('<div class="splunk-components"/>');
-            $footerContainer.append(footerView.render().el);
-            $('body').append($footerContainer);
         });
     }
 });

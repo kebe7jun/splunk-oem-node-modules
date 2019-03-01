@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 import BaseRouter from 'routers/Base';
 import TaskModel from 'models/managementconsole/Task';
 import DeployModel from 'models/managementconsole/Deploy';
+import TopologyModel from 'models/managementconsole/topology/Topology';
 import Packages from 'collections/managementconsole/Packages';
 import UploadedAppsPageContainer from 'views/managementconsole/apps/uploaded_apps/UploadedAppsPageContainer';
 
@@ -16,6 +17,17 @@ const UploadedAppsPageRouter = BaseRouter.extend({
         this.fetchUploadedPackages();
         this.initializeDeployTaskModel();
         this.initializeDeployModel();
+        this.initializeTopologyModel();
+
+        this.model.deployModel.on('serverValidated', (success, context, messages) => {
+            const netErrorMsg = _.find(messages, msg =>
+                msg.type === 'network_error' || msg.text === 'Server error',
+            );
+            if (netErrorMsg) {
+                this.model.deployModel.entry.content.unset('taskId');
+                this.initializeDeployModel();
+            }
+        }, this);
     },
 
     fetchUploadedPackages() {
@@ -45,11 +57,11 @@ const UploadedAppsPageRouter = BaseRouter.extend({
     // Initialize deploy task model to keep track of the deploy action progress. No initial fetch
     initializeDeployTaskModel() {
         this.model.deployTask = new TaskModel();
+        this.model.deployModel = new DeployModel();
     },
 
     // Initialize the deploy model - provide taskId for the last deployment
     initializeDeployModel() {
-        this.model.deployModel = new DeployModel();
         this.model.deployModel.startPolling();
 
         this.listenTo(this.model.deployModel.entry.content, 'change:taskId', (model, taskId) => {
@@ -63,12 +75,19 @@ const UploadedAppsPageRouter = BaseRouter.extend({
         });
     },
 
+    // Initialize topology model to know the Splunk deployment type.
+    initializeTopologyModel() {
+        this.model.topologyModel = new TopologyModel();
+        this.deferreds.topologyModel = this.model.topologyModel.fetch();
+    },
+
     page(...args) {
         BaseRouter.prototype.page.call(this, ...args);
 
         $.when(
             this.deferreds.pageViewRendered,
             this.deferreds.packages,
+            this.deferreds.topologyModel,
         ).done(() => {
             this.pollPackagesCollection();
             $('.preload').replaceWith(this.pageView.el);
@@ -78,6 +97,7 @@ const UploadedAppsPageRouter = BaseRouter.extend({
                 pollPackagesCollection: this.pollPackagesCollection,
                 deployTask: this.model.deployTask,
                 canEdit: this.model.user.hasCapability('dmc_deploy_apps'),
+                isSHC: !!this.model.topologyModel.entry.content.get('SHCDeployer'),
             };
 
             render(

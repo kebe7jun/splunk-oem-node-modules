@@ -17,6 +17,7 @@ define(
         'models/account/TOS',
         'models/account/MFAStatus',
         'models/account/Duo',
+        'models/account/Rsa',
         'views/account/Master',
         'util/login_page',
         'jquery.cookie'
@@ -39,6 +40,7 @@ define(
         TOSModel,
         MFAStatusModel,
         DuoModel,
+        RsaModel,
         MasterView,
         LoginPageUtils,
         jqueryCookie
@@ -61,9 +63,10 @@ define(
                 '*root/:locale/account/:page/?*params': 'pageRooted'
             },
             status: {
-                DUO_SUCCESSFUL: 0,
-                DUO_BOOTSTRAP_TOS: 4,
-                DUO_BOOTSTRAP: 5
+                MFA_SUCCESSFUL: 0,
+                MFA_BOOTSTRAP_TOS: 4,
+                MFA_BOOTSTRAP: 5,
+                RSA_TOKENMODE: 7
             },
             initialize: function() {
                 this.model = {};
@@ -75,6 +78,7 @@ define(
                 this.model.web = new WebModel({}, {splunkDPayload: __splunkd_partials__['/configs/conf-web']});
                 this.model.login = new LoginModel();
                 this.model.duo = new DuoModel();
+                this.model.rsa = new RsaModel();
                 this.model.mfaStatus = new MFAStatusModel({}, {splunkDPayload: __splunkd_partials__['/account/mfa/status']});
                 this.model.user = new UserModel({}, {serverInfoModel: this.model.serverInfo});
                 this.model.user.urlRoot = undefined;//urlRoot is relied on by other consumers; required to be deleted in order to set a fully qualified link as id
@@ -88,18 +92,25 @@ define(
                 }, this);
                 this.model.login.on('skipChangePassword', this.setLoginCookie, this);
                 this.model.login.on('sync', function() {
-                    //optional first time run password change for authenticated user
-                    if (!this.model.session.entry.content.get('hasLoggedIn') && !this.model.serverInfo.isFreeLicense() && this.model.login.isAdmin()) {
+                    if (this.model.login.get('status') === this.status.MFA_BOOTSTRAP) {
+                        if (this.model.login.get('mfa_vendor') === 'rsa-mfa') {
+                            // Initialize the Rsa model and its listeners.
+                            this.model.application.set('page', 'rsaauth');
+                            this.model.rsa.on('sync', this.handleRsaSuccess, this);
+                            this.model.rsa.on('error', this.handleRsaError, this);
+                        } else {
+                            // Initialize the Duo model and its listeners.
+                            this.model.duo.fetch().done(function() {
+                                    this.model.application.set('page', 'duoauth');
+                                }.bind(this));
+                            this.model.duo.on('sync', this.handleDuoSuccess, this);
+                            this.model.duo.on('error', this.handleDuoError, this);
+                        }
+                    } else if(this.model.login.isPasswordExpiring()) {
                         var id = '/services/' + this.model.user.url + '/' + encodeURIComponent(this.model.login.get('username'));
                         this.model.user.set('id', id);
+                        this.model.user.entry.content.set('oldpassword', this.model.login.get('password'));
                         this.model.application.set('page', 'passwordchange');
-                    } else if (this.model.login.get('status') === this.status.DUO_BOOTSTRAP) {
-                        // Initialize the Duo model and its listeners.
-                        this.model.duo.fetch().done(function() {
-                                this.model.application.set('page', 'duoauth');
-                            }.bind(this));
-                        this.model.duo.on('sync', this.handleDuoSuccess, this);
-                        this.model.duo.on('error', this.handleDuoError, this);
                     } else {
                         this.successRedirect();
                     }
@@ -120,19 +131,39 @@ define(
                 }
             },
             handleDuoSuccess: function(model, response, options){
-                if (response.status && response.status == this.status.DUO_BOOTSTRAP_TOS && response.tos_url && response.tos_version){
+                if (response.status && response.status == this.status.MFA_BOOTSTRAP_TOS && response.tos_url && response.tos_version){
                     this.bootstrapTOS(response.tos_version, response.tos_url);
-                } else if (response.status === this.status.DUO_SUCCESSFUL) {
+                } else if (response.status === this.status.MFA_SUCCESSFUL) {
                     this.successRedirect();
                 }
             },
             handleDuoError: function(model, response, option){
                 var responseJSON = response.responseJSON;
-                if (responseJSON && responseJSON.status == this.status.DUO_BOOTSTRAP_TOS && responseJSON.tos_version && responseJSON.tos_url && responseJSON.login_type) {
+                if (responseJSON && responseJSON.status == this.status.MFA_BOOTSTRAP_TOS && responseJSON.tos_version && responseJSON.tos_url && responseJSON.login_type) {
                         this.model.login.set('login_type', responseJSON.login_type);
                         this.bootstrapTOS(responseJSON.tos_version, responseJSON.tos_url);
                 } else {
                     this.model.application.set('page','login');
+                }
+            },
+            handleRsaSuccess: function(model, response, options){
+                if (response.status && response.status == this.status.MFA_BOOTSTRAP_TOS && response.tos_url && response.tos_version){
+                    this.bootstrapTOS(response.tos_version, response.tos_url);
+                } else if (response.status === this.status.MFA_SUCCESSFUL) {
+                    this.successRedirect();
+                }
+            },
+            handleRsaError: function(model, response, option){
+                var responseJSON = response.responseJSON;
+                if (responseJSON && responseJSON.status == this.status.MFA_BOOTSTRAP_TOS && responseJSON.tos_version && responseJSON.tos_url && responseJSON.login_type) {
+                        this.model.login.set('login_type', responseJSON.login_type);
+                        this.bootstrapTOS(responseJSON.tos_version, responseJSON.tos_url);
+                } else if (responseJSON && responseJSON.status == this.status.RSA_TOKENMODE) {
+                    this.model.login.set('tokenmode', true);
+                    this.model.rsa.set('authnAttemptId', responseJSON.authnAttemptId);
+                    this.model.rsa.set('inResponseTo', responseJSON.inResponseTo);
+                } else {
+                    this.model.application.set('page','rsaauth');
                 }
             },
             successRedirect: function(options) {
@@ -194,7 +225,8 @@ define(
                         login: this.model.login,
                         user: this.model.user,
                         mfaStatus: this.model.mfaStatus,
-                        duo: this.model.duo
+                        duo: this.model.duo,
+                        rsa: this.model.rsa
                     }
                 });
 

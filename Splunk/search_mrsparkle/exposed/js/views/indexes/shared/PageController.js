@@ -8,13 +8,15 @@ define([
         'underscore',
         'backbone',
         'module',
-        'collections/services/AppLocals',
         'controllers/BaseManagerPageControllerFiltered',
+        'collections/services/AppLocals',
         'collections/indexes/cloud/Archives',
-
+        'collections/services/configs/conf-self-storage-locations/BucketList',
         './DeleteIndexDialog',
+        'views/shared/basemanager/EditDialog',
         'views/shared/basemanager/EnableDialog',
         'views/shared/basemanager/DisableDialog',
+        'views/indexes/cloud/restore_archive/Master',
         './AddEditWaitIndexDialog',
         './DeleteWaitIndexDialog',
         './GridRow',
@@ -27,13 +29,15 @@ define([
         _,
         Backbone,
         module,
-        AppsCollection,
         BaseController,
+        AppsCollection,
         ArchivesCollection,
-
+        BucketListCollection,
         DeleteIndexDialog,
+        AddEditDialog,
         EnableDialog,
         DisableDialog,
+        RestoreArchiveDialog,
         AddEditWaitIndexDialog,
         DeleteWaitIndexDialog,
         GridRow,
@@ -41,6 +45,9 @@ define([
         cssBaseManager,
         css
     ) {
+        var SELF_STORAGE_CONST = 'SelfStorage',
+            ARCHIVE_CONST = 'Archive',
+            NONE_CONST = 'None';
 
         var IndexesController = BaseController.extend({
             moduleId: module.id,
@@ -73,6 +80,8 @@ define([
                     this.deferreds.archives = this.fetchArchivesCollection();
                 }
 
+                this.collection.bucketList = new BucketListCollection();
+
                 var showWaitSaveDialog = this.options.isCloud && !this.options.isSingleInstanceCloud,
                     showWaitDeleteDialog = this.options.isCloud && !this.options.isSingleInstanceCloud,
                     pageDesc = _("A repository for data in Splunk Enterprise. Indexes reside in flat files on the Splunk Enterprise instance known as the indexer.").t();
@@ -101,6 +110,7 @@ define([
                 options.deferreds = this.deferreds;
                 options.entitiesCollectionClass = this.options.indexesCollectionClass;
                 options.entityModelClass = this.options.indexModelClass;
+                options.archiverModelClass =  this.options.archiverModelClass;
                 options.entityFetchDataClass = this.options.indexesFetchDataClass;
                 options.grid = {
                     showAppFilter: !this.options.showAppFilter,
@@ -138,6 +148,11 @@ define([
                 }
             },
 
+            initEventHandlers: function(options) {
+                BaseController.prototype.initEventHandlers.call(this, options);
+                this.listenTo(this.model.controller, "restoreEntity", this.showRestoreDialog);
+            },
+
             /* Create/Edit action */
             // editIndex->onEditEntity->showAddEditDialog->onEntitySaved->showWaitSaveIndexDialog->onEditDialogHidden->
             // ->onWaitSaveDialogHidden->navigate
@@ -147,6 +162,78 @@ define([
                     this.showWaitSaveIndexDialog(index);
                 }
                 this.fetchEntitiesCollection();
+            },
+            /**
+             * Show the restore modal for restoring archive
+             * @param entityModel
+             */
+            showRestoreDialog: function(entityModel) {
+                this.children.restoreArchiveModal = new RestoreArchiveDialog({
+                    model: {
+                        entity: entityModel
+                    }
+                });
+                this.children.restoreArchiveModal.render().appendTo($("body"));
+            },
+            showAddEditDialog: function(entityModel, isClone) {
+                var isCloud = this.model.serverInfo.isCloud();
+                var dialogOptions = $.extend({}, this.options);
+
+                if (entityModel) {
+                    // clone to prevent changes in the table as you edit the fields in the popup
+                    this.model.entity = entityModel.clone();
+                } else {
+                    this.model.entity = new this.options.entityModelClass();
+                }
+
+                this.model.stateModel.set('isArchiverAppInstalled', this.collection.appLocals.isArchiverAppInstalled());
+                this.model.stateModel.set('isDataArchiveEnabled', _.isFunction(this.collection.entities.isDataArchiveEnabled) && this.collection.entities.isDataArchiveEnabled());
+                this.model.stateModel.set('maxArchiveRetention', _.isFunction(this.collection.entities.getMaxDataArchiveRetentionPeriod) && this.collection.entities.getMaxDataArchiveRetentionPeriod());
+                if (isCloud && !_.isUndefined(this.model.stateModel.get('isArchiverAppInstalled'))) {
+                    if (!_.isUndefined(this.model.entity.entry.content.get('archiver.selfStorageBucket'))) {
+                        this.model.stateModel.set('dynamicStorageOption', SELF_STORAGE_CONST);
+                    }
+
+                    // fetch bucketlist when showAddEditDialog is called instead of constructor
+                    // to avoid fetching bucketlist if not needed
+                    this.deferreds.bucketList = new $.Deferred();
+                    this.collection.bucketList.fetch({
+                        data: {
+                            count: -1,
+                            owner: this.model.application.get('owner'),
+                            app: this.model.application.get('app')
+                        },
+                        success: _(function (collection, response) {
+                            if (collection.length > 0) {
+                                this.model.stateModel.set('selfStorageConfigured', true);
+                            } else {
+                                this.model.stateModel.set('selfStorageConfigured', false);
+                            }
+                            this.deferreds.bucketList.resolve();
+                        }).bind(this)
+                    });
+                    this.model.stateModel.set('archiverAppLabel', this.collection.appLocals.archiverAppLabel());
+                    dialogOptions.archiverModelClass = this.options.archiverModelClass;
+                }
+
+                dialogOptions = $.extend(dialogOptions, {
+                    isNew: _.isUndefined(entityModel),
+                    isClone: isClone,
+                    model: this.model,
+                    collection: this.collection,
+                    deferred: this.deferreds,
+                    SELF_STORAGE: SELF_STORAGE_CONST,
+                    ARCHIVE: ARCHIVE_CONST,
+                    NONE: NONE_CONST
+                });
+
+                var _AddEditDialog = this.options.customViews.AddEditDialog || AddEditDialog;
+                this.children.editDialog = new _AddEditDialog(dialogOptions);
+                this.listenTo(this.children.editDialog, "entitySaved", this.onEntitySaved);
+                this.listenTo(this.children.editDialog, "hidden", this.onEditDialogHidden);
+                this.children.editDialog.render().appendTo($("body"));
+
+                this.children.editDialog.show();
             },
             showWaitSaveIndexDialog: function(index){
                 // Build save waiting dialog. Refresh data when dialog is hidden.

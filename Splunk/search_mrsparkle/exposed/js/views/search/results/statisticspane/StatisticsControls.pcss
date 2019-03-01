@@ -7,7 +7,7 @@
 
 */
 .search-results-statisticspane-statisticscontrols {
-    height: 36px;
+    height: 42px;
     margin-top: -10px; /*  override default tab padding */
 
     .dialog-format {
@@ -19,9 +19,9 @@
     }
 
     .statistics-controls-inner {
-        padding:5px 20px 5px 20px;
+        padding:5px;
         background-color: $white;
-        height: 26px;
+        height: 32px;
         position: relative;
 
         &.affix-top {
@@ -29,8 +29,6 @@
             top: 0;
             left: 0;
             right: 0;
-            margin-bottom: -1px;
-            border-bottom: 1px solid $borderColor;
             z-index: 406;
             &.disabled .statistics-controls-inner-cover {
                 position: absolute;
@@ -39,7 +37,7 @@
                 bottom: 0px;
                 left: 0px;
                 opacity: 0.30;
-                background-color: $gray;
+                background-color: $gray45;
                 z-index: 404;
             }
         }

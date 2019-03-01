@@ -1,8 +1,10 @@
 define(function(require, exports, module) {
 
+    var _ = require("underscore");
     var Backbone = require("backbone");
     var Class = require("jg/Class");
     var Color = require("jg/graphics/Color");
+    var ColorCodes = require("splunk/palettes/ColorCodes");
     var ValueEditor = require("splunk/editors/ValueEditor");
     var ColorPickerControl = require("views/shared/controls/ColorPickerControl");
 
@@ -12,10 +14,9 @@ define(function(require, exports, module) {
 
         // Private Static Constants
 
-        var _PALETTE_COLORS = [
-            '#FFFFFF', '#555555', '#D93F3C', '#F7BC38', '#65A637',
-            '#ED8440', '#6A5C9E', '#A2CC3E', '#3863A0', '#6DB7C6'
-        ];
+        var _PALETTE_COLORS = _.flatten([
+            ColorCodes.SEMANTIC, ColorCodes.DIVERGENT_PAIRS, '#FFFFFF', ColorCodes.DARK_GREY
+        ]);
 
         // Private Properties
 

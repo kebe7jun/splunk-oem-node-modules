@@ -79,7 +79,7 @@ define(
                 this.listenTo(this.model.timeRange, 'applied', function() {
                     var stateModelAttrs = {};
                     this.children.popdown.hide();
-                    
+
                     if (this.options.forceTimerangeChange && !this.model.timeRange.hasChanged('earliest') && !this.model.timeRange.hasChanged('latest')) {
                         this.model.state.unset(this.timeRangeAttrNames.earliest, {silent: true});
                         this.model.state.unset(this.timeRangeAttrNames.latest, {silent: true});
@@ -181,14 +181,17 @@ define(
                     ]
                 }, this.options.popdownOptions || {}));
 
-                this.children.popdown.on('shown', function() {
-                    if (this.children.dialog.$(".accordion-group.active").length){
-                        this.children.dialog.onShown();
+                this.children.popdown.on('shown', function () {
+                    var dialog = this.children.dialog;
+
+                    if (dialog.$('.accordion-group.active').length) {
+                        dialog.onShown();
                         return;
                     }
-                    var timePanel = "presets";
-                    this.children.dialog.children[timePanel].$el.closest(".accordion-group").find(".accordion-toggle").first().click();
-                    this.children.dialog.onShown();
+
+                    // There's no active panel, so tell dialog to make the best panel active
+                    dialog.showBestPanel();
+                    dialog.onShown();
                 }, this);
 
                 this.setLabel();

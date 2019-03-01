@@ -52,6 +52,7 @@ define([
                 'Install failed: Cannot install packages that contain statically packaged dependencies. ' +
                 'Only dynamically declared dependencies are supported. Remove the static packages and try again.').t(),
             'AppInstall_ServerException': _('Install failed: %s').t(),
+            'AppInstall_UnsupportedDeployment': _('Install failed: App does not support %s deployments.').t(),
             'Deploy_Failed': _('Application cannot be installed because the previous deployment task has failed.').t(),
             'Deploy_Locked': _('Application cannot be installed while deployment operations are locked. ' +
                 'This might happen during maintenance windows. If this situation is unexpected or goes on ' +
@@ -62,7 +63,9 @@ define([
             'AppUpdate_AlreadyUpToDate': _('Update failed: App is already up to date.').t(),
             'AppUpload_DuplicateVersion': _('App validation failed: Version already in use.').t(),
             'AppUpload_InvalidContent': _('App validation failed: Package contains invalid content. ' +
-                'Only regular files and directories are permitted.').t()
+                'Only regular files and directories are permitted.').t(),
+            'AppDelete_NoPackage': _('Delete failed: Package cannot be found.'),
+            'AppDelete_PackageInUse': _('Delete failed: Package is in use.')
         },
 
         APP_UPLOAD_INCORRECT_CREDENTIALS = _('Incorrect username or password').t(),
@@ -78,12 +81,17 @@ define([
 
         SUCCESSFUL_UPLOAD_MESSAGE = _('%s was uploaded successfully!').t(),
 
+        DEPLOYMENT_TYPES = {
+            '_search_head_clustering': _('search head cluster').t(),
+            '_distributed': _('distributed').t()
+        },
+
         // This is the status text of jQuery XHRs when the request times out.
         JQXHR_TIMEOUT = 'timeout';
 
         var packageModel = ConfigurationModel.extend(
             {
-                maxUploadFileSize: 128 * 1024 * 1024,
+                maxUploadFileSize: 256 * 1024 * 1024,
 
                 isPrivate: function() {
                     return true;
@@ -216,6 +224,9 @@ define([
                                 message = responseJSON.payload;
                             } else if (type === 'AppInstall_ServerException') {
                                 message = splunkUtil.sprintf(DMC_ERROR_MESSAGES[type], responseJSON.payload.message);
+                            } else if (type === 'AppInstall_UnsupportedDeployment') {
+                                message = splunkUtil.sprintf(DMC_ERROR_MESSAGES[type],
+                                                             DEPLOYMENT_TYPES[responseJSON.payload.deployment]);
                             } else {
                                 message = DMC_ERROR_MESSAGES[type] || '';
                             }
@@ -228,7 +239,7 @@ define([
                 },
 
                 login: function(username, password) {
-                        var dfd = $.Deferred();
+                    var dfd = $.Deferred();
 
                     this.save({}, {
                         url: splunkdUtils.fullpath('dmc/packages-upload:login'),
@@ -256,6 +267,28 @@ define([
                             }
                         }
 
+                        dfd.rejectWith(dfd, [arguments, message]);
+                    });
+
+                    return dfd.promise();
+                },
+
+                'delete': function(action) {
+                    var dfd = $.Deferred();
+
+                    this.destroy({
+                        url: this.getFullLink(action.toLowerCase()),
+                        wait: true // don't update the model until REST call is complete
+                    }).done(function(response) {
+                        dfd.resolve();
+                    }).fail(function(response, statusText) {
+                        var status = response.status,
+                            responseJSON = response && response.responseJSON,
+                            type = responseJSON && responseJSON.type,
+                            message = '';
+                        if (status === 400 && _.isString(type)) {
+                            message = DMC_ERROR_MESSAGES[type] || '';
+                        }
                         dfd.rejectWith(dfd, [arguments, message]);
                     });
 

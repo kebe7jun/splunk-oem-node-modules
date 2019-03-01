@@ -39,6 +39,7 @@ define(
             "auto_pause": true,
             "enablePreview": true,
             "adhoc_search_level": true,
+            "workload_pool": true,
             "check_risky_command": true,
             "provenance": true
         };

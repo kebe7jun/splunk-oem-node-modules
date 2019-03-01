@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
-import ControlGroup from 'splunk-ui/components/ControlGroup';
-import Message from 'splunk-ui/components/Message';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
+import Message from '@splunk/react-ui/Message';
 import { createTestHook } from 'util/test_support';
 
 // This component is mainly used for showing form validation errors/warnings.

@@ -195,7 +195,12 @@ define(function(require, exports, module) {
             // if we don't have autofetch, we will skip this (as fetch was
             // called manually).
             if (isAutofetch && !condition(manager)) {
-                this.trigger('nodata', this);
+                var content = manager.get("data") || {};
+                var isCompleted = content.isDone || content.isFailed || content.isFinalized;
+                // only trigger nodata event when search is completed.
+                if (isCompleted) {
+                    this.trigger('nodata', this);
+                }
                 return;
             }
 

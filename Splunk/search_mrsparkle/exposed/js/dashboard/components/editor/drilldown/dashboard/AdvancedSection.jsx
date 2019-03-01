@@ -1,9 +1,10 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
-import TransitionOpen from 'splunk-ui/components/TransitionOpen';
-import Button from 'splunk-ui/components/Button';
-import ChevronDown from 'splunk-ui/icons/ChevronDown';
-import ChevronRight from 'splunk-ui/icons/ChevronRight';
+import PropTypes from 'prop-types';
+import React from 'react';
+import TransitionOpen from '@splunk/react-ui/TransitionOpen';
+import Button from '@splunk/react-ui/Button';
+import ChevronDown from '@splunk/react-icons/ChevronDown';
+import ChevronRight from '@splunk/react-icons/ChevronRight';
 import { createTestHook } from 'util/test_support';
 
 const buttonStyles = {
@@ -30,7 +31,7 @@ class AdvancedSection extends React.Component {
 
     render() {
         return (
-            <div {...createTestHook(module.id)}>
+            <div {...createTestHook(module.id)} data-test="advanced" data-test-expand={this.state.active}>
                 <Button
                     icon={this.state.active ? <ChevronDown /> : <ChevronRight />}
                     appearance="pill"

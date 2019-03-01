@@ -68,7 +68,7 @@ define([
                         && !reportContent.previous('display.visualizations.charting.chart.rangeValues')) {
                     delete filteredChanged['display.visualizations.charting.chart.rangeValues'];
                 }
-                if(filteredChanged['display.visualizations.charting.gaugeColors'] === '[0x84E900,0xFFE800,0xBF3030]'
+                if(filteredChanged['display.visualizations.charting.gaugeColors'] === '[0x53A051,0xF8BE34,0xDC4E41]'
                         && !reportContent.previous('display.visualizations.charting.gaugeColors')) {
                     delete filteredChanged['display.visualizations.charting.gaugeColors'];
                 }

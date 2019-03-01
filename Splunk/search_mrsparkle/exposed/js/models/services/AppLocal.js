@@ -128,15 +128,17 @@ define(
             disable: function() {
                 return syncLink.call(this, 'disable', this, {});
             },
-
             // returns a promise to enable the app
             enable: function() {
                 return syncLink.call(this, 'enable', this, {});
             },
-
             // returns a boolean that tells if the app can be launched
             canLaunch: function() {
                 return !!(!this.isDisabled() && this.getVisibility());
+            },
+            // returns a boolean that tells if the app can be setup
+            canSetup: function() {
+                return this.entry.links.get("setup") ? true : false;
             }
         });
     }

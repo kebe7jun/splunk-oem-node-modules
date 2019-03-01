@@ -12,7 +12,7 @@ define(
     function(_, $, module, Base, What, SearchHistoryView, route, splunkUtil) {
         return Base.extend({
             moduleId: module.id,
-            className:'section-content',
+            className: 'main-section',
             /**
              * @param {Object} options {
              *     model: {
@@ -86,8 +86,10 @@ define(
                 <div class="column help-column <% if (whatIsShown) { %> column-how <% } %>">\
                     <h3><%- _("How to Search").t() %></h3>\
                     <p><%- _("If you are not familiar with the search features, or want to learn more, see one of the following resources.").t() %></p>\
-                    <a href="<%- docRoute %>" target="_blank" title="<%- _("Splunk help").t() %>" class="btn btn-documentation" style="margin-bottom: 10px"><%- _("Documentation").t() %> <i class="icon-external"></i></a>\
-                    <a href="<%- tutorialDocRoute %>" target="_blank" title="<%- _("Splunk help").t() %>" class="btn btn-documentation" style="margin-bottom: 10px"><%- _("Tutorial").t() %> <i class="icon-external"></i></a>\
+                    <div class="button-container">\
+                        <a href="<%- docRoute %>" target="_blank" title="<%- _("Splunk help").t() %>" class="btn btn-documentation"><%- _("Documentation").t() %> <i class="icon-external"></i></a>\
+                        <a href="<%- tutorialDocRoute %>" target="_blank" title="<%- _("Splunk help").t() %>" class="btn btn-documentation"><%- _("Tutorial").t() %> <i class="icon-external"></i></a>\
+                    </div>\
                 </div>\
             '
         });

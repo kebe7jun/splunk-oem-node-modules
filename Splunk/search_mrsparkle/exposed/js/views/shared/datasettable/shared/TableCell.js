@@ -54,23 +54,31 @@ define(
                     textSelection = window.getSelection(),
                     $realTextWrapper = $cell.find(this.REAL_TEXT_WRAPPER_CLASS),
                     $realText = $realTextWrapper.find(this.REAL_TEXT_CLASS),
+                    realTextElem = $realText.get(0),
                     cellValue = $realText.length ? $realText.text() : null,
                     colIndex = $cell.data('col-index'),
                     // anchorOffset is where the selection starts, focus is where it ends. We want to normalize the
                     // start and end so it doesn't matter if the user selected text by dragging leftward or rightward.
                     startPosition = Math.min(textSelection.anchorOffset, textSelection.focusOffset),
                     endPosition = Math.max(textSelection.anchorOffset, textSelection.focusOffset),
-                    selectedText = textSelection.toString();
+                    selectedText = textSelection.toString(),
+                    focusNode = textSelection.focusNode,
+                    anchorNode = textSelection.anchorNode;
 
                 this.model.state.trigger('clearDragability');
+
                 if (/\S/.test(selectedText) && (startPosition !== endPosition) && this.isTextSelectable() &&
                         // using mouseup so we need to make sure we are not selecting the more/less link
                         !$(e.target).is('a') &&
                         // These two statements will check that the text selection is inside of the text element
                         // and not anywhere outside of it
-                        textSelection.focusNode && textSelection.focusNode.parentNode == $realText.get(0) &&
-                        textSelection.anchorNode && textSelection.anchorNode.parentNode == $realText.get(0)) {
-
+                        focusNode &&
+                        (focusNode === realTextElem || 
+                            focusNode.parentNode === realTextElem) &&
+                        anchorNode &&
+                        (anchorNode === realTextElem || 
+                            anchorNode.parentNode === realTextElem)
+                    ) {
                     this.selectText(selectedText, startPosition, endPosition);
 
                     this.model.state.trigger('setSelectedColumn', colIndex);
@@ -101,8 +109,11 @@ define(
             },
 
             handleCellDoubleClick: function(e) {
-                var $realTextWrapper = this.$(this.REAL_TEXT_WRAPPER_CLASS),
+                var $cell = $(e.currentTarget),
+                    $realTextWrapper = this.$(this.REAL_TEXT_WRAPPER_CLASS),
                     $realText = $realTextWrapper.find(this.REAL_TEXT_CLASS),
+                    $selectionText = this.$(this.SELECTION_TEXT_CLASS),
+                    colIndex = $cell.data('col-index'),
                     oldCellValue = $realText.length ? $realText.text() : null,
                     selectedColId = this.model.dataset.selectedColumns.pluck('id')[0],
                     selectedCol = this.model.dataset.getCurrentCommandModel().columns.get(selectedColId),
@@ -120,19 +131,23 @@ define(
                         return;
                     }
                 }
+                
+                // SPL-146401: Remove text selection for editable cell.
+                if ($selectionText.length) {
+                    this.handleCellSelect($cell, colIndex, oldCellValue);
+                    $selectionText.remove();
+                }
 
                 this.renderValueInput(oldCellValue);
             },
 
             renderValueInput: function(oldCellValue, newCellValue) {
-                var $selectionText = this.$(this.SELECTION_TEXT_CLASS),
-                    $realTextWrapper = this.$(this.REAL_TEXT_WRAPPER_CLASS),
+                var $realTextWrapper = this.$(this.REAL_TEXT_WRAPPER_CLASS),
                     triggerDirectReplaceValue = _.bind(function(e) {
                         var newCellValue = e.target.value;
                         // Do not apply new command if user did not change value (including when cell is null aka. empty textbox)
                         if (oldCellValue === newCellValue || (_(oldCellValue).isNull() && newCellValue === "")) {
                             $realTextWrapper.css('display', '');
-                            $selectionText && $selectionText.css('display', '');
                             $newValueInput.remove();
                         } else {
                             this.model.state.trigger('directReplaceValue', oldCellValue, newCellValue, this.$el.data('col-index'));
@@ -146,7 +161,6 @@ define(
                 }
 
                 $realTextWrapper.hide();
-                $selectionText && $selectionText.hide();
                 $newValueInput = $('<input type="text" class="cell-value-input" onfocus="this.value = this.value;">');
                 $newValueInput.prependTo(this.$el).focus().val(startingCellValue);
 

@@ -1,3 +1,8 @@
+.datasets-results-table > .table {
+    @mixin create-card-table;
+    margin-bottom: $spacing;
+}
+
 .section-description {
 	margin-bottom: 0;
 	max-width: 700px;
@@ -18,7 +23,7 @@
 }
 
 .col-actions {
-	width: 270px;
+	width: 150px;
 }
 
 .edit:not(:empty) {
@@ -56,78 +61,11 @@ td.app, td.owner {
 	word-break: break-all;
 }
 
-.dataset-addon-prompt {
-    .modal-body {
-        min-height: 440px;
-    }
-
-    .left-pane-intro, .right-pane-intro {
-        margin: 12px;
-    }
-
-    .left-pane-intro {
-        height: 80px;
-    }
-
-    .left-pane {
-        width: 365px;
-        float: left;
-        margin-right: 20px;
-    }
-
-    .right-pane {
-        width: 365px;
-        float: left;
-    }
-
-    .left-pane-image {
-        background-image: url('./install_dialog_left.png');
-        background-size: 100% auto;
-        width: 100%;
-        height: 196px;
-        margin: 12px;
-    }
-
-    .right-pane-image {
-        background-image: url('./install_dialog_right.png');
-        background-size: 100% auto;
-        width: 100%;
-        height: 196px;
-        margin: 12px;
-    }
-
-    h4 {
-        text-align: center;
-    }
-
-    .dont-show-again-control {
-        display: inline-block;
-        margin-bottom: 0;
-        padding-right: 10px;
-
-        > label {
-            display: inline-block;
-            margin-top: 4px;
-            margin-bottom: 0;
-        }
-
-        > .controls {
-            display: inline-block;
-            float: left;
-            margin-top: -3px;
-        }
-    }
-
-    span.bold {
-        font-weight: bold;
-    }
-}
-
 .app-download-container {
     display: inline-block;
 }
 
 .icon-lightning-selected {
-    color: $yellow;
-    text-shadow: 0 1px 0 color($yellow l(-20%));
+    color: $warningColor;
+    text-shadow: 0 1px 0 $warningColorD20;
 }

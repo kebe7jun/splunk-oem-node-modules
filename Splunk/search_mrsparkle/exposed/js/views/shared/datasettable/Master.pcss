@@ -1,5 +1,5 @@
-$cutBackgroundColor: color($red blend($white 75%));
-$selectedBackgroundColor: color($blue blend($white 75%));
+$cutBackgroundColor: $errorColorL40;
+$selectedBackgroundColor: $accentColorL50;
 
 /*
     IE11 allows focusing of tds, giving them a light blue background (thanks to bootstrap). Overriding.
@@ -8,6 +8,7 @@ $selectedBackgroundColor: color($blue blend($white 75%));
 .table > tbody > tr > td:focus {
     background: transparent;
 }
+
 
 .shared-datasettable {
     position:relative;
@@ -45,10 +46,10 @@ $selectedBackgroundColor: color($blue blend($white 75%));
     }
 
     .dataset-table-head {
-        border-bottom: 1px solid $tableBorder;
+        border-bottom: $tableBorder;
         z-index: 1;
         background-color: white;
-        height: 34px;
+        height: 35px;
 
         position: absolute;
         @mixin display-flex row;
@@ -81,13 +82,13 @@ $selectedBackgroundColor: color($blue blend($white 75%));
         border-collapse: separate;
         background-color: white;
         border-top: 0px;
-        margin-bottom: $baseLineHeight;
+        margin-bottom: $lineHeight;
     }
 
     .col-header {
         flex-shrink: 0;
         font-size: $fontSizeLarge;
-        line-height: 17px;
+        line-height: 22px;
         position: relative;
         box-sizing: border-box;
         border-left: none;
@@ -126,7 +127,7 @@ $selectedBackgroundColor: color($blue blend($white 75%));
         }
 
         &.over-right {
-            border-right: 4px solid $blue !important;
+            border-right: 4px solid $accentColor !important;
             padding-left: 10px;
             right: 1px;
 
@@ -139,18 +140,19 @@ $selectedBackgroundColor: color($blue blend($white 75%));
         }
 
         &.over-left {
-            border-left: 4px solid $blue !important;
+            border-left: 4px solid $accentColor !important;
             padding-left: 10px;
             left: -5px;
 
             > .resize {
                 right: -3px;
             }
+
         }
 
         &.column-selected,
         &.column-selected-end {
-            border-top: 2px solid $blue;
+            border-top: 2px solid $accentColor;
             padding-top: 3px;
 
             cursor: move;
@@ -164,7 +166,7 @@ $selectedBackgroundColor: color($blue blend($white 75%));
         &:not(.column-selected):not(.column-selected-end) + .col-header.column-selected,
         &:not(.column-selected):not(.column-selected-end) + .col-header.column-selected-end,
         &.column-selected:first-child {
-            border-left: 2px solid $blue;
+            border-left: 2px solid $accentColor;
 
             i.field-type {
                 margin-left: 0px;
@@ -172,7 +174,7 @@ $selectedBackgroundColor: color($blue blend($white 75%));
         }
 
         &.column-selected-end {
-            border-right: 2px solid $blue;
+            border-right: 2px solid $accentColor;
         }
 
         span.name {
@@ -197,7 +199,7 @@ $selectedBackgroundColor: color($blue blend($white 75%));
             padding-top: 3px;
             padding-bottom: 3px;
             &.warning {
-                border: 1px solid $red;
+                border: 1px solid $errorColor;
             }
         }
 
@@ -252,27 +254,27 @@ $selectedBackgroundColor: color($blue blend($white 75%));
         }
 
         &.selected, &.text-selected {
-            border: 2px solid $blue;
-            padding: 3px 6px 2px 6px;
+            border: 2px solid $accentColor;
+            padding: 4px 10px 5px 10px;
 
             &:last-child {
-                padding-right: 18px;
+                padding-right: 10px;
             }
         }
 
         &:not(.column-selected):not(.column-selected-end) + td.column-selected,
         &:not(.column-selected):not(.column-selected-end) + td.column-selected-end,
         &.row-num.column-selected {
-            border-left: 2px solid $blue;
-            padding-left: 6px;
+            border-left: 2px solid $accentColor;
+            padding-left: 10px;
         }
 
         &.column-selected-end {
-            border-right: 2px solid $blue;
-            padding-right: 6px;
+            border-right: 2px solid $accentColor;
+            padding-right: 10px;
 
             &:last-child {
-                padding-right: 18px;
+                padding-right: 10px;
             }
         }
 
@@ -287,12 +289,12 @@ $selectedBackgroundColor: color($blue blend($white 75%));
         }
 
         &.truncated {
-            background-color: $tableBackgroundAccent;
+            background-color: $tableRowAccentColor;
             text-align: center;
         }
 
         &.mismatched-type span {
-            color: $red;
+            color: $errorColor;
         }
 
         .highlight {
@@ -323,18 +325,18 @@ $selectedBackgroundColor: color($blue blend($white 75%));
     }
 
     tr:last-child td.column-selected, tr:last-child td.column-selected-end {
-        border-bottom: 2px solid $blue;
+        border-bottom: 2px solid $accentColor;
         padding-bottom: 2px;
     }
 
     .col-header,
     td {
         &.null-cell {
-            background: $offWhite;
+            background: $gray98;
         }
 
         &.column-highlighted {
-            background: $yellowLighter;
+            background: $warningColorL40;
         }
 
         &.column-cut,
@@ -350,7 +352,7 @@ $selectedBackgroundColor: color($blue blend($white 75%));
 
         &.hover:not(.disabled),
         &.value:hover:not(.disabled) {
-            background: $tableBackgroundHover;
+            background: $tableRowHoverColor;
         }
     }
 }

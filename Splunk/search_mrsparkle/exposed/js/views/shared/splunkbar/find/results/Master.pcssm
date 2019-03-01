@@ -3,8 +3,10 @@
 /*  Find Results */
 .view {
     composes: view from '../../../MenuDialog.pcssm';
-    background-color: $white;
+    background-color: $popupBackgroundColor;
     width: 360px;
+    max-height: calc(100vh - ($navbarHeight + $spacing));
+    overflow: auto;
 }
 
 .list {
@@ -40,11 +42,11 @@
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
-    color:$textGray;
+    color: $popupBackgroundColor;
     border-bottom: 1px solid $borderColor;
 }
 
 .sharedSplunkbarFindFindprogress {
-    background-color: $white;
+    background-color: $popupBackgroundColor;
     width: 360px;
 }

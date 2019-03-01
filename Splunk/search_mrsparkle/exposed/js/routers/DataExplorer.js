@@ -16,7 +16,6 @@ define(
                 BaseRouter.prototype.initialize.apply(this, arguments);
                 this.setPageTitle(_('Explore Data').t());
                 this.fetchUser = true;
-                this.enableFooter = false;
                 this.enableAppBar = false;
             },
             page: function(locale, app, page) {

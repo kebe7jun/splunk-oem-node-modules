@@ -50,7 +50,10 @@ define(
                     label: this.options.addLabel ? _('Source type: ').t() : '',  //IB
                     defaultValue: 'default',
                     toggleClassName: 'btn',
-                    menuClassName: 'dropdown-menu-sourcetype',
+                    // Set a dropup class name here to fix SPL-153379
+                    // After nightlight, controls are bigger and the space for the source type menu is shrinked by other controls.
+                    // Set dropup on top of the dropdown container to show the sub menus in the other direction to prevent the fluctuating on the screen due to height change.
+                    menuClassName: 'dropdown-menu-sourcetype dropup',
                     items: this.buildCategoryItems(),
                     prompt: _('Select Source Type').t(),
                     popdownOptions: popdownOptions,

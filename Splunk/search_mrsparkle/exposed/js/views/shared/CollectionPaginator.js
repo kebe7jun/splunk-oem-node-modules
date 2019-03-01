@@ -5,7 +5,8 @@ define(
         'contrib/text!views/shared/Paginator.html',
         'splunk.paginator',
         'module',
-        'views/Base'
+        'views/Base',
+        './CollectionPaginator.pcss'
     ],
     function(
         $,
@@ -52,7 +53,7 @@ define(
                         this.model.set(this.options.offsetAttr, offset-count);
                         return;
                     }
-                    this.debouncedRender(); 
+                    this.debouncedRender();
                 }, this);
                 this.model.on('change:' + this.options.countAttr, function(){
                     this.model.set(this.options.offsetAttr, 0);

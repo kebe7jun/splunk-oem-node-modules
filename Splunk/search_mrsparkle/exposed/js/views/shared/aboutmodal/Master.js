@@ -27,6 +27,7 @@ function(
                 model: {
                     application: this.options.model.application,
                     appLocal: this.options.model.appLocal,
+                    appNav: this.options.model.appNav,
                     serverInfo: this.options.model.serverInfo
                 }
             });

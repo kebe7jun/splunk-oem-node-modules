@@ -76,12 +76,7 @@ export default DMCBaseDialog.extend({
         let bodyHtml;
         if (this.appCanUpdate) {
             const operationLabels = [_('update').t(), _('Updating').t()];
-            bodyHtml = splunkUtils.sprintf(DMCBaseDialog.CONFIRM_MSG_TEMPLATE,
-                operationLabels[0],
-                _.escape(this.appName),
-                _.escape(this.appVersionLabel),
-                operationLabels[1],
-            );
+            bodyHtml = this.getConfirmBodyHTMLForOperation(operationLabels);
         } else {
             bodyHtml = splunkUtils.sprintf(_('You cannot update <b>%s</b> (version %s) \n' +
                     'by using self-service app installation. To update this app, contact Splunk Support.').t(),

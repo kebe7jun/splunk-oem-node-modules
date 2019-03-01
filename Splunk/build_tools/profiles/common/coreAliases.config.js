@@ -4,7 +4,6 @@ module.exports = {
             'coreAliases': __filename,
             // contrib libraries
             'jquery$': 'shim/jquery',
-            'moment': 'contrib/moment',
             'numeral': 'shim/numeral',
             'highcharts.runtime_patches': 'contrib/highcharts-4.0.4/runtime_patches',
             'backbone_validation': 'contrib/backbone-validation-amd',
@@ -17,15 +16,11 @@ module.exports = {
             'spin': 'contrib/spin',
             'sax': 'contrib/sax',
             'ace/ace$': 'shim/ace-editor',
+            'ace/spl_tools': 'shim/ace-spl_tools',
             'ace/mode-spl': 'shim/mode-spl',
 
             // splunkjs
             'async': 'splunkjs/contrib/requirejs-plugins/async', // TODO We should not use splunkjs in core! Move this to core?
-
-            // paths for deprecated versions of jquery
-            'contrib/jquery-1.8.2': 'contrib/deprecated/jquery-1.8.2',
-            'contrib/jquery-1.8.3': 'contrib/deprecated/jquery-1.8.3',
-            'contrib/jquery-1.10.2': 'contrib/deprecated/jquery-1.10.2',
 
             // Begin shimmed modules
 

@@ -1,12 +1,12 @@
-import { createTestHook } from 'util/test_support';
-import React, { PropTypes } from 'react';
-import Heading from 'splunk-ui/components/Heading';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Heading from '@splunk/react-ui/Heading';
 
 const HeaderSection = (props) => {
     const { title, description, children } = props;
 
     return (
-        <div {...createTestHook(module.id)}>
+        <div data-test="UploadedApps-HeaderSection">
             <div className="section-header section-padded">
                 {children}
                 <Heading className="section-title">{title}</Heading>

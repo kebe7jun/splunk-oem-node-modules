@@ -13,22 +13,21 @@ if isLite:
 else:
     theme = 'enterprise'
 
-css_less_qs = {} 
+css_less_qs = {}
 if hasattr(cherrypy.request, 'embed') and cherrypy.request.embed:
     css_less_qs['embed'] = 1
-%>  
+%>
     <link rel="shortcut icon" href="${util.getFaviconURL()}" />
     <meta name="description" content="listen to your data" />
     <meta name="author" content="Splunk Inc." />
     <meta name="viewport" content="width=1024, initial-scale=1.0" />
     <!-- IB CHANGE -->
-   % if isLite:
+    % if isLite:
     <link rel="stylesheet" type="text/css" href="${make_url('/static/build/css/bootstrap-lite.css', _qs=css_less_qs)}" />
-    <link rel="stylesheet" type="text/css" href="${make_url('/static/css/build/pages/dashboard-simple-bootstrap-lite.min.css', _qs=css_less_qs)}" />
     % else:
     <link rel="stylesheet" type="text/css" href="${make_url('/static/build/css/bootstrap-enterprise.css', _qs=css_less_qs)}" />
-    <link rel="stylesheet" type="text/css" href="${make_url('/static/css/build/pages/dashboard-simple-bootstrap.min.css', _qs=css_less_qs)}" />
     % endif
+    <link rel="stylesheet" type="text/css" href="${make_url('/static/build/css/splunkjs-dashboard.css', _qs=css_less_qs)}" />
 
     <style media="screen" type="text/css">
         .edit-dashboard-menu {
@@ -68,11 +67,11 @@ if hasattr(cherrypy.request, 'embed') and cherrypy.request.embed:
             top: -20px;
             margin-bottom: -10px;
         }
-        
+
         .info-message {
             margin-bottom: 0px;
         }
-        
+
         .pool-overlay {
             position: relative;
             top: -30px;
@@ -81,7 +80,7 @@ if hasattr(cherrypy.request, 'embed') and cherrypy.request.embed:
 
         % if isLite:
         hr {
-            border-color: #CCC;
+            border-color: #c3cbd4;
             border-top: none;
         }
         .page-licensing .tab-content {
@@ -93,7 +92,7 @@ if hasattr(cherrypy.request, 'embed') and cherrypy.request.embed:
             width: 33% !important;
         }
         % endif
-            
+
     </style>
 </head>
 <body class="simplexml preload page-licensing">
@@ -201,7 +200,7 @@ if hasattr(cherrypy.request, 'embed') and cherrypy.request.embed:
                                 <h3>${_("Daily License Usage")}</h3>
                             </div>
                             <div class="input input-checkboxgroup pool-overlay" id="field3">
-                            </div>      
+                            </div>
                             <div class="panel-body"></div>
                         </div>
                     </div>
@@ -266,7 +265,7 @@ if hasattr(cherrypy.request, 'embed') and cherrypy.request.embed:
                         <div class="dashboard-element" id="dailyUsageLite">
                             <div class="panel-head">
                                 <h3>${_("Daily License Usage")}</h3>
-                            </div>      
+                            </div>
                             <div class="panel-body"></div>
                         </div>
                     </div>

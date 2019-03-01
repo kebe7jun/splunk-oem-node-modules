@@ -131,11 +131,15 @@ define(
         // in production, start_backbone_history should always be called with no arguments
         exports.start_backbone_history = function(options) {
             var hasPushstate = "pushState" in window.history;
+            var hash = Backbone.history.getHash();
+            // always remove navSkip hash
+            if (hash === 'navSkip') {
+                window.location.replace(window.location.href.split('#')[0]);
+            }
             //Due to the URL length constraint, forcing IE to use fragment identifier for the history management
             if ((options && options.forceNoPushState) || !hasPushstate || userAgent.isIE()) {
                 $(document).ready(function() {
-                    var hash = Backbone.history.getHash(),
-                        hashPath = '',
+                    var hashPath = '',
                         query = '',
                         adjustedHash = '';
 
@@ -161,7 +165,7 @@ define(
                     }
 
                     window.location.replace(window.location.href.split('#')[0] + '#' + adjustedHash);
-                    
+
                     //SPL-96431
                     //when ignoreFragment is true, the fragment part of the URL will be ignored for routing. Note: the fragment will not be removed from the URL.
                     if(options && options.ignoreFragment) {

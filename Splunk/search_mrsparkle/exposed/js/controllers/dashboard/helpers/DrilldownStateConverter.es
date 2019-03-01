@@ -161,8 +161,8 @@ const getToSearch = ({ report, managerReportContent, searchModel }, eventManager
         );
 
         // possible string 1) 'search?q=index=_audit&earliest=-15m&latest=now'
-        const searchWithTimeRange = linkAction.value.match(
-            /^search\?q=(.*)&earliest=(.*)&latest=(.*)/);
+        // note: need to match line terminators as well.
+        const searchWithTimeRange = linkAction.value.match(/^search\?q=([\s\S]*)&earliest=([\s\S]*)&latest=([\s\S]*)/);
         // possible string 2) 'search?q=index=_audit'
         const onlySearchString = linkAction.value.match(/^search\?q=(.*)/);
 

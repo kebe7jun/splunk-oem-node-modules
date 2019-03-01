@@ -2,13 +2,18 @@
 /*  ==================== */
 /*  Alert listing page layout and overrides */
 
+.alerts-table > .table {
+    @mixin create-card-table;
+    margin-bottom: $spacing;
+}
+
 h2 + p {
 	margin-bottom: 0;
 	max-width: 700px;
 }
 
 .col-actions {
-	width: 180px;
+	width: 240px;
 }
 
 .col-app, .col-owner {
@@ -55,102 +60,92 @@ td.app, td.owner {
 }
 
 
-/*  Lite */
+/*  Tile View */
 /*  ------------------------------- */
-@if $theme == lite {
-	.col-actions {
-		width: 220px;
+.alerts-tiles {
+	color: $textColor;
+}
+
+.alerts-tiles-alerttilelist {
+	padding: 0px 40px;
+}
+
+.alerts-tiles-alerttile {
+	display: inline-block;
+	vertical-align: top;
+	margin: 6px;
+
+	.tile-shape {
+		position: relative;
+		width: 230px;
+		height: 280px;
+		border-radius: 2px;
+		background-color: $gray30;
+		color: $white;
 	}
-	
-	.alerts-table {
-		border-top: 1px solid $borderColor;
+
+	.tile-icon {
+		position: absolute;
+		top: 120px;
+		left: 0px;
+		right: 0px;
+		text-align: center;
 	}
 
-	.alerts-tiles {
-		color: $textColor;
+	.tile-name {
+		position: absolute;
+		top: 40px;
+		left: 20px;
+		right: 20px;
+		max-height: 80px;
+		overflow: hidden;
+		font-size: 14px;
+		text-align: center;
 	}
 
-	.alerts-tiles-alerttilelist {
-		padding: 0px 40px;
-	}
+	.tile-actions {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
 
-	.alerts-tiles-alerttile {
-		display: inline-block;
-		vertical-align: top;
-		margin: 6px;
-
-		.tile-shape {
-			position: relative;
-			width: 230px;
-			height: 280px;
-			border-radius: 2px;
-			background-color: $grayDark;
-			color: $white;
-		}
-
-		.tile-icon {
+		.action-edit {
 			position: absolute;
-			top: 120px;
-			left: 0px;
-			right: 0px;
-			text-align: center;
-		}
+			top: 10px;
+			right: 10px;
 
-		.tile-name {
-			position: absolute;
-			top: 40px;
-			left: 20px;
-			right: 20px;
-			max-height: 80px;
-			overflow: hidden;
-			font-size: 14px;
-			text-align: center;
-		}
+			.dropdown-toggle {
+				color: $textTileColor;
+				text-decoration: none;
 
-		.tile-actions {
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			bottom: 0px;
-			right: 0px;
-
-			.action-edit {
-				position: absolute;
-				top: 10px;
-				right: 10px;
-
-				.dropdown-toggle {
-					color: $textTileColor;
-					text-decoration: none;
-
-					.caret {
-						font-size: 8px;
-					}
-				}
-
-				.dropdown-toggle:hover {
-					color: $white;
+				.caret {
+					font-size: 8px;
 				}
 			}
 
-			.action-buttons {
-				position: absolute;
-				bottom: 14px;
-				right: 10px;
+			.dropdown-toggle:hover {
+				color: $white;
+			}
+		}
 
-				.btn {
-					margin: 3px;
-					border-color: $borderColor !important;
-					background-color: $grayDark;
-					color: $textTileColor;
-					box-shadow: none;
-					text-shadow: none;
-				}
+		.action-buttons {
+			position: absolute;
+			bottom: 14px;
+			right: 10px;
 
-				.btn:hover {
-					border-color: $white !important;
-					color: $white;
-				}
+			.btn {
+				margin: 3px;
+				border-color: $borderColor !important;
+				background-color: $gray30;
+				color: $textTileColor;
+				box-shadow: none;
+				text-shadow: none;
+			}
+
+			.btn:hover {
+				border-color: $white !important;
+				color: $white;
 			}
 		}
 	}

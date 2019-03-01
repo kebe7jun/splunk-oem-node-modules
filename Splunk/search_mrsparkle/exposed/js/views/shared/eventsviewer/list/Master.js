@@ -47,24 +47,25 @@ define(
                 * modalize related logic.
                 */
                 this.children.modalize = new Modalize({
-                    el: this.el, 
+                    el: this.el,
                     tbody: '#' + this.tableId + ' > tbody'
                 });
-                
+
                 /*
-                * Based on the state of the report, customize thead columns 
-                * to contain contain time. 
+                * Based on the state of the report, customize thead columns
+                * to contain contain time.
                 *
                 */
                 this.children.head = new TableHeadView({
                     model: this.model.report,
                     labels: this.isList() ? ['Time', 'Event']: ['Event'],
                     allowRowExpand: this.options.allowRowExpand,
-                    showWarnings: this.options.showWarnings
+                    showWarnings: this.options.showWarnings,
+                    headerOffset: 45
                 });
-                
+
                 this.children.body = new TableBodyView({
-                    model: { 
+                    model: {
                         result: this.model.result,
                         summary: this.model.summary,
                         state: this.model.state,
@@ -79,14 +80,13 @@ define(
                     selectableFields: this.options.selectableFields,
                     allowRowExpand: this.options.allowRowExpand,
                     showWarnings: this.options.showWarnings,
-                    highlightExtractedTime: this.options.highlightExtractedTime,
-                    clickFocus: this.options.clickFocus
+                    highlightExtractedTime: this.options.highlightExtractedTime
                 });
-                
+
                 if (this.options.headerMode === 'dock') {
-                    this.children.tableDock = new TableDock({ 
-                        el: this.el, 
-                        offset: this.options.headerOffset, 
+                    this.children.tableDock = new TableDock({
+                        el: this.el,
+                        offset: this.options.headerOffset,
                         defaultLayout: 'auto'
                     });
                 } else if (this.options.headerMode === 'static') {
@@ -123,7 +123,7 @@ define(
                 }); //TODO: extract out to method on the state model for sharing between table/list_raw
 
                 /*
-                 * Changes to the selected fields have potential to change the row dimensions. We 
+                 * Changes to the selected fields have potential to change the row dimensions. We
                  * should rerender the modalize mask on any add/remove/reset.
                  */
                 this.listenTo(this.collection.selectedFields, 'reset add remove', this.children.modalize.update);
@@ -136,33 +136,33 @@ define(
                     this.model.state.trigger(idx + '-collapse');
                     this.model.state.set('modalizedRow', false);
                 });
-                
+
                 /*
                     LOTS OF CALLERS TO DEFER UPDATE TABLE HEAD!....fix me please :(
                 */
                 this.listenTo(this.model.report.entry.content, 'change:display.events.rowNumbers', function(model, value) {
                     var $table = this.$('table:not(.table-embed)'),
                         hasRowNumbers = util.normalizeBoolean(value);
-                        
+
                     hasRowNumbers ? $table.removeClass('hide-line-num'): $table.addClass('hide-line-num');
                     this.updateTableHead();
                 });
-                
+
                 this.listenTo(this.model.report.entry.content, 'change:display.events.type', function(model, value) {
                     this.showHideRowNum();
                     this.updateTableHead();
                 });
-                
+
                 this.listenTo(this.model.report.entry.content, 'change:display.events.list.wrap', function() {
                     this.updateTableHead();
                 });
-                
+
                 this.listenTo(this.model.result.results, 'reset', function() {
                     if (!this.model.state.get('isModalized')) {
                         this.updateTableHead();
                     }
                 });
-               
+
                 this.listenTo(this.children.body, 'rows:pre-remove', function() { this.$el.css('minHeight', this.$el.height()); });
                 this.listenTo(this.children.body, 'rows:added', function() { this.$el.css('minHeight', ''); });
                 this.$el.on('elementResize', function(e) {
@@ -173,7 +173,7 @@ define(
                 if (!this.active) {
                     return BaseView.prototype.deactivate.apply(this, arguments);
                 }
-                
+
                 //once delegates can easily cleanup dom they create we can remove this.
                 this.$('.header-table-docked').remove();
                 this.$el.off('elementResize');
@@ -202,7 +202,7 @@ define(
                         tableHeaders = ['Time', 'Event'];
                     }
                 }
-                this.children.head.updateLabels(tableHeaders);                
+                this.children.head.updateLabels(tableHeaders);
             },
             updateTableHead: function() {
                 this.updateTableLabels();
@@ -251,7 +251,7 @@ define(
                     <div class="header-table-static"></div>\
                     <div class="vertical-scrolling-table-wrapper">\
                 <% } %>\
-                <table class="table table-chrome table-row-expanding events-results events-results-table" id="<%= tableId %>"></table>\
+                <table class="table table-chrome table-striped table-row-expanding events-results events-results-table" id="<%= tableId %>"></table>\
                 <% if (addstatichead) { %>\
                     </div>\
                 <% } %>\

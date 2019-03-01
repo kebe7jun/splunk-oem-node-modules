@@ -139,12 +139,7 @@ define(
                     _: _
                 });
                 this.children.list.render().appendTo(this.$el);
-                // DCE-OEM-CHANGE 自动根据原位置算出 fixed 之后的位置
-                this.children.tableDock = new Dock({
-                    el: this.$('.fields-controls')[0],
-                    affix: '.fields-controls-inner',
-                    auto: true,
-                });
+                this.children.tableDock = new Dock({ el: this.$('.fields-controls')[0], affix: '.fields-controls-inner' });
                 return this;
             },
             template: '\

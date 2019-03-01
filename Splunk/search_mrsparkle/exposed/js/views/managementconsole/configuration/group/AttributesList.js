@@ -134,15 +134,15 @@ define(
                     this.$('tbody.attrs').scrollTop(scrollTop);
                 }
                 if (focusKey) {
-                    $newFocus = this.$('tbody.attrs ' + 
-                        'tr[data-key="' + _.escape(focusKey) + '"] ' + 
+                    $newFocus = this.$('tbody.attrs ' +
+                        'tr[data-key="' + _.escape(focusKey) + '"] ' +
                         '[class="' + _.escape(focusClass) + '"]'
                     );
 
                     // If it's an input, we need to focus to highlight all text
                     if ($newFocus.prop('tagName') === 'INPUT') {
                         $newFocus.select();
-                    } 
+                    }
                     // Otherwise we can simply focus
                     else {
                         $newFocus.focus();
@@ -199,7 +199,7 @@ define(
                         )
                     ),
                     that = this;
-                
+
                 this.textControls.push(textControl);
 
                 this.$('.attrs').append($attrRow);
@@ -278,7 +278,7 @@ define(
                     <tbody class="attrs">\
                     </tbody>\
                 </table>\
-                <a href="#" class="add-new-attr"><i class="icon icon-plus-circle"></i> <%- _("Add New Attribute").t() %> </a>',
+                <a href="#" class="add-new-attr"><i class="icon icon-plus"></i> <%- _("Add New Attribute").t() %> </a>',
 
             attrTemplate: '\
                 <tr class="attr" data-key="<%- key %>">\

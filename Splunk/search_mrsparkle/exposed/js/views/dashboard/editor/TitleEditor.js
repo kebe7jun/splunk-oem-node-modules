@@ -29,7 +29,7 @@ define(['module',
                 var curVal = this.$el.val();
                 var newVal = this.model.get(this.attribute, {tokens: this.tokenEnabled});
                 if (curVal != newVal) {
-                    this.$el.val(_(newVal || '').t());
+                    this.$el.val(newVal ? _(newVal).t() : '');
                 }
             },
             _updateModel: function() {

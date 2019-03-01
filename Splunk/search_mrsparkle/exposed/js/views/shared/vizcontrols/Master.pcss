@@ -5,20 +5,31 @@
 
 /* visualization controls
 
-	missing markup ...
+    missing markup ...
 
 */
 .visualization-controls {
-	@mixin clearfix;
-    
-    margin-bottom: 10px;
+    @mixin clearfix;
+    margin-bottom: $spacingHalf;
+    padding-left: $spacing;
+    padding-right: $spacing;
 
-	padding-left:20px;
-	padding-right:20px;
+    .format-visualization {
+        width: 450px;
+    }
+}
 
-	.format-visualization {
-		width: 450px;
-	}
+.shared-vizcontrols-components-form > help-block {
+    color: $placeholderText;
+}
+
+/* Fixes truncated labels for IE11 */
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+    .shared-vizcontrols-components-form {
+        .shared-vizcontrols-customcontrols-axistitlecontrolgroup > .controls .dropdown-toggle > .link-label {
+            flex-shrink: 0;
+        }
+    }
 }
 
 /*  Print */

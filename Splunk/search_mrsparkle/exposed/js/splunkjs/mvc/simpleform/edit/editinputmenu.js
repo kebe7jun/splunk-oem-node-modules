@@ -178,17 +178,19 @@ define(function(require, exports, module) {
         },
 
         template: '\
-            <div class="input-editor-body">\
-                <ul class="input-editor-type">\
-                    <li><a class="edit-text input-editor-toggle" href="#" data-label="text"><i class="icon-text"></i> <%- _("Text").t() %></a></li>\
-                    <li><a class="edit-radio input-editor-toggle" href="#" data-label="radio"><i class="icon-boolean"></i> <%- _("Radio").t() %></a></li>\
-                    <li><a class="edit-dropdown input-editor-toggle" href="#" data-label="dropdown"><i class="icon-triangle-down-small"></i> <%- _("Dropdown").t() %></a></li>\
-                    <li><a class="edit-checkbox input-editor-toggle" href="#" data-label="checkbox"><i class="icon-box-checked"></i> <%- _("Checkbox").t() %></a></li>\
-                    <li><a class="edit-multiselect input-editor-toggle" href="#" data-label="multiselect"><i class="icon-triangle-down-small"></i> <%- _("Multiselect").t() %></a></li>\
-                    <li><a class="edit-link input-editor-toggle" href="#" data-label="link"><i class="icon-link"></i> <%- _("Link List").t() %></a></li>\
-                    <li><a class="edit-trp input-editor-toggle" href="#" data-label="time"><i class="icon-clock"></i> <%- _("Time").t() %></a></li>\
-                </ul>\
-                <div class="input-editor-format"></div>\
+            <div class="input-editor-body-and-flash-message">\
+                <div class="input-editor-body">\
+                    <ul class="input-editor-type">\
+                        <li><a class="edit-text input-editor-toggle" href="#" data-label="text"><i class="icon-text"></i> <%- _("Text").t() %></a></li>\
+                        <li><a class="edit-radio input-editor-toggle" href="#" data-label="radio"><i class="icon-boolean"></i> <%- _("Radio").t() %></a></li>\
+                        <li><a class="edit-dropdown input-editor-toggle" href="#" data-label="dropdown"><i class="icon-triangle-down-small"></i> <%- _("Dropdown").t() %></a></li>\
+                        <li><a class="edit-checkbox input-editor-toggle" href="#" data-label="checkbox"><i class="icon-box-checked"></i> <%- _("Checkbox").t() %></a></li>\
+                        <li><a class="edit-multiselect input-editor-toggle" href="#" data-label="multiselect"><i class="icon-triangle-down-small"></i> <%- _("Multiselect").t() %></a></li>\
+                        <li><a class="edit-link input-editor-toggle" href="#" data-label="link"><i class="icon-link"></i> <%- _("Link List").t() %></a></li>\
+                        <li><a class="edit-trp input-editor-toggle" href="#" data-label="time"><i class="icon-clock"></i> <%- _("Time").t() %></a></li>\
+                    </ul>\
+                    <div class="input-editor-format"></div>\
+                </div>\
                 <div class="flash-messages-placeholder"></div>\
             </div>\
             <a class="input-editor-cancel btn pull-left" tabindex="0">'+_("Cancel").t()+'</a>\
@@ -212,8 +214,7 @@ define(function(require, exports, module) {
         controlType: "SyntheticCheckbox",
         controlOptions: {
             modelAttribute: "searchWhenChanged"
-        },
-        className: 'editcheckbox'
+        }
     };
 
     var _TOKEN_CONTROL = {
@@ -241,6 +242,7 @@ define(function(require, exports, module) {
         inputTypeClass: RadioInput,
         controlClass: 'default_control',
         enableClearSelection: true,
+        controlsLayout: 'stack',
         controlOptions: {
             modelAttribute: "default"
         },
@@ -253,6 +255,7 @@ define(function(require, exports, module) {
         inputTypeClass: LinkListInput,
         controlClass: 'default_control',
         enableClearSelection: true,
+        controlsLayout: 'stack',
         controlOptions: {
             modelAttribute: "default"
         },
@@ -265,6 +268,7 @@ define(function(require, exports, module) {
         inputTypeClass: DropdownInput,
         controlClass: 'default_control',
         enableClearSelection: true,
+        controlsLayout: 'stack',
         controlOptions: {
             modelAttribute: "default"
         },
@@ -279,8 +283,7 @@ define(function(require, exports, module) {
         controlOptions: {
             modelAttribute: "default"
         },
-        tooltip: _("The default value of the input.").t(),
-        className: 'editcheckbox'
+        tooltip: _("The default value of the input.").t()
     };
 
     var _DEFAULT_CONTROL_MULTISELECT = {
@@ -306,6 +309,7 @@ define(function(require, exports, module) {
                 scrollContainer: '.popdown-dialog.open .concertina-body'
             }
         },
+        controlsLayout: 'stack',
         tooltip: _("The default value of the input.").t()
     };
 
@@ -325,6 +329,7 @@ define(function(require, exports, module) {
         inputTypeClass: RadioInput,
         controlClass: 'seed_control',
         enableClearSelection: true,
+        controlsLayout: 'stack',
         controlOptions: {
             modelAttribute: "initialValue"
         },
@@ -337,6 +342,7 @@ define(function(require, exports, module) {
         inputTypeClass: LinkListInput,
         controlClass: 'seed_control',
         enableClearSelection: true,
+        controlsLayout: 'stack',
         controlOptions: {
             modelAttribute: "initialValue"
         },
@@ -349,6 +355,7 @@ define(function(require, exports, module) {
         inputTypeClass: DropdownInput,
         controlClass: 'seed_control',
         enableClearSelection: true,
+        controlsLayout: 'stack',
         controlOptions: {
             modelAttribute: "initialValue"
         },
@@ -363,8 +370,7 @@ define(function(require, exports, module) {
         controlOptions: {
             modelAttribute: "initialValue"
         },
-        tooltip: _("Initial value on page load. Ignored when Default is specified.").t(),
-        className: 'editcheckbox'
+        tooltip: _("Initial value on page load. Ignored when Default is specified.").t()
     };
 
     var _SEED_CONTROL_MULTISELECT = {

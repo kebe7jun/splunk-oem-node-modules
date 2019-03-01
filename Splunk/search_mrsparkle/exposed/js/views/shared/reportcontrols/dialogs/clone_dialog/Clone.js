@@ -70,7 +70,6 @@ define([
                 this.children.selectApp = new ControlGroup({
                     label: _("App").t(),
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: "app",
                         model: this.model.inmem.entry.acl,

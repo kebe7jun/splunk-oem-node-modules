@@ -26,7 +26,7 @@ define(
             initialize: function(options) {
                 DialogBase.prototype.initialize.call(this, options);
                 // Set default values for the button labels
-                this.settings.set("primaryButtonLabel",_("Ok").t());
+                this.settings.set("primaryButtonLabel",_("OK").t());
                 this.settings.set("cancelButtonLabel",_("Cancel").t());
                 if(this.options.flashModel) {
                     this.children.flashMessages = new FlashMessagesView({model: this.options.flashModel});

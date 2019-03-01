@@ -13,7 +13,7 @@ define([
         'collections/services/authentication/Users',
         'collections/services/authorization/Roles',
         'collections/services/configs/SearchBNFs',
-        'collections/services/data/Indexes',
+        'collections/services/data/IndexesDistributed',
         'collections/shared/ModAlertActions',
         'models/classicurl',
         'models/savedsearches/SavedSearchesFetchData',
@@ -42,7 +42,7 @@ define([
         UsersCollection,
         RolesCollection,
         SearchBNFsCollection,
-        IndexesCollection,
+        IndexesDistributedCollection,
         ModAlertActionsCollection,
         classicurl,
         EAIFilterFetchData,
@@ -228,16 +228,10 @@ define([
             },
 
             fetchIndexesCollection: function() {
-                this.collection.indexes = new IndexesCollection();
-
-                return this.collection.indexes.fetch({
-                    data: {
-                        count: -1,
-                        search:'isInternal=false AND isVirtual=false'
-                    },
-                    silent: true // is silent needed???
-                });
-            },
+            	this.collection.indexes = new IndexesDistributedCollection();
+				this.collection.indexes.fetchData.set({isInternal: false, isVirtual: false, isWritable: true, fieldsNameList: "name"}, {silent: true});
+				return this.collection.indexes.fetch();
+			},
 
             onNewReport: function(entityModel) {
                 if (this.canShowModal) {
@@ -334,7 +328,10 @@ define([
              */
             showAddEditDialog: function(entityModel, isClone) {
                 if (this.canShowModal) {
-                    if (entityModel.isAlert()) {
+                    if (!entityModel) {
+                        this.onCreateEntity();
+                    }
+                    else if (entityModel.isAlert()) {
                         // Convert model to alert
                         entityModel = new AlertModel({}, {splunkDPayload: entityModel.toSplunkD()});
                         this.children.editAlertDialog = new AlertEditDialog({
@@ -355,6 +352,7 @@ define([
                         this.children.editAlertDialog.render().appendTo($("body"));
                         this.children.editAlertDialog.show();
                         this.listenTo(this.children.editAlertDialog, 'hidden', this.canShowModalTrue);
+                        this.canShowModal = false;
                     } else {
                         this.children.reportEditSearchDialog = new ReportEditSearchDialog({
                             model: {
@@ -371,8 +369,8 @@ define([
                         this.children.reportEditSearchDialog.render().appendTo($("body"));
                         this.children.reportEditSearchDialog.show();
                         this.listenTo(this.children.reportEditSearchDialog, 'hidden', this.canShowModalTrue);
+                        this.canShowModal = false;
                     }
-                    this.canShowModal = false;
                 }
             }
         });

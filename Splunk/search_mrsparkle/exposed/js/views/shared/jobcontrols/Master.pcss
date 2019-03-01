@@ -42,30 +42,23 @@
     height: 20px;
     position: relative;
 
-
     .job-menu {
         white-space: nowrap;
         display: inline-block;
 
         .icon-info-circle, .icon-warning {
-            font-size: 16px;
             line-height: 14px; /*  slightly smaller to prevent breakage */
-            color: $yellow;
+            color: $warningColor;
             display: inline-block;
-            vertical-align: -2px; /*  middle */
+            margin-right: $spacingQuarter;
         }
         .icon-info-circle {
-            color: $splunkGreen;
-        }
-        @if $theme == lite {
-           .icon-info-circle {
-                color: $yellow;
-            }
+            color: $successColor;
         }
     }
 
     .stop, .cancel, .reload, .playpause {
-        font-size: 13px;
+        font-size: $fontSize;
     }
 
 }
@@ -84,6 +77,8 @@ ul.shared-jobcontrols-menu-messages {
     > li {
         border-top: 1px dotted  $borderColor;
         padding: 5px 10px ; /*  BS 2.2.x breaks this ... */
+        color: $textGray;
+        font-size: $fontSizeSmall;
 
         &:first-child {
             border: none;
@@ -109,7 +104,6 @@ ul.shared-jobcontrols-menu-messages {
 
 .shared-jobcontrols-menu {
     .message-indicator {
-        padding-top: 5px;
         .alert {
             padding-left: 0;
             display: inline;
@@ -120,19 +114,12 @@ ul.shared-jobcontrols-menu-messages {
 
 .shared-jobcontrols-menu-editmodal,
 .shared-jobcontrols-menu-sendbackgroundmodal-success {
-    .control-label {
-        width: 140px;
-    }
-    .controls {
-        margin-left: 160px;
+    .add-on.bookmark {
+        height: $inputHeight;
     }
     .icon-bookmark {
         font-size: 16px;
     }
-    .bookmark > ir {
-        width: 0;
-    }
-
     p {
         margin-bottom: 20px;
     }

@@ -7,103 +7,83 @@
 
 #gdi-overview-main-container {
   width: 100%;
+  padding-bottom: 20px;
 }
 
-#top {
-  background: white;
-  width: 100%;
-  padding-bottom: 40px;
+.adddata-initial {
+    width: 960px;
+    margin: 20px auto;
+
+    .section-header {
+        padding: $spacing;
+    }
+    #top {
+        padding: 0 $spacing;
+        margin-bottom: $spacing;
+    }
+    #bottom {
+        padding: $spacing;
+    }
 }
 
-#bottom {
-  background: $bodyBackgroundColor;
-  width: 100%;
-  padding-top: 40px;
+
+.gdi-overview-section {
+    @mixin create-card;
+    margin-bottom: 20px;
 }
+
 
 .inner-container {
-  position: relative;
-  width: 900px;
-  /*min-width: 900px;*/
-  margin: 0 auto;
+    position: relative;
 }
 
+
 .type-container {
-  display: inline-block;
-  text-align: center;
-  width: 350px;
-  margin-left: -55px;
-  vertical-align: top;
+    display: inline-block;
+    text-align: center;
+    width: 33%;
+    vertical-align: top;
 }
 
 .type-btn {
-  display: block;
-  margin: 0 auto 10px auto;
-  padding: 10px 0 5px 0;
-  cursor: pointer;
-  width: 220px;
-  border-radius: 4px;
-
+    display: block;
+    cursor: pointer;
+    padding-bottom: $spacingQuarter;
+    margin-bottom: $spacingQuarter;
+    border-radius: $borderRadius;
+    transition: $transitionBackgroundColor;
 
 	svg {
 		fill: none;
 	}
 
-	@if $theme == enterprise {
-		.stroke {
-			stroke: $splunkGreen;
-			stroke-width: 2px ;
-		}
-
-		.fill {
-			fill: $splunkGreen;
-		}
-
-		&:hover {
-		  background-color: color($splunkGreen l(+50%));
-		}
+	.stroke {
+		stroke: $brandColor;
+		stroke-width: 2px ;
 	}
 
-
-	@if $theme == lite {
-		.stroke {
-			stroke: $splunkLiteOrange;
-			stroke-width: 2px ;
-		}
-
-		.fill {
-			fill: $splunkLiteOrange;
-		}
-
-		&:hover {
-		  background-color: color($splunkLiteOrange l(+39%));
-		}
+	.fill {
+		fill: $brandColor;
 	}
+
+	&:hover {
+	  background-color: $gray98;
+	}
+
+    &:focus {
+        @mixin focus-element;
+    }
 }
-
 
 .type-text1 {
-  color: $splunkGreen;
-  font-size: 20px;
   line-height: 24px;
-}
-
-.type-text2 {
-  color: $splunkGreen;
-  font-size: 11px;
+  font-weight: 500;
 }
 
 .type-text3 {
-  font-size: 11px;
+  font-size: $fontSizeSmall;
   line-height: 16px;
   color: $textGray;
-}
-
-
-@if $theme == lite {
-	.type-text1, .type-text2 {
-	  color: $splunkLiteOrange;
-	}
 }
 
 #examples {
@@ -112,12 +92,12 @@
 }
 
 #examples-title {
-  font-size: 16px;
+  @mixin create-heading-medium;
   margin-bottom:30px;
 }
 
 #sources-title {
-  font-size: 16px;
+  @mixin create-heading-medium;
 }
 
 .example-icon-styling {
@@ -132,6 +112,7 @@
         height: 20px;
         width: 20px;
         background-image: url(./images/gdi-example-$index.svg);
+        margin-top: 2px;
     }
 }
 
@@ -147,13 +128,13 @@
   width:180px;
   display: inline-block;
   vertical-align: top;
-  font-size: 11px;
+  font-size: $fontSizeSmall;
 }
 
 .example-group-header {
-  margin-left:30px;
-  text-transform: uppercase;
-  margin-bottom: 5px;
+    @mixin create-section-heading-small;
+    margin-left:30px;
+    margin-bottom: 5px;
 }
 
 .example-group-item {
@@ -169,7 +150,7 @@
 }
 
 .sources-and-faq-description {
-  font-size: 12px;
+  font-size: $fontSizeSmall;
   margin-top: 10px;
 }
 
@@ -220,6 +201,6 @@
 }
 
 #faq-title {
-  margin-top: 50px;
-  font-size:16px;
+    @mixin create-heading-medium;
+    margin-top: 50px;
 }

@@ -7,31 +7,51 @@ define(function(require, exports, module) {
 
         // Public Static Constants
 
-        // TODO: use the following colors for visual refresh
-        // "#006D9C", "#4FA484", "#EC9960", "#AF575A", "#B6C75A", "#62B3B2", "#294E70", "#738795", "#EDD051", "#BD9872",
-        // "#5A4575", "#7EA77B", "#708794", "#D7C6B7", "#339BB2", "#55672D", "#E6E1AE", "#96907F", "#87BC65", "#CF7E60",
-        // "#7B5547", "#77D6D8", "#4A7F2C", "#F589AD", "#6A2C5D", "#AAABAE", "#9A7438", "#A4D563", "#7672A4", "#184B81"
         ColorCodes.CATEGORICAL = [
-            "#1e93c6", "#f2b827", "#d6563c", "#6a5c9e", "#31a35f", "#ed8440", "#3863a0", "#a2cc3e", "#cc5068", "#73427f", "#11a88b", "#ea9600",
-            "#0e776d", "#ffb380", "#aa3977", "#91af27", "#4453aa", "#99712b", "#553577", "#97bc71", "#d35c2d", "#314d5b", "#99962b", "#844539",
-            "#00b290", "#e2c188", "#a34a41", "#44416d", "#e29847", "#8c8910", "#0b416d", "#774772", "#3d9988", "#bdbd5e", "#5f7396", "#844539"
+            "#006d9c", "#4fa484", "#ec9960", "#af575a", "#b6c75a", "#62b3b2", "#294e70", "#738795", "#edd051", "#bd9872",
+            "#5a4575", "#7ea77b", "#708794", "#d7c6b7", "#339bb2", "#55672d", "#e6e1ae", "#96907f", "#87bc65", "#cf7e60",
+            "#7b5547", "#77d6d8", "#4a7f2c", "#f589ad", "#6a2c5d", "#aaabae", "#9a7438", "#a4d563", "#7672a4", "#184b81",
+            "#7fb6ce", "#a7d2c2", "#f6ccb0", "#d7abad", "#dbe3ad", "#b1d9d9", "#94a7b8", "#b9c3ca", "#f6e8a8", "#deccb9",
+            "#b7acca", "#b2cab0", "#a5b2bf", "#e9ddd4", "#66c3d0", "#aab396", "#f3f0d7", "#c1bcb3", "#b6d7a3", "#e1b2a1",
+            "#dec4ba", "#abe6e8", "#91b282", "#f8b7ce", "#cba3c2", "#cccdce", "#c3ab89", "#c7e6a3", "#ada9c8", "#a4bbe0"
         ];
 
-        // TODO: use the following colors for visual refresh
-        // "#006D9C", "#53A051", "#F8BE34", "#F1813F", "#DC4E41"
-        ColorCodes.SEMANTIC = [ "#65a637", "#6db7c6", "#f7bc38", "#f58f39", "#d93f3c" ];
+        ColorCodes.CATEGORICAL_DARK = ColorCodes.CATEGORICAL; // @pwied: for now we use the same colors in dark mode
 
-        ColorCodes.SEMANTIC_1 = [ "#FFFFFF", "#006D9C" ];
-        ColorCodes.SEMANTIC_2 = [ "#FFFFFF", "#53A051" ];
-        ColorCodes.SEMANTIC_3 = [ "#FFFFFF", "#F8BE34" ];
-        ColorCodes.SEMANTIC_4 = [ "#FFFFFF", "#F1813F" ];
-        ColorCodes.SEMANTIC_5 = [ "#FFFFFF", "#DC4E41" ];
+        ColorCodes.SEMANTIC_BY_NAME = {
+            success: "#53a051",
+            info: "#006d9c",
+            warning: "#f8be34",
+            alert: "#f1813f",
+            error: "#dc4e41"
+        };
 
-        ColorCodes.DIVERGENT_1 = [ "#006D9C", "#FFFFFF", "#EC9960" ];
-        ColorCodes.DIVERGENT_2 = [ "#AF575A", "#FFFFFF", "#62B3B2" ];
-        ColorCodes.DIVERGENT_3 = [ "#4FA484", "#FFFFFF", "#F8BE34" ];
-        ColorCodes.DIVERGENT_4 = [ "#5A4575", "#FFFFFF", "#708794" ];
-        ColorCodes.DIVERGENT_5 = [ "#294E70", "#FFFFFF", "#B6C75A" ];
+        ColorCodes.SEMANTIC = [
+            ColorCodes.SEMANTIC_BY_NAME.success,
+            ColorCodes.SEMANTIC_BY_NAME.info,
+            ColorCodes.SEMANTIC_BY_NAME.warning,
+            ColorCodes.SEMANTIC_BY_NAME.alert,
+            ColorCodes.SEMANTIC_BY_NAME.error
+        ];
+
+        ColorCodes.SEMANTIC_DARK = ColorCodes.SEMANTIC;
+
+        ColorCodes.SEQUENTIAL = [
+            ColorCodes.SEMANTIC_BY_NAME.success,
+            ColorCodes.SEMANTIC_BY_NAME.error,
+            ColorCodes.SEMANTIC_BY_NAME.info
+        ];
+
+        ColorCodes.DIVERGENT_PAIRS = [
+            ["#006D9C", "#EC9960"],
+            ["#62B3B2", "#AF575A"],
+            ["#AF575A", "#F8BE34"],
+            ["#F8BE34", "#4FA484"],
+            ["#708794", "#5A4575"],
+            ["#294E70", "#B6C75A"]
+        ];
+
+        ColorCodes.DARK_GREY = '#3c444d';
 
         // Public Static Methods
 

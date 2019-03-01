@@ -63,9 +63,6 @@ define([
             name: 'display.visualizations.charting.drilldown',
             label: _('Drilldown').t(),
             defaultValue: 'all',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
                 items: [
@@ -85,9 +82,6 @@ define([
             name: 'display.visualizations.charting.chart.stackMode',
             label: _('Stack Mode').t(),
             defaultValue: 'default',
-            groupOptions: {
-                controlClass: 'controls-thirdblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
                 items: [
@@ -117,9 +111,6 @@ define([
             name: 'display.visualizations.charting.chart.nullValueMode',
             label: _('Null Values').t(),
             defaultValue: 'gaps',
-            groupOptions: {
-                controlClass: 'controls-thirdblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
                 items: [
@@ -146,9 +137,6 @@ define([
             name: 'display.visualizations.charting.layout.splitSeries',
             label: _('Multi-series Mode').t(),
             defaultValue: '0',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: BooleanRadioControl
         },
 
@@ -156,9 +144,6 @@ define([
             name: 'display.visualizations.charting.chart.showDataLabels',
             label: _('Show Data Values').t(),
             defaultValue: 'none',
-            groupOptions: {
-                controlClass: 'controls-fill'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
                 items: [
@@ -185,7 +170,7 @@ define([
             group: AxisTitleControlGroup,
             groupOptions: {
                 axisType: AxisTitleControlGroup.X_AXIS,
-                controlClass: 'controls-block'
+                className: 'control-group title-input-width'
             }
         },
 
@@ -221,27 +206,32 @@ define([
                     {
                         value: '-90',
                         icon: 'label-rotation--90',
-                        tooltip: '-90&deg;'
+                        tooltip: '-90&deg;',
+                        iconSize: 'icon-large label-rotation-alignment'
                     },
                     {
                         value: '-45',
                         icon: 'label-rotation--45',
-                        tooltip: '-45&deg;'
+                        tooltip: '-45&deg;',
+                        iconSize: 'icon-large label-rotation-alignment'
                     },
                     {
                         value: '0',
                         icon: 'label-rotation-0',
-                        tooltip: '0&deg;'
+                        tooltip: '0&deg;',
+                        iconSize: 'icon-large label-rotation-alignment'
                     },
                     {
                         value: '45',
                         icon: 'label-rotation-45',
-                        tooltip: '45&deg;'
+                        tooltip: '45&deg;',
+                        iconSize: 'icon-large label-rotation-alignment'
                     },
                     {
                         value: '90',
                         icon: 'label-rotation-90',
-                        tooltip: '90&deg;'
+                        tooltip: '90&deg;',
+                        iconSize: 'icon-large label-rotation-alignment'
                     }
                 ]
             }
@@ -251,12 +241,9 @@ define([
             name: 'display.visualizations.charting.axisX.scale',
             label: _('Scale').t(),
             defaultValue: 'linear',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
-                className: 'btn-group locale-responsive-layout',
+                additionalClassNames: 'locale-responsive-layout',
                 items: [
                     {
                         label: _("Linear").t(),
@@ -274,6 +261,8 @@ define([
             name: 'display.visualizations.charting.axisLabelsX.majorUnit',
             label: _('Interval').t(),
             defaultValue: '',
+            groupOptions: {
+            },
             control: TextControl,
             controlOptions: {
                 placeholder: _('optional').t(),
@@ -292,6 +281,8 @@ define([
             name: 'display.visualizations.charting.axisX.minimumNumber',
             label: _('Min Value').t(),
             defaultValue: '',
+            groupOptions: {
+            },
             control: TextControl,
             controlOptions: {
                 placeholder: _('optional').t(),
@@ -312,6 +303,8 @@ define([
             name: 'display.visualizations.charting.axisX.maximumNumber',
             label: _('Max Value').t(),
             defaultValue: '',
+            groupOptions: {
+            },
             control: TextControl,
             controlOptions: {
                 placeholder: _('optional').t(),
@@ -332,12 +325,9 @@ define([
             name: 'display.visualizations.charting.axisX.abbreviation',
             label: _('Number Abbreviations').t(),
             defaultValue: 'none',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
-                className: 'btn-group locale-responsive-layout',
+                additionalClassNames: 'locale-responsive-layout',
                 items: [
                     {
                         label: _('Off').t(),
@@ -358,7 +348,7 @@ define([
             group: AxisTitleControlGroup,
             groupOptions: {
                 axisType: AxisTitleControlGroup.Y_AXIS,
-                controlClass: 'controls-block'
+                className: 'control-group title-input-width'
             }
         },
 
@@ -366,12 +356,9 @@ define([
             name: 'display.visualizations.charting.axisY.scale',
             label: _('Scale').t(),
             defaultValue: 'linear',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
-                className: 'btn-group locale-responsive-layout',
+                additionalClassNames: 'locale-responsive-layout',
                 items: [
                     {
                         label: _("Linear").t(),
@@ -392,14 +379,11 @@ define([
             name: 'display.visualizations.charting.layout.splitSeries.allowIndependentYRanges',
             label: _('Axis Range').t(),
             defaultValue: '0',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: BooleanRadioControl,
             controlOptions: {
                 trueLabel: _("Independent").t(),
                 falseLabel: _("Uniform").t(),
-                className: 'btn-group locale-responsive-layout',
+                additionalClassNames: 'locale-responsive-layout',
                 reversed: true
             },
             visibleWhen: function(reportModel) {
@@ -411,6 +395,8 @@ define([
             name: 'display.visualizations.charting.axisLabelsY.majorUnit',
             label: _('Interval').t(),
             defaultValue: '',
+            groupOptions: {
+            },
             control: TextControl,
             controlOptions: {
                 placeholder: _('optional').t(),
@@ -438,6 +424,8 @@ define([
             name: 'display.visualizations.charting.axisY.minimumNumber',
             label: _('Min Value').t(),
             defaultValue: '',
+            groupOptions: {
+            },
             control: TextControl,
             controlOptions: {
                 placeholder: _('optional').t(),
@@ -467,6 +455,8 @@ define([
             name: 'display.visualizations.charting.axisY.maximumNumber',
             label: _('Max Value').t(),
             defaultValue: '',
+            groupOptions: {
+            },
             control: TextControl,
             controlOptions: {
                 placeholder: _('optional').t(),
@@ -496,12 +486,9 @@ define([
             name: 'display.visualizations.charting.axisY.abbreviation',
             label: _('Number Abbreviations').t(),
             defaultValue: 'none',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
-                className: 'btn-group locale-responsive-layout',
+                additionalClassNames: 'locale-responsive-layout',
                 items: [
                     {
                         label: _('Off').t(),
@@ -521,7 +508,6 @@ define([
             defaultValue: '',
             group: OverlayFieldsControlGroup,
             groupOptions: {
-                controlClass: 'controls-block'
             }
         },
 
@@ -529,9 +515,6 @@ define([
             name: 'display.visualizations.charting.axisY2.enabled',
             label: _('View as Axis').t(),
             defaultValue: '0',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: BooleanRadioControl,
             controlOptions: {
                 trueLabel: _('On').t(),
@@ -549,7 +532,7 @@ define([
             group: AxisTitleControlGroup,
             groupOptions: {
                 axisType: AxisTitleControlGroup.Y_AXIS_2,
-                controlClass: 'controls-block'
+                className: 'control-group title-input-width'
             },
             enabledWhen: function(reportModel) {
                 return splunkUtils.normalizeBoolean(reportModel.get('display.visualizations.charting.axisY2.enabled'));
@@ -560,12 +543,9 @@ define([
             name: 'display.visualizations.charting.axisY2.scale',
             label: _('Scale').t(),
             defaultValue: 'inherit',
-            groupOptions: {
-                controlClass: 'controls-thirdblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
-                className: 'btn-group locale-responsive-layout',
+                additionalClassNames: 'locale-responsive-layout',
                 items: [
                     {
                         label: _('Inherit').t(),
@@ -591,7 +571,6 @@ define([
             label: _('Interval').t(),
             defaultValue: '',
             groupOptions: {
-                controlClass: 'controls-block'
             },
             control: TextControl,
             controlOptions: {
@@ -618,6 +597,8 @@ define([
             name: 'display.visualizations.charting.axisY2.minimumNumber',
             label: _('Min Value').t(),
             defaultValue: '',
+            groupOptions: {
+            },
             control: TextControl,
             controlOptions: {
                 placeholder: _('optional').t(),
@@ -641,6 +622,8 @@ define([
             name: 'display.visualizations.charting.axisY2.maximumNumber',
             label: _('Max Value').t(),
             defaultValue: '',
+            groupOptions: {
+            },
             control: TextControl,
             controlOptions: {
                 placeholder: _('optional').t(),
@@ -664,12 +647,9 @@ define([
             name: 'display.visualizations.charting.axisY2.abbreviation',
             label: _('Number Abbreviations').t(),
             defaultValue: 'none',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
-                className: 'btn-group locale-responsive-layout',
+                additionalClassNames: 'locale-responsive-layout',
                 items: [
                     {
                         label: _('Off').t(),
@@ -690,12 +670,9 @@ define([
             name: 'display.visualizations.charting.legend.mode',
             label: _('Compare Series').t(),
             defaultValue: 'standard',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
-                className: 'btn-group locale-responsive-layout',
+                additionalClassNames: 'locale-responsive-layout',
                 items: [
                     {
                         label: _("Off").t(),
@@ -714,7 +691,6 @@ define([
             label: _('Legend Position').t(),
             defaultValue: 'right',
             groupOptions: {
-                controlClass: 'controls-block'
             },
             control: SyntheticSelectControl,
             controlOptions: {
@@ -740,7 +716,8 @@ define([
                         value: 'none'
                     }
                 ],
-                toggleClassName: 'btn'
+                toggleClassName: 'btn',
+                menuWidth: 'narrow'
             },
             visibleWhen: function(reportModel) {
                 return reportModel.get('display.visualizations.charting.legend.mode') !== 'seriesCompare';
@@ -755,7 +732,6 @@ define([
             label: _('Legend Position').t(),
             defaultValue: _('Right').t(),
             groupOptions: {
-                controlClass: 'controls-block'
             },
             control: LabelControl,
             controlOptions: {},
@@ -768,9 +744,6 @@ define([
             name: 'display.visualizations.charting.legend.labelStyle.overflowMode',
             label: _('Legend Truncation').t(),
             defaultValue: 'ellipsisMiddle',
-            groupOptions: {
-                controlClass: 'controls-thirdblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
                 items: [

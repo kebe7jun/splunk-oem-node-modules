@@ -8,6 +8,7 @@ import ReactAdapterBase from 'views/ReactAdapterBase';
 import reducers from 'dashboard/containers/editor/drilldown/drilldownReducer';
 import DrilldownContainer from 'dashboard/containers/editor/drilldown/DrilldownContainer';
 import {
+    fetchTimeRangePresets,
     fetchApps,
     fetchDashboards,
     fetchReports,
@@ -78,6 +79,11 @@ export default ReactAdapterBase.extend({
         this.bootstrap();
     },
     bootstrap() {
+        this.store.dispatch(fetchTimeRangePresets({
+            app: this.model.application.get('app'),
+            owner: this.model.application.get('owner'),
+            count: -1,
+        }));
         this.store.dispatch(fetchApps());
         this.store.dispatch(fetchDashboards({
             app: this.store.getState().forms[LINK_TO_DASHBOARD].activeApp,

@@ -110,7 +110,6 @@ define([
                         modelAttribute: 'name',
                         model: this.model.entity.entry
                     },
-                    controlClass: 'controls-block',
                     label: _('Prebuilt panel ID').t()
                 });
                 this.children.appSelect = new ControlGroup({
@@ -120,7 +119,7 @@ define([
                         model: this.model.entity.entry.acl,
                         modelAttribute: 'app',
                         items: [],
-                        className: 'fieldAppSelect',
+                        additionalClassNames: 'fieldAppSelect',
                         toggleClassName: 'btn',
                         popdownOptions: {
                             detachDialog: true
@@ -158,12 +157,10 @@ define([
 
             validateXML: function() {
                 var xml = this.children.editorView.getEditorValue();
-                var annotations = [];
                 var parser = this.panelParser;
                 var result = parser.validatePanel(xml);
-                this.model.editor.set('parseResults', result);
+                this.model.editor.set('validateResults', result);
                 this.children.editorView.applyAnnotations();
-                return annotations;
             },
 
             /**

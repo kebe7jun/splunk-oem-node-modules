@@ -222,26 +222,26 @@ define([
             this.collection.wizardSteps = new BaseCollection([
                 {
                     value: fieldExtractorUtils.SELECT_SAMPLE_MODE,
-                    label: _('Select sample').t(),
+                    label: _('Select Sample').t(),
                     nextLabel: _('Next').t(),
                     showPreviousButton: false
                 },
                 {
                     value: fieldExtractorUtils.SELECT_METHOD_MODE,
-                    label: _('Select method').t(),
+                    label: _('Select Method').t(),
                     enabled: !!this.model.state.get('masterEvent'),
                     nextLabel: _('Next').t()
                 },
                 {
                     value: fieldExtractorUtils.SELECT_DELIM_MODE,
-                    label: _('Rename fields').t(),
+                    label: _('Rename Fields').t(),
                     enabled: (this.model.state.get('method') === this.DELIM_MODE),
                     visible: false,
                     nextLabel: _('Next').t()
                 },
                 {
                     value: fieldExtractorUtils.SELECT_FIELDS_MODE,
-                    label: _('Select fields').t(),
+                    label: _('Select Fields').t(),
                     enabled: (this.model.state.get('method') === this.REGEX_MODE),
                     nextLabel: _('Next').t()
                 },
@@ -371,25 +371,18 @@ define([
                         this.$('.content-body').show();
                     }
                     this.children.masterEventDelimEditor.appendTo(this.$('.content-header')).$el.show();
+                    this.collection.wizardSteps
+                        .findWhere({ value: fieldExtractorUtils.SAVE_FIELDS_MODE })
+                        .set({ enabled: (_(this.model.state.get('delimFieldNames')).keys().length > 0) });
                 }
             });
             this.listenTo(this.model.state, 'delimFieldNamesUpdated', function() {
                 // When a field is named, update the regex, so that the results table is updated with new field names
                 if (this.model.state.get('mode') === fieldExtractorUtils.SELECT_DELIM_MODE) {
-                    var delimFieldNames = this.model.state.get('delimFieldNames'),
-                        delimItems = this.model.state.get('delimItems'),
-                        delim = fieldExtractorUtils.getMultiCharDelimRegex(this.model.state.get('delim')),
-                        delimRegex = '';
-                    for (var i = 0; i < delimFieldNames.length; i++) {
-                        delimRegex += "(?P<" + delimFieldNames[i] + ">(?:(?!"+ delim +").)*)";
-                        if (i < delimFieldNames.length-1) {
-                                delimRegex += "(?:" + delim + ")";
-                        }
-                    }
+                    this.applyDelim(this.model.state.get('delim'));
                     this.collection.wizardSteps
                         .findWhere({ value: fieldExtractorUtils.SAVE_FIELDS_MODE })
                         .set({ enabled: (_(this.model.state.get('delimFieldNames')).keys().length > 0) });
-                    this.model.state.set('regex', delimRegex);
                 }
             });
             this.listenTo(this.model.state, 'change:mode', function() {
@@ -487,6 +480,7 @@ define([
             this.model.state.set({ interactiveMode: fieldExtractorUtils.NO_INTERACTION_MODE });
             this.children.stepWizardControl.$el.hide();
             this._setupManualView();
+            this.$('.page-header').attr('data-mode', 'manual');
         },
         _setupManualView: function() {
             this.cleanUpOldMode(this.model.state.get('mode'));
@@ -508,6 +502,7 @@ define([
             this.children.manualExtractionEditor.cleanupState();
             this._cleanupManualView();
             this._refreshExtractionViews();
+            this.$('.page-header').attr('data-mode', 'auto');
         },
         _cleanupManualView: function() {
             this.$('.select-sourcetype-header').detach();
@@ -705,7 +700,6 @@ define([
                 delimType: '',
                 delim: '',
                 delimFieldNames: [],
-                delimitedBounds: [],
                 delimItems: []
             });
         },
@@ -833,7 +827,7 @@ define([
 
                 this.children.source = new ControlGroup({
                     controlType: 'Text',
-                    controlClass: 'controls-block',
+
                     controlOptions: {
                         modelAttribute: 'source',
                         model: this.model.state
@@ -1099,11 +1093,12 @@ define([
                 delimSanitized,
                 regexp,
                 match,
-                matches = [],
-                pairs = [],
-                names = [],
+                names = this.model.state.get('delimFieldNames'),
                 delimItems = [];
-            var delimRegex = '';
+            var delimRegex,
+                delimRegexSep,
+                uiRegex,
+                baseRegex;
             // preprocess to get rid of leading and trailing delim characters
             var delimString = fieldExtractorUtils.DELIM_CONF_MAP[this.model.state.get('delimType')] ?
                     fieldExtractorUtils.DELIM_CONF_MAP[this.model.state.get('delimType')] :
@@ -1111,7 +1106,11 @@ define([
             // clean up any previous error messages before we try
             this.model.state.set({ errorState: false });
             this.children.flashMessages.flashMsgHelper.removeGeneralMessage(this.regexErrorMessageId);
+            this.clearError();
             try {
+                if (delim.length===0) {
+                    throw new Error ("Delimiter field cannot be empty");
+                }
                 delimSanitized = fieldExtractorUtils.getMultiCharDelimRegex(delim);
             } catch (e) {
                 this.model.state.set({ errorState: true });
@@ -1123,33 +1122,59 @@ define([
                 return;
             }
 
-            regexp = new RegExp(delimSanitized,"g");
-            while (stringUtils.strStartsWith(sampleEvent, delimString)){
-                sampleEvent = sampleEvent.slice(delimString.length);
+            // SPL-145193 - Extractor doesn't recognized escaped delimiter in event. This is tricky to do with regular
+            // expressions on the UI, because of lack of support for lookbehind on current Javascript. What I'm doing
+            // is matching (non-backslash non-delimiters or escaped stuff)*
+            //           (  !(delim or backslash or quote)           |(whatever escaped) )*
+            baseRegex = "(?:(?:(?!(?:"+delimSanitized+")|\\\\|\").)|(?:\\\\.))";
+            // if delimiters include double-quotes, baseRegex is already good
+            if (delimString.includes('"')) {
+                baseRegex += '*';
+            } else {
+                // if not, then fields can be quoted -- in that case, the full expression is either
+                // the regex above or any non-quote (including anything escaped) between double-quotes
+                // think about cases such as these (using , as delimiter):
+                // "fiel\""\""d1","fiel,d2",field\,3,""fi"e"ld4
+                baseRegex = "(?:\"(?:[^\\\\\"]|\\\\.)*\"|"+baseRegex+")*";
             }
-            while (stringUtils.strEndsWith(sampleEvent, delimString)) {
-                sampleEvent = sampleEvent.slice(0, sampleEvent.length - delimString.length);
-            }
-
-            while ((match = regexp.exec(sampleEvent)) != null) {
-                delimItems.push(match[0]);
-                matches.push(match.index);
-            }
-
-            matches.unshift(-1);
-            matches.push(sampleEvent.length);
-
-            for (var i=0; i<matches.length-1; i++) {
-                pairs.push({start: matches[i]+1, end: matches[i+1]});
-                var fieldName = 'field' + (i+1);
-                names.push(fieldName);
-                delimRegex += "(?P<"+fieldName+">(?:(?!"+delimSanitized+").)*)";
-                if (i < matches.length-2) {
-                        delimRegex += "(?:"+delimSanitized+")";
+            uiRegex = "^("+baseRegex+")("+delimSanitized+"|$)";
+            regexp = new RegExp(uiRegex);
+            while ((match = regexp.exec(sampleEvent))!=null) {
+                // matching nothing with no delimiter is normal at the end of the event
+                // it could also be a sign we got stuck -- haven't seen that with the
+                // current regex though. breaking is the safe thing to do regardless.
+                if (match[0]==='') {
+                    break;
                 }
+                delimItems.push(match[1]);
+                sampleEvent = sampleEvent.substr(match[0].length);
             }
+            // dangling quotes and other oddities may cause us to abort early in the string.
+            // the backend plods on, so that's what we'll do. unfortunately I have no clue of
+            // how to do that for |rex... simply making the last field consume .* is wrong,
+            // if the event has more delimiters after the last one in the sample used by the UI
+            // resulting searches will simply trim the remaining fields, whereas .* squashes them
+            // all into the last one.
+            // TODO: figure out a way to preview with |rex situations like dangling quotes in the
+            // last field (PBL-12571)
+            if (sampleEvent.length!==0) {
+                delimItems.push(sampleEvent);
+            }
+
+            delimRegex = '';
+            delimRegexSep = '^';
+            for (var i=0; i<delimItems.length; i++) {
+                if (names.length <= i) {
+                    names.push('field' + (i+1));
+                }
+                delimRegex += delimRegexSep + "(?P<"+names[i]+">"+baseRegex+")";
+                // must start at the beginning of the string, after that all entries should
+                // end with a separator, unless they are empty. the weird hacky ternary operator
+                // will deal with this last alternative.
+                delimRegexSep = "(?:"+delimSanitized+")" + (i>0 ? "?" : "");
+            }
+
             this.model.state.set('delimItems', delimItems);
-            this.model.state.set('delimitedBounds', pairs);
             this.model.state.set('regex', delimRegex);
             this.model.state.set('delimFieldNames', names);
         },
@@ -1248,8 +1273,7 @@ define([
                 previewBaseSearch += ' source="' +  splunkUtils.searchEscape(this.model.state.get('source')) + '"';
             }
 
-            // need double backslash escaping for the backend to interpret it correctly
-            var regex = "(?ms)" + this.model.state.get('regex').replace(/\\\\/g, "\\\\\\\\");
+            var regex = "(?ms)" + this.model.state.get('regex');
 
             if(regex && fieldExtractorUtils.getCaptureGroupNames(regex).length > 0) {
                 var pipeToRex = splunkUtils.sprintf(
@@ -1275,6 +1299,10 @@ define([
 
         _refreshExtractionViews: function() {
             // Setup routines for each wizard/manual mode that user enters
+
+            this.$('.content-header').removeClass('content-header-narrow');
+            this.$('.content-body').show();
+
             var mode = this.model.state.get('mode'),
                 interactiveMode = this.model.state.get('interactiveMode'),
                 isManualMode = interactiveMode === fieldExtractorUtils.NO_INTERACTION_MODE,
@@ -1332,6 +1360,7 @@ define([
                         regexTxt: splunkUtils.sprintf(_('Splunk %s will extract fields using a Regular Expression.').t(), this.environment),
                         delimTxt: splunkUtils.sprintf(_('Splunk %s will extract fields using a delimiter (such as commas, spaces, or characters). Use this method for delimited data like comma separated values (CSV files).').t(), this.environment)
                     })).appendTo(this.$('.content-header'));
+                    this.$('.content-body').hide();
                     this.children.masterEventViewer.render().insertBefore(this.$('.method-switch'));
                     this._updateMethodButtons();
                 }
@@ -1375,7 +1404,7 @@ define([
                         this.children.delimiterCustom.$el.hide();
                     }
                     this.children.masterEventDelimEditor.detach();
-                    if (!this.model.state.get('delimitedBounds') || this.model.state.get('delimitedBounds').length === 0) {
+                    if (!this.model.state.get('delimItems') || this.model.state.get('delimItems').length === 0) {
                         this.children.masterEventViewer.render().appendTo(this.$('.delim-selector'));
                     } else {
                         this.children.masterEventDelimEditor.appendTo(this.$('.content-header')).$el.show();
@@ -1427,7 +1456,7 @@ define([
                     extractionIsNew: this.model.extraction.isNew()
                 })).appendTo(this.$('.content-header'));
                 this._setupSaveView();
-                this.children.saveView.render().appendTo(this.$('.content-header')).$el.show();
+                this.children.saveView.render().appendTo(this.$('.content-header').addClass('content-header-narrow')).$el.show();
                 this.$('.content-body').hide();
                 if(this.model.state.get('interactiveMode') === fieldExtractorUtils.NO_INTERACTION_MODE){
                     this.$('.return-manual-page').show();
@@ -1463,7 +1492,7 @@ define([
                         '<a href="' + editExtractionsHref + '" class="edit-extractions-link">' + _('Field Extractions').t() + '</a>'
                     )
                 })).appendTo(this.$('.content-header'));
-                this.children.confirmationView.render().appendTo(this.$('.content-header')).$el.show();
+                this.children.confirmationView.render().appendTo(this.$('.content-header').addClass('content-header-narrow')).$el.show();
             }
 
             // Only show existing extractions flyout button when in the first two wizard steps
@@ -1592,6 +1621,12 @@ define([
             this.children.extractionViewer.disable();
         },
 
+        clearError: function() {
+            this.children.stepWizardControl.enable();
+            this.$('.instruction a').removeClass('disabled');
+            this.children.extractionViewer.enable();
+        },
+
         viewAllExtractionsTemplate: '\
             <% if(warningOn) { %>\
                 <i class="icon-alert" title="<%- _("There are existing extractions, however because they overlap, they can only be manually turned on.").t() %>"></i>\
@@ -1602,7 +1637,7 @@ define([
         selectMasterEventTemplate: '\
             <div class="select-sample-header">\
                 <div class="instruction">\
-                    <h3 class="instruction-title"><%- _("Select Sample Event").t() %></h3>\
+                    <h1 class="instruction-title"><%- _("Select Sample Event").t() %></h1>\
                     <span class="instruction-text">\
                         <%- _("Choose a source or source type, select a sample event, and click Next to go to the next step. The field extractor will use the event to extract fields. ").t() %>\
                         <a href="<%- fieldsHelpHref %>" class="external" target="_blank"><%- _("Learn more").t() %></a>\
@@ -1632,7 +1667,7 @@ define([
         selectMethodTemplate: '\
             <div class="select-method-header">\
                 <div class="instruction">\
-                    <h3 class="instruction-title"><%- _("Select Method").t() %></h3>\
+                    <h1 class="instruction-title"><%- _("Select Method").t() %></h1>\
                     <span class="instruction-text">\
                         <%- _("Indicate the method you want to use to extract your field(s).").t() %>\
                         <a href="<%- ifxHelpHref %>" class="external" target="_blank"><%- _("Learn more").t() %></a>\
@@ -1649,18 +1684,13 @@ define([
                 <div class="method-switch">\
                     <div class="type-container">\
                         <div class="type-btn btn-regex" tabIndex="0">\
-                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="104px" height="104px" viewBox="-73 21 104 104" enable-background="new -73 21 104 104" xml:space="preserve">\
-                                <g>\
-                                    <path class="fill" d="M-21,22.8c27.7,0,50.2,22.5,50.2,50.2S6.7,123.2-21,123.2S-71.2,100.7-71.2,73S-48.7,22.8-21,22.8 M-21,21c-28.7,0-52,23.3-52,52s23.3,52,52,52s52-23.3,52-52S7.7,21-21,21L-21,21z"/>\
-                                </g>\
-                                <g>\
-                                    <path class="fill" d="M-33.1,62.8l0.7-2.2l3.7,1.5V58h2.3v4.1l3.7-1.5l0.8,2.2l-3.9,1.3l2.4,3.2l-1.8,1.3l-2.4-3.3l-2.3,3.3l-1.9-1.3l2.4-3.2L-33.1,62.8z"/>\
-                                    <path class="fill" d="M-17.4,65.7c0-1.2,0.2-2.4,0.6-3.4s0.9-1.9,1.6-2.6c0.7-0.7,1.6-1.3,2.6-1.7c1-0.4,2.1-0.6,3.4-0.6c1,0,2,0.2,2.9,0.5c0.9,0.3,1.7,0.7,2.3,1.3c0.7,0.6,1.2,1.3,1.6,2.2c0.4,0.9,0.6,1.8,0.6,2.9c0,0.8-0.1,1.5-0.3,2.1s-0.4,1.1-0.7,1.5c-0.3,0.4-0.6,0.8-1,1.1c-0.4,0.3-0.7,0.7-1.1,1C-5.3,70.3-5.7,70.7-6,71c-0.4,0.3-0.7,0.7-1,1.1c-0.3,0.4-0.5,0.9-0.6,1.5c-0.1,0.6-0.2,1.3-0.2,2.1h-3.7c0-1,0.1-1.8,0.2-2.5s0.3-1.3,0.5-1.8c0.2-0.5,0.5-1,0.8-1.4c0.3-0.4,0.7-0.8,1.2-1.2c0.4-0.3,0.7-0.6,1-0.9c0.3-0.3,0.6-0.6,0.9-0.9c0.3-0.3,0.5-0.7,0.6-1.1c0.1-0.4,0.2-0.9,0.2-1.5c0-0.7-0.1-1.3-0.4-1.8c-0.2-0.5-0.5-0.9-0.9-1.2C-7.7,61.2-8,61-8.4,60.9c-0.4-0.1-0.7-0.2-1-0.2c-1.4,0-2.4,0.5-3.1,1.4c-0.7,0.9-1,2.1-1,3.7H-17.4z"/>\
-                                </g>\
-                                <circle class="fill" cx="-9.6" cy="80.8" r="2.2"/>\
-                                <circle class="fill" cx="-38.5" cy="80.8" r="2.2"/>\
-                                <path class="fill" d="M5.1,88.8H2.9c5.2-9,5.8-21.6,0-31.3h2.2C11.8,67.8,11.4,78.9,5.1,88.8z"/>\
-                                <path class="fill" d="M-47.1,57.4h2.2c-5.8,9.7-5.2,22.4,0,31.3h-2.2C-53.5,78.9-53.8,67.8-47.1,57.4z"/>\
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="72px" height="72px" viewBox="-3 -18 72 72">\
+                                <circle class="fill" cx="44.9" cy="31" r="2"/>\
+                                <circle class="fill"  cx="15.9" cy="31" r="2"/>\
+                                <path class="fill"  d="M46.1,25h-2.4c0-5,2.5-7.1,4.6-8.8c1.6-1.4,2.5-2.2,2.5-3.9c0-4.8-3.8-5.2-5.4-5.2 c-0.2,0-5.9-0.1-5.9,6.9h-2.4c0-8,5.4-9.3,8.3-9.3c3.6,0,7.8,1.9,7.8,7.7c0,2.9-1.8,4.4-3.4,5.7C47.9,19.7,46.1,21.1,46.1,25z"/>\
+                                <polygon class="fill"  points="32.3,9.6 31.6,7.7 26.9,9.5 26.9,5 24.9,5 24.9,9.5 20.3,7.7 19.5,9.6 24.3,11.5  21.2,15.6 22.8,16.8 25.9,12.7 29,16.8 30.6,15.6 27.5,11.5 "/>\
+                                <path class="fill"  d="M60.5,36h2.1c2-6.2,3.2-11.7,3.2-18.4c0-6.4-1.1-12.8-2.8-17.6h-2.2c1.9,4.6,3,11.2,3,17.6 C63.8,24.2,62.6,29.7,60.5,36z"/>\
+                                <path class="fill"  d="M5.4,36H3.2C1.2,30,0,24.3,0,17.6C0,11.2,1.1,5,2.8,0H5C3.2,5,2,11.2,2,17.6 C2,24.2,3.3,30,5.4,36z"/>\
                             </svg>\
                             <div class="type-title-text"><%=_("Regular Expression").t()%></div>\
                         </div>\
@@ -1668,19 +1698,12 @@ define([
                     </div>\
                     <div class="type-container">\
                         <div class="type-btn btn-delim" tabIndex="0">\
-                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="104px" height="104px" viewBox="107 21 104 104" enable-background="new 107 21 104 104" xml:space="preserve">\
-                                <g>\
-                                    <g>\
-                                        <path class="fill stroke" stroke-miterlimit="10" d="M125.5,66.4h2.8l3.2,4.7l3.4-4.7h2.7l-4.6,6.2l5.2,7.3h-2.8l-3.7-5.6l-3.7,5.6h-2.7l5-7.1L125.5,66.4z"/>\
-                                        <path class="fill stroke" stroke-miterlimit="10" d="M159.2,83.3c-0.3,0.5-0.5,0.8-0.8,1.1c-0.3,0.3-0.6,0.5-1,0.6c-0.4,0.1-0.8,0.2-1.3,0.2c-0.3,0-0.5,0-0.8-0.1c-0.3,0-0.5-0.1-0.8-0.2v-2c0.2,0.1,0.4,0.1,0.6,0.2s0.4,0.1,0.7,0.1c0.5,0,0.8-0.1,1.1-0.3c0.3-0.2,0.5-0.5,0.7-0.9l0.9-2.3l-5.3-13.4h2.5l3.9,11h0.1l3.8-11h2.3l-5.8,15.2C159.7,82.3,159.4,82.8,159.2,83.3z"/>\
-                                        <path class="fill stroke" stroke-miterlimit="10" d="M172.5,59.4h1v26h-1V59.4z"/>\
-                                        <path class="fill stroke" stroke-miterlimit="10" d="M144.5,59.5h1v26h-1V59.5z"/>\
-                                        <path class="fill stroke" stroke-miterlimit="10" d="M189.3,68.3h-7.6v-1.9h10.5v1.5l-8.2,10h8.6v2h-11.3v-1.7L189.3,68.3z"/>\
-                                    </g>\
-                                </g>\
-                                <g>\
-                                    <path class="fill" d="M159,22.8c27.7,0,50.2,22.5,50.2,50.2s-22.5,50.2-50.2,50.2s-50.2-22.5-50.2-50.2S131.3,22.8,159,22.8M159,21c-28.7,0-52,23.3-52,52s23.3,52,52,52s52-23.3,52-52S187.7,21,159,21L159,21z"/>\
-                                </g>\
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="72px" height="72px" viewBox="-2 -20 72 72">\
+                            <rect x="19" class="fill" width="2" height="26"/>\
+                            <rect x="47" class="fill" width="2" height="26"/>\
+                            <polygon class="fill" points="0,21 2.5,21 7,15.1 11.5,21 14.1,21 8.3,13.5 14.1,6 11.5,6 7,11.9 2.5,6 0,6 5.8,13.5 "/>\
+                            <path class="fill" d="M39.2,6c-1.2,2.9-3.4,8-5.3,12.5L28.9,6h-2.2l6,15.1c-1.2,2.8-2.1,5.1-2.4,5.8 c-0.7,1.8-1.7,2-3.4,2H27v2c0,0,0,0,0.1,0c1.7,0,3.8-0.3,5.1-3.3C33,25.7,39.3,10.9,41.3,6H39.2z"/>\
+                            <polygon class="fill" points="68,21 54,21 64,8 54,8 54,6 68.1,6 58.1,19 68,19 "/>\
                             </svg>\
                             <div class="type-title-text"><%=_("Delimiters").t()%></div>\
                         </div>\
@@ -1693,7 +1716,7 @@ define([
         selectDelimTemplate: '\
             <div class="select-fields-header">\
                 <div class="instruction">\
-                    <h3 class="instruction-title"><%- _("Rename Fields").t() %></h3>\
+                    <h1 class="instruction-title"><%- _("Rename Fields").t() %></h1>\
                     <span class="instruction-text">\
                         <%- _("Select a delimiter. In the table that appears, rename fields by clicking on field names or values. ").t() %>\
                         <a href="<%- delimRenameHelp %>" class="external" target="_blank"><%- _("Learn more").t() %></a>\
@@ -1709,7 +1732,7 @@ define([
         selectFieldsTemplate: '\
             <div class="select-fields-header">\
                 <div class="instruction">\
-                    <h3 class="instruction-title"><%- _("Select Fields").t() %></h3>\
+                    <h1 class="instruction-title"><%- _("Select Fields").t() %></h1>\
                     <span class="instruction-text">\
                         <%- _("Highlight one or more values in the sample event to create fields. You can indicate one value is required, meaning it must exist in an event for the regular expression to match. Click on highlighted values in the sample event to modify them. To highlight text that is already part of an existing extraction, first turn off the existing extractions.").t() %>\
                         <a href="<%- ifxHelpHref %>" class="external" target="_blank"><%- _("Learn more").t() %></a>\
@@ -1721,7 +1744,7 @@ define([
         validateFieldsTemplate: '\
             <div class="validate-fields-header">\
                 <div class="instruction">\
-                    <h3 class="instruction-title"><%- _("Validate").t() %></h3>\
+                    <h1 class="instruction-title"><%- _("Validate").t() %></h1>\
                     <span class="instruction-text"><%= instructionsText %></span>\
                 </div>\
             </div>\
@@ -1730,7 +1753,7 @@ define([
         saveExtractionsTemplate: '\
             <div class="save-extractions-header">\
                 <div class="instruction"> \
-                    <h3 class="instruction-title"><%- _("Save").t() %></h3>\
+                    <h1 class="instruction-title"><%- _("Save").t() %></h1>\
                     <span class="instruction-text">\
                         <% if(extractionIsNew) { %>\
                             <%- _("Name the extraction and set permissions.").t() %> \
@@ -1745,7 +1768,7 @@ define([
         confirmationTemplate: '\
             <div class="confirmation-header">\
                 <div class=" instructions">\
-                	<h3 class="instruction-title"><%- _("Success!").t() %></h3>\
+                	<h1 class="instruction-title"><%- _("Success!").t() %></h1>\
                 </div>\
                 <p class="success-message"><%- successMessage %></p>\
                 <p class="edit-extractions-message">\
@@ -1756,7 +1779,7 @@ define([
 
         previewInstructionsTemplate: '\
             <div class="body-instructions">\
-                <h3 class="instructions-title"><%- _("Preview").t() %></h3>\
+                <h2 class="instructions-title"><%- _("Preview").t() %></h2>\
                 <div class="instructions-text">\
                     <%= text %>\
                 </div>\
@@ -1765,7 +1788,7 @@ define([
 
         template: '\
             <div class="page-header">\
-                <div class="extract-fields-page-title"><%- _("Extract Fields").t() %></div>\
+                <h2 class="extract-fields-page-title"><%- _("Extract Fields").t() %></h2>\
                 <a href="#" class="btn previous-button return-automatic-mode" style="display:none"><i class="icon-chevron-left"></i> <%- _("Back").t() %></a>\
                 <a href="#" class="btn previous-button return-manual-page" style="display:none"><i class="icon-chevron-left"></i> <%- _("Back").t() %></a>\
                 <a href="#" class="btn btn-primary manual-save-button" style="display:none"><i class="icon-chevron-right"></i> <%- _("Finish").t() %></a>\

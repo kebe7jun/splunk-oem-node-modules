@@ -1,5 +1,28 @@
 # Changelog
 
+## 6.0.0
+
+- Upgrade to PostCSS 7.
+- Drop support for Node 4.
+
+## 5.0.0
+
+- Move PostCSS from `peerDependencies` to `dependencies`.
+- Drop support for Node 0.12.
+
+## 4.0.0
+
+- Upgrade to PostCSS v6. (If you still use PostCSS v5, stick with v3 until you can upgrade your PostCSS.)
+- Switched PostCSS to a peer dependency.
+
+## 3.0.0
+
+- Replace `clearMessages` option with `clearReportedMessages` and `clearAllMessages`.
+
+## 2.0.0
+
+- Only log warning messages (`type: "warning"`) by default.
+
 ## 1.4.1
 - Add `filter` option.
 - Add blacklist functionality to `plugins` option with `!` prefix`.

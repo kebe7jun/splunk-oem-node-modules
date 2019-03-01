@@ -30,7 +30,7 @@ export default class ModSetupBaseType {
      * @param config
      */
     // eslint-disable-next-line class-methods-use-this
-    create(/* config*/) {
+    create(/* config */) {
     }
 
     /**

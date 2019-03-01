@@ -5,7 +5,9 @@ define(
         'backbone',
         'module',
         'views/Base',
-        'views/shared/controls/ControlGroup'
+        'views/shared/controls/ControlGroup',
+        'contrib/text!views/datapreview/settings/EventBreaks.html',
+        '../Pane.pcss'
     ],
     function(
         $,
@@ -13,11 +15,14 @@ define(
         Backbone,
         module,
         BaseView,
-        ControlGroup
+        ControlGroup,
+        eventBreaksTemplate,
+        css
     ){
         return BaseView.extend({
             moduleId: module.id,
             className: 'form form-horizontal eventBreaks',
+            template: eventBreaksTemplate,
             initialize: function() {
                 this.label = _('Presets').t();
                 BaseView.prototype.initialize.apply(this, arguments);
@@ -83,10 +88,11 @@ define(
                 }
             },
             render: function() {
-                this.$el.append(this.children.eventBreakMode.render().el);
+                this.$el.html(this.compiledTemplate({_:_}));
+                this.$('.form-body').append(this.children.eventBreakMode.render().el);
                 var indent = $('<div class="form-indent-section"></div>');
                 indent.append(this.children.regexPattern.render().el);
-                this.$el.append(indent);
+                this.$('.form-body').append(indent);
                 return this;
             }
         });

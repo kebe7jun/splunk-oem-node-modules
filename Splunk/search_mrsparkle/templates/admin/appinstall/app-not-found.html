@@ -1,9 +1,10 @@
 <%!
     title = 'App Install'
-    %>
-    <%namespace name="lib" file="//lib.html" import="*"/>
-    <%inherit file="//layout/admin.html" />
-    <%
+%>
+<%namespace name="lib" file="//lib.html" import="*"/>
+<%namespace name="helpers" file="//admin/_helpers.html"/>
+<%inherit file="//layout/admin.html" />
+<%
     import splunk
     from splunk.appserver.mrsparkle.lib import util, i18n
 %>
@@ -37,10 +38,10 @@
 	    <form method="GET" action="">
 	    <div class="spl-prompt-message-wrapper"> 
 	        <h3 class="spl-main-description-hdr"> 
-	            ${_('App not listed on SplunkApps')}
+	            ${_('App not listed on Splunkbase')}
 	        </h3> 
 	        <p class="spl-main-description"> 
-	           ${_('The requested app could not be found on SplunkApps.')}<br>
+	           ${_('The requested app could not be found on Splunkbase.')}<br>
 	           ${_('If you have a copy of the app stored locally, you may upload it by clicking the link below.')}
 	        </p> 
 	    </div> 

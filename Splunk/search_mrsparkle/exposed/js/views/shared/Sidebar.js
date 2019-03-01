@@ -92,7 +92,7 @@ define(function(require, exports, module) {
             var removedSidebarsCount = this.contents.length - index;
             var animationArgs = {};
             animationArgs[this.options.direction] = "-=" + width;
-            this.$('.sidebar').animate(animationArgs, _.bind(function() {
+            this.$('.sidebar').animate(animationArgs, 200, _.bind(function() {
                 $.each(remove, function() {
                     this.remove();
                 });
@@ -110,7 +110,7 @@ define(function(require, exports, module) {
             // shift all sidebars.
             var animationArgs = {};
             animationArgs[this.options.direction] = "+=" + width + "px";
-            this.$('.sidebar').animate(animationArgs);
+            this.$('.sidebar').animate(animationArgs, 200);
         },
         show: function() {
             this.shiftSidebars();

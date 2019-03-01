@@ -22,10 +22,10 @@ define([
     return TextControl.extend(/** @lends views.PercentTextControl.prototype */{
 
         moduleId: module.id,
-
+        className: 'shared-controls-textcontrol',
         initialize: function() {
             this.options = $.extend({
-                append: _('<span class="add-on"><%- _("%").t() %></span>').template({}),
+                append: '<span class="add-on">%</span>',
                 inputClassName: 'input-mini'
             }, this.options);
             TextControl.prototype.initialize.call(this, this.options);
@@ -48,6 +48,16 @@ define([
 
             updateAttrs[this.getModelAttribute()] = _.isNaN(normalizedValue) ? rawValue : normalizedValue;
             return updateAttrs;
+        },
+
+        disable: function() {
+            TextControl.prototype.disable.apply(this, arguments);
+            this.$('add-on, span').attr('disabled', 'disabled');
+        },
+
+        enable: function() {
+            TextControl.prototype.enable.apply(this, arguments);
+            this.$('add-on, span').removeAttr('disabled');
         }
 
     });

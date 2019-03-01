@@ -1,49 +1,50 @@
+/*===============================================================================================*/
+/*  SPLUNK: UNIVERSAL STYLES                                                                     */
+/*  This file contains high-level structural Splunk styles.                                      */
+/*===============================================================================================*/
 
-
-/*************************************************************
- *  Splunk Universal Styles
- *
- *    This file contains high-level structural Splunk styles.
- *
- ************************************************************/
-
-/* Typography
----------------------------------*/
-a:active {
-    outline: 0;
-}
+/*************************************************************************************************/
+/*  TYPOGRAPHY                                                                                   */
+/*************************************************************************************************/
 a {
     text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
+    &:hover {
+        text-decoration: underline;
+    }
+    &:active {
+        outline: 0;
+    }
 }
 h1 {
     margin:0;
 }
 h4 {
-    padding:0px 0px 10px 0px;
-    margin:0px;
+    padding: 0px 0px $spacingHalf 0px;
+    margin: 0px;
 }
 
-/* Application Header
-________________________________*/
+
+/*************************************************************************************************/
+/*  APPLICATION HEADER                                                                           */
+/*************************************************************************************************/
 .appLogo {
-    padding-right: 5px;
+    padding-right: $spacingQuarter;
     float: left;
 }
 .splunkPoweredLogo {
     display: none;
 }
-/* Layout
----------------------------------*/
 
+
+/*************************************************************************************************/
+/*  LAYOUT                                                                                       */
+/*************************************************************************************************/
 body {
-    padding:0px;
-    margin:0px;
-}
-body.splView-flashtimeline {
-    min-width:420px;
+    padding: 0px;
+    margin: 0px;
+    &.splView-flashtimeline {
+        min-width: 420px;
+    }
 }
 
 /* make sure there is space for app bars*/
@@ -54,7 +55,7 @@ body.splView-flashtimeline {
 /* NOTE: this might not work since this can be replaced */
 .navigationHeader {
     min-height: 30px;
-    background-color: $grayLightMedium;
+    background-color: $gray80;
 }
 
 .splView-_admin .navigationHeader {
@@ -62,15 +63,12 @@ body.splView-flashtimeline {
 }
 
 
-/* high level layout
-------------------------------*/
+/*************************************************************************************************/
+/*  HIGH LEVEL LAYOUT                                                                            */
+/*************************************************************************************************/
 div.layout {
     float: left;
     width:100%;
-    /*
-    min-width:751px;
-    width:expression(document.body.clientWidth < 751? "750px": "100%" );
-    */
 }
 /* NOTE: js code to affect layout in IEs can be found in /exposed/js/layout_engine.js */
 div.layoutRow {
@@ -92,9 +90,9 @@ div.threeColRow div.layoutCell {
     width: 33%;
 }
 
-div.charting div.threeColRow {min-width:800px;}
-
-div.charting div.twoColRow {min-width:800px;}
+div.charting {
+    div.twoColRow, div.threeColRow {min-width:800px;}
+}
 
 /* last cell in a 3-col layout needs to be 34% so we don't have extra space */
 div.threeColRow div.lastCell {
@@ -103,9 +101,8 @@ div.threeColRow div.lastCell {
 
 /* global module css */
 .SplunkModule {
-    padding:5px 10px;
+    padding: 5px 10px;
 }
-
 
 /* individual Layout panels */
 div.mainSearchControls, div.pageControls {
@@ -129,74 +126,118 @@ div.pageControls {
     border-bottom-style: solid;
     padding: 0px 0px 5px 0px;
 }
-.splSearchControls-inline .SplunkModule {
-    padding:0px;
-}
-.splSearchControls-inline td{
-    vertical-align:top;
-}
-.splSearchControls-inline table.mainSearchControlsTable {
-    border:0px;
-    margin: 0 10px 10px 10px;
-
-}
-.splSearchControls-inline table.mainSearchControlsTable td {
-    padding: 0;
-
+.splSearchControls-inline {
+    .SplunkModule {
+        padding:0px;
+    }
+    td {
+        vertical-align:top;
+    }
+    table.mainSearchControlsTable {
+        border:0px;
+        margin: 0 10px 10px 10px;
+        td {
+            padding: 0;
+        }
+    }
 }
 
 .pageControls {
     line-height: 22px;
 }
 .splView-flashtimeline .pageControls .Count {
-	padding-right: 30px;
+    padding-right: 30px;
 }
 
 .splSearchFormatChart-tabs,
 .splSearchFormatChart-column {
-	float: left;
+    float: left;
 }
 
-.splSearchFormatChart-tabs .linkSwitcherPipe,
-.splSearchFormatChart-tabs .orphanLabel {
-	display: none;
-}
-
-div.splSearchFormatChart-tabs ul {
-	border-right-width: 1px;
-	border-right-style: solid;
-	padding-right: 10px;
-}
-
-div.splSearchFormatChart-tabs ul li {
-	float: none ;
-	position: relative;
-	padding-right: 20px;
-}
-
-
-div.splSearchFormatChart-tabs ul li.selected .linkSwitcherSelectedIcon {
-    height: 7px;
-    width: 4px;
-    overflow: hidden;
-    display: block;
-    position: absolute;
-    top: 7px;
-    right: 0;
+.splSearchFormatChart-tabs {
+    .linkSwitcherPipe, .orphanLabel {
+        display: none;
+    }
+    ul {
+        border-right-width: 1px;
+        border-right-style: solid;
+        padding-right: 10px;
+        li {
+            float: none ;
+            position: relative;
+            padding-right: 20px;
+            &.selected .linkSwitcherSelectedIcon {
+                height: 7px;
+                width: 4px;
+                overflow: hidden;
+                display: block;
+                position: absolute;
+                top: 7px;
+                right: 0;
+            }
+        }
+    }
 }
 
 /* sidebar */
 div.withSidebar {
     overflow: hidden;
+    div.sidebar {
+        float: left;
+        width: 200px;
+        position: relative;
+        padding-bottom: 10000px;
+        margin-bottom: -9950px;
+        min-height:400px;
+        span.sidebarControl a {
+            float: right;
+            margin: 7px 7px 0 0;
+            margin-bottom: -23px;
+        }
+    }
+    div.sidebarCollapsed {
+        width:30px;
+        height: 65px;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        min-height: 28px;
+        border-right: 0px;
+        * {
+            display: none;
+        }
+        .sidebarControl {
+            border-width: 0;
+            border-top-width: 1px;
+            a {
+                display: block;
+                position: relative;
+                top: -2px;
+                left: 1px;
+
+                span {
+                    display: block;
+                }
+            }
+        }
+        span.sidebarControl {
+            display: block;
+        }
+    }
+    div.sidebarExpanded {
+        .FieldPicker {
+            border-top-style: solid;
+            border-top-width: 1px;
+        }
+        span.sidebarControl {
+            border:0px;
+            display:none;
+            .splIcon-sidebar-open {
+                display: none;
+            }
+        }
+    }
 }
-div.withSidebar div.sidebar {
-    float: left;
-    width: 200px;
-    position: relative;
-    padding-bottom: 10000px;
-    margin-bottom: -9950px;
-    min-height:400px;
-}
+
 div.withSidebar div.oneColRow,
 div.withSidebar div.twoColRow,
 div.layoutCellHeader {
@@ -208,100 +249,46 @@ div.layoutCellHeader {
     width: auto;
 }
 
-/* collapsible sidebar styles */
-div.withSidebar div.sidebar span.sidebarControl a {
-    float: right;
-    margin: 7px 7px 0 0;
-    margin-bottom: -23px;
-}
-div.withSidebar div.sidebar span.sidebarControl {
-}
-div.withSidebar div.sidebarCollapsed {
-    width:30px;
-    height: 65px;
-    padding-bottom: 0;
-    margin-bottom: 0;
-    min-height: 28px;
-    border-right: 0px;
-}
-div.withSidebar div.sidebarCollapsed * {
-    display: none;
-}
-
-div.sidebarCollapsed .sidebarControl {
-    border-width: 0;
-    border-top-width: 1px;
-}
-
-
-div.withSidebar div.sidebarExpanded .FieldPicker {
-	border-top-style: solid;
-	border-top-width: 1px;
-}
-
-div.withSidebar div.sidebarExpanded span.sidebarControl {
-    border:0px;
-    display:none;
-}
-div.withSidebar div.sidebarExpanded span.sidebarControl .splIcon-sidebar-open {
-    display: none;
-}
-
-
-div.withSidebar div.sidebarCollapsed span.sidebarControl {
-    display: block;
-}
-div.withSidebar div.sidebarCollapsed span.sidebarControl a {
-    display: block;
-    position: relative;
-    top: -2px;
-    left: 1px;
-}
-div.withSidebar div.sidebarCollapsed span.sidebarControl a span {
-    display: block;
-}
-
-div.withSidebar div.sidebarCollapsed span.sidebarControl a:hover {
-    /* background-position:  -100px -40px; */
-}
 div.layoutCellHeader {
     margin-bottom: 5px;
 }
 
 /* layout panel element overrides */
+.pageControls {
+    select {
+        margin-top: 0px;
+    }
+    .EnablePreview {
+        line-height:22px;
+        padding-top:4px;
+        input {
+            margin-top:0px;
+        }
+    }
+    .SplunkModule {
+        float: left;
+        height: 22px;
+    }
+}
 
-.pageControls select {
-    margin-top: 0px;
-}
-.pageControls .Paginator .ResultsContainer {}
-
-.pageControls .EnablePreview {
-    line-height:22px;
-    padding-top:4px;
-}
-.pageControls .EnablePreview input {
-    margin-top:0px;
-}
-.pageControls .SplunkModule {
-    float: left;
-    height: 22px;
-}
 .pageControls .Paginator ,
 .splView-flashtimeline .Paginator {
     float:right;
 }
 
-/* Helper classes
---------------------------------------*/
+
+/*************************************************************************************************/
+/*  HELPER CLASSES                                                                               */
+/*************************************************************************************************/
 .splClearfix {
     zoom:1;
-}
-.splClearfix:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
+    &:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
 }
 .splPipe {
     margin:0px 8px;
@@ -310,8 +297,11 @@ div.layoutCellHeader {
     padding: 0px;
 }
 
-/* LIST STYLES. Minimal set for cross-browser happiness.
-----------------------------------------------------------*/
+
+/*************************************************************************************************/
+/*  LIST STYLES                                                                                  */
+/*  Minimal set for cross-browser happiness.                                                     */
+/*************************************************************************************************/
 ul,ol {padding-top:0;margin-top:0;padding-bottom:0;margin-bottom:10px;}
 ul ul, ol ol, ul ol, ol ul {padding-top:0;margin-top:0;padding-bottom:0;margin-bottom:0;}
 ul {margin-left: 14px; padding-left: 0;}
@@ -319,46 +309,51 @@ ol {margin-left: 20px; padding-left: 0;margin-bottom:10px;}
 ul li {margin-bottom:0;margin-left:0;padding-left:0;padding-bottom:0;}
 ol li {margin-bottom:10px;}
 
-/* headers
----------------------------------*/
+
+/*************************************************************************************************/
+/*  HEADERS                                                                                      */
+/*************************************************************************************************/
 .splHeader {
-    height:28px;
-    line-height:28px;
-}
-.splHeader h2 {
-    float:left;
-    margin:0px 5px 0px 10px;
+    height:30px;
+    line-height:30px;
+    h2 {
+        float:left;
+        margin: 0px 5px 0px 10px;
+    }
 }
 .splView-flashtimeline .ResultsHeader .splHeader-primary h2 {
-	margin: 0;
-	padding: 0 10px;
+    margin: 0;
+    padding: 0 10px;
     float: none;
     min-height: 28px;
 }
 
 .splView-flashtimeline .ResultsHeader .splHeader-primary .ie6.splClearfix {
-	display: none;
+    display: none;
 }
 
 
-/* borders
----------------------------------*/
-
+/*************************************************************************************************/
+/*  BORDERS                                                                                      */
+/*************************************************************************************************/
 .splBorder-n    { border-top-width: 1px; border-top-style: solid; }
 .splBorder-s    { border-bottom-width: 1px; border-bottom-style: solid; }
 .splBorder-e    { border-right-width: 1px; border-right-style: solid; }
 .splBorder-w    { border-left-width: 1px; border-left-style: solid; }
 .splBorder-nsew { border-width: 1px; border-style: solid; }
 
-/* images
-_______________________________*/
 
+/*************************************************************************************************/
+/*  IMAGES                                                                                       */
+/*************************************************************************************************/
 img, a img {
     border: none;
 }
 
-/* Forms
---------------------------------*/
+
+/*************************************************************************************************/
+/*  FORMS                                                                                        */
+/*************************************************************************************************/
 form {
     margin:0px;
     padding:0px;
@@ -377,40 +372,55 @@ fieldset p {
 }
 .fieldsetWrapper {
     padding-top: 15px;
-}
-.fieldsetWrapper .multiColumnFieldset {
-    padding-top: 0px;
+    .multiColumnFieldset {
+        padding-top: 0px;
+    }
 }
 /* multi-column fieldsets */
-.multiColumnFieldset label {
-    display:block;
-    margin-right: 10px;
-}
-.multiColumnFieldset div {
-    float:left;
-    margin-right: 10px;
+.multiColumnFieldset {
+    label {
+        display:block;
+        margin-right: 10px;
+    }
+    div {
+        float:left;
+        margin-right: 10px;
+    }
 }
 label {
     min-width: 30px;
+    font-weight: $fontWeight;
+
+    .disabledLabel {
+        min-width: 30px;
+        color: $textDisabledColor;
+    }
 }
 #item-actionsfieldset label.topLabel  {
     font-weight: bold;
 }
-label .disabledLabel {
-    min-width: 30px;
-    color: #f0f0f0;
-}
 input:not([type=checkbox]), textarea, select {
-    padding: 5px 7px;
+    padding: $inputPadding;
     margin-top: 4px;
     border-width: 1px;
     border-style: solid;
+    line-height: $lineHeight;
+    border-radius: $borderRadius;
 }
 select {
     padding: 2px 3px 2px 5px;
-}
-select option {
-    padding-right: 15px;
+    option {
+        padding-right: 15px;
+    }
+    &.medium {
+        width: 182px;
+    }
+    &.short, &.short.regular {
+        width: 108px;
+    }
+    &.long {
+        width: 660px;
+    }
 }
 .entityEditForm input,
 input.regular, textarea.regular {
@@ -418,22 +428,13 @@ input.regular, textarea.regular {
 }
 .entityEditForm select,
 select.regular {
-    width: 364px;
-}
-select.medium {
-    width: 182px;
+    width: 368px;
 }
 input.short {
-    width: 80px;
-}
-select.short {
-    width: 94px;
+    width: 90px;
 }
 input.long, textarea.long {
     width: 650px;
-}
-select.long {
-    width: 660px;
 }
 textarea.huge {
     width:95%;
@@ -443,57 +444,61 @@ input.radio, input.checkbox {
     width: auto;
     border: 0;
 }
-.entityEditForm div {
-	padding-bottom: 5px;
-}
-.entityEditForm div.fieldsetWrapper {
-    padding-bottom:0px;
-}
 input[type=checkbox], input.checkbox {
     margin-top: 4px;
-    width:auto;
+    width: auto;
+
+    &:focus {
+        border-radius: 2px;
+    }
 }
-p.helpText{
-    margin:5px 0 0 0;
+p {
+    &.helpText{
+        color: $textGray;
+        margin:5px 0 0 0;
+    }
+    &.exampleText {
+        margin: 5px 5px 0px 0px;
+        color: $textGray;
+    }
+    &.fieldsetHelpText {
+        display:block;
+        margin: 0 0 10px 0;
+    }
 }
-p.exampleText {
-    margin: 5px 5px 0px 0px;
-    color:$textGrayDark;
-}
-p.fieldsetHelpText {
-    display:block;
-    margin: 0 0 10px 0;
-}
-span.optionalText {
-    color:$textGrayDark;
-}
-span.requiredAsterisk {
-    color: #AF4444;
+span {
+    &.optionalText {
+        color:$textGrayDark;
+    }
+    &.requiredAsterisk {
+        color: #AF4444;
+    }
 }
 
-.splTextArea {
-    padding:5px;
+.splTextAreaStd {
+    .disabledTextarea {
+        overflow: auto;
+        color: #111;
+        pre{
+            overflow:auto;
+            background-color: #EBEBE4;
+        }
+    }
 }
-.splTextAreaStd .disabledTextarea {
-	overflow: auto;
-	color: #111;
-}
-.splTextAreaStd .disabledTextarea pre{
-	overflow:auto;
-	background-color: #EBEBE4;
-}
+.splTextAreaStd .disabledTextarea
 .splTextArea .disabledTextarea pre,
 .splTextArea textarea {
-	margin:0px;
-	width:100%;
-	border:none;
-	padding:0px;
-	resize:vertical;
+    margin:0px;
+    width:100%;
+    border:none;
+    padding:0px;
+    resize:vertical;
+    outline-offset: 5px;
 }
 .splTextArea .disabledTextarea pre,
 .splTextAreaStd textarea {
-	height:52px;
-	min-height:52px;
+    height:52px;
+    min-height:52px;
 }
 
 
@@ -503,37 +508,43 @@ span.requiredAsterisk {
 }
 
 /* form elements in popups */
-.popupContainer label {
-    display: block;
+.popupContainer {
+    label {
+        display: block;
+    }
+    .entityEditForm {
+        padding: 0px 15px 10px;
+    }
+    .radio, .checkbox {
+        float:left;
+        clear:left;
+        margin-right:8px;
+    }
+    .radioWidget, .checkboxWidget {
+        label {
+            padding-top:6px;
+        }
+    }
 }
-.popupContainer .entityEditForm {
-    padding: 0px 15px 10px;
-}
-.popupContainer .radio, .popupContainer .checkbox {
-    float:left;
-    clear:left;
-    margin-right:8px;
-}
-.popupContainer .radioWidget label,
-.popupContainer .checkboxWidget label {
-    padding-top:6px;
-}
-.hiddenLabel{
-	position: absolute;
-	left: -10000px;
-}
-.orphanLabel{
-	font-size: $baseFontSize;
-}
-.labelLegend{
-	padding: 0 !important;
-	color: $black;
-	font-size: $baseFontSize;
-	font-weight: normal;
-}
-/* Form Search
-_______________________________*/
 
+.hiddenLabel {
+    position: absolute;
+    left: -10000px;
+}
+.orphanLabel {
+    font-size: $fontSize;
+}
+.labelLegend {
+    padding: 0 !important;
+    color: $black;
+    font-size: $fontSize;
+    font-weight: normal;
+}
+
+
+/*************************************************************************************************/
+/*  FORM SEARCH                                                                                  */
+/*************************************************************************************************/
 .formSearchLabel {
     display:block;
 }
@@ -544,47 +555,62 @@ _______________________________*/
     min-width: 170px;
 }
 
-/* Table Styles
---------------------------------*/
+
+/*************************************************************************************************/
+/*  TABLE STYLES                                                                                 */
+/*************************************************************************************************/
 table {
-    border:0px;
-    border-spacing:0px;
+    border: 0px;
+    border-spacing: 0px;
+    line-height: $lineHeight;
+
+    &.splTable {
+        width: 100%;
+        margin-bottom: 15px;
+        border-bottom: 0;
+
+        th, td {
+            padding: $tableCellPadding;
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+            vertical-align: top;
+        }
+        th {
+            text-align: left;
+
+            a {
+                position: relative;
+                margin-right: 10px;
+                display: inline-block;
+                width: 100%;
+            }
+            > a {
+                margin: -$tableCellPaddingDefault -calc($tableCellPaddingDefault * 2);
+                margin-right: 0;
+                padding: $tableCellPadding;
+                text-decoration: none;
+
+                &:focus {
+                  @mixin focus-element-inset $tableHeaderBackground;
+                }
+            }
+        }
+    }
 }
 
-table.splTable {
-    width: 100%;
-    margin-bottom: 15px;
-    border-bottom: 0;
-}
-table.splTable th {
-    padding: 3px 5px;
-    text-align: left;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    vertical-align: top;
-}
-table.splTable td {
-    padding: 5px;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    vertical-align: top;
-}
-table.splTable th a {
-    position: relative;
-    margin-right: 10px;
-    display:inline-block;
-}
 /* sorting */
 .splSortNone, .splSortAsc, .splSortDesc {
     width: 5px;
     height: 10px;
     position: absolute;
-    right:-10px;
-    top:2px;
+    margin-left: 5px;
+    margin-top: 5px;
 }
 
-/* Global elements
-----------------------------------------*/
+
+/*************************************************************************************************/
+/*  GLOBAL ELEMENTS                                                                              */
+/*************************************************************************************************/
 #loading  {
     position:absolute;
     left:50%;
@@ -625,8 +651,9 @@ label.searchTextSetting img {
 .widgetinlineerror { display: block !important; }
 
 
-/* percentage bar graph
-________________________________*/
+/*************************************************************************************************/
+/*  PERCENTAGE BAR GRAPH                                                                         */
+/*************************************************************************************************/
 .barGraphWrapper {
     overflow:hidden;
 }
@@ -645,11 +672,11 @@ ________________________________*/
     float:left;
 }
 
-/* Popups
---------------------------------*/
+
+/*************************************************************************************************/
+/*  POPUPS                                                                                       */
+/*************************************************************************************************/
 .popupContainer {
-    border-width: 1px;
-    border-style: solid;
     position:absolute;
     top:0px;
     left:-1000px;
@@ -657,31 +684,60 @@ ________________________________*/
     z-index:501;
     visibility:hidden;
     text-align: left;
+    box-shadow: $overlayBoxShadow !important;
+
+    .splHeader {
+        padding: 20px 25px;
+        height: 22px;
+        cursor: default;
+        .splIcon-close {
+            color: $gray45;
+            background: none;
+            border-radius: 3px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            margin-top: -2px;
+            width: 27px;
+            height: 27px;
+            text-align: center;
+            text-decoration: none;
+            &:before {
+                font-family: "Splunk Icons";
+                content: '\2717';
+                font-size: $spacing;
+                line-height: 28px;
+            }
+            &:hover {
+                background-color: $gray98;
+                text-decoration: none;
+                color: $accentColorD10;
+            }
+        }
+        h2 {
+            @mixin create-heading;
+            display:block;
+            padding: 0;
+            margin: 0;
+            font-size: 20px;
+            line-height: 22px;
+        }
+    }
+    + .splOverlay {
+        opacity: 0.5;
+    }
 }
 .popupContent {
     min-width: 300px;
     min-height: 50px;
 }
-.popupContainer .splHeader .splIcon-close {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    margin: 7px 7px;
-}
-.popupContainer .splHeader-popup h2 {
-    display:block;
-    float:none;
-    margin-right:20px;
-    margin-left:0px;
-    padding-left:10px;
-}
 .popupFooter {
     height: 35px;
     text-align: right;
-    padding: 10px 5px 0 0;
-}
-.popupFooter button {
-    margin-right: 5px;
+    padding: $spacing;
+    button {
+        margin-left: 5px;
+    }
 }
 .pdfPopup {
     display:none;
@@ -699,15 +755,15 @@ ________________________________*/
     padding-left: 5px;
 }
 .resultsOptions {
-}
-.resultsOptions .popupContent {
-    padding:10px;
-}
-.resultsOptions select {
-    width:150px;
-}
-.resultsOptions .SoftWrap label {
-    display:inline;
+    .popupContent {
+        padding:10px;
+    }
+    select {
+        width:150px;
+    }
+    .SoftWrap label {
+        display:inline;
+    }
 }
 
 /* Field Value Popup Styles */
@@ -718,79 +774,74 @@ ________________________________*/
     visibility:visible;
     display:block!important;
     */
-}
-.fieldValuePopup .fieldValuePopupInner {
-    position:relative;
-}
-.fieldValuePopup .popupContent {
-    min-height:170px;
-    padding: 10px 0px;
-}
-
-.fieldValuePopup p {
-    margin:0px;
-    padding:5px 10px;
-}
-.fieldValuePopup div.fieldLinks {
-    padding:0px;
-    margin: 0 10px 10px 10px;
-    float: left;
-    width: 240px;
-}
-.fieldValuePopup p.numericalStats {
-    padding: 10px;
-}
-.fieldValuePopup p.fieldHeader {
-    padding:0px 10px;
-}
-.fieldValuePopup p.fieldHeader h2 {
-    margin-top:0px;
-}
-.fieldValuePopup h4 {
-    padding:0;
-}
-
-.fieldValuePopup p.numericalStats span {
-    padding-right:10px;
-}
-.fieldValuePopup div.reportLinks{
-	margin: 0 0 10px 0;
-    padding: 0;
-    float: left;
-    width: 240px;
-}
-
-.fieldValuePopup div.reportLinks a,
-.fieldValuePopup div.fieldLinks a
-{
-    display: block;
-}
-
-.fieldValuePopup table {
-    margin:0px 10px;
-    width: 490px;
-}
-.fieldValuePopup table th {
-    text-align: left;
-}
-.fieldValuePopup table th,
-.fieldValuePopup table td {
-    text-align:right;
-    padding: 2px 10px 2px 0px;
-}
-.fieldValuePopup table td.fieldValueGraphCell {
-    padding-right:0px;
-}
-.fieldValuePopup table tr.fieldNameHeaderRow td {
-    padding-bottom: 7px;
-}
-.fieldValuePopup th.fieldName {
-    text-align:left;
-    width:100%;
+    .fieldValuePopupInner {
+        position:relative;
+    }
+    .popupContent {
+        min-height:170px;
+        padding: 10px 0px;
+    }
+    p {
+        margin:0px;
+        padding:5px 10px;
+        &.numericalStats {
+            padding: 10px;
+            span {
+                padding-right:10px;
+            }
+        }
+        &.fieldHeader {
+            padding:0px 10px;
+            h2 {
+                margin-top:0px;
+            }
+        }
+    }
+    div.fieldLinks {
+        padding:0px;
+        margin: 0 10px 10px 10px;
+        float: left;
+        width: 240px;
+    }
+    div.reportLinks {
+        margin: 0 0 10px 0;
+        padding: 0;
+        float: left;
+        width: 240px;
+    }
+    div.reportLinks a, div.fieldLinks a {
+        display: block;
+    }
+    h4 {
+        padding:0;
+    }
+    table {
+        margin:0px 10px;
+        width: 490px;
+    }
+    th {
+        text-align: left;
+        &.fieldName {
+            text-align:left;
+            width:100%;
+        }
+    }
+    td.fieldValueGraphCell {
+        padding-right:0px;
+    }
+    th, td {
+        text-align:right;
+        padding: 2px 10px 2px 0px;
+    }
+    tr.fieldNameHeaderRow td {
+        padding-bottom: 7px;
+    }
 }
 
-/* overlays and shadows
----------------------------------*/
+
+/*************************************************************************************************/
+/*  OVERLAYS & SHADOWS                                                                           */
+/*************************************************************************************************/
 .splOverlay, .splOverlay-white {
     display: none;
     position:fixed;
@@ -807,69 +858,50 @@ ________________________________*/
     padding: 0 8px 9px 0;
 }
 
-/* buttons
----------------------------------*/
 
+/*************************************************************************************************/
+/*  BUTTONS                                                                                      */
+/*************************************************************************************************/
 .splButton-primary,
 .splButton-secondary,
 .splButton-tertiary {
     cursor: pointer;
-    height:21px;
-    line-height:21px; /*Note: line-height doesn't work on input/button in FF */
+    line-height: $lineHeight;
     width: auto;
-    margin-left: 5px;
     text-align: center;
-    padding: 0px 5px;
-}
-.splButton-primary:active,
-.splButton-secondary:active,
-.splButton-tertiary:active {
-	outline: none;
+    &:active {
+        outline: none;
+    }
+    a& {
+        text-decoration: none;
+        float: left;
+        span {
+            text-decoration: none;
+            float: left;
+            display: block;
+        }
+        span.splButtonIcon + span {
+            min-width: 0;
+            padding: 0 5px;
+        }
+        span.splButtonIcon, span.splMenuIcon {
+            width: 13px;
+            height: 13px;
+            min-width: 13px;
+            margin: 4px 2px;
+            overflow: hidden;
+            text-indent: -1000em;
+            display: block;
+            float: left;
+        }
+    }
 }
 
-button.splButton-primary,
-button.splButton-secondary,
-button.splButton-tertiary {
-    height:23px;
-}
-a.splButton-primary,
-a.splButton-secondary,
-a.splButton-tertiary {
-    height:21px;
-}
-
-a.splButton-primary,
-a.splButton-secondary,
-a.splButton-tertiary,
-a.splButton-primary span,
-a.splButton-secondary span,
-a.splButton-tertiary span {
-    text-decoration: none;
-    float: left;
-}
-.splButton-primary span,
-.splButton-secondary span,
-.splButton-tertiary span {
-    display: block;
-}
 .splButton-primary span {
     min-width: 80px;
+    font-weight: $fontWeightSemiBold;
 }
 
-.splButton-primary span.splButtonIcon + span,
-.splButton-secondary span.splButtonIcon + span,
-.splButton-tertiary span.splButtonIcon + span
-{
-    min-width: 0;
-    padding: 0 5px;
-}
-
-.splButton-primary span.splButtonIcon,
-.splButton-secondary span.splButtonIcon,
-.splButton-tertiary span.splButtonIcon,
-.splButton-primary span.splMenuIcon,
-.splButton-secondary span.splMenuIcon,
-.splButton-tertiary span.splMenuIcon,
 .timeRangeActivatorWrapper span.splMenuIcon {
     width: 13px;
     height: 13px;
@@ -884,25 +916,13 @@ a.splButton-tertiary span {
 .splButtonGroup .splButton-primary,
 .splButtonGroup .splButton-secondary,
 .splButtonGroup .splButton-tertiary {
-	margin-right: 0;
+    margin-right: 0;
 }
 
 .splButtonGroup .splButton-tertiary + .splButton-tertiary,
 .splButtonGroup .splButton-secondary + .splButton-secondary,
-.splButtonGroup .splButton-primary + .splButton-primary
-
-{
-	border-left-width: 0;
-}
-
-
-/* Splunk search button */
-input.searchButton {
-    margin: 0px;
-    width: 44px;
-    border: 0px;
-/*    outline:0;*/
-    height: 28px;
+.splButtonGroup .splButton-primary + .splButton-primary {
+    border-left-width: 0;
 }
 
 /* button wrapper */
@@ -917,31 +937,24 @@ input.searchButton {
 /* Iconic Button */
 
 .splIconicLink {
-	display: block;
-	float: left;
+    display: block;
+    float: left;
     height: 17px;
     margin-right: 20px;
 }
 
 .splIconicLinkIcon {
-	display: block;
-	height: 13px;
-	width: 13px;
-	display: block;
-	float: left;
-	margin-right: 2px;
+    display: block;
+    height: 13px;
+    width: 13px;
+    display: block;
+    float: left;
+    margin-right: 2px;
 }
 
 .splIconicLinkLabel {
-	line-height: 17px;
+    line-height: 17px;
 }
-
-
-.splIconicLinkDisabled  {
-    cursor: default !important;
-    text-decoration: none !important;
-}
-
 
 .splIconicLinkDisabled  {
     cursor: default !important;
@@ -950,13 +963,14 @@ input.searchButton {
 
 
 .pageControls .splIcon-export,
-.pageControls .splIcon-options
- {
-	margin-top: 5px;
+.pageControls .splIcon-options {
+    margin-top: 5px;
 }
 
-/* icons
----------------------------------*/
+
+/*************************************************************************************************/
+/*  ICONS                                                                                        */
+/*************************************************************************************************/
 .splIcon {
     height: 13px;
     width: 13px;
@@ -989,27 +1003,32 @@ input.searchButton {
     height:7px;
 }
 
-/* state interaction
-_________________________________*/
 
-
+/*************************************************************************************************/
+/*  STATE INTERACTION                                                                            */
+/*************************************************************************************************/
 .fatal, .error, .warn, .info, .persistent { /*due to specifity rules, it appears that this is never getting applied */
-    padding: 0px 10px;
+    padding: $spacingHalf $spacing;
     line-height: 28px;
+
+    &:empty {
+        padding: 0;
+    }
 }
 
 .fatal .remove, .error .remove, .warn .remove, .info .remove, .persistent .remove {
-margin-top: 1px;
-	display: block;
+    margin-top: 1px;
+    display: block;
     height: 13px;
     width: 13px;
     text-indent: 30px;
     overflow: hidden;
 }
 
-/* menu classes
----------------------------------*/
 
+/*************************************************************************************************/
+/*  MENU CLASSES                                                                                 */
+/*************************************************************************************************/
 /*** Structural menu styles, default ***/
 .splMenu, .splMenu div.outerMenuWrapper {
     position: absolute;
@@ -1034,8 +1053,6 @@ margin-top: 1px;
     width: 140px;
     text-decoration: none;
     overflow: hidden;
-}
-.splMenu a:hover {
 }
 .splMenu ul {
     border-width: 1px;
@@ -1067,9 +1084,9 @@ margin-top: 1px;
 }
 
 
-/* Tab styles
----------------------------------*/
-
+/*************************************************************************************************/
+/*  TAB STYLES                                                                                   */
+/*************************************************************************************************/
 .tabsWrapper {
     float:none !important;
     min-height:27px;
@@ -1100,9 +1117,9 @@ ul.tabs li a {
     text-decoration: none;
 }
 
-/* jquery ui styles
-_______________________________*/
-
+/*************************************************************************************************/
+/*  JQUERY UI STYLES                                                                             */
+/*************************************************************************************************/
 /* datepicker styles */
 .splunkDatepicker {
     width: 144px;
@@ -1206,7 +1223,7 @@ _______________________________*/
      Mako Exception Traceback Styles
  *********************************/
 .traceback h2 {
-	font-size: $baseFontSizeSmall;
+	font-size: $fontSizeSmall;
 	font-weight:bold;
 	margin-top:0px;
 	color:red;
@@ -1243,7 +1260,7 @@ _______________________________*/
 /* generic exception in the module handler */
 p.moduleException {
     text-align: center;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     font-weight: bold;
     padding: 10px;
 }
@@ -1273,7 +1290,7 @@ p.moduleException {
     height: 10px;
     padding: 5px;
     text-align: center;
-    background-color: $red;
+    background-color: $errorColor;
     color: $white;
 }
 
@@ -1295,7 +1312,7 @@ p.moduleException {
 }
 
 .devModuleLabel {
-    background-color: $red;
+    background-color: $errorColor;
 }
 
 /******************************************************************************
@@ -1466,6 +1483,12 @@ div.SplunkModule.HiddenSavedSearch {
     margin: 0;
 }
 
+div.SplunkModule.SubmitButton input[type=submit] {
+    margin-top: 0;
+    height: 28px !important;
+    background-position: 3px 0px;
+}
+
 /* mod/gandalf/search_field/AdvancedModeToggle */
 .AdvancedModeToggle label {
     float: left;
@@ -1557,9 +1580,21 @@ div.SplunkModule.HiddenSavedSearch {
  *****************************************************************************/
 .navSkip {
     position: absolute;
-    top:0;
-    left:-1000px;
+    margin: 1px 0px 0px 10px;
+    top: 0;
+    left: -1000px;
+    width: 150px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    background-color: $navbarBackground;
+    color: $gray80;
+    z-index: calc($zindexFixedNavbar + 10);
+    &:focus {
+        left: 0px;
+    }
 }
+
 
 .dropDown{
 	text-indent: -10000px;

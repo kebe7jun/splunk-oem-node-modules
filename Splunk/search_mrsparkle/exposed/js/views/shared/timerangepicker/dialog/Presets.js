@@ -98,7 +98,7 @@ function(
         template: '\
             <% if (realTimePresets && realTimePresets.length) { %>\
                 <ul class="unstyled presets-group">\
-                    <li><%- _("Real-time").t() %></li>\
+                    <li class="section-heading-small"><%- _("Real-time").t() %></li>\
                     <% _.each(realTimePresets, function(model) { %>\
                         <%= listElementPartial({model: model}) %>\
                     <% }); %>\
@@ -107,13 +107,13 @@ function(
             <% } %>\
             <% if (hasPeriodPresets && hasLastPresets) { %>\
                     <ul class="unstyled presets-group">\
-                        <li><%- _("Relative").t() %></li>\
+                        <li class="section-heading-small"><%- _("Relative").t() %></li>\
                         <% _.each(periodPresets, function(model) { %>\
                             <%= listElementPartial({model: model}) %>\
                         <% }); %>\
                     </ul>\
                     <ul class="unstyled presets-group">\
-                        <li>&nbsp;</li>\
+                        <li class="section-heading-small">&nbsp;</li>\
                         <% _.each(lastPresets, function(model) { %>\
                              <%= listElementPartial({model: model}) %>\
                         <% }); %>\
@@ -121,7 +121,7 @@ function(
                     <div class="presets-divider-wrap"><div class="presets-divider"></div></div>\
             <% } else if (hasPeriodPresets) { %>\
                 <ul class="unstyled presets-group">\
-                    <li><%- _("Relative").t() %></li>\
+                    <li class="section-heading-small"><%- _("Relative").t() %></li>\
                     <% _.each(periodPresets, function(model) { %>\
                         <%= listElementPartial({model: model}) %>\
                     <% }); %>\
@@ -129,7 +129,7 @@ function(
                 <div class="presets-divider-wrap"><div class="presets-divider"></div></div>\
             <% } else if (hasLastPresets) { %>\
                 <ul class="unstyled presets-group">\
-                    <li><%- _("Relative").t() %></li>\
+                    <li class="section-heading-small"><%- _("Relative").t() %></li>\
                     <% _.each(lastPresets, function(model) { %>\
                         <%= listElementPartial({model: model}) %>\
                    <% }); %>\
@@ -138,7 +138,7 @@ function(
             <% } %>\
             <% if (otherPresets && otherPresets.length) { %>\
                 <ul class="unstyled presets-group">\
-                    <li><%- _("Other").t() %></li>\
+                    <li class="section-heading-small"><%- _("Other").t() %></li>\
                     <% _.each(otherPresets, function(model) { %>\
                         <% if (!(isAllTime(model) && !options.showAllTime)) { %>\
                             <%= listElementPartial({model: model}) %>\

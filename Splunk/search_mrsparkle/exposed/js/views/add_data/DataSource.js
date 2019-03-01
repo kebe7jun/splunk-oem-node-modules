@@ -30,7 +30,8 @@ define(
         'views/add_data/input_forms/WinPerfmonRemote',
         'views/add_data/input_forms/WinPrintmon',
         'views/add_data/input_forms/WinRegmon',
-        'contrib/text!views/add_data/DataSource.html'
+        'contrib/text!views/add_data/DataSource.html',
+        './DataSource.pcss'
     ],
     function(
         $,
@@ -54,12 +55,13 @@ define(
         WinPerfmonRemote,
         WinPrintmon,
         WinRegmon,
-        template
+        template,
+        css
         ) {
         return BaseView.extend({
             template: template,
             moduleId: module.id,
-            className: 'selectSourceColumns flexRow',
+            className: 'data-source-columns flexRow',
             initialize: function(options) {
                 BaseView.prototype.initialize.apply(this, options);
 
@@ -109,7 +111,7 @@ define(
                 }
 
                 var modInputWrapper = this.$('.modularInputWrapper');
-                var inputForm = this.$('.inputForm');
+                var inputForm = this.$('.data-source-upload, .inputForm');
                 var inputFormView;
                 var inputFormDestination;
 
@@ -145,13 +147,17 @@ define(
                 // Header might be hidden here, need to reveal it
                 $(".adddata-header").show();
                 this.$('.modularInputWrapper').hide();
-                
+
                 var inputType = this.model.wizard.get('inputType');
                 this._renderInput.apply(this, [inputType]);
 
                 if (!this.model.wizard.isUploadMode()) {
                     this.$el.find('.sourceList').append(this.children.inputListView.render().el);
                     this.children.inputListView.delegateEvents();
+                    this.$el.removeClass('file-upload');
+                }
+                else {
+                    this.$el.addClass('file-upload');
                 }
 
 

@@ -127,7 +127,7 @@ define([
             var selectedModel = this.collection.findWhere({ value: selectedValue });
             return this.collection.indexOf(selectedModel);
         },
-        
+
         getPrevIndex: function() {
             var selectedValue = this.getValue();
             var selectedModel = this.collection.findWhere({ value: selectedValue });
@@ -233,19 +233,21 @@ define([
             }
             if (nextIsVisible) {
                 $nextButton.show();
+                $nextButton.css('display', 'inline-block');
             }
             else {
                 $nextButton.hide();
             }
             if (prevIsVisible) {
                 $previousButton.show();
+                $previousButton.css('display', 'inline-block');
             }
             else {
                 $previousButton.hide();
             }
 
             $nextButton.find('.button-text').text(this.collection.at(selectedIndex).get('nextLabel') || _('Next').t());
-            $previousButton.find('.button-text').text(this.collection.at(selectedIndex).get('previousLabel') || '');
+            $previousButton.find('.button-text').text(this.collection.at(selectedIndex).get('previousLabel') || _('Back').t());
         },
 
         render: function() {
@@ -290,7 +292,7 @@ define([
                 </div>\
             <% }) %>\
             <div class="nav-buttons">\
-                <a href="#" class="btn previous-button">\
+                <a href="#" class="btn btn-secondary previous-button">\
                     <i class="icon-chevron-left"></i>\
                     <span class="button-text"></span>\
                 </a> <a href="#" class="btn btn-primary next-button">\

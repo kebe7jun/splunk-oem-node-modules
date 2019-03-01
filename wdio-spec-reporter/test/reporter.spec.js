@@ -1,7 +1,8 @@
 import sinon from 'sinon'
+import chalk from 'chalk'
 import SpecReporter from '../lib/reporter'
 import {
-    SUITE, COLORS, RESULTLIST, SUMMARY, ERRORS, ERRORLIST,
+    SUITE, RESULTLIST, SUMMARY, ERRORS, ERRORLIST,
     STATS, STATS_WITH_NO_SPECS, SUITERESULT, JOBLINKRESULT,
     ERRORS_NO_STACK, ERRORLIST_NO_STACK, SUITES_SUMMARY,
     STATS_WITH_MULTIPLE_RUNNERS
@@ -13,12 +14,14 @@ const baseReporter = {
         err: '✖',
         dot: '․',
         error: 'F'
-    },
-    color (type, str) {
-        return `\u001b[${COLORS[type]}m${str}\u001b[0m`
     }
 }
 const reporter = new SpecReporter(baseReporter)
+
+/**
+ * disable colors for testing purposes
+ */
+reporter.chalk = new chalk.constructor({level: 0})
 
 describe('spec reporter', () => {
     describe('the runner:start event', () => {
@@ -143,10 +146,10 @@ describe('spec reporter', () => {
         it('should return the right symbol', () => {
             reporter.getColor('pass').should.be.equal('green')
             reporter.getColor('passing').should.be.equal('green')
-            reporter.getColor('pending').should.be.equal('pending')
-            reporter.getColor('fail').should.be.equal('fail')
-            reporter.getColor('fail').should.be.equal('fail')
-            reporter.getColor('failing').should.be.equal('fail');
+            reporter.getColor('pending').should.be.equal('cyan')
+            reporter.getColor('fail').should.be.equal('red')
+            reporter.getColor('fail').should.be.equal('red')
+            reporter.getColor('failing').should.be.equal('red');
             (reporter.getColor('foobar') === null).should.be.true()
         })
     })

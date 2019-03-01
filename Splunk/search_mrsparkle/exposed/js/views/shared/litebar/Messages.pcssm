@@ -2,8 +2,8 @@
 /*  ======================= */
 
 .messagesHeader {
-    line-height: $navbarHeightLite;
-    height: $navbarHeightLite;
+    line-height: $litebarHeight;
+    height: $litebarHeight;
     padding: 0 10px;
 }
 
@@ -30,7 +30,7 @@
     background: none;
     color: $textGray;
     text-align: left;
-    line-height: $navbarHeightLite;
+    line-height: $litebarHeight;
     padding: 0 10px;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .messageNotification {
-    background: $red;
+    background: $errorColor;
     border-radius: 10px;
     color: #FFF;
     display: inline-block;
@@ -71,7 +71,7 @@
 }
 
 .splunkMessagesDivider {
-    border-top: 1px solid $gray;
+    border-top: $borderDefault;
     height: 0px;
     margin: 0 10px;
 }

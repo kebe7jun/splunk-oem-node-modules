@@ -541,7 +541,7 @@ define([
             },
 
             template: '\
-                <div class="section-padded section-header">\
+                <div class="section-padded section-header page-heading">\
                     <div class="header-button-holder pull-right">\
                         <a href="<%- docUrl %>" target="_blank" class="btn external"><%- _("Documentation").t() %></a>\
                     </div>\

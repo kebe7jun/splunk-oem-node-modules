@@ -49,7 +49,7 @@ define([
                 activeIconName: "triangleDownSmall",
                 activeClass: "active",
                 collapsible: false,
-                speed: 300
+                speed: 200
             };
 
             _.defaults(this.options, defaults);

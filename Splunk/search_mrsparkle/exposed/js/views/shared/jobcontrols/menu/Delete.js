@@ -33,9 +33,9 @@ define(
             render: function() {
                 var canWrite = this.model.searchJob.entry.acl.canWrite();
                 if (canWrite){
-                    this.$el.html('<a href="#">' + _("Delete Job").t() + '</a>');
+                    this.$el.html('<a href="#" aria-disabled="false">' + _("Delete Job").t() + '</a>');
                 } else {
-                    this.$el.html('<a href="#" class="disabled">' + _("Delete Job").t() + '</a>');
+                    this.$el.html('<a href="#" aria-disabled="true" class="disabled">' + _("Delete Job").t() + '</a>');
                 }
                 return this;
             }

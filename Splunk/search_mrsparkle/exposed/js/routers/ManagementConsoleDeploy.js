@@ -32,7 +32,6 @@ define(
                     isExpanded = urlHelper.getUrlParam('isExpanded') || false;
 
                 this.setPageTitle(_('Deploy').t());
-                this.enableFooter = false;
 
                 this.children = this.children || {};
                 this.collection = this.collection || {};

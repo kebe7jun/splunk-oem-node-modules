@@ -135,7 +135,10 @@ define(
                 } catch(e) {
                     // ignore if not valid XML
                 }
-                html = HtmlCleaner.clean(html, {allowInlineStyles: DashboardUtils.allowInlineStyles()});
+                html = HtmlCleaner.clean(html, {
+                    allowInlineStyles: DashboardUtils.allowInlineStyles(),
+                    allowIframes: DashboardUtils.allowIframes()
+                });
                 $body.html(html);
                 this.normalizeLinks($body);
             },
@@ -165,7 +168,7 @@ define(
                 return this.contentLoadedDfd.promise();
             },
             remove: function() {
-                this.stopListeningToTokenDependencyChange();                
+                this.stopListeningToTokenDependencyChange();
                 BaseDashboardView.prototype.remove.apply(this, arguments);
             }
         }));

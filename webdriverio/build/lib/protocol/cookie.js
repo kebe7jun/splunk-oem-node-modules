@@ -43,12 +43,11 @@ function cookie() {
     var requestOptions = {
         path: '/session/:sessionId/cookie',
         method: method
-    };
 
-    /**
-     * set cookie param for POST method
-     */
-    if (method.toUpperCase() === 'POST' && typeof args === 'object') {
+        /**
+         * set cookie param for POST method
+         */
+    };if (method.toUpperCase() === 'POST' && typeof args === 'object') {
         data.cookie = args;
     }
 

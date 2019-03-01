@@ -260,6 +260,7 @@ define([
             options || (options = {});
             this._applyRowGrouping(parserResult, options);
             this._normalizeDrilldownDefaults(parserResult, options);
+            this._normalizeDrilldownLinks(parserResult, options);
             this._normalizeLegacyElementSettings(parserResult, options);
             this._moveSettings(parserResult, options);
             this._inlineChildren(parserResult, options);
@@ -585,6 +586,14 @@ define([
                             component.reportContent['display.visualizations.singlevalue.drilldown'] = 'all';
                         }
                     }
+                }
+            }, this);
+        },
+        _normalizeDrilldownLinks: function(parserResult, options) {
+            this._visit(parserResult, function(component) {
+                // link url needs to be decoded.
+                if (component.def.name === 'link') {
+                    component.settings.value = decodeURI(component.settings.value);
                 }
             }, this);
         },

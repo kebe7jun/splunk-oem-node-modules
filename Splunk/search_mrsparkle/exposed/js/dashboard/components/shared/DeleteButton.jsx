@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
-import Button from 'splunk-ui/components/Button';
-import Close from 'splunk-ui/icons/Close';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Button from '@splunk/react-ui/Button';
+import Close from '@splunk/react-icons/Close';
 import { createTestHook } from 'util/test_support';
 
 const DeleteButton = ({ onClick }) => (

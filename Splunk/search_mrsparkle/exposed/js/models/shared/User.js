@@ -16,18 +16,23 @@ define(
         };
         
         var UserModel = UserBaseModel.extend({
+            /**
+             * @param {Object} options {
+             *     serverInfoModel: <models.services.server.ServerInfo> (Required)
+             *     appLocalsCollection: <collections.services.AppLocals> (Optional) required if
+             *         used for calling canAccessAppWithName and canAccessSplunkDatasetExtensions.
+             */
             initialize: function(attributes, options) {
                 UserBaseModel.prototype.initialize.apply(this, arguments);
                 options = options || {};
                 
                 var serverInfoModel = options.serverInfoModel,
                     appLocalsCollection = options.appLocalsCollection;
-                
-                if (!serverInfoModel || !(serverInfoModel instanceof ServerInfoModel)) {
-                    throw 'The following constructor arguments are required ({}, {serverInfoModel: <models/services/server/ServerInfo>}).';
+
+                if (serverInfoModel && (serverInfoModel instanceof ServerInfoModel)) {
+                    this.associated.serverInfo = serverInfoModel;
+                    this.serverInfo = serverInfoModel;
                 }
-                this.associated.serverInfo = serverInfoModel;
-                this.serverInfo = serverInfoModel;
                 
                 if (appLocalsCollection && (appLocalsCollection instanceof AppLocalsCollection)) {
                     this.associated.appLocals = appLocalsCollection;
@@ -105,7 +110,7 @@ define(
 
             isHunkAdmin: function() {
                 return !this.isFree() && this.serverInfo.hasHadoopAddon() &&
-                    !this.serverInfo.isCloud() && this.isAdmin();
+                    !this.serverInfo.isCloud() && this.hasCapability('indexes_edit');
             },
 
             canExploreData: function() {
@@ -190,7 +195,17 @@ define(
             
             canAccessSplunkDatasetExtensions: function() {
                 return this.canAccessAppWithName(CORE_JS_APP_NAMES.DATASETS_EXTENSIONS);
+            },
+
+            canListAndSelectWorkloadPools: function(workloadManagementStatus) {
+                if (this.hasCapability('list_workload_pools') &&
+                    this.hasCapability('select_workload_pools') &&
+                    workloadManagementStatus.isEnabled()) {
+                    return true;
+                }
+                return false;
             }
+
         },
         {
             CORE_JS_APP_NAMES: CORE_JS_APP_NAMES

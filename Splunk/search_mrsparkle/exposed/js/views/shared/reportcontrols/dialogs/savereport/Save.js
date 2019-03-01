@@ -42,13 +42,13 @@ define(
                         searchJob: this.model.searchJob
                     }
                 });
-                
+
                 //timeRangePicker toggle
                 this.children.timeRangePickerToggle = new ControlGroup({
                     label: _("Time Range Picker").t(),
                     controlType:'SyntheticRadio',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             { value: '1', label: _('Yes').t() },
                             { value: '0', label: _('No').t() }

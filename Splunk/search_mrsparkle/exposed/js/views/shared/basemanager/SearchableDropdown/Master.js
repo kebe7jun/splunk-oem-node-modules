@@ -13,6 +13,7 @@ define([
     'views/shared/controls/TextControl',
     'splunk.util',
     'util/string_utils',
+    'util/keyboard',
     'views/Base',
     './Master.pcss'
 ], function (
@@ -24,6 +25,7 @@ define([
     InputView,
     splunkUtil,
     stringUtil,
+    keyboardUtil,
     BaseView
 ) {
 
@@ -61,6 +63,7 @@ define([
             if (this.options.rerenderMenuOnShow) {
                 this.listenTo(this.children.popdown, 'show', this.renderMenu);
             }
+            this.listenTo(this.children.popdown, 'hidden', this.onMenuHidden);
             this.popdownDialogEvents = {};
         },
 
@@ -98,6 +101,11 @@ define([
             this.$menu.html(this.getMenuHTML());
         },
 
+        onMenuHidden: function() {
+            // reset focus state to the toggle button
+            this.$('.' + toggleClass).focus();
+        },
+
         /**
          * DO NOT override! The goal of the interface class
          * is to provide the functionality for the menu
@@ -112,7 +120,7 @@ define([
                 menuClass: menuClass
             }));
 
-            this.$('.'+toggleClass).addClass(this.options.toggleClassName);
+            this.$('.'+toggleClass).addClass(this.options.toggleClassName).addClass("searchable-dropdown");
             this.$('.dropdown-menu').addClass(this.options.menuClassName);
             this.renderLabel();
             this.renderMenu();
@@ -123,7 +131,8 @@ define([
          * DO NOT override the template.
          */
         template: '\
-            <a class="<%- toggleClass %>">\
+            <a class="<%- toggleClass %>" href="#">\
+                <i class="icon-large"></i>\
                 <span class="<%- labelClass %>"></span>\
                 <span class="caret"></span>\
             </a>\
@@ -223,6 +232,7 @@ define([
                 this.$el.attr('data-selected', 'selected');
                 this.$('.icon-check').show();
             }
+            this.$el.attr('tabindex', 0);
             this.$el.data(this.model.toJSON());
             return this;
         },
@@ -404,7 +414,12 @@ define([
             var value = selectedValues.join(this.options.valueSeparator);
             this.model.target.set(this.options.modelAttribute, value);
         },
-
+        handleSyntheticSelectKeyup: function(e) {
+            if (e.which === keyboardUtil.KEYS['ENTER']) {
+                this.handleSyntheticSelectClick(e);
+                this.children.popdown.hide();
+            }
+        },
         handleSyntheticSelectClick: function (e) {
             e.preventDefault();
             var $target = $(e.currentTarget);
@@ -554,16 +569,19 @@ define([
             // unbind previous listener
             if (this.$menu) {
                 this.$menu.off('click', 'a.synthetic-select', this.handleSyntheticSelectClickBound);
+                this.$menu.off('keyup', 'a.synthetic-select');
             }
             DropdownView.prototype.renderMenu.apply(this, arguments);
             // bind new listener
             this.$menu.on('click', 'a.synthetic-select', this.handleSyntheticSelectClickBound);
+            this.$menu.on('keyup', 'a.synthetic-select', this.handleSyntheticSelectKeyup.bind(this));
         },
 
         remove: function () {
             // when the view is removed, unbind custom listener
             if (this.$menu) {
                 this.$menu.off('click', 'a.synthetic-select', this.handleSyntheticSelectClickBound);
+                this.$menu.off('keyup', 'a.synthetic-select');
                 this.$menu = null;
             }
             DropdownView.prototype.remove.apply(this, arguments);

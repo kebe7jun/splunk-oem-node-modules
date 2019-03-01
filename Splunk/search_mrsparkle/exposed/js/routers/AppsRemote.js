@@ -100,7 +100,7 @@ define(
                     offset: this.model.metadata.get('offset') || 0,
                     limit: this.model.metadata.get('count') || 20,
                     order: this.model.metadata.get('order') || 'latest',
-                    include: 'release,categories,created_by,icon,download_count'
+                    include: 'release,release.manifest,categories,created_by,icon,download_count'
                 };
 
                 var keys = ['query', 'created_by'];

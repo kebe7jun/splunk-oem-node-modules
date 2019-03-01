@@ -103,6 +103,7 @@ define(function(require, exports, module) {
             this.splitValue = 'noSplit';
             this.searchJob  = this.model.searchJob;
             this.searchResults = this.model.searchResults;
+            var fieldColors = '{' + _('volume licensed').t() + ': 0xDC4E41, ' + _('volume indexed').t() + ': 0xFBD886}';
             this.chartOptions = {
                 'display.visualizations.charting.chart' : 'column',
                 'display.visualizations.charting.axisTitleX.text' : _('Date').t(),
@@ -115,7 +116,7 @@ define(function(require, exports, module) {
                 'display.visualizations.charting.height': '300',
                 'display.visualizations.charting.chart.overlayFields': '"volume licensed"',
                 'display.visualizations.charting.lineDashStyle' : 'shortDash',
-                'display.visualizations.charting.fieldColors' : '{' + _('volume licensed').t() + ': 0xff0000}'
+                'display.visualizations.charting.fieldColors' : fieldColors
             };
 
             this.localUsedBytes = -1;

@@ -1,8 +1,9 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import _ from 'underscore';
-import Message from 'splunk-ui/components/Message';
+import Message from '@splunk/react-ui/Message';
+import SimpleDialog from 'components/SimpleDialog';
 import ItemSelector from 'dashboard/components/shared/ItemSelector';
-import SimpleDialog from 'dashboard/components/shared/SimpleDialog';
 import SearchContainer from 'dashboard/containers/editor/drilldown/search/SearchContainer';
 import DashboardContainer from 'dashboard/containers/editor/drilldown/dashboard/DashboardContainer';
 import ReportContainer from 'dashboard/containers/editor/drilldown/report/ReportContainer';
@@ -71,6 +72,8 @@ const DrilldownEditor = ({
         okLabel={_('Apply').t()}
         onClose={onClose}
         onApply={onApply}
+        width={550}
+        disablePrimaryButton={!isSupported}
         {...createTestHook(module.id)}
     >
         {isSupported ?
@@ -78,7 +81,7 @@ const DrilldownEditor = ({
                 {isCustomViz ? <Message type="warning" {...createTestHook(null, 'customVizMessage')}>
                     {customVizMessage} </Message> : null}
                 <ItemSelector
-                    label={_('On click').t()}
+                    label={_('On Click').t()}
                     activeItem={activeAction}
                     items={actions}
                     isLoading={false}

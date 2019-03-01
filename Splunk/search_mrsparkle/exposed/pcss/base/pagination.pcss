@@ -1,9 +1,8 @@
-/*  Splunk: Component: paginator */
-/*  ============================ */
-/*  TODO: should this be in base? */
-
+/*===============================================================================================*/
+/*  SPLUNK: PAGINATOR                                                                            */
+/*  Navigation styles and components.                                                            */
+/*===============================================================================================*/
 /* pagination styles and overrides
-
     <div class="pagination">
         <ul>
             <li><a href="#">Prev</a></li>
@@ -16,9 +15,9 @@
     </div>
 
 */
-
 .pagination {
     height: auto;
+
     > ul {
         display: inline-block;
         /*  Reset default ul styles */
@@ -28,126 +27,91 @@
 
         > li {
             float: left;
-        }
 
-        > li > span,
-        > li > a {
-            float: left;
-            text-decoration: none;
-            border: 1px solid transparent;
-            line-height: 20px;
-            min-width: 10px;
-            padding: 2px 8px;
-            text-align: center;
-             border-radius: $interactiveBorderRadius;
+            > span,
+            > a {
+                @mixin button-padding $buttonPaddingVertical; /*  note the vertical padding will be funky unless it's block, inline-block, or floated */
+                float: left;
+                line-height: $lineHeight;
+                border: $border transparent;
+                border-radius: $interactiveBorderRadius;
 
-	 		&:focus {
-	 		  @mixin focus-pill;
-	 		}
-        }
-        /*  hover & active state */
-        & > li > a:hover,
-        .active > a
-        {
-            background-color: $pillBackgroundColorHover;
-        }
+                @mixin interactive none, transparent, none, $pillTextColor;
+                @mixin button-states pill-hover, pill-active, pill-disabled, pill-style $linkColor;
 
-        .active > a {
+                &:not(.page-controls){
+                    @mixin button-padding $buttonPaddingVertical, $spacingHalf;
+                    margin: 0 1px;
+
+                    &.btn-square {
+                        @mixin button-padding $buttonPaddingVertical, 0;
+                    }
+                }
+            }
+        }
+        .active > a, .active > a:hover {
             cursor: default;
+            border: $border $accentColor;
+            color:  $accentColor;
         }
-
         .icon-chevron-left, .icon-triangle-left-small {
-            padding-right: 3px;
+            padding-right: calc($lineHeight / 3);
         }
         .icon-chevron-right, .icon-triangle-right-small {
-            padding-left: 3px;
+            padding-left: calc($lineHeight / 3);
         }
-
         > .disabled {
             > span,
             > a,
             > a:hover,
             > a:focus {
                 background-color: transparent;
+                border-color: transparent;
                 color: $textDisabledColor;
                 cursor: default;
+                box-shadow: none;
             }
         }
-
     }
-
     .max-events-per-bucket {
-        color: $yellow;
+        color: $warningColor;
         font-size: 18px;
     }
-    /*  missing sequence dots */
-    .dots,
-    .dots:hover {
-        width: 20px;
-        padding: 0px;
-    }
-
 }/*  .pagination */
 
 
+.splunk-paginator.splunk-view {
+    padding: 0 $spacingHalf;
 
-/*  Alignment */
-/*  -------------------------------------------------- */
+    .disabled, a.selected {
+        color: $textDisabledColor;
+        cursor: default;
+    }
+    a.selected {
+        color: $linkColor;
+        border: $border $linkColor;
+        background: transparent;
+    }
+    a {
+        border: 1px solid transparent;
+        border-radius: $borderRadius;
+        color: $interactiveTextColor;
+        padding: 2px 8px 2px;
+        text-decoration: none;
+        min-width: $spacingHalf;
+        line-height: $lineHeight;
+        display: inline-block;
+        text-align: center;
 
-.pagination-centered {
-  text-align: center;
-}
-.pagination-right {
-  text-align: right;
-}
-
-/*  Large */
-/*  -------------------------------------------------- */
-.pagination-large {
-  ul > li > a,
-  ul > li > span {
-    padding: $paddingLarge;
-    font-size: $fontSizeLarge;
-  }
-  ul > li:first-child > a,
-  ul > li:first-child > span {
-    @mixin border-left-radius $borderRadiusLarge;
-  }
-  ul > li:last-child > a,
-  ul > li:last-child > span {
-    @mixin border-right-radius $borderRadiusLarge;
-  }
-}
-
-/*  Small and mini */
-/*  -------------------------------------------------- */
-.pagination-mini,
-.pagination-small {
-  ul > li:first-child > a,
-  ul > li:first-child > span {
-    @mixin border-left-radius $borderRadiusSmall;
-  }
-  ul > li:last-child > a,
-  ul > li:last-child > span {
-    @mixin border-right-radius $borderRadiusSmall;
-  }
-}
-
-/*  Small */
-/*  -------------------------------------------------- */
-.pagination-small {
-  ul > li > a,
-  ul > li > span {
-    padding: $paddingSmall;
-    font-size: $fontSizeSmall;
-  }
-}
-/*  Mini */
-/*  -------------------------------------------------- */
-.pagination-mini {
-  ul > li > a,
-  ul > li > span {
-    padding: $paddingMini;
-    font-size: $fontSizeMini;
-  }
+        &:hover {
+            background: $pillBackgroundColorHover;
+        }
+        &:disabled {
+            background: none;
+        }
+    }
+    span {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
 }

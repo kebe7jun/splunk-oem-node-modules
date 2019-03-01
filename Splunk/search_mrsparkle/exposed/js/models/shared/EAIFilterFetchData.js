@@ -26,9 +26,10 @@ define(
         'underscore',
         'backbone',
         'models/Base',
-        'splunk.util'
+        'splunk.util',
+        'util/splunkd_utils'
     ],
-    function($, _, Backbone, BaseModel, splunk_utils) {
+    function($, _, Backbone, BaseModel, splunk_utils, splunkDUtils) {
         return BaseModel.extend({
             initialize: function(attributes, options) {
                 BaseModel.prototype.initialize.apply(this, arguments);
@@ -46,7 +47,7 @@ define(
 
                 var searchString = "";
                 if (!_.isUndefined(ownerSearch) && !_.isEmpty(ownerSearch)) {
-                    searchString += '(eai:acl.owner="' + ownerSearch + '")';
+                    searchString += '(eai:acl.owner=' + splunkDUtils.quoteSearchFilterValue(ownerSearch) + ')';
                 }
 
                 if (!_.isUndefined(appSearch) && !visible && !_.isEmpty(appSearch)) {

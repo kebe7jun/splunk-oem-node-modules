@@ -157,9 +157,9 @@ function(
                 </span>\
                 <span class="<%- css.time %>" data-role="time"><%- msgTime %></span>\
                 <% if (type == "splunk") { %>\
-                    <a href="#" class="<%-css.delete%>" data-action="delete-splunk-message"></a>\
+                    <a href="#" aria-label="<%- _("Delete").t() %>" class="<%-css.delete%>" data-action="delete-splunk-message"></a>\
                 <% } else { %>\
-                    <a href="#" class="<%-css.delete%>" data-action="delete"></a>\
+                    <a href="#" aria-label="<%- _("Delete").t() %>" class="<%-css.delete%>" data-action="delete"></a>\
                 <% } %>\
         '
     });

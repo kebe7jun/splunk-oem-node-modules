@@ -106,7 +106,7 @@ define([
                 },
                 eventType: $wrapper.is('.master-event-wrapper') ? 'master' : 'sample'
             });
-            this.listenTo(this.children.editExtractionDropdown, 'action:rename', function(newFieldName) { 
+            this.listenTo(this.children.editExtractionDropdown, 'action:rename', function(newFieldName) {
                 this.trigger('action:renameExistingExample', fieldName, newFieldName);
             });
             this.listenTo(this.children.editExtractionDropdown, 'action:remove', function(fieldName) {
@@ -122,11 +122,11 @@ define([
             this.children.editExtractionDropdown.show($target, { $onOpenFocus : this.$el });
         },
 
-        removeRequiredTextHandler: function(e, $target) {  
+        removeRequiredTextHandler: function(e, $target) {
             if (this.children.removeRequiredTextDropdown) {
                 this.stopListening(this.children.removeRequiredTextDropdown);
                 this.children.removeRequiredTextDropdown.remove();
-            }          
+            }
             this.children.removeRequiredTextDropdown = new RemoveRequiredTextDropdown({ requiredText: $target.text() });
             this.listenTo(this.children.removeRequiredTextDropdown, 'action:remove', function() {
                 this.trigger('action:removeRequiredText');
@@ -177,8 +177,8 @@ define([
                             startIndex: extract.startIndex
                         });
                     }
-                }); 
-                
+                });
+
                 var selection = fieldExtractorUtils.getSelectionObject(windowSelection, $target, fieldsAndRequiredText);
 
                 if (!selection){
@@ -244,14 +244,14 @@ define([
                 this.removeTemporaryHighlight('', $target);
             }
         },
-        
+
         verifyNoExistingOverlap: function(startOffset, endOffset, highlightedExistingMatches) {
             return !_.any(highlightedExistingMatches, function(highlightedExisting) {
                 return (((startOffset >= $(highlightedExisting).data('start-index')) && (startOffset < $(highlightedExisting).data('end-index'))) ||
                         ((startOffset <= $(highlightedExisting).data('start-index')) && (endOffset > $(highlightedExisting).data('start-index'))));
             });
         },
-        
+
         verifyNoFieldOverlap: function(highlightedMatches, highlightedExistingMatches, selection, requiredText) {
             var execute = true,
                 startOffset = selection.startIndex,
@@ -481,7 +481,7 @@ define([
             <div class="master-event-container">\
                 <div class="event-wrapper master-event-wrapper"><span class="event-text"></span></div>\
                 <% _(sampleEvents || []).each(function(sampleEvent, i) { %>\
-                    <a href="#" class="remove-button" data-sample-index="<%- i %>"><i class="icon-x-circle"></i></a>\
+                    <a href="#" class="remove-button" data-sample-index="<%- i %>"><i class="icon-x"></i></a>\
                     <div class="event-wrapper sample-event-wrapper" data-sample-index="<%- i %>"><span class="event-text"><%- sampleEvent.rawText %></span></div>\
                 <% }) %>\
             </div>\

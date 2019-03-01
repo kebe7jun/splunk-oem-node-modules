@@ -5,6 +5,7 @@
     composes: menu from '../../MenuDialog.pcssm';
     width: 100%;
     @mixin clearfix;
+    border-radius: $containerInnerBorderRadius $containerInnerBorderRadius 0 0;
 }
 
 .formSearch {

@@ -108,11 +108,6 @@ requirejs.config({
         // splunkjs
         "async": "splunkjs/contrib/requirejs-plugins/async",
         "select2": "contrib/select2-3.4.6",
-
-        // paths for deprecated versions of jquery
-        'contrib/jquery-1.8.2': 'contrib/deprecated/jquery-1.8.2',
-        'contrib/jquery-1.8.3': 'contrib/deprecated/jquery-1.8.3',
-        'contrib/jquery-1.10.2': 'contrib/deprecated/jquery-1.10.2'
     },
     shim: {
 

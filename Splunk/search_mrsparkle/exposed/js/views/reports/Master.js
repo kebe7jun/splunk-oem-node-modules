@@ -144,7 +144,7 @@ define(
                 this.children.table.render().appendTo(this.$el);
             },
 
-            template: '<div class="section-padded section-header"></div><% if (!isLite) { %><div class="divider"></div><% } %>'
+            template: '<div class="section-header page-heading"></div>'
         });
     }
 );

@@ -77,7 +77,7 @@ function(
         },
 
         render: function() {
-            this.el.innerHTML = PopTartView.prototype.template_menu;
+            this.el.innerHTML = '';
             var searchLink = route.search(
                 this.model.application.get('root'),
                 this.model.application.get('locale'),
@@ -200,7 +200,7 @@ function(
             <a class="<%=css.primaryLink%>" href="<%- searchLink %>" data-role="search-more-link">\
                 <%- splunkUtils.sprintf(_("Open %s in search").t(), rawSearch) %>\
             </a>\
-            <a class="<%=css.secondaryLink%>" data-role="secondary-search-more-link" href="<%- searchLink %>" target="_blank" title="<%- splunkUtils.sprintf(_("Open %s in search in new tab").t(), rawSearch) %>">\
+            <a class="<%=css.secondaryLink%>" data-role="secondary-search-more-link" href="<%- searchLink %>" target="_blank" aria-label="<%- splunkUtils.sprintf(_("Open %s in search in new window").t(), rawSearch) %>">\
             </a>\
         </li></ul>\
         '

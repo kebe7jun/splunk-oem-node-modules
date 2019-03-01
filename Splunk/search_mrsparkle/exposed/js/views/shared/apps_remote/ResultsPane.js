@@ -30,7 +30,8 @@ define(
                 var _AppsBoxView = this.options.appsBoxViewClass || AppsBoxView;
                 this.children.appsBox = new _AppsBoxView({
                     model: this.model,
-                    collection: this.collection
+                    collection: this.collection,
+                    isSHC: this.options.isSHC
                 });
 
                 this.children.paginator = new Paginator({

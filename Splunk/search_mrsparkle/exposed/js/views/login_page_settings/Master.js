@@ -94,7 +94,7 @@ define(
                 this.loginCustomBackgroundImage = this.model.web.entry.content.get('loginCustomBackgroundImage');
                 this.loginBackgroundImageOption = this.model.web.entry.content.get('loginBackgroundImageOption');
 
-                this.animationSpeed = 300;
+                this.animationSpeed = 200;
                 this.isPreviewExpanded = false;
 
                 // Register onKeyDown event since it should listen on the entire window.

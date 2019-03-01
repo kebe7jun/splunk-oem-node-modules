@@ -45,7 +45,7 @@ define([
                             scrollContainer: '.modal:visible .modal-body:visible'
                         }
                     },
-                    controlClass: 'controls-block btn'
+                    controlClass: 'btn'
                 });
 
                 this.flashMessages = new FlashMessagesCollection();
@@ -73,7 +73,7 @@ define([
                     })
                     .done(function(response) {
                         this.hide();
-                        
+
                         var successDialog = new SuccessDialog({
                             title: _('Resync Operation Scheduled').t(),
                             message: _('Operation resync has been scheduled.').t(),

@@ -6,6 +6,7 @@ define(
         'views/shared/controls/Control',
         'util/general_utils',
         'util/svg',
+        'util/keyboard',
         'bootstrap.tooltip'
     ],
     function(
@@ -14,7 +15,8 @@ define(
         module,
         Control,
         util,
-        svgUtil
+        svgUtil,
+        keyboardUtils
         // bootstrap tooltip
         ) {
 
@@ -53,11 +55,25 @@ define(
                     this.$('[rel="tooltip"]').tooltip({animation:false, container: 'body', trigger: 'hover'});
                 }
                 var value = this._value;
+                this.$el.find('.btn-radio').each(function(i, el) {
+                    var $el = $(el);
+                    if ($el.data('value') === value) {
+                        $el.addClass('active');
+                    }
+                    else {
+                        $el.removeClass('active');
+                    }
+                    $el.click(function() {
+                        that.setValue( $el.data('value'));
+                    });
+                });
                 this.$el.find('input:radio').each(function(i, el) {
                     var $el = $(el);
-                    $el.prop({ 'checked': $el.data('value') === value });
-                    $el.change(function() {
+                    $el.prop({'checked': $el.data('value') === value });
+                    $el.keypress(function(event) {
+                      if (event.code === 13 || keyboardUtils.KEYS.ENTER) {
                         that.setValue( $el.data('value'));
+                      }
                     });
                 });
                 this.$el.find('.icon-placeholder').each(function(i, el) {
@@ -72,9 +88,9 @@ define(
             },
             template: '\
                 <% _.each(items, function(item, index){ %>\
-                    <div class="color-mode-radio-icon-container">\
-                        <input type="radio" data-value="<%- item.value %>" \
-                        <% if (item.tooltip) { %> rel="tooltip" title="<%=item.tooltip%>" <% } %>>\
+                    <div class="color-mode-radio-icon-container shared-controls-syntheticradiocontrol">\
+                        <input type="radio" data-value="<%- item.value %>">\
+                        <div class="btn-radio" <% if (item.tooltip) { %> rel="tooltip" title="<%=item.tooltip%>" <% } %> data-value="<%- item.value %>"></div>\
                         <% if (item.label) { %> <div class="radio-label"><%- item.label %></div> <% } %>\
                         <div class="icon-placeholder"></div> \
                     </div>\

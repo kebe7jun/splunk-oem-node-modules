@@ -10,9 +10,9 @@
   % endif
 </script>
 
-</%def>    
+</%def>
 
-<%def name="css()">  
+<%def name="css()">
     <%coreCSSFiles = ["/static/css/view.css", "/static/css/skins/default/default.css", '/modules/nav/AccountBar.css', '/static/css/print.css', '/static/css/tb.css'] %>
     <%lib:stylesheet_tags files="${coreCSSFiles}" />
 </%def>
@@ -23,7 +23,7 @@
 
 <div class="appHeaderWrapper">
     <div class="layoutRow oneColRow splClearfix appHeader">       
-        <div class="SplunkModule AccountBar">                        
+        <div class="SplunkModule AccountBar">
             <a href="#" class="splIcon splIcon-close"></a>
             <div class="appLogoContainer popupAppLogoContainer">
                 <a href="javascript:void()" class="appLogo notLinked"></a>
@@ -38,14 +38,14 @@
      <p class="${msgtype|h}">${msg|h}</p>
   % endfor
 % endfor
- 
+
 <form method="POST" id="iterate" class="entityEditForm">
 
   ${csrf_hidden_input()}
-  <input type="hidden" name="namespace"         value="${namespace|h}" />  
+  <input type="hidden" name="namespace"         value="${namespace|h}" />
   <input type="hidden" name="oldsearch"         value="${search|h}" />
   <input type="hidden" name="fieldsstr"         value="${fieldsstr|h}" />
-  
+
 
   <div id="control">
     <label>${_('Search')}</label>
@@ -102,7 +102,7 @@
     <input type=text name="endswith" value="${endswith|h}" />
     <p class="exampleText">${_('Specify a search (e.g., "logout") or eval filtering expression (e.g., "eval(delay<timeout/60)"),<br/>which if satisfied by an event marks the end of a new transaction.')}</p>
 
-															     
+
     <br/><br/>
 
     <div class="transactionButtons">
@@ -117,7 +117,7 @@
     <div id="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX------------------events">
       <h2>${_('Sample transactions')}</h2>
       <p class="info">
-	       ${_('Based on the selections above, the following search was run:')} 
+	       ${_('Based on the selections above, the following search was run:')}
                <a target="testing" href="${testingurl|h}"><code>${testingsearch|h}</code></a>
       </p>
       <div id="eventListing">
@@ -129,10 +129,10 @@
                     </tr>
             	  % endfor
             </tbody>
-          </table> 
+          </table>
       </div>
 
-      <br style="clear:both" />			
+      <br style="clear:both" />
 
     </div>
   </div>
@@ -141,12 +141,12 @@
     <div class="splHeader splHeader-popup">
         <h2>${_('Save event type')}</h2>
     </div>
-    
+
     <div class="popupContent">
         <div class="entityEditForm">
             <div class="fieldsetWrapper">
                 <fieldset>
-                	    <p class="helpText"><b>Note:</b> To ensure the transaction works properly, test before saving.</p>                
+                	    <p class="helpText"><b>Note:</b> To ensure the transaction works properly, test before saving.</p>
                     <label for="saveName">
             	    <%doc>TRANS: Name to give to event type</%doc>
             	    ${_('Name')}</label>
@@ -163,7 +163,7 @@
 	       <button class="splButton-primary" type="submit" name="savetransaction" ><%doc>TRANS: Save transaction</%doc><span>${_('Save Transaction')}</span></button>
     </div>
   </div>
- 
+
  <div id="saveSuccessLayer" class="popupContainer">
     <div class="splHeader splHeader-popup">
         <h2>${_('Successfully saved transaction information')}</h2>
@@ -176,7 +176,7 @@
     <div class="popupFooter">
         <button class="splButton-primary" name="ok" onclick="saveSuccessClose()" ><span>${_('Close')}</span></button>
     </div>
-  </div> 
+  </div>
 
   <div class="splOverlay">&nbsp;</div>
 </form>

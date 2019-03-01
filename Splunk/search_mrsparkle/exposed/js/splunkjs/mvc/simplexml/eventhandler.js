@@ -115,20 +115,20 @@ define([
             var target = this.settings.get('target');
             switch (action.type) {
                 case "set":
-                    return EventHandler.setToken(action.token, action.value, action, data);
+                    return EventHandler.setToken(action.token, action.value, action, data, action.submit);
                 case "unset":
-                    return EventHandler.unsetToken(action.token);
+                    return EventHandler.unsetToken(action.token, action.submit);
                 case "link":
                     var newWindow = evt && !!(evt.metaKey || evt.ctrlKey);
                     return EventHandler.linkTo(action.value, action.target || target, data, newWindow);
                 case "eval":
-                    return EventHandler.evalToken(action.token, action.value, data);
+                    return EventHandler.evalToken(action.token, action.value, data, action.submit);
                 default:
                     throw new Error('Invalid drilldown action type ' + JSON.stringify(action.type));
             }
         }
     }, {
-        setToken: function (name, format, options, data) {
+        setToken: function (name, format, options, data, submit) {
             var value;
             if (options.delimiter != null && _.isArray(data)) {
                 value = _(data).map(function(data){
@@ -147,28 +147,30 @@ define([
                 value = (options.prefix || '') + value + (options.suffix || '');
             }
 
-            EventHandler.applyTokenValue(name, value);
+            EventHandler.applyTokenValue(name, value, submit);
         },
-        evalToken: function(name, expr, data) {
+        evalToken: function(name, expr, data, submit) {
             try {
-                EventHandler.applyTokenValue(name, EventHandler.evaluate(expr, data));
+                EventHandler.applyTokenValue(name, EventHandler.evaluate(expr, data), submit);
             } catch (e) {
                 console.error('Error executing eval expression %s: %s', expr, e);
             }
         },
-        applyTokenValue: function(name, value){
+        applyTokenValue: function(name, value, submit) {
+            submit = submit !== false;
             var defaultTokenModel = mvc.Components.get('default');
             var submittedTokenModel = mvc.Components.get('submitted');
             defaultTokenModel.set(name, value);
-            if (submittedTokenModel) {
+            if (submit && submittedTokenModel) {
                 submittedTokenModel.set(name, value);
             }
         },
-        unsetToken: function (name) {
+        unsetToken: function (name, submit) {
+            submit = submit !== false;
             var defaultTokenModel = mvc.Components.get('default');
             var submittedTokenModel = mvc.Components.get('submitted');
             defaultTokenModel.unset(name);
-            if (submittedTokenModel) {
+            if (submit && submittedTokenModel) {
                 submittedTokenModel.unset(name);
             }
         },

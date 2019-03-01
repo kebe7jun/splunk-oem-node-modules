@@ -56,16 +56,13 @@ define(
                 });
                 BaseView.prototype.initialize.apply(this,arguments);
                 this.children.split1 = new ControlGroup ({
-                    controlClass: 'input-append',
                     controls: [
                         new TextControl({
-                            className: 'input-append',
                             modelAttribute: 'appendTextControl'
                         }),
                         new SyntheticSelectControl ({
                             model: this.model,
                             modelAttribute: 'appendSelect',
-                            className: 'btn-group',
                             items: [
                                 { label: _('is greater than').t(), value: 'greater than' },
                                 { label: _('is less than').t(), value: 'less than' },
@@ -78,11 +75,14 @@ define(
                             menuWidth: 'narrow'
                         })
                     ],
-                    label: _('Append').t()
+                    label: _('Join (Default)').t()
                 });
                 this.children.split2 = new ControlGroup ({
-                    controlClass: 'input-prepend',
+                    controlsLayout: 'separate',
                     controls: [
+                        new TextControl({
+                            modelAttribute: 'prependTextControl'
+                        }),
                         new SyntheticSelectControl ({
                             model: this.model,
                             modelAttribute: 'prependSelect',
@@ -96,31 +96,17 @@ define(
                             ],
                             toggleClassName: 'btn',
                             menuWidth: 'narrow'
-                        }),
-                        new TextControl({
-                            className: 'input-prepend',
-                            modelAttribute: 'prependTextControl'
                         })
                     ],
-                    label: _('Prepend').t()
+                    label: _('Separate').t()
                 });
                 this.children.link = new ControlGroup({
                     controlType:'Text',
                     controlOptions: {
                         modelAttribute: 'appendCustomHTML',
-                        className: 'job-link',
                         append: '<a class="add-on bookmark" href=""><i class="icon-bookmark"></i><span class="hide-text">' + _("Splunk Search Job").t() + '</span></a>'
                     },
                     label: _('Append custom html').t()
-                });
-                this.children.link2 = new ControlGroup({
-                    controlType:'Text',
-                    controlOptions: {
-                        modelAttribute: 'prependCustomHTML',
-                        className: 'job-link',
-                        prepend: '<a class="add-on bookmark" href=""><i class="icon-bookmark"></i><span class="hide-text">' + _("Splunk Search Job").t() + '</span></a>'
-                    },
-                    label: _('Prepend custom html').t()
                 });
             },
             render: function() {

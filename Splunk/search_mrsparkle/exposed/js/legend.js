@@ -26,9 +26,17 @@ Splunk.Legend = {
         if (targetData)
             return;
 
-        targetData = { labels: null };
+        targetData = {
+            id: id,
+            labels: null,
+            sortIndex: +(id.match(/\d+/g).join('')),
+        };
         this._targetMap[id] = targetData;
         this._targetList.push(targetData);
+        this._targetList.sort(function(a, b) {
+            return a.sortIndex - b.sortIndex;
+        });
+
     },
 
     unregister: function(id) {
@@ -154,11 +162,11 @@ Splunk.Legend = {
         if (this._isLabelMapValid)
             return;
 
+        this._updateLabelMap();
         this._isLabelMapValid = true;
-
         clearTimeout(this._timeoutID);
 
-        this._updateLabelMap();
+
     },
 
     _updateLabelMap: function() {

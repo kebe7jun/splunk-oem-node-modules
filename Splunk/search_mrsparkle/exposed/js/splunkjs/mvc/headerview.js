@@ -73,6 +73,8 @@ define(function (require, exports, module) {
                 if (this.useSideNav) {
                     this.collection.tours.dfd.done(function() {
                         this.sideNav = SideNav.create({
+                            showAppsList: this.options.showAppsList,
+                            hideActivityMenu: this.options.hideActivityMenu,
                             model: {
                                 application: this.model.application,
                                 appLocal: this.model.appLocal,

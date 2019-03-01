@@ -52,7 +52,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'http-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -64,7 +63,6 @@ define(
                 this.children.source = new ControlGroup({
                     className: 'http-source control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.source',
                         model: this.model.input,
@@ -78,7 +76,6 @@ define(
                 this.children.description = new ControlGroup({
                     className: 'http-desc control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.description',
                         model: this.model.input,
@@ -92,7 +89,6 @@ define(
                 this.children.useAck = new ControlGroup({
                     className: 'http-useack control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.useACK',
                         model: this.model.input,
@@ -123,12 +119,11 @@ define(
                 this.children.outputs = new ControlGroup({
                     className: 'output-group control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.outputgroup',
                         model: this.model.input,
                         items: items,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'wide',
                         toggleClassName: 'btn',
                         popdownOptions: { attachDialogTo: 'body' }
@@ -143,11 +138,11 @@ define(
                 var faqList = [
                     {
                         question: _('What is the HTTP Event Collector?').t(),
-                        answer: _('The HTTP Event Collector is an endpoint that lets developers send application events directly to the Splunk software via HTTP or HTTPS using a token-based authentication model.').t()
+                        answer: _('The HTTP Event Collector is an endpoint that lets developers send application events directly to the Splunk platform via HTTP or HTTPS using a token-based authentication model.').t()
                     },
                     {
                         question: _('How do I set up the HTTP Event Collector?').t(),
-                        answer: _('Enable the collector on this page. Provide a name for the token (all other fields are optional.) After saving, configure your logging client with the token that the Splunk software displays to send data to the collector in a specific format.').t() +' '+ '<a class="external" href="' + generalHelpLink + '" target="_blank">' + _('Learn more').t() + '</a>'
+                        answer: _('Enable the collector on this page. Provide a name for the token (all other fields are optional.) After saving, configure your logging client with the token that the Splunk platform displays to send data to the collector in a specific format.').t() +' '+ '<a class="external" href="' + generalHelpLink + '" target="_blank">' + _('Learn more').t() + '</a>'
                     },
                     {
                         question: _('How do I view and configure the tokens that I can use to send data to the HTTP Event Collector?').t(),

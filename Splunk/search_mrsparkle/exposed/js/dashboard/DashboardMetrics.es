@@ -121,14 +121,15 @@ export function getDashboardAttrs(committedState, page, scheduledView, fieldsetS
     const stylesheet = settings.stylesheet || [];
     const numCustomCss = stylesheet.length;
     const numCustomJs = script.length;
+    const theme = settings.theme || 'light';
 
     const hideAppBar = !!page.get('hideAppBar');
     const hideChrome = !!page.get('hideChrome');
     const hideEdit = !!page.get('hideEdit');
     const hideFilters = !!page.get('hideFilters');
-    const hideFooter = !!page.get('hideFooter');
     const hideSplunkBar = !!page.get('hideSplunkBar');
     const hideTitle = !!page.get('hideTitle');
+    const hideExport = !!page.get('hideExport');
 
     const isScheduled = !!scheduledView.entry.content.get('is_scheduled');
 
@@ -142,7 +143,6 @@ export function getDashboardAttrs(committedState, page, scheduledView, fieldsetS
         hideChrome,
         hideEdit,
         hideFilters,
-        hideFooter,
         hideSplunkBar,
         hideTitle,
         isScheduled,
@@ -151,6 +151,8 @@ export function getDashboardAttrs(committedState, page, scheduledView, fieldsetS
         numCustomJs,
         refresh,
         submitButton,
+        theme,
+        hideExport,
     };
 }
 
@@ -260,8 +262,8 @@ export function getSearchTypeCounts(searches, managers) {
     }
     const typesArray = [];
     searchesState.forEach((item) => {
-        const { type, search, refresh } = item.getState();
-        typesArray.push(type);
+        const { searchType, search, refresh } = item.getState();
+        typesArray.push(searchType);
         if (isValidPivotSearch(search)) {
             typesArray.push('pivot');
         }

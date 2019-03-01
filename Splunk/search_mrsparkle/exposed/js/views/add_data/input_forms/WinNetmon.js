@@ -56,7 +56,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'print-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -118,7 +117,6 @@ define(
                 this.children.remoteAddress = new ControlGroup({
                     className: 'net-remoteAddress control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.remoteAddress',
                         model: this.model.input,
@@ -131,7 +129,6 @@ define(
                 this.children.process = new ControlGroup({     // TODO: see submit logic in original xml
                     className: 'net-process control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.process',
                         model: this.model.input,
@@ -144,7 +141,6 @@ define(
                 this.children.user = new ControlGroup({     // TODO: see submit logic in original xml
                     className: 'net-user control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.user',
                         model: this.model.input,
@@ -168,25 +164,25 @@ define(
                 return [
                     {
                         question: _('What information does the Windows network monitoring input gather?').t(),
-                        answer: _('The network monitoring input gathers network activity on a Windows machine, including IP \
-                    address family, packet type, protocol used, the machines involved in the transaction, and more.').t() +
+                        answer: _('The network monitoring input gathers network activity on a Windows machine, including IP ' +
+                    'address family, packet type, protocol used, the machines involved in the transaction, and more.').t() +
                             '<a class="external" href="' + arguments[0] + '" target="_blank">' + _("Learn More").t() + '</a>'
                     },
                     {
-                        question: _('Does Splunk need to run as an administrative user to access local network monitoring information?').t(),
-                        answer: _('Yes. You must run Splunk as the "Local System" user or as a domain user that is a member of the local Administrators group.').t()
+                        question: _('Does the Splunk platform need to run as an administrative user to access local network monitoring information?').t(),
+                        answer: _('Yes. You must run the Splunk platform as the "Local System" user or as a domain user that is a member of the local Administrators group.').t()
                     },
                     {
                         question: _('Can I configure Windows network monitoring on remote Windows machines?').t(),
-                        answer: _('Yes, if you install a universal forwarder on the machines that you want to get this \
-                    information from. You can’t collect this type of data from remote machines from this Splunk instance.').t()
+                        answer: _('Yes, if you install a universal forwarder on the machines that you want to get this ' +
+                    'information from. You can’t collect this type of data from remote machines from this Splunk platform instance.').t()
                     },
                     {
                         question: _('I\'m having problems with the network monitoring input. Are there any common problems I should be aware of?').t(),
-                        answer: _('Make sure that you have updated the machine with all available patches, including the \
-                    <a href="http://support.microsoft.com/kb/2685811" target="_blank"> Kernel-Mode Driver Framework version 1.11 Update</a> \
-                    that is part of Knowledge Base article 2685811. Network monitoring input might not function if \
-                    this update is not present on your system.').t()
+                        answer: _('Make sure that you have updated the machine with all available patches, including the ' +
+                    '<a href="http://support.microsoft.com/kb/2685811" target="_blank"> Kernel-Mode Driver Framework version 1.11 Update</a> ' +
+                    'that is part of Knowledge Base article 2685811. Network monitoring input might not function if ' +
+                    'this update is not present on your system.').t()
                     }
                     ];
             },

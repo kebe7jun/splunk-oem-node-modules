@@ -7,6 +7,9 @@
 <%
     import splunk
     from splunk.appserver.mrsparkle.lib import util, i18n
+    implicit_id_required = splunk.util.normalizeBoolean(state.get('implicit_id_required', None))
+    appText = util.getAppType()
+    productName = util.getProductName()
 %>
 
 % if error:
@@ -32,6 +35,7 @@
         });
     });
 </script>
+
 <script language="JavaScript">
     function acceptLicense(checkBox) {
         if ($(checkBox).is(':checked')) {
@@ -44,16 +48,16 @@
     }
 </script>
 
-<%
-    implicit_id_required = splunk.util.normalizeBoolean(state.get('implicit_id_required', None))
-    appText = 'add-on' if util.isLite() else 'app'
-%>
 <div class="spl-gdi-wrapper spl-prompt-message-layout"> 
 	<div class="jmFormOptions">
 	    <h2 class="spl-page-hdr spl-icon-attention-md" > 
 	        <span> 
 	            <!-- replace with page title --> 
-	            ${_('%s update available' % appText.capitalize())}
+                % if implicit_id_required:
+                ${_('Overwrite from Splunkbase')}
+                % else:
+                ${_('Update from Splunkbase')}
+                % endif
 	            <!-- end replace with page title --> 
 	        </span> 
 	    </h2> 
@@ -63,38 +67,35 @@
 	    <input type="hidden" name="state" value="${state.serialize()}">
         ${csrf_hidden_input()}
 	    <div class="spl-prompt-message-wrapper"> 
-	        <h3 class="spl-main-description-hdr"> 
-	            % if implicit_id_required:
-	            ${_('Overwrite from SplunkApps')}
-	            % else:
-	            ${_('Update from SplunkApps')}
-	            % endif
-	        </h3> 
 	        <p class="spl-main-description"> 
-	            % if not implicit_id_required:
-	            ${_('Your %(appText)s does not have a valid %(appText)s ID and may not have originated from SplunkApps. Be sure to first back up your configuration as this operation is irreversible.' % dict(appText=appText))}<br><br>
-	            ${_('Click the button below if you are sure you would like to overwrite the local copy of this %(appText)s with the newest version on SplunkApps.' % dict(appText=appText))}<br>
+	            % if implicit_id_required:
+	            ${_('Note: <strong>%(appname)s</strong> does not have a valid %(appText)s ID '
+                    'and may not have originated from Splunkbase. Overwriting the local copy of '
+                    '<strong>%(appname)s</strong> with the newest version on Splunkbase might '
+                    'cause Splunk %(productName)s to restart.' % dict(appText=appText, appname=appname))}
 	            % else:
-	            ${_('The requested %(appText)s is already installed, but a newer version is available on SplunkApps.' % dict(appText=appText))}<br><br>
-	            ${_('Click the button below to update the %(appText)s to the newer version now.' % dict(appText=appText))}<br>
+	            ${_('Note: Updating <strong>%(appname)s</strong> from Splunkbase might cause Splunk %(productName)s to restart.' % dict(appname=appname, productName=productName))}
 	            % endif
-	           ${_('Note that a restart of Splunk may be required after update.')}
 	        </p> 
-            % if (app_license_url != 'http://www.splunk.com/view/SP-CAAAAAH'):
             <p class="spl-main-description">
-               ${_('This %(appText)s is provided by a third party and your rights to use the '
-                '%(appText)s is in accordance with the license provided by that third-party licensor. '
-                'Splunk is not responsible for any third-party %(appText)ss and does not provide any '
-                'warranty or support. If you have any questions, complaints or claims with '
-                'respect to this %(appText)s, please contact the licensor directly, whose contact '
-                'information can be found on the download page.' % dict(appText=appText))}
+                % if implicit_id_required:
+                ${_('Accept the following license agreement to overwrite the %(appText)s:') % dict(appText=appText)}
+                % else:
+                ${_('Accept the following license agreement to update the %(appText)s:') % dict(appText=appText)}
+                % endif
             </p>
-            % endif
-            <p class="spl-main-description splunk-components">
-               <a href="${app_license_url}" target="_blank">${app_license}<span class="icon-external external"></span></a>
+            <p class="spl-main-description">
+               ${_('The %(appText)s, and any related dependency that will be installed, may be '
+                   'provided by Splunk and/or a third party and your right to use these %(appText)s(s) '
+                   'is in accordance with the applicable license(s) provided by Splunk and/or the '
+                   'third-party licensor. Splunk is not responsible for any third-party %(appText)s '
+                   'and does not provide any warranty or support. If you have any questions, complaints '
+                   'or claims with respect to an %(appText)s, please contact the applicable licensor '
+                   'directly whose contact information can be found on the Splunkbase download page.' % dict(appText=appText))}
             </p>
             <p class="spl-main-description splunk-components">
-               <a href="${_('http://www.splunk.com/view/SP-CAAAAAH')}" target="_blank">${_('Splunk Websites Terms and Conditions of Use')}<span class="icon-external external"></span></a>
+                ${_('<strong>%(appname)s</strong> is governed by the following license: ' % dict(appname=appname))}
+                <a href="${app_license_url}" target="_blank">${app_license}<span class="icon-external external"></span></a>
             </p>
             <p class="spl-main-description">
                 <input type="checkbox" name="accept-license" value="0" id="accept-license" onclick="acceptLicense(this);"/>
@@ -110,11 +111,7 @@
             <span>${_('Cancel')}</span> 
         </button> 
         <button class="splButton-primary disabled" type="submit"> 
-            % if implicit_id_required:
-            <span>${_('Overwrite')}</span> 
-            % else:
-            <span>${_('Update')}</span> 
-            % endif
+            <span>${_('Accept and Continue')}</span> 
         </button> 
     </div> 
     </form>

@@ -122,21 +122,19 @@ define([
 
             this.tooltip('hide');
 
-            var template = '', viewReportLink, editReportLink,
+            var template = this.reportDetailsTemplate,
                 root = this.model.application.get('root'),
                 locale = this.model.application.get('locale'),
-                app = this.model.application.get('app');
-            viewReportLink = route.report(root, locale, app, {data: {s: this.model.savedReport.get('id')}});
-            if (this.model.savedReport.isPivotReport()) {
-                template = this.pivotReportDetailsTemplate;
-                editReportLink = route.pivot(root, locale, app, {data: {s: this.model.savedReport.get('id')}});
-            } else {
-                template = this.searchReportDetailsTemplate;
-                editReportLink = route.search(root, locale, app, {data: {s: this.model.savedReport.get('id')}});
-            }
+                app = this.model.application.get('app'),
+                openInView = this.model.savedReport.openInView(this.model.user);
+
+            var view = route.getView(openInView);
+            var viewReportLink = route.report(root, locale, app, {data: {s: this.model.savedReport.get('id')}});
+            var editReportLink = view.route(root, locale, app, {data: {s: this.model.savedReport.get('id')}});
             this.$('.dropdown-menu').html(_.template(template, {
                 viewReportLink: viewReportLink,
                 editReportLink: editReportLink,
+                editReportLabel: view.openLabel,
                 _: _
             }));
 
@@ -167,24 +165,12 @@ define([
             this.$('.dropdown-menu').addClass('show-details');
             $(window).trigger('resize');
         },
-        searchReportDetailsTemplate: '\
+        reportDetailsTemplate: '\
             <div class="arrow"></div>\
             <ul class="reportDetails">\
                 <li><a target="_blank" href="<%- viewReportLink %>" class="viewSearchReport"><%- _("View").t() %></a></li>\
-                <li><a target="_blank" href="<%- editReportLink %>" class="openSearchReport"><%- _("Open in Search").t() %></a></li>\
-                <li><a href="#" class="cloneSearchReport"><%- _("Clone to an Inline Search").t() %></a></li>\
-            </ul>\
-            <ul class="reportActions">\
-                <li><a href="#" class="selectNewReport"><%- _("Select New Report").t() %></a></li>\
-                <li><a href="#" class="useReportFormatting"><%- _("Use Report\'s Formatting for this Content").t() %></a></li>\
-            </ul>\
-        ',
-        pivotReportDetailsTemplate: '\
-            <div class="arrow"></div>\
-            <ul class="reportDetails">\
-                <li><a href="<%- viewReportLink %>" class="viewPivotReport"><%- _("View").t() %></a></li>\
-                <li><a href="<%- editReportLink %>" class="openPivotReport"><%- _("Open in Pivot").t() %></a></li>\
-                <li><a href="#" class="clonePivotReport"><%- _("Clone to an Inline Pivot").t() %></a></li>\
+                <li><a target="_blank" href="<%- editReportLink %>" class="openSearchReport"><%- editReportLabel %></a></li>\
+                <li><a href="#" class="cloneSearchReport"><%- _("Clone to Inline").t() %></a></li>\
             </ul>\
             <ul class="reportActions">\
                 <li><a class="selectNewReport"><%- _("Select New Report").t() %></a></li>\

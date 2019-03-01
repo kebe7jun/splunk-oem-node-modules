@@ -51,7 +51,7 @@ define(
                         <% var values = m.get(field) %>\
                         <li>\
                             <% _(values).each(function(value, idx) { %>\
-                                <span class="field"><%- field %> =</span>\
+                                <span class="field" tabindex="0"><%- field %> =</span>\
                                 <span class="field-value<%- r.highlighted.hasFieldValue(field, value) ? " a" : ""%>">\
                                     <a href="#" class="f-v" data-field-name="<%-field %>" title="<%- value ? value : ""%>"><% if(value) {%><%- value %><% } else { %>&nbsp;<% } %></a>\
                                 </span>\

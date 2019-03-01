@@ -12,7 +12,8 @@ define(
         'views/style_guide/Forms/Section',
         'views/style_guide/Forms/Search',
         'views/style_guide/Forms/Wizard',
-        'contrib/text!views/style_guide/Forms/Master.html'
+        'contrib/text!views/style_guide/Forms/Master.html',
+        './Master.pcss'
     ],
     function(
         _,

@@ -16,6 +16,9 @@ This rule alerts you when you use redundant values in the following shorthand pr
 -   `border-radius`
 -   `border-style`
 -   `border-width`
+-   `grid-gap`
+
+The `--fix` option on the [command line](../../../docs/user-guide/cli.md#autofixing-errors) can automatically fix all of the problems reported by this rule.
 
 ## Options
 

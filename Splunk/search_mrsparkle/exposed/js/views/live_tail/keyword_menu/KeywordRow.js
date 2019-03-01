@@ -115,7 +115,7 @@ define(
                         <input type="text" class="keyword-input" value="<%- keyword %>" placeholder="<%- _("String to highlight").t() %>">\
                         <div class="keyword-error"></div>\
                     </div>\
-                    <a class="remove-keyword"><i class="icon icon-x-circle"></i></a>\
+                    <a class="remove-keyword"><i class="icon icon-x"></i></a>\
                     <div class="livetail-alarms-container collapsible-heading">\
                         <a class="collapsible-toggle" href="#">\
                             <i class="icon-collapsible-toggle icon-chevron-right"></i>\

@@ -90,7 +90,6 @@ define([
                         model: this.model.clusterConfig.entry.content,
                         placeholder: _('Between 0.1 and 1').t()
                     },
-                    controlClass: 'controls-block',
                     tooltip: _('Threshold limit. If set to 0.9, data rebalancing continues ' +
                                'until the number of bucket copies on each peer is between ' +
                                '.90 and 1.10 of the average number of copies for all peers. ' +
@@ -106,7 +105,6 @@ define([
                         model: this.rebalanceModel,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
                     tooltip: _('Maximum time, in minutes, to run data rebalancing.').t(),
                     label: _('Max Runtime').t()
                 });
@@ -118,12 +116,12 @@ define([
                         modelAttribute: 'index',
                         model: this.rebalanceModel,
                         items: indexItems,
+                        toggleClassName: 'btn',
                         popdownOptions: {
                             attachDialogTo: '.modal:visible',
                             scrollContainer: '.modal:visible .modal-body:visible'
                         }
                     },
-                    controlClass: 'controls-block btn',
                     tooltip: _('Run data rebalancing on all indexes or on a single specified index.').t(),
                     label: _('Index').t()
                 });

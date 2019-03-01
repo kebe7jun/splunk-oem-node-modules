@@ -6,10 +6,10 @@
  *              The core structure is a checkbox and a TimeSecondsControl.
  *              The TimeSecondsControl is only enabled when the checkbox is checked.
  */
- 
- 
- 
- 
+
+
+
+
 define(
 [
     'underscore',
@@ -34,11 +34,11 @@ function (
     return Control.extend({
         moduleId: module.id,
 
-        initialize: function () {            
+        initialize: function () {
             this.model.editCutoffSec = new BaseModel({
                 'enabled': this.options.enabled
             });
-            
+
             this.enableUnifiedCheckbox = new SyntheticCheckboxControl({
                 model: this.model.editCutoffSec,
                 modelAttribute: 'enabled',
@@ -48,17 +48,16 @@ function (
                 controls: [this.enableUnifiedCheckbox],
                 help: this.options.checkboxHelp
             });
-           
+
             this.listenTo(this.model.editCutoffSec, 'change enabled', this.setTimeThresholdVisibility);
 
             this.unifiedSearchCutoffControl = new TimeSecondsControl({
                 modelAttribute: this.options.modelAttribute,
                 model: this.options.model
             });
-            
+
             this.children.timeCutoff = new ControlGroup({
                     className: 'control-group',
-                    controlClass: 'controls-block',
                     controls: [this.unifiedSearchCutoffControl],
                     label: this.options.timeLabel,
                     tooltip: this.options.timeTooltip,
@@ -74,7 +73,7 @@ function (
                 this.children.timeCutoff.disable();
             }
         },
-        
+
         isEnabled: function() {
             return this.model.editCutoffSec.get('enabled');
         },

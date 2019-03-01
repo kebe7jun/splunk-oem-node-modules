@@ -1,7 +1,0 @@
-.main {
-    @mixin reset flex;
-
-    &[data-inline] {
-        display: inline-flex;
-    }
-}

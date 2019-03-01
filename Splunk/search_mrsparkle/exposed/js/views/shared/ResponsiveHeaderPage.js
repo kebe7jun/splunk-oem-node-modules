@@ -47,7 +47,7 @@ define([
             css
         ) {
 
-    var HEIGHT_OF_COLLAPSED_NAV_BAR = 6,
+    var HEIGHT_OF_COLLAPSED_NAV_BAR = 3,
         ANIMATION_DURATION = 200,
         INITIAL_HIDE_DELAY = 500;
 
@@ -128,8 +128,6 @@ define([
             }
 
             this.renderHeader();
-            // DCE-OEM-CHANGE
-            // this.renderFooter();
             this.$header = this.$('header');
             this.$navBar = this.$('.navbar-splunkbar');
             this.$appBar = this.$('.app-bar');
@@ -166,7 +164,7 @@ define([
             if(!this.bannerColor) {
                 return;
             }
-            this.$('.expand-collapse-control').css({ 'background-color': this.bannerColor });
+            // this.$('.expand-collapse-control').css({ 'background-color': this.bannerColor });
         },
 
         showFullHeader: function() {
@@ -183,15 +181,8 @@ define([
             // When the bottom is defined using a calc(...) expression Safari is not able to animate it (SPL-107323).
             this.$header.css({ bottom: windowHeight - HEIGHT_OF_COLLAPSED_NAV_BAR });
             var bottomOffset = (HEIGHT_OF_COLLAPSED_NAV_BAR + this.getComputedHeaderHeight());
-            // DCE-OEM-CHANGE appBar & :before(背景) 需要从左侧滑入
-            var appBar = this.$('div[data-view="views/shared/appbar/Master"]');
-            $('#appbar-before').remove();
-            appBar.animate({ left: '0' }, {
-                duration: ANIMATION_DURATION,
-            });
-
             this.$header.animate({ bottom: windowHeight - bottomOffset }, {
-                duration: ANIMATION_DURATION/2,
+                duration: ANIMATION_DURATION,
                 done: function() {
                     that.isExpanded = true;
                     that.isAnimating = false;
@@ -208,12 +199,6 @@ define([
             var that = this;
             this.isAnimating = true;
             this.$screen.fadeOut(ANIMATION_DURATION);
-            // DCE-OEM-CHANGE appBar & :before(背景) 需要从左侧滑出
-            var appBar = this.$('div[data-view="views/shared/appbar/Master"]');
-            $('head').append('<style id="appbar-before">div[data-view="views/shared/appbar/Master"]::before{ left: -200px; }</style>');
-            appBar.animate({ left: '-200px' }, {
-                duration: ANIMATION_DURATION,
-            });
             this.$header.animate({ bottom: $(window).height() - HEIGHT_OF_COLLAPSED_NAV_BAR }, {
                 duration: ANIMATION_DURATION,
                 done: function() {

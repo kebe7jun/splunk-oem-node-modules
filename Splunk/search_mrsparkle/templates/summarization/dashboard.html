@@ -131,26 +131,25 @@ setInterval(updateSummarizationStatus, 10000);
 
 <style>
 
-.question_mark {
-margin-right: 5px;
-margin-left: 5px;
-background: url(/static/img/skins/default/icon-help-12.png) no-repeat left center;
-_background: url(/static/img/skins/default/icon-help-12-grey-ie6.png) no-repeat left center;
-padding-left: 16px;
-
+a.question_mark {
+    margin-right: 5px;
+    margin-left: 5px;
+    background: url(/static/img/skins/default/icon-help-12.png) no-repeat left center;
+    _background: url(/static/img/skins/default/icon-help-12-grey-ie6.png) no-repeat left center;
+    padding-left: 16px;
+    display: inline-block;
+    width: auto !important;
+    position: absolute !important;
+    right: 0;
+    top: 5px;
 }
 
 .question_mark:hover{
     text-decoration:none;
 }
 
-
 .savedSearch {
-   line-height: 22px;
-}
-
-.pageContentWrapper, td {
-     font-size:13px;
+   line-height: 20px;
 }
 
 .showLink {
@@ -162,54 +161,6 @@ padding-left: 16px;
 .showVerificationResults {
     color:#000000; 
     text-decoration: none; 
-}
-table.splTable th {
-    text-align:left;
-    color:#000000;
-    border-bottom:solid 1px black;
-}
-
-table.splTable tr, table.splTable td {
-    text-align:left;
-    border-collapse: collapse;
-    border-bottom-width: 1px;
-    padding-right:20px; 
-}
-
-table.splTable th {
-    padding-right:20px;
-}
-
-table.splTable {
-    width:100%;
-}
-
-table.splTable th, table.splTable tr {
-    line-height:18px; 
-}
-
-table.searches_list { 
-    width:100%;        
-}
-
-table.searches_list th{
-    text-align:center;
-    background-color:#CCCCCC;
-    border-bottom:solid 2px white;
-}
-
-table.splTable .number{
-    text-align:right;
-}
-
-
-table.searches_list .dark{
-    background-color:#EEEEEE;
-} 
-
-table.searches_list .insideCol{
-    border-right: solid 1px black; 
-    width: 25%;
 }
 
 .complete {
@@ -232,29 +183,37 @@ table.searches_list .insideCol{
 }
 
 .expandLink {
- text-decoration:none; 
- padding-left:20px; 
- font-size: 11px; 
+ text-decoration:none;
+ padding-left:20px;
+ font-size: 11px;
 }
 
 .triangleShow {
-    background-position:-65px -320px; 
+    background-position:-65px -320px;
 }
 
 
 .triangleHide {
-    background-position:-65px -341px; 
+    background-position:-65px -341px;
 }
 
 .hiddenSearch {
-    display:none; 
+    display:none;
 }
 
 
-.access_time { 
+.access_time {
     color:#868686;
-    padding-left:10px; 
-    font-size:11px; 
+    padding-left:10px;
+}
+
+.eaiResultsPageControls, .eaiFilterControls {
+    padding: 0 !important;
+    background-color: transparent !important;
+}
+
+.splTable .summarizationLoad {
+    padding-right: 42px;
 }
 
 </style>
@@ -262,7 +221,7 @@ table.searches_list .insideCol{
 <div>
 <%lib:generate_searchbar search="${search}" pwnr="${pwnr}" ns="${ns}" countPerPage="${countPerPage}" appOptionList="${appOptionList}" pwnrOptionList="${pwnrOptionList}" pwnr="${pwnr}"/>
 </div>
-<div class="pageContentWrapper">
+<div class="adminContent pageContentWrapper">
 
 % if controller_exception:
     <div class="error">
@@ -314,7 +273,7 @@ def prettyInt(num):
                 %>
                     
                 <th>${_('Reports Using Summary')}  <a href="javascript:void(0)" class="expandLink" style= ${' display:none' if isAutoExpand or hideExpandLink else 'color:#1A7996'} id="expand_all"> ${_('Show All')} </a>   </th>
-                <th>${sort_link(_('Summarization Load'), ['manager','system','summarization'], cherrypy.request.params, 'summary.load_factor')}
+                <th class="summarizationLoad">${sort_link(_('Summarization Load'), ['manager','system','summarization'], cherrypy.request.params, 'summary.load_factor')}
                  <a class="question_mark" href="${generateSelfHelpLink('learnmore.search.acceleration')}"   target="_blank" title="${_('Splunk help')}">&nbsp;</a> </th>
                  </span>     
                 <th>${sort_link(_('Access Count'), ['manager','system','summarization'], cherrypy.request.params, 'summary.access_count')}</th>

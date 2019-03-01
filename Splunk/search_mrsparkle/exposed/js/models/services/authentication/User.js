@@ -242,6 +242,15 @@ function(_, SplunkDBaseModel, splunkUtil) {
         canEditInstrumentation: function() {
             return this.hasCapability('edit_telemetry_settings');
         },
+        canUseAdvancedEditor: function() {
+            if (this.isFree()) {
+                return true;
+            }
+            return this.entry.content.get('search_use_advanced_editor');
+        },
+        canListHealth: function() {
+            return this.hasCapability('list_health');
+        },
         getSearchSyntaxHighlighting: function() {
             if (this.isFree()) {
                 return UserModel.EDITOR_THEMES.DEFAULT;
@@ -300,6 +309,47 @@ function(_, SplunkDBaseModel, splunkUtil) {
             DEFAULT: 'light',
             BLACK_WHITE: 'black-white',
             DARK: 'dark'
+        }
+    });
+
+    UserModel.Entry = UserModel.Entry.extend({
+        validation: function() {
+            // Need to validate name if the user is new or clone
+            if (this.isNew()) {
+                return {
+                    'name': [
+                        {
+                            required: true,
+                            msg: _('Name is required.').t()
+                        }
+                    ]
+                };
+            } 
+
+            return {};
+        }
+    });
+    UserModel.Entry.Content = UserModel.Entry.Content.extend({
+        validation: function() {
+            // Need to validate password if the user is new or clone, or if the password is not undefined 
+            if (this.get('isNew') === true || !_.isUndefined(this.get('password'))) {
+                return {
+                    'password': [
+                        {
+                            required: true,
+                            msg: _('New password is required.').t()
+                        }
+                    ],
+                    'confirmpassword': [
+                        {
+                            equalTo: 'password',
+                            msg: _('Passwords don\'t match, please try again.').t()
+                        }
+                    ]
+                };
+            } 
+
+            return {};
         }
     });
     return UserModel;

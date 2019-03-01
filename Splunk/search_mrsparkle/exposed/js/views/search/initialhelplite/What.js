@@ -51,7 +51,7 @@ define(
                     type: "data-sourcetypes",
                     label: _("Sourcetypes").t()
                 });
-                
+
                 this.children.sourcetypesPane = new Pane({
                     type: "sourcetype",
                     label: _("Source Types").t(),
@@ -87,7 +87,7 @@ define(
                         serverInfo: this.model.serverInfo
                     }
                 });
-                
+
                 this.activate();
             },
             startListening: function() {
@@ -137,7 +137,7 @@ define(
                     addDataRoute = route.manager(root, locale, app, 'adddata');
 
                 if (isAdmin) {
-                    noDataText += ' <a href="' + addDataRoute + '">' + _('Please add data').t() + '</a>';
+                    noDataText = '<a href="' + addDataRoute + '">' + _('Add data').t() + '</a>';
                 }
 
                 this.$el.html(this.compiledTemplate({
@@ -153,7 +153,7 @@ define(
                 this.children.hostsPane.render().appendTo(this.$('.tab-content'));
                 this.children.sourcesPane.render().appendTo(this.$('.tab-content'));
                 this.children.sourcetypesPane.render().appendTo(this.$('.tab-content'));
-                
+
                 this.children.tabsDelegate = new TabsDelegate({
                     el: this.$('.main-tabs')
                 });
@@ -165,7 +165,7 @@ define(
             template: '\
                 <h3><%- _("What to Search").t() %></h3>\
                 <div class="what-columns">\
-                    <ul class="nav nav-tabs-lite main-tabs"></ul>\
+                    <ul class="nav nav-tabs main-tabs"></ul>\
                     <div class="tab-content" style="overflow:visible;">Waiting for results...</div>\
                 </div>\
             '

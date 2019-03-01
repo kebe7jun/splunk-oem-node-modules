@@ -49,8 +49,8 @@ define(
                         allDfd.resolve(response, status, options);
                     });
                 }.bind(this));
-                fetchDfd.fail(function(){
-                    console.log('component load fail');
+                fetchDfd.fail(function(e){
+                    allDfd.reject(e);
                 });
                 return allDfd;
             }

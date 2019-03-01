@@ -36,6 +36,7 @@
  */
 
 import { ProtocolError } from '../utils/ErrorHandler'
+import { isUnknownCommand } from '../helpers/utilities'
 
 export default function execute (...args) {
     let script = args.shift()
@@ -49,7 +50,7 @@ export default function execute (...args) {
 
     /*!
      * instances started as multibrowserinstance can't getting called with
-     * a function paramter, therefor we need to check if it starts with "function () {"
+     * a function parameter, therefor we need to check if it starts with "function () {"
      */
     if (typeof script === 'function' || (this.inMultibrowserMode && script.indexOf('function (') === 0)) {
         script = `return (${script}).apply(null, arguments)`
@@ -59,7 +60,7 @@ export default function execute (...args) {
         /**
          * jsonwire command not supported try webdriver endpoint
          */
-        if (err.message.match(/did not match a known command/)) {
+        if (isUnknownCommand(err)) {
             return this.requestHandler.create('/session/:sessionId/execute/sync', { script, args })
         }
 

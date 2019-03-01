@@ -10,7 +10,7 @@
 .search-title {
     position: relative;
     @mixin clearfix;
-    margin-bottom: 4px;
+    margin-bottom: $spacingQuarter;
 }
 
 .search-title h2 {
@@ -18,18 +18,24 @@
     overflow: hidden;
     text-overflow: ellipsis;
     padding-right: 340px;
+    position: relative;
 }
 
 .alert-partial-fields {
-    margin: 10px 20px;
+    margin: $spacingHalf $spacing;
 }
 
 .document-controls {
     float: right;
+    margin-top: -8px;
 }
 
 .search-actions-createdashboardpanel {
     margin-left: 10px;
+}
+
+.search-timerange > .btn-group > .btn {
+    border-right: 0;
 }
 
 .section-header {
@@ -48,13 +54,18 @@
 /*  Page specific vertical spacing adjustments */
 
 .shared-jobstatus {
-    margin-top: 12px;
+    margin-top: $spacingQuarter;
     margin-bottom: -15px;
     padding-right: 0px;
     padding-left: 0px;
 
     .progress-bar {
         margin: 0px -20px;
+    }
+    .shared-jobstatus-count[style*="display: none"] {
+        + .shared-jobstatus-samplingmode > .btn-group {
+            margin-left: calc(($buttonPaddingSides + 2) * -1);
+        }
     }
 }
 
@@ -92,15 +103,15 @@
         margin:0 5px;
     }
     a {
-        background-color: $grayLightMedium;
+        background-color: $gray80;
         color: $textColor;
         padding: 2px 5px;
-        border: 1px solid $grayDark;
+        border: 1px solid $gray30;
         border-radius: 5px;
-        @mixin gradient-vertical $interactiveGradientStartColor, $interactiveGradientEndColor;
+        background-color: $interactiveBackgroundColor;
         text-decoration: none;
         &:hover {
-            @mixin gradient-vertical $interactiveGradientEndColor, $interactiveGradientStartColor;
+            background-color: $interactiveBackgroundColorHover;
         }
     }
 }
@@ -128,12 +139,33 @@
 /*  Open In Pivot Dialog */
 .open-in-pivot-modal {
     width: 460px;
+
+    .form {
+        .radio {
+            @mixin radio-class-button-overlay;
+
+            &.all-button-radio, &.selected-button-radio {
+                height: 26px;
+                box-sizing: border-box;
+                padding: $spacingQuarter 0 0;
+            }
+            &.coverage-radio-button > input {
+                margin-top: 10px;
+            }
+        }
+        .coverage-input {
+            width: 50px;
+        }
+    }
 }
 
 /* wrapper for the buttons and chart */
 .timeline-container {
-    margin-top: -8px;
+    margin-top: -$spacingQuarter;
 
+    &:empty {
+        margin-top: 0;
+    }
     .format-timeline {
         z-index: 1;
     }
@@ -152,11 +184,11 @@
 
     .controlLinks {
         margin-right: 20px;
-        margin-bottom: 2px;
+        margin-bottom: $spacingQuarter;
     }
 
     .bucketSize {
-        font-size: 11px;
+        font-size: $fontSizeSmall;
     }
 
     &.loading {
@@ -171,7 +203,36 @@
 .lazy-results-table.loading,
 .shared-reportvisualizer .loading,
 .shared-reportvisualizer .visualization-message {
-    padding: 60px 20px;
+    padding: $spacingDouble $spacing;
+    text-align: center;
+
+    .alert {
+        padding: 0;
+        color: $gray60;
+
+        i {
+            display: none;
+        }
+    }
+    h2 {
+        font-size: $modalHeadingFontSize;
+        font-weight: $fontWeight;
+        color: $gray60;
+    }
+    &:not(.shared-jobdispatchstate) i {
+        display: none;
+    }
+    svg {
+        .fill-dark {
+            fill: $gray60;
+        }
+        .stroke-dark {
+            stroke: $gray60;
+        }
+    }
+}
+.message-single.shared-jobdispatchstate i {
+    display: none;
 }
 
 .events-fields-container > .alerts  {
@@ -230,7 +291,7 @@ table.fields-histogram {
         margin: 0;
         padding: 0;
         min-width: 1px;
-        background-color: $grayLight;
+        background-color: $gray60;
     }
 
 }
@@ -239,7 +300,7 @@ table.fields-histogram {
 /* splunk-charting-Timeline */
 
 .splunk-charting-Timeline {
-    font-size: 11px;
+    font-size: $fontSizeSmall;
     line-height: 1;
 
     .splunk-charting-label {
@@ -303,46 +364,46 @@ table.fields-histogram {
 
 /* Initial Help */
 .search-initialhelp {
-    padding: 30px;
     min-height: 200px;
 
     .help-column {
-        padding-bottom: 0;
-        margin-bottom: 20px;
-        h3 {
-            margin: -5px 0 8px 0;
-        }
-        > .btn {
-            margin: 20px 10px 0 0;
-        }
-    }
-
-    .column-what {
-        margin: 0 0 0 420px;
-        min-height: 150px;
-        border-left: 1px dotted $borderColor;
-    }
-
-    .what-columns {
-        min-height: 40px;
-        > div {
-            max-width: 230px;
-        }
-    }
-
-    .btn {
-        line-height: 22px;
-    }
-
-    .column-how {
-        width:360px;
-        min-height: 150px;
-        margin-bottom: 0px;
+        @mixin create-card;
+        min-height: 180px;
+        margin: 0 0 $spacingHalf;
         float: left;
+        box-sizing: border-box;
+        width: calc(50% - $spacingQuarter);
+        position: relative;
+
+        h3 {
+            margin: 0 0 8px 0;
+        }
+        > .button-container > .btn {
+            margin: 0 $spacingHalf 0 0;
+        }
+    }
+    .column-how {
+        margin-right: $spacingHalf;
         > p {
             min-height: 40px;
             margin-bottom: 0px;
         }
+    }
+    .column-what {
+    }
+
+    .what-columns {
+        > div {
+            max-width: 230px;
+        }
+        .results-heading {
+            margin: $spacingQuarter 0;
+        }
+    }
+    .button-container {
+        position: absolute;
+        bottom: $spacing;
+        left: $spacing;
     }
 }
 
@@ -370,12 +431,16 @@ table.fields-histogram {
 }
 
 .shared-eventsviewer, .lazy-events-viewer.loading {
-    border-left: 1px solid $tableBorderVertical;
+    border-left: $tableBorder;
+}
+
+.shared-eventsviewer > .shared-eventsviewer-list > table.table {
+    margin-bottom: $spacingQuarter;
 }
 
 .lazy-events-viewer.loading {
     min-height: 400px;
-    border-top: 1px solid $tableBorderVertical;
+    border-top: $tableBorderVertical;
     text-align: center;
     padding-top: 15px;
     .alert {
@@ -403,17 +468,29 @@ table.fields-histogram {
 
 /*  Lite UI */
 /*  -------------------------------------------------- */
-
 @if $theme == lite {
     .search-initialhelplite {
         @mixin clearfix;
-       .column-what {
-            width: 60%;
-            float: left
+        h3 {
+            margin-top: 0;
+        }
+        .columns {
+            display: flex;
+            width: 100%;
+        }
+        .column {
+            @mixin create-card;
+            box-sizing: border-box;
+            padding: $spacing;
+            margin: 0 0 $spacingHalf;
+        }
+        .column-what {
+            flex: 60%;
+            margin-right: $spacingQuarter;
         }
         .column-how {
-            width: 20%;
-            float: right;
+            flex: 40%;
+            margin-left: $spacingQuarter;
         }
     }
     .search-initialhelp {
@@ -430,9 +507,7 @@ table.fields-histogram {
     .search-initialhelplite-what .scroll-table-wrapper {
         height: auto;
     }
-    .lite .search-results-wrapper .table-chrome {
-        border-top: 1px solid $borderColor;
-    }
+
     .btn.add-data {
         margin-bottom: 10px;
     }

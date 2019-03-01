@@ -55,8 +55,12 @@ function(
         moduleId: module.id,
         css: css,
         template: templateMaster,
+        defaults: {
+            showAppsList: true
+        },
         initialize: function(options) {
             AppBarView.prototype.initialize.apply(this, arguments);
+            this.options = _.extend({}, this.defaults, this.options);
             this.webConfDfd = $.Deferred();
 
             this.children.hamburger = new IconView({icon: 'menu'});
@@ -71,6 +75,7 @@ function(
             this.collection.filteredApps = {};
 
             this.children.sideNav = new SideNav({
+                hideActivityMenu: this.options.hideActivityMenu,
                 model: {
                     user: this.model.user,
                     serverInfo: this.model.serverInfo,
@@ -237,7 +242,7 @@ function(
             var appId = this._getAppId(),
                 appName = this._getAppName(appId),
                 appNameShort = (appName) ? appName.replace('Splunk Add-on for', '').replace('Splunk App for', '').trim() : '',
-                useLogo = this.collection.filteredApps.length <= 1;
+                useLogo = !this.options.showAppsList || this.collection.filteredApps.length <= 1;
 
             this.children.logo = new Logo({
                 model: {

@@ -16,7 +16,6 @@ define(
 
 
         return BaseList.extend({
-            className: 'dashboard-list',
             moduleId: module.id,
             initialize: function(options) {
                 BaseList.prototype.initialize.apply(this, arguments);

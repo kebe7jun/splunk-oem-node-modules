@@ -20,7 +20,7 @@
  * <example>
     :executeAsync.js
     it('should execute async JavaScript on the page', function () {
-        browser.timeoutsAsyncScript(5000);
+        browser.timeouts('script', 5000);
 
         var result = browser.executeAsync(function(a, b, c, d, done) {
             // browser context - you may access neither client nor console
@@ -45,6 +45,7 @@
  */
 
 import { ProtocolError } from '../utils/ErrorHandler'
+import { isUnknownCommand } from '../helpers/utilities'
 
 export default function executeAsync (...args) {
     let script = args.shift()
@@ -68,7 +69,7 @@ export default function executeAsync (...args) {
         /**
          * jsonwire command not supported try webdriver endpoint
          */
-        if (err.message.match(/did not match a known command/)) {
+        if (isUnknownCommand(err)) {
             return this.requestHandler.create('/session/:sessionId/execute/async', { script, args })
         }
 

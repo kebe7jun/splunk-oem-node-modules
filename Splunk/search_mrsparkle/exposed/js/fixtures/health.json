@@ -1,0 +1,57 @@
+{
+    "links": {
+        "_acl": "/services/server/health/_acl"
+    },
+    "origin": "https://localhost:8000/services/server/health",
+    "updated": "2018-02-09T12:17:01-08:00",
+    "generator": {
+        "build": "e0586d9e33ed86c8001366514dc9bc8a0fb7eb94",
+        "version": "20180131"
+    },
+    "entry": [
+        {
+            "name": "splunkd",
+            "id": "https://localhost:8000/services/server/health/splunkd",
+            "updated": "1969-12-31T16:00:00-08:00",
+            "links": {
+                "alternate": "/services/server/health/splunkd",
+                "list": "/services/server/health/splunkd",
+                "details": "/services/server/health/splunkd/details"
+            },
+            "author": "system",
+            "acl": {
+                "app": "",
+                "can_list": true,
+                "can_write": true,
+                "modifiable": false,
+                "owner": "system",
+                "perms": {
+                    "read": [
+                        "admin",
+                        "power",
+                        "sc_admin",
+                        "splunk-system-role"
+                    ],
+                    "write": []
+                },
+                "removable": false,
+                "sharing": "system"
+            },
+            "fields": {
+                "required": [],
+                "optional": [],
+                "wildcard": []
+            },
+            "content": {
+                "eai:acl": null,
+                "health": "red"
+            }
+        }
+    ],
+    "paging": {
+        "total": 1,
+        "perPage": 30,
+        "offset": 0
+    },
+    "messages": []
+}

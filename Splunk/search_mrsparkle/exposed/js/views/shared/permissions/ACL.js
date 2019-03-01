@@ -47,12 +47,14 @@ define([
             this.children.readCheckbox = new SyntheticCheckboxControl({
                 modelAttribute: role +'.read',
                 model: this.model.perms,
-                checkboxClassName: className + " read btn"
+                checkboxClassName: className + " read btn",
+                ariaLabel: _("Read permissions for").t() + ' ' + escapedRoleName
             });
             this.children.writeCheckbox = new SyntheticCheckboxControl({
                 modelAttribute: role + '.write',
                 model: this.model.perms,
-                checkboxClassName: className + " write btn"
+                checkboxClassName: className + " write btn",
+                ariaLabel: _("Write permissions for").t() + ' ' + escapedRoleName
             });
 
             this.children.readCheckbox.render().appendTo(this.$('td.perms-read.'+ role + '-checkbox'));

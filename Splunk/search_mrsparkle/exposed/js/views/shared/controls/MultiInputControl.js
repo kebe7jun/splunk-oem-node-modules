@@ -102,7 +102,7 @@ define([
         },
 
         template: '\
-            <input class="<%= options.inputClassName %>" />\
+            <input aria-hidden="true" class="<%= options.inputClassName %>" />\
         '
 
     });

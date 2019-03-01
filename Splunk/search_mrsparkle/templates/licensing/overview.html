@@ -62,21 +62,21 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
             ${_('This server is acting as a standalone license server')}
         % endif
     </span>
-    
+
 	<a class="button" href="${make_url(['manager','system','licensing','self'], _qs=dict(return_to=cherrypy.request.relative_uri))|h}">
     	<span class="switch">${_('Change to slave')}</span>
     </a>
 </div>
 % endif
 
-<div class="pageContentWrapper">
+<div class="pageContentWrapper licensingPageWrapper">
     % if isLite:
         <h2 class="top">${_('License information') | h}</h2>
         <table class="properties">
             <tr>
                 <td class="k">${_('Current license') | h}</td>
                 <td class="licenseName">
-                    ${_('%s') % liteDict.get(active_group_name.lower(), 'Splunk Light') | h} 
+                    ${_('%s') % liteDict.get(active_group_name.lower(), 'Splunk Light') | h}
                     <a class="splButton-primary inline-btn" href="${make_url(['manager','system','licensing','licenses','new'], _qs=dict(return_to=cherrypy.request.relative_uri))}">
                         ${_('Add License')}
                     </a>
@@ -155,12 +155,12 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
             <span>${_('This server is configured to use licenses from the <strong>%s license group</strong>') % h(active_group_name)}</span>
         </div>
         <p class="splClearfix">
-            <a class="splButton-primary" href="${make_url(['manager','system','licensing','licenses','new'], _qs=dict(return_to=cherrypy.request.relative_uri))}">
+            <a class="splButton-primary" data-role="add-license" href="${make_url(['manager','system','licensing','licenses','new'], _qs=dict(return_to=cherrypy.request.relative_uri))}">
                 <span>${_('Add license')}</span>
             </a>
 
-            % if showLicenseUsage:      
-            <a class="splButton-primary" style="margin-left:15px;" href="${make_url(['manager','search','licenseusage'])}">
+            % if showLicenseUsage:
+            <a class="splButton-primary" data-role="usage-report" style="margin-left:15px;" href="${make_url(['manager','search','licenseusage'])}">
                 <span>${_('Usage report')}</span>
             </a>
             % endif
@@ -193,10 +193,10 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                 }
         }
         %>
-                
+
         <div class="moduleWrapper">
             <h2>${_('Alerts')}</h2>
-            
+
             <p class="prose">
                 ${_('Licensing alerts notify you of excessive indexing warnings and licensing misconfigurations.')}
                 <a class="spl-icon-external-link-xsm" href="${generateSelfHelpLink('license.alerts')}" target="_blank">${_('Learn more')}</a>
@@ -214,7 +214,7 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                 ${message_renderer(soft_messages)}
                 % endif
             </table>
-         
+
             <div class='subGroupTitle'> ${_('Permanent')} </div>
             <table class="msg-listing">
                 % if len(hard_messages) == 0:
@@ -227,14 +227,14 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                 % else:
                     ${message_renderer(hard_messages)}
                 % endif
-            </table>     
-            
+            </table>
+
 
         </div>
 
 
         % if can_edit_pools:
-            
+
             % if len(stack_table) == 0:
                 <p class="empty-text">
                     ${_('There are currently no stacks associated with the <strong>%s</strong> license type. No usage information is available.') % h(active_group_name)}
@@ -247,10 +247,10 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                         <h2>${_('%s stack') % stack['label'] | h}</h2>
                         <a target="_blank" class="spl-icon-external-link-xsm" href="${generateSelfHelpLink('license.stack')}">${_('Learn more')}</a>
                     </div>
-                    
-                    <% 
+
+                    <%
                         working_pools = [x for x in pool_table if x['stack_name'] == stack['name']]
-                        pool_count = len(working_pools) 
+                        pool_count = len(working_pools)
                         show_pool_info = True
                     %>
 
@@ -265,7 +265,7 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                             </p>
                         % endif
                     % endif
-                        
+
                     <table class="listing">
                         <thead>
                             <tr>
@@ -317,13 +317,13 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                                 <td colspan="3"></td>
                             </tr>
                         </tbody>
-                    </table> 
-                        
+                    </table>
+
                     % if pool_count == 0:
                         <p class="empty-text">${_('There are no pools configured in the %s stack') % h(stack['label'])}</p>
 
                     % else:
-                        
+
                         <table class="listing">
                             <thead>
                                 <tr>
@@ -358,7 +358,7 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                                         %>
                                         <tr class="group-header">
                                             <td>
-                                                ${pool['name'] | h} 
+                                                ${pool['name'] | h}
                                                 % if can_edit_pools and pool['name'] in catchall_pool_names:
                                                     <span class="notable">*</span>
                                                 % endif
@@ -374,7 +374,7 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                                             <td class="actions">
                                                 % if can_edit_pools:
                                                     <% qs = dict(pool_name=pool['name'], stack_name=pool['stack_name'], return_to=cherrypy.request.relative_uri) %>
-                                                    <a href="${make_url(['manager','system','licensing','pools','edit'], _qs=qs)|h}" title="Edit this pool">${_('Edit')}</a> | 
+                                                    <a href="${make_url(['manager','system','licensing','pools','edit'], _qs=qs)|h}" title="Edit this pool">${_('Edit')}</a> |
                                                     <a href="${make_url(['manager','system','licensing','pools','delete'], _qs=qs)|h}" title="Delete this pool">${_('Delete')}</a>
                                                 % endif
                                             </td>
@@ -414,7 +414,7 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                                     % endfor
                                 % endfor
                             </tbody>
-                        </table> 
+                        </table>
 
                     % endif
 
@@ -477,15 +477,15 @@ liteDict = {'lite': 'Splunk Light', 'lite_free': 'Splunk Light Free'}
                 <tr>
                     <td class="k">${_('Debug information')}</td>
                     <td>
-                        
+
                         <a href="${make_url(['manager','system','licensing','licenses'])}">${_('All license details')}</a>
                         <br />
                         <a href="${make_url(['manager','system','licensing','indexers'])}">${_('All indexer details')}</a>
-                        
+
                     </td>
                 </tr>
             </table>
         </div>
-    % endif	
+    % endif
 
 </div>

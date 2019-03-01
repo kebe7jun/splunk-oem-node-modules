@@ -1,38 +1,37 @@
-/*  Labels & Badges Overrides */
-/*  ======================== */
-
-
+/*===============================================================================================*/
+/*  SPLUNK: LABELS & BADGES OVERRIDES                                                            */
+/*===============================================================================================*/
 
 /*  Base classes */
 .label,
 .badge {
-  display: inline-block;
-  padding: 2px 4px;
-  font-size: calc($baseFontSize * 0.846);
-  font-weight: bold;
-  line-height: 14px; /*  ensure proper line-height if floated */
-  color: $white;
-  vertical-align: baseline;
-  white-space: nowrap;
-  text-shadow: 0 -1px 0 rgba(0,0,0,.25);
-  background-color: $grayLight;
+    display: inline-block;
+    padding: 2px 4px;
+    font-size: calc($fontSize * 0.846);
+    font-weight: bold;
+    line-height: 14px; /*  ensure proper line-height if floated */
+    color: $white;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+    background-color: $gray60;
 }
 /*  Set unique padding and border-radii */
 .label {
-  border-radius: 3px;
+    border-radius: 3px;
 }
 .badge {
-  padding-left: 9px;
-  padding-right: 9px;
-  border-radius: 9px;
+    padding-left: 9px;
+    padding-right: 9px;
+    border-radius: 9px;
 }
 
 /*  Empty labels/badges collapse */
 .label,
 .badge {
-  &:empty {
-    display: none;
-  }
+    &:empty {
+        display: none;
+    }
 }
 
 /*  Hover/focus state, but only for links */
@@ -55,8 +54,8 @@ a {
   &-important         { background-color: $errorBackground; }
   &-important[href]   { background-color: color($errorBackground l(-10%)); }
   /*  Warnings (orange) */
-  &-warning           { background-color: $orange; }
-  &-warning[href]     { background-color: color($orange l(-10%)); }
+  &-warning           { background-color: $alertColor; }
+  &-warning[href]     { background-color: color($alertColor l(-10%)); }
   /*  Success (green) */
   &-success           { background-color: $successText; }
   &-success[href]     { background-color: color($successText l(-10%)); }
@@ -64,8 +63,8 @@ a {
   &-info              { background-color: $infoText; }
   &-info[href]        { background-color: color($infoText l(-10%)); }
   /*  Inverse (black) */
-  &-inverse           { background-color: $grayDark; }
-  &-inverse[href]     { background-color: color($grayDark l(-10%)); }
+  &-inverse           { background-color: $gray30; }
+  &-inverse[href]     { background-color: color($gray30 l(-10%)); }
 }
 
 /*  Quick fix for labels/badges in buttons */
@@ -93,13 +92,13 @@ a {
 	padding: 1px 4px 0 4px;
 	border-radius: 4px;
 	line-height: 17px;
-	font-size: 11px;
+	font-size: $fontSizeSmall;
 	font-weight: normal;
 	text-transform: uppercase;
 	color: $textColor;
 	text-shadow: none;
-	background-color: $grayLightMedium;
-	border: 1px solid $grayDark;;
+	background-color: $gray80;
+	border: 1px solid $gray30;;
 	/*  icons in labels */
 	[class*="icon-"]{
 		font-size: 16px;
@@ -115,9 +114,9 @@ a {
 	}
 	/*  Warnings (orange) */
 	&-warning {
-		background-color: color($orange l(+35%));
-		border-color: $orange;
-		color: $orange;
+		background-color: color($alertColor l(+35%));
+		border-color: $alertColor;
+		color: $alertColor;
 	}
 	/*  Success (green) */
 	&-success {
@@ -133,8 +132,8 @@ a {
 	}
 	/*  Inverse (black) */
 	&-inverse {
-		background-color: $gray;
-		border-color: $grayDark;
+		background-color: $gray45;
+		border-color: $gray30;
 		color: $white;
 	}
 }

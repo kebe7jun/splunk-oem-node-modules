@@ -43,6 +43,7 @@ define([
         initialize: function() {
             BaseRouter.prototype.initialize.apply(this, arguments);
             this.fetchUser = true;
+            this.enableAppBar = false;
             this.setPageTitle(_('Field Extractor').t());
             this.collection.extractions = new Extractions();
             this.collection.sourcetypes = new Sourcetypes();

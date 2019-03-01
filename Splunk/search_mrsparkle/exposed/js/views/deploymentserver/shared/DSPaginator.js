@@ -23,7 +23,11 @@ function(
          * }
          */
         className: 'paginator_container',
+        defaults: {
+            countLabel: _('Clients').t()
+        },
         initialize: function(options) {
+            this.options = _.extend({}, this.defaults, this.options);
             BaseView.prototype.initialize.call(this, options);
 
             // Paginator for clients table
@@ -52,7 +56,7 @@ function(
 
             this.children.collectionCount = new CollectionCountView({
                 collection: this.collection,
-                countLabel: _('Clients').t()
+                countLabel: options.countLabel
             });
 
         },

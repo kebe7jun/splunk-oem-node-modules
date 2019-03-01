@@ -34,13 +34,13 @@ define(
                     validateRatio: function(value, attr, computedState) {
                         if ((!validationUtils.isNonNegValidInteger(value)) || parseInt(value, 10) <= 1) {
                             return _(' Sample ratio must be an integer greater than 1').t();
-                        } 
+                        }
                     }
                 });
 
                 this.model.inmem = new Inmem();
                 this.model.inmem.set('ratio', this.model.report.entry.content.get('display.prefs.customSampleRatio'));
-               
+
                 var docRoute = route.docHelp(this.model.application.get("root"), this.model.application.get("locale"), 'learnmore.search_app.event.sampling');
                 this.children.sampleRatioInput = new ControlGroup({
                     controlType: 'Text',
@@ -50,6 +50,7 @@ define(
                         model: this.model.inmem
                     },
                     label: 'Sample Ratio',
+                    controlsLayout: 'separate',
                     help: '<a href="' + docRoute +'" target="_blank" title="'+_("Splunk help").t()+'">' + _("Learn More").t() + ' <i class="icon-external"></i></a>'
                 });
 
@@ -77,7 +78,7 @@ define(
             }),
             setCaretPositionToEnd: function() {
                 var $inputField = this.$('input');
-                domUtils.setCaretPosition($inputField.get(0), $inputField.val().length);                
+                domUtils.setCaretPosition($inputField.get(0), $inputField.val().length);
             },
             applyChanges: function() {
                 if (this.model.inmem.isValid(true)) {
@@ -104,9 +105,9 @@ define(
                 // Add content to body
                 this.$(Modal.BODY_SELECTOR).append(Modal.FORM_HORIZONTAL);
                 this.children.sampleRatioInput.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
-                this.children.sampleRatioInput.$el.find('.ratio-input-control').before('<span>' + _("1 : ").t() + '</span>');
-                this.children.sampleRatioInput.$el.find('.ratio-input-control').after('<span>' + _("events").t() + '</span>');
-                
+                this.children.sampleRatioInput.$el.find('.ratio-input-control').before('<span class="input-label">' + _("1 : ").t() + '</span>');
+                this.children.sampleRatioInput.$el.find('.ratio-input-control').after('<span class="input-label">' + _("events").t() + '</span>');
+
                 // Add footer buttons
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL);
                 this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="edit-apply btn btn-primary pull-right" tabindex="0"> '+_("Apply").t()+'</a>');

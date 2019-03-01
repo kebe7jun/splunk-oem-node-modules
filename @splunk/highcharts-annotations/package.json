@@ -1,0 +1,28 @@
+{
+    "name": "@splunk/highcharts-annotations",
+    "version": "0.8.4",
+    "license": "SEE LICENSE IN LICENSE.md",
+    "main": "lib/index.js",
+    "files": [
+        "lib"
+    ],
+    "publishConfig": {
+        "registry": "https://repo.splunk.com/artifactory/api/npm/npm-solutions-local"
+    },
+    "scripts": {
+        "build": "webpack",
+        "build:watch": "yarn build -- --watch",
+        "start": "yarn build:watch",
+        "lint": "eslint src test",
+        "lint:ci": "yarn run lint -- -f junit -o test-reports/lint-results.xml"
+    },
+    "dependencies": {
+        "@splunk/charting-utils": "^0.8.4",
+        "lodash": "^4.17.4"
+    },
+    "devDependencies": {
+        "@splunk/charting-webpack-config": "^0.8.4",
+        "eslint": "^3.19.0",
+        "webpack": "^3.4.1"
+    }
+}

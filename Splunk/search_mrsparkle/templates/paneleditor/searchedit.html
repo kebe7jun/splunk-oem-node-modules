@@ -51,7 +51,7 @@ from splunk.appserver.mrsparkle.lib.eai import cpQuoteEntity
         }
         .readonlyform,
         input[type="text"].readonlyform {
-            border: 1px solid #CCC;
+            border: 1px solid #c3cbd4;
             background: #f4f4f1;
             box-shadow: none;
         }
@@ -61,7 +61,7 @@ from splunk.appserver.mrsparkle.lib.eai import cpQuoteEntity
         .search-type {
             padding: 5px 10px;
             background: #ededed url(/static/img/skins/default/overlay_bottomgradient_soft.png) repeat-x bottom;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #c3cbd4;
         }
         .search-type label {
             margin-right: 10px;
@@ -69,7 +69,7 @@ from splunk.appserver.mrsparkle.lib.eai import cpQuoteEntity
         }
         .saved-search-list, .inline-search-header {
             padding: 7px 11px;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #c3cbd4;
             position: relative;
         }
         .saved-search-list:after, .inline-search-header:after {
@@ -222,12 +222,12 @@ from splunk.appserver.mrsparkle.lib.eai import cpQuoteEntity
             </ul>
         </div>
 
-        <ul class="splClearfix buttons" style="margin:0px; margin-top:10px; background: #fff; border-top: 1px solid #ccc;padding:10px; list-style:none;">
+        <ul class="splClearfix buttons" style="margin:0px; margin-top:10px; background: #fff; border-top: 1px solid #c3cbd4;padding:10px; list-style:none;">
             <li style="float:left;"><a href="${make_url(['paneleditor', app, 'searchedit', dashboard_panel.id[1][0], dashboard_panel.id[1][1]], _qs=dict(id=dashboard_panel.id[0]))}" class="splButton-secondary cancel" tabindex="3">${_("Cancel")}</a></li>
             <li style="float:right;"><button class="splButton-primary" type="button"><span>${_('Save')}</span></button></li>
         </ul>
     </form>
-    <script src="${make_url('/static/js/contrib/deprecated/jquery-1.8.3.js')}"></script>
+    <script src="${make_url('/static/js/contrib/jquery/jquery.js')}"></script>
     <script>
         (function(){
             var uiSearchMode = ${json_decode(ui_search_mode)|n};

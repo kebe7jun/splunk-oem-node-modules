@@ -57,7 +57,7 @@ define(
                         applicationModel: this.model.application
                     });
                 }
-                
+
                 this.children.searchInput = new Input($.extend(true, {}, this.options, {
                     model: {
                         user: this.model.user,
@@ -69,7 +69,7 @@ define(
                         searchBNFs: this.collection.searchBNFs
                     }
                 }));
-                
+
                 if (this.options.showTimeRangePicker) {
                     this.children.timeRangePicker = new TimeRangePicker({
                         model: {
@@ -86,7 +86,7 @@ define(
                 }
 
             },
-            
+
             events: {
                 'click .search-button > .btn': function(e) {
                     e.preventDefault();
@@ -106,14 +106,14 @@ define(
             closeAssistant: function() {
                 this.children.searchInput.closeAssistant();
             },
-            
+
             /**
              * Disable the search input, make the search string unwritable.
              */
             disable: function() {
                 this.children.searchInput.disable();
             },
-            
+
             /**
              * Enable the search input, make the search string editable.
              * If option disableOnSubmit this must be called to re enable the input.
@@ -121,7 +121,7 @@ define(
             enable: function() {
                 this.children.searchInput.enable();
             },
-            
+
             /**
              * Updates the text value in the searchbar input. The text is not submitted.
              * @param {string} search
@@ -129,7 +129,7 @@ define(
             setText: function(search) {
                 this.children.searchInput.setText(search);
             },
-            
+
             /**
              * Returns the text value in the searchbar input. The text is not necessarily submitted.
              * @return {string} search
@@ -137,21 +137,21 @@ define(
             getText: function() {
                 return this.children.searchInput.getText();
             },
-            
+
             /**
              * Adds focus to the search field.
              */
             searchFieldFocus: function() {
                 this.children.searchInput.searchFieldFocus();
             },
-            
+
             /**
              * Removes focus from the search field.
              */
             removeSearchFieldFocus: function() {
                 this.children.searchInput.removeSearchFieldFocus();
             },
-            
+
             /**
              * Reformats the search string in the searchbar input. This is an asynchronous function
              * which waits for the reformat functionality to be available on the editor.
@@ -159,7 +159,7 @@ define(
             reformatSearch: function() {
                 return this.children.searchInput.reformatSearch();
             },
-            
+
             /**
              * Sets the autoOpenAssistant option.
              * @param {boolean} value
@@ -168,7 +168,12 @@ define(
                 this.options.autoOpenAssistant = splunkUtils.normalizeBoolean(value);
                 this.children.searchInput.setAutoOpenAssistantOption(value);
             },
-            
+
+            setUseAdvancedEditorOption: function(value) {
+                this.options.useAdvancedEditor = splunkUtils.normalizeBoolean(value);
+                this.children.searchInput.setUseAdvancedEditorOption(value);
+            },
+
             /**
              * Sets the search attribute on the content model to the text value in the search bar input.
              * @param {object} options {
@@ -180,18 +185,18 @@ define(
             submit: function(options) {
                 this.children.searchInput.submit(options);
             },
-            
+
             render: function() {
                 if (!this.$el.html()) {
-                    var template = _.template(this.template, {showTimeRangePicker: this.options.showTimeRangePicker});
+                    var template = _.template(this.template, {showTimeRangePicker: this.options.showTimeRangePicker, _:_});
                     this.$el.html(template);
 
                     if (this.children.apps) {
                         this.children.apps.render().appendTo(this.$('.search-apps'));
                     }
-                    
+
                     this.children.searchInput.render().appendTo(this.$('.search-input'));
-                    
+
                     if (this.children.timeRangePicker) {
                         this.children.timeRangePicker.render().appendTo(this.$('.search-timerange'));
                     }
@@ -209,7 +214,7 @@ define(
                                     <td class="search-timerange"></td>\
                                 <% } %>\
                                 <td class="search-button">\
-                                    <a class="btn" href="#"><i class="icon-search-thin"></i></a>\
+                                    <a class="btn" aria-label="<%= _("Search Button").t() %>" href="#"><i class="icon-search-thin"></i></a>\
                                 </td>\
                             </tr>\
                         </tbody>\

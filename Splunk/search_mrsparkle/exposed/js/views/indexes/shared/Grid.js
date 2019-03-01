@@ -60,9 +60,15 @@ define([
                         }.bind(this)
                     }, {
                         id: 'frozenTimePeriodInSecs',
-                        title: _('Retention').t(),
+                        title: _('Searchable Retention').t(),
                         visible: function() {
-                            return this.model.controller.get('mode') === 'cloud';
+                            return (this.model.controller.get('mode') === 'cloud');
+                        }.bind(this)
+                    }, {
+                        id: 'archiver.selfStorageBucket',
+                        title: _('Self Storage Location').t(),
+                        visible: function() {
+                            return ((this.model.controller.get('mode') === 'cloud') && this.collection.appLocalsUnfilteredAll.findByEntryName('dynamic-data-self-storage-app'));
                         }.bind(this)
                     }, {
                         id: 'archive.provider',
@@ -79,5 +85,3 @@ define([
 
         });
     });
-
-

@@ -65,7 +65,7 @@ define([
             template: '\
             <td class="cell-name">\
                 <a href="#" class="model-title entity-edit-link"><%- model.entry.get("name") %></a>\
-                <div class="model-description"><%- _(description||"").t() %></div>\
+                <div class="model-description"><%- description || "" %></div>\
             </td>\
             <td class="cell-actions">\
                 <a href="#" class="entity-action edit-action"><%= _("Edit").t() %></a>\
@@ -75,7 +75,7 @@ define([
                 <% } %>\
             </td>\
             \
-            <td class="cell-category"><%- _(model.entry.content.get("category")||"").t() %></td>\
+            <td class="cell-category"><%- model.entry.content.get("category") || ""  %></td>\
             <% if(canUseApps) { %>\
             <td class="cell-app"><%- model.entry.acl.get("app") %></td>\
             <% } %>\

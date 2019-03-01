@@ -89,9 +89,8 @@ define([
 
             template: '\
             <div class="tokens-disabled-warning alert-error red-triangle-warning"><i class="icon-alert"/></div>\
-            <a href="#" class="btn btn-primary global-settings-button"><%- _("Global Settings").t() %></a>\
+            <a href="#" class="btn btn-secondary global-settings-button"><%- _("Global Settings").t() %></a>\
             <a href="#" class="btn btn-primary new-entity-button"><%- _("New ").t() + entitySingular %></a>'
 
         });
     });
-

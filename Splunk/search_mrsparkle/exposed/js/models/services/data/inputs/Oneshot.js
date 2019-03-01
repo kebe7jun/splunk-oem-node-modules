@@ -24,6 +24,12 @@ define(
                         msg: _("Host value is required.").t()
                     }
                 ]
+            },
+			getLabel: function () {
+                return this.get("ui.name");
+            },
+            getValue: function () {
+                return this.get("ui.name");
             }
         });
     }

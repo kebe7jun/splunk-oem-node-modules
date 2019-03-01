@@ -24,36 +24,46 @@ function (
                 url: route.docHelp(this.model.application.get("root"), this.model.application.get("locale"), "search.reference"),
                 title: _("Search Manual").t(),
                 icon:'\
-                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="104px" height="104px" viewBox="0 0 104 104" enable-background="new 0 0 104 104" xml:space="preserve">\
-                    <circle fill="#FFFFFF" stroke="#63A543" stroke-width="2" stroke-miterlimit="10" cx="52" cy="52" r="50"/>\
-                    <g transform="translate(0.5, 0.5)">\
-                    	<path fill="#FFFFFF" d="M74.5,75.5c0,2.209-1.791,4-4,4h-37c-2.209,0-4-1.791-4-4v-47c0-2.209,1.791-4,4-4h37c2.209,0,4,1.791,4,4 V75.5z"/>\
-                        <path fill="none" stroke="#63A543" stroke-width="2" stroke-miterlimit="10" d="M74.5,75.5c0,2.209-1.791,4-4,4h-37 c-2.209,0-4-1.791-4-4v-47c0-2.209,1.791-4,4-4h37c2.209,0,4,1.791,4,4V75.5z"/>\
-                        <line fill="none" stroke="#63A543" stroke-miterlimit="10" x1="37" y1="25.5" x2="37" y2="79.5"/>\
-                        <polygon fill="none" stroke="#63A543" stroke-miterlimit="10" points="56,25 56,42.5 60,37.589 64,42.5 64,25 "/>\
-                    </g>\
-                    <path fill="#63A744" d="M47.906,51.135c-0.554,0.932-0.824,1.946-0.824,3.027c0,2.162,1.176,4.162,3.054,5.257\
-                    	c0.932,0.554,1.946,0.824,3.027,0.824c2.162,0,4.162-1.176,5.257-3.054c0.554-0.932,0.824-1.946,0.824-3.027\
-                    	c0-2.162-1.176-4.162-3.054-5.257c-0.932-0.554-1.946-0.824-3.027-0.824C50.999,48.081,48.999,49.257,47.906,51.135z M60.148,58.365\
-                    	l4.541,4.541C64.893,63.109,65,63.352,65,63.609c0,0.257-0.108,0.5-0.311,0.703l-1.378,1.378c-0.203,0.203-0.446,0.311-0.703,0.311\
-                    	c-0.257,0-0.5-0.108-0.703-0.311l-4.541-4.541c-1.297,0.784-2.703,1.176-4.203,1.176c-2.932,0-5.595-1.581-7.054-4.081\
-                    	C45.365,56.987,45,55.635,45,54.162c0-2.932,1.581-5.595,4.081-7.068c1.257-0.73,2.608-1.095,4.081-1.095\
-                    	c2.932,0,5.595,1.581,7.068,4.081c0.73,1.257,1.095,2.608,1.095,4.081C61.325,55.662,60.933,57.067,60.148,58.365z"/>\
-                </svg>',
+                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
+                        width="50px" height="62px" viewBox="0 0 50 62" enable-background="new 0 0 50 62" xml:space="preserve" class="fill-svg">\
+                        <path id="XMLID_468_" d="M39.1,32.7L32.4,26c-0.3,0.6-0.7,1.2-1.1,1.7l6.4,6.4c0.4,0.4,0.4,1,0,1.4l-0.2,0.2c-0.4,0.4-1,0.4-1.4,0\
+                            l-6.4-6.4c-0.5,0.4-1.1,0.8-1.7,1.1l6.7,6.7c0.6,0.6,1.4,0.9,2.1,0.9c0.8,0,1.5-0.3,2.1-0.9l0.2-0.2C40.3,35.8,40.3,33.8,39.1,32.7z"/>\
+                        <g id="XMLID_931_">\
+                            <path id="XMLID_928_" d="M22.4,31.9c-6.3,0-11.4-5.1-11.4-11.4S16.2,9.1,22.4,9.1s11.4,5.1,11.4,11.4S28.7,31.9,22.4,31.9z\
+                                M22.4,10.9c-5.3,0-9.6,4.3-9.6,9.6s4.3,9.6,9.6,9.6s9.6-4.3,9.6-9.6S27.7,10.9,22.4,10.9z"/>\
+                        </g>\
+                        <g id="XMLID_915_">\
+                            <path id="XMLID_914_" d="M17.8,21h-1.8c0-4,2.9-6.9,5.9-6.9v1.8C20,15.9,17.8,18,17.8,21z"/>\
+                        </g>\
+                        <g id="XMLID_657_">\
+                            <path id="XMLID_658_" d="M7.9,50c-0.9,0-2.3,1-2.3,2H47v-2H7.9z"/>\
+                        </g>\
+                        <g id="XMLID_655_">\
+                            <path id="XMLID_656_" d="M7.9,57c-0.9,0-2.3-1-2.3-2H47v2H7.9z"/>\
+                        </g>\
+                        <path id="XMLID_653_" d="M49,62H8.5C4,62,0.3,58.4,0,54h0V10C0,4.5,4.5,0,10,0h37c1.7,0,3,1.3,3,3v41c0,1.7-1.3,3-3,3H8.5\
+                            C4.9,47,2,49.9,2,53.5S4.9,60,8.5,60H49V62z M10,2c-4.4,0-8,3.6-8,8v38c1.5-1.8,3.8-3,6.4-3v0H47c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1H10z"/>\
+                    </svg>\
+                ',
                 external: true,
                 description: _("Use the Splunk Search Processing Language (SPL).").t()
             });
             var pivotIcon = '\
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="104px" height="104px" viewBox="0 0 104 104" enable-background="new 0 0 104 104" xml:space="preserve">\
-	            <circle fill="#FFFFFF" stroke="#63A543" stroke-width="2" stroke-miterlimit="10" cx="52" cy="52" r="50"/>\
-	            <g transform="translate(0.5, 0.5)">\
-	            	<path fill="#FFFFFF" d="M74.5,75.5c0,2.209-1.791,4-4,4h-37c-2.209,0-4-1.791-4-4v-47c0-2.209,1.791-4,4-4h37c2.209,0,4,1.791,4,4 V75.5z"/>\
-		            <path fill="none" stroke="#63A543" stroke-width="2" stroke-miterlimit="10" d="M74.5,75.5c0,2.209-1.791,4-4,4h-37 c-2.209,0-4-1.791-4-4v-47c0-2.209,1.791-4,4-4h37c2.209,0,4,1.791,4,4V75.5z"/>\
-		            <line fill="none" stroke="#63A543" stroke-miterlimit="10" x1="37" y1="25.5" x2="37" y2="79.5"/>\
-		            <polygon fill="none" stroke="#63A543" stroke-miterlimit="10" points="56,25 56,42.5 60,37.589 64,42.5 64,25 "/>\
-	            </g>\
-	            <path transform="translate(0.5, 1)" fill="#63A543" d="M50.5,50.176v8.656l4.73-0.044l3.186,3.168L47.809,62c-0.663,0-1.309-0.454-1.309-1.1V50.5h-2.498l4.4-4.424 l4.628,4.214L50.5,50.176z M63.5,47.021V57.5h2.502l-4.4,4.284l-4.4-4.284H59.5v-8h-4.499l-3.3-3.388l10.54-0.103 C62.906,46.009,63.5,46.377,63.5,47.021z"/>\
-            </svg>';
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
+                    width="50px" height="62px" viewBox="0 0 50 62" enable-background="new 0 0 50 62" xml:space="preserve" class="fill-svg">\
+                    <g id="XMLID_796_">\
+                        <path id="XMLID_797_" d="M7.9,50c-0.9,0-2.3,1-2.3,2H47v-2H7.9z"/>\
+                    </g>\
+                    <g id="XMLID_794_">\
+                        <path id="XMLID_795_" d="M7.9,57c-0.9,0-2.3-1-2.3-2H47v2H7.9z"/>\
+                    </g>\
+                    <path id="XMLID_778_" d="M49,62H8.5C4,62,0.3,58.4,0,54h0V10C0,4.5,4.5,0,10,0h37c1.7,0,3,1.3,3,3v41c0,1.7-1.3,3-3,3H8.5\
+                        C4.9,47,2,49.9,2,53.5S4.9,60,8.5,60H49V62z M10,2c-4.4,0-8,3.6-8,8v38c1.5-1.8,3.8-3,6.4-3v0H47c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1H10z"/>\
+                    <path id="XMLID_472_" d="M39,10H20h-2h-3c-1.1,0-2,0.9-2,2v3v2v19c0,1.1,0.9,2,2,2h3c1.1,0,2-0.9,2-2V17h19c1.1,0,2-0.9,2-2v-3\
+                        C41,10.9,40.1,10,39,10z M15,12h3v3h-3V12z M18,36h-3V17h3V36z M39,15H20v-3h19V15z"/>\
+                    <path id="XMLID_477_" d="M36.7,22H39l-3-3l-3,3h1.6c-1.1,4.7-4.6,7.7-9.6,8.4v-1.9l-3,3l3,3v-2.1C31.2,31.7,35.5,27.8,36.7,22z"/>\
+                </svg>\
+            ';
 
             this.children.pivotManual = new ItemView({
                 url: route.docHelp(this.model.application.get("root"), this.model.application.get("locale"), "pivot.manual"),
@@ -63,16 +73,33 @@ function (
                 description: _("Use Pivot to create tables and charts with SPL.").t()
             });
             var vizIcon = '\
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="104px" height="104px" viewBox="0 0 104 104" enable-background="new 0 0 104 104" xml:space="preserve">\
-            <circle fill="#FFFFFF" stroke="#63A543" stroke-width="2" stroke-miterlimit="10" cx="52" cy="52" r="50"/>\
-            <g transform="translate(0.5, 0.5)">\
-            	<path fill="#FFFFFF" d="M74.5,75.5c0,2.209-1.791,4-4,4h-37c-2.209,0-4-1.791-4-4v-47c0-2.209,1.791-4,4-4h37c2.209,0,4,1.791,4,4 V75.5z"/>\
-                <path fill="none" stroke="#63A543" stroke-width="2" stroke-miterlimit="10" d="M74.5,75.5c0,2.209-1.791,4-4,4h-37 c-2.209,0-4-1.791-4-4v-47c0-2.209,1.791-4,4-4h37c2.209,0,4,1.791,4,4V75.5z"/>\
-                <line fill="none" stroke="#63A543" stroke-miterlimit="10" x1="37" y1="25.5" x2="37" y2="79.5"/>\
-                <polygon fill="none" stroke="#63A543" stroke-miterlimit="10" points="56,25 56,42.5 60,37.589 64,42.5 64,25 "/>\
-            </g>\
-            <path transform="translate(0, 0.5)" fill="#63A744" d="M52,62.5h-4v-8h4V62.5z M58,62.5h-4v-12h4V62.5z M64,62.5h-4v-17h4V62.5z"/>\
-            </svg>';
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
+                    width="50px" height="62px" viewBox="0 0 50 62" enable-background="new 0 0 50 62" xml:space="preserve" class="fill-svg">\
+                    <g id="XMLID_676_">\
+                        <path id="XMLID_677_" d="M7.9,50c-0.9,0-2.3,1-2.3,2H47v-2H7.9z"/>\
+                    </g>\
+                    <g id="XMLID_674_">\
+                        <path id="XMLID_675_" d="M7.9,57c-0.9,0-2.3-1-2.3-2H47v2H7.9z"/>\
+                    </g>\
+                    <path id="XMLID_672_" d="M49,62H8.5C4,62,0.3,58.4,0,54h0V10C0,4.5,4.5,0,10,0h37c1.7,0,3,1.3,3,3v41c0,1.7-1.3,3-3,3H8.5\
+                        C4.9,47,2,49.9,2,53.5S4.9,60,8.5,60H49V62z M10,2c-4.4,0-8,3.6-8,8v38c1.5-1.8,3.8-3,6.4-3v0H47c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1H10z"/>\
+                    <polygon id="XMLID_944_" points="9.6,19.8 8.4,18.2 16.9,11.8 24.9,15.8 33,9.7 41.7,17.2 40.3,18.8 33,12.3 25.1,18.2 17.1,14.2"/>\
+                    <g id="XMLID_943_">\
+                        <rect id="XMLID_942_" x="31" y="25" width="2" height="12"/>\
+                    </g>\
+                    <g id="XMLID_941_">\
+                        <rect id="XMLID_940_" x="27" y="29" width="2" height="8"/>\
+                    </g>\
+                    <g id="XMLID_939_">\
+                        <rect id="XMLID_938_" x="35" y="21" width="2" height="16"/>\
+                    </g>\
+                    <g id="XMLID_937_">\
+                        <rect id="XMLID_667_" x="39" y="29" width="2" height="8"/>\
+                    </g>\
+                        <path id="XMLID_467_" d="M16.8,22.2c-4.1,0-7.5,3.4-7.5,7.5s3.4,7.5,7.5,7.5s7.5-3.4,7.5-7.5S20.9,22.2,16.8,22.2z M22.2,29H18v-4.7\
+                    C20.2,24.8,22,26.7,22.2,29z M16.8,35.2c-3,0-5.5-2.5-5.5-5.5c0-2.8,2.1-5.1,4.7-5.4V31h6.1C21.5,33.4,19.4,35.2,16.8,35.2z"/>\
+                </svg>\
+            ';
 
             this.children.dashboardVisualizations = new ItemView({
                 url: route.docHelp(this.model.application.get("root"), this.model.application.get("locale"), "dashboards.visualizations"),
@@ -88,19 +115,28 @@ function (
                     linkClass: 'product-tours',
                     title: _("Product Tours").t(),
                     icon: '\
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="104px" height="104px" viewBox="0 0 104 104" enable-background="new 0 0 104 104" xml:space="preserve">\
-                            <circle fill="#FFFFFF" stroke="#63A543" stroke-width="1.75" stroke-miterlimit="10" cx="52.298" cy="52.239" r="50"></circle>\
-                            <g>\
-                                <path fill="#63A543" d="M54.794,83.568c0.575,0,1.045-0.47,1.045-1.044V21.937c0-0.574-0.47-1.044-1.045-1.044h-4.178c-0.575,0-1.045,0.47-1.045,1.044v60.588c0,0.574,0.47,1.044,1.045,1.044H54.794z"/>\
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
+                             width="62px" height="62px" viewBox="0 0 62 62" enable-background="new 0 0 62 62" xml:space="preserve" class="fill-svg">\
+                            <g id="XMLID_854_">\
+                                <g id="XMLID_855_">\
+                                    <g id="XMLID_856_">\
+                                        <g id="XMLID_857_">\
+                                            <g id="XMLID_858_">\
+                                                <path id="XMLID_1050_" d="M31,30c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S33.2,30,31,30z M31,24c-1.1,0-2,0.9-2,2s0.9,2,2,2\
+                                                    s2-0.9,2-2S32.1,24,31,24z"/>\
+                                            </g>\
+                                        </g>\
+                                    </g>\
+                                </g>\
                             </g>\
-                            <g>\
-                                <path fill="#FFFFFF" d="M83.792,35.859c0.425,0.387,0.425,1.018,0,1.404l-6.512,5.908c-0.425,0.387-1.243,0.701-1.817,0.701H29.201c-0.574,0-1.045-0.47-1.045-1.044V30.294c0-0.575,0.471-1.045,1.045-1.045h46.262c0.574,0,1.393,0.315,1.818,0.702L83.792,35.859z" />\
-                                <path fill="none" stroke="#63A543" stroke-width="2" stroke-miterlimit="10" d="M83.792,35.859c0.425,0.387,0.425,1.018,0,1.404l-6.512,5.908c-0.425,0.387-1.243,0.701-1.817,0.701H29.201c-0.574,0-1.045-0.47-1.045-1.044V30.294c0-0.575,0.471-1.045,1.045-1.045h46.262c0.574,0,1.393,0.315,1.818,0.702L83.792,35.859z"/>\
-                            </g>\
-                            <g>\
-                                <path fill="#FFFFFF" d="M22.663,58.155c-0.425-0.387-0.425-1.018,0-1.403l6.511-5.909c0.426-0.386,1.243-0.701,1.818-0.701h46.261c0.575,0,1.045,0.47,1.045,1.044v12.535c0,0.575-0.47,1.045-1.045,1.045H30.992c-0.575,0-1.393-0.315-1.819-0.702L22.663,58.155z" />\
-                                <path fill="none" stroke="#63A543" stroke-width="2" stroke-miterlimit="10" d="M22.663,58.155c-0.425-0.387-0.425-1.018,0-1.403l6.511-5.909c0.426-0.386,1.243-0.701,1.818-0.701h46.261c0.575,0,1.045,0.47,1.045,1.044v12.535c0,0.575-0.47,1.045-1.045,1.045H30.992c-0.575,0-1.393-0.315-1.819-0.702L22.663,58.155z"/>\
-                            </g>\
+                            <path id="XMLID_830_" d="M60.9,49c-0.2-3-0.7-12.3-0.9-16.1c-0.2-3-1.6-5.2-2.7-6.9C56.6,25,56,24,56,23.2V9c0-1.7-1.3-3-3-3h-0.1\
+                                l0.6-3.7c0.1-0.6-0.1-1.2-0.4-1.6S52.2,0,51.6,0H38c-0.6,0-1.1,0.3-1.5,0.7c-0.4,0.4-0.5,1-0.4,1.6L36.6,6H34v9h-6V6h-2.7L26,2.3\
+                                c0.1-0.6-0.1-1.2-0.4-1.6C25.1,0.3,24.6,0,24,0H10.4C9.8,0,9.2,0.3,8.8,0.7c-0.4,0.4-0.5,1-0.4,1.6L9,6h0C7.3,6,6,7.3,6,9v14.2\
+                                C6,24,5.4,25,4.7,26.1c-1.1,1.7-2.5,3.8-2.7,6.9C1.7,36.7,1.2,46,1.1,49H0v10c0,1.7,1.3,3,3,3h23c1.7,0,3-1.3,3-3V49h-1V36h6v13h-1\
+                                v10c0,1.7,1.3,3,3,3h23c1.7,0,3-1.3,3-3V49H60.9z M51.6,2l-0.7,4H38.7L38,2H51.6z M10.4,2H24l-0.7,4H11.1L10.4,2z M27,59\
+                                c0,0.6-0.4,1-1,1H3c-0.6,0-1-0.4-1-1v-8h25V59z M26,34v15H3.1C3.2,45.9,3.7,36.8,4,33.1c0.2-2.5,1.3-4.3,2.4-5.9\
+                                C7.2,25.9,8,24.6,8,23.2V9c0-0.6,0.4-1,1-1h17v9h10V8h17c0.6,0,1,0.4,1,1v14.2c0,1.4,0.8,2.6,1.6,3.9c1,1.6,2.2,3.4,2.4,5.9\
+                                c0.3,3.7,0.8,12.8,0.9,15.9H36V34H26z M60,59c0,0.6-0.4,1-1,1H36c-0.6,0-1-0.4-1-1v-8h25V59z"/>\
                         </svg>\
                     ',
                     external: false,
@@ -133,9 +169,10 @@ function (
             this.children.pivotManual.render().appendTo(this.$el);
             this.children.dashboardVisualizations.render().appendTo(this.$el);
             return this;
-        },
+        }, 
         template: '\
         '
 
     });
 });
+

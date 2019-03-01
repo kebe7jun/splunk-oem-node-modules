@@ -27,7 +27,7 @@ define(['underscore', 'module', 'views/shared/controls/Control', 'bootstrap.tool
                 defaultValue: 'label',
                 iconSize: 'icon-large'
             };
-         
+
             _.defaults(this.options, defaults);
 
             Control.prototype.initialize.apply(this, arguments);
@@ -35,7 +35,7 @@ define(['underscore', 'module', 'views/shared/controls/Control', 'bootstrap.tool
         },
         render: function() {
             var value = (_.isUndefined(this._value) || _.isNull(this._value)) ? '' : this._value;
-            
+
             if (!this.el.innerHTML) {
                 var template = _.template(this.template, {
                         options: this.options,
@@ -50,7 +50,7 @@ define(['underscore', 'module', 'views/shared/controls/Control', 'bootstrap.tool
 
             var additionalClassNames = this.options.additionalClassNames;
             if(additionalClassNames) {
-                this.$el.addClass(additionalClassNames); 
+                this.$el.addClass(additionalClassNames);
             }
 
             if (this.options.tooltip) {
@@ -61,7 +61,9 @@ define(['underscore', 'module', 'views/shared/controls/Control', 'bootstrap.tool
         // Using concatenation for constructing the template so extra whitespace isn't introduced into the span.
         // This allows the use of preformatted text styling on the span.
         template: '' +
-            '<span class="<%= options.inputClassName %><% if(options.tooltip) { %> tooltip-text<% } %>">' +
+            '<span ' +
+                'tabindex="0" <% if (options.ariaLabel) { %> aria-label="<%- options.ariaLabel + ":" + value %>" <% } %> ' +
+                'class="<%= options.inputClassName %><% if(options.tooltip) { %> tooltip-text<% } %>">' +
                 '<% if (options.icon) { %> <i class="icon-<%-options.icon%> <%-options.iconSize%>"></i> <% } %>' +
                 '<%- value %>' +
             '</span>'

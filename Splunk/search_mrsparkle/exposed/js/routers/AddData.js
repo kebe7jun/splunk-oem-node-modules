@@ -27,6 +27,7 @@ define(
         /* Models */
         'models/add_data/WizardModel',
         'models/managementconsole/DmcSettings',
+        'models/indexes/cloud/Index',
         'models/services/saved/Sourcetype',
         'models/services/deploymentserver/DeploymentServerClassGDI',
         'models/services/deploymentserver/DeploymentApplication',
@@ -89,6 +90,7 @@ define(
         /* Models */
         WizardModel,
         DmcSettings,
+        IndexModel,
         SourcetypeModel,
         DeploymentServerClass,
         DeploymentApplicationModel,
@@ -131,10 +133,10 @@ define(
             initialize: function() {
                 var that = this;
                 BaseRouter.prototype.initialize.apply(this, arguments);
+                this.isSingleInstanceCloud = true;
                 this.fetchUser = true;
                 this.fetchAppLocals = true;
                 this.enableAppBar = false;
-                this.enableFooter = false;
                 this.pageRenderedDfd = new $.Deferred();
 
                 this.collection.appLocals = new AppLocalsCollection();
@@ -296,6 +298,7 @@ define(
                 }, this);
 
                 this.deferreds.indexes = this.refreshIndexes();
+                this.deferreds.fetchIndexModel = this.fetchIndexModel();
             },
 
             showErrorPage: function(){
@@ -314,7 +317,14 @@ define(
                     this.logger.error("You do not have permission to view this page.");
                 }.bind(this));
             },
-
+            _navigateToNewAddData: function(locale, app){
+                window.location.replace(route.addData(
+                    this.model.application.get('root'),
+                    locale,
+                    app));
+                // this.navigate(nextUrl, {trigger: true, replace: true});
+                return;
+            },
             /*
              THE ENTRY POINT
              */
@@ -333,13 +343,14 @@ define(
                     step !== 'selectforwarders') {
                     // any request to pages other than root and permalinkable ones will redirect to root
                     // undefined inputMode is used here as an indicator that we're coming from outside the workflow
-                    var pathname = window.location.pathname,
-                        nextUrl =  pathname.substring(0,pathname.lastIndexOf("/"));
-                    this.navigate(nextUrl, {trigger: true, replace: true});
-                    return;
+                    return this._navigateToNewAddData(locale, app);
                 }
                 step = step || 'initial';
                 step = step.toLowerCase();
+
+                if (step === 'initial') {
+                    return this._navigateToNewAddData(locale, app);
+                }
 
                 this.pageRenderedDfd.done(function(){
                     if (typeof self._routes[step] === 'function'){
@@ -377,7 +388,7 @@ define(
                          this.deferreds.sourcetypesCollection.resolve();
                     }.bind(this));
 
-                    $.when(this.pageReadydfd, this.deferreds.pageViewRendered, this.deferreds.indexes).done(function() {
+                    $.when(this.pageReadydfd, this.deferreds.pageViewRendered, this.deferreds.indexes, this.deferreds.fetchIndexModel).done(function() {
                         // Rendering a static Header view and a simple placeholder for views that we switch
                         that.pageView.$('.main-section-body').append(that.headerView.render().el);
                         that.pageView.$('.main-section-body').append('<div class="layoutBodyColumns layoutRow addDataBody"></div>');
@@ -534,7 +545,7 @@ define(
                         sid: previewSid,
                         name: name,
                         sourcetype: this.model.input.get('ui.sourcetype'),
-                        descriptionText: _('This page lets you see how Splunk sees your data before indexing. If the events look correct and have the right timestamps, click "Next" to proceed. If not, use the options below to define proper event breaks and timestamps. If you cannot find an appropriate source type for your data, create a new one by clicking "Save As".').t()
+                        descriptionText: _('This page lets you see how the Splunk platform sees your data before indexing. If the events look correct and have the right timestamps, click "Next" to proceed. If not, use the options below to define proper event breaks and timestamps. If you cannot find an appropriate source type for your data, create a new one by clicking "Save As".').t()
                     });
 
                     this.model.previewPrimer.on('change:sourcetype', function(model, value){
@@ -567,7 +578,6 @@ define(
                         },
                         enableHeader: true,
                         enableAppBar: false,
-                        enableFooter: false,
                         model: this.model,
                         collection: this.collection,
                         history: this.history,
@@ -590,7 +600,8 @@ define(
                     }
                     var view = new InputSettingsView({
                         model: this.model,
-                        collection: this.collection
+                        collection: this.collection,
+                        isSingleInstanceCloud: this.isSingleInstanceCloud
                     });
                     $('.addDataBody').html(view.render().el);
                     this.setPageTitle(_('Add Data - Input Settings').t());
@@ -710,6 +721,16 @@ define(
                         search: 'isInternal=0 disabled=0 isVirtual=0',
                         count: -1
                     }
+                });
+            },
+
+            fetchIndexModel: function() {
+                new IndexModel().fetch().then(function() {
+                    this.isSingleInstanceCloud = false;
+                    return false;
+                }).fail(function(){
+                    this.isSingleInstanceCloud = true;
+                    return true;
                 });
             },
 

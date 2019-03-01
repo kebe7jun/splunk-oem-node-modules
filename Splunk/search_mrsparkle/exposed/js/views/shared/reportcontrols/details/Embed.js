@@ -11,6 +11,20 @@ define(
             tagName: 'span',
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
+                this.activate();
+            },
+            activate: function(options) {
+                if (this.active) {
+                    return Base.prototype.activate.call(this, options);
+                }
+                Base.prototype.activate.call(this, options);
+                if (this.el.innerHTML) {
+                    this.render();
+                }
+                return this;
+            },
+            startListening: function() {
+                this.listenTo(this.model.entry.content, 'change:embed.enabled', this.debouncedRender);
             },
             render: function() {
                 var embed = Util.normalizeBoolean(this.model.entry.content.get("embed.enabled"));

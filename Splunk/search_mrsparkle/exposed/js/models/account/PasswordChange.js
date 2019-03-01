@@ -25,9 +25,6 @@ function(
                 if (!value) {
                     return _("New password is required.").t();
                 }
-                if (this.loginModel.isAdmin() && value==="changeme") {
-                    return _("For security reasons, the new password must be different from the default one.").t();
-                }
             },
             confirmpassword: {
                 equalTo: 'newpassword',

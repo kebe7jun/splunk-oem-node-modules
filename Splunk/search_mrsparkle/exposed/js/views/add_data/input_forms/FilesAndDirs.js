@@ -106,13 +106,12 @@ define(
                     },
                     label:   _('File or Directory').t(),
                     help:   _('On Windows: c:\\apache\\apache.error.log or \\\\hostname\\apache\\apache.error.log. On Unix: /var/log or /mnt/www01/var/log.').t(),
-                    tooltip: _('This can be any file or directory accessible from this Splunk installation. Make sure Splunk has the correct permissions to access the data you want it to collect.').t()
+                    tooltip: _('This can be any file or directory accessible from this Splunk installation. Make sure the Splunk platform has the correct permissions to access the data you want it to collect.').t()
                 });
 
                 this.children.filePath = new ControlGroup({
                     className: 'file-path control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -120,13 +119,12 @@ define(
                     },
                     label:   _('File or Directory').t(),
                     help:   _('On Windows: c:\\apache\\apache.error.log or \\\\hostname\\apache\\apache.error.log. On Unix: /var/log or /mnt/www01/var/log.').t(),
-                    tooltip: _('This can be any file or directory accessible from this Splunk installation. Make sure Splunk has the correct permissions to access the data you want it to collect.').t()
+                    tooltip: _('This can be any file or directory accessible from this Splunk installation. Make sure the Splunk platform has the correct permissions to access the data you want it to collect.').t()
                 });
 
                 this.children.continuouslyMonitor = new ControlGroup({
                     className: 'continuous-montior control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'continuouslyMonitor',
                         model: this.model.input,
@@ -147,7 +145,6 @@ define(
                 this.children.whitelist = new ControlGroup({
                     className: 'whitelist control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.whitelist',
                         model: this.model.input,
@@ -155,13 +152,12 @@ define(
                         placeholder: _('optional').t()
                     },
                     label: _('Whitelist').t(),
-                    tooltip: _('Specify a regular expression that files from this source must match to be monitored by Splunk.').t()
+                    tooltip: _('Specify a regular expression that files from this source must match to be monitored by the Splunk platform.').t()
                 });
 
                 this.children.blacklist = new ControlGroup({
                     className: 'blacklist control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.blacklist',
                         model: this.model.input,
@@ -169,7 +165,7 @@ define(
                         placeholder: _('optional').t()
                     },
                     label: _('Blacklist').t(),
-                    tooltip: _('Specify a regular expression that files from this source must NOT match to be monitored by Splunk.').t()
+                    tooltip: _('Specify a regular expression that files from this source must NOT match to be monitored by the Splunk platform.').t()
                 });
 
                 /* Events */
@@ -282,36 +278,36 @@ define(
             faqListMonitor: function () {
                 return [
                     {
-                        question: _('What kinds of files can Splunk index?').t(),
-                        answer: _('Many kinds. Splunk recognizes many different file formats, and you can \
-                    configure it to recognize many more.').t()
+                        question: _('What kinds of files can the Splunk platform index?').t(),
+                        answer: _('Many kinds. The Splunk platform recognizes many different file formats, and you can ' +
+                    'configure it to recognize many more.').t()
                     },
                     {
                         question: _('I can\'t access the file that I want to index. Why?').t(),
-                        answer: _('Make sure that the file is available on your system by checking mount points or mapped \
-                    drives. Also, make sure the user account that Splunk runs as has proper permissions to \
-                    access the file.').t()
+                        answer: _('Make sure that the file is available on your system by checking mount points or mapped ' +
+                    'drives. Also, make sure the user account that the Splunk platform runs as has proper permissions to ' +
+                    'access the file.').t()
                     },
                     {
-                        question: _('How do I get remote data onto my Splunk instance?').t(),
-                        answer: _('If the data is on a machine on the same network, you can map or mount a drive to access \
-                    the data. The most popular option is to forward the data by installing a universal forwarder on \
-                    the machine that contains the data.').t()
+                        question: _('How do I get remote data onto my Splunk platform instance?').t(),
+                        answer: _('If the data is on a machine on the same network, you can map or mount a drive to access ' +
+                    'the data. The most popular option is to forward the data by installing a universal forwarder on ' +
+                    'the machine that contains the data.').t()
                     },
                     {
                         question: _('Can I monitor changes to files in addition to their content?').t(),
-                        answer: _('Yes. Best Practices suggest using native OS file auditing tools, like Audit Policy for \
-                    Windows and auditd for UNIX, and then indexing the output of those tools into Splunk.').t()
+                        answer: _('Yes. Best Practices suggest using native OS file auditing tools, like Audit Policy for ' +
+                    'Windows and auditd for UNIX, and then indexing the output of those tools into the Splunk platform.').t()
                     },
                     {
                         question: _('What is a source type?').t(),
-                        answer: _('A source type is a field that defines how Splunk handles a piece of incoming \
-                    data. The source type defines specifications for line break behavior, timestamp location, and character set.').t()
+                        answer: _('A source type is a field that defines how the Splunk platform handles a piece of incoming ' +
+                    'data. The source type defines specifications for line break behavior, timestamp location, and character set.').t()
                     },
                     {
                         question: _('How do I specify a whitelist or blacklist for a directory?').t(),
                         answer: _('Specify a ').t() + '<a class="external" href="' + arguments[0] + '" target="_blank">' + _("wildcard").t() + '</a>' +
-                        _(' or a directory in the "File or Directory" field, then click "Next." Splunk enables the "whitelist" and "blacklist" fields for editing.').t() +
+                        _(' or a directory in the "File or Directory" field, then click "Next." The Splunk platform enables the "whitelist" and "blacklist" fields for editing.').t() +
                         '<a class="external" href="' + arguments[1] + '" target="_blank">' + _("Learn More").t() + '</a>'
                     }
                 ];
@@ -320,30 +316,30 @@ define(
             faqListForwarder: function () {
                 return [
                     {
-                        question: _('What kinds of files can Splunk index?').t(),
-                        answer: _('Many kinds. Splunk recognizes many different file formats, and you can \
-                    configure it to recognize many more.').t()
+                        question: _('What kinds of files can the Splunk platform index?').t(),
+                        answer: _('Many kinds. The Splunk platform recognizes many different file formats, and you can ' +
+                    'configure it to recognize many more.').t()
                     },
                     {
                         question: _('Can I browse files on Universal Forwarders through this UI?').t(),
-                        answer: _('No, at this time there is no support for browsing remote file systems. Instead, specify \
-                    the exact path to the file or directory you wish to monitor.').t()
+                        answer: _('No, at this time there is no support for browsing remote file systems. Instead, specify ' +
+                    'the exact path to the file or directory you wish to monitor.').t()
                     },
                     {
                         question: _('Can I monitor changes to files in addition to their content?').t(),
-                        answer: _('Yes. Use native OS file auditing tools, like Audit Policy for Windows and auditd for \
-                    UNIX, and then configure the universal forwarder to monitor the file or Event Log channel that \
-                    the auditing tool writes to.').t()
+                        answer: _('Yes. Use native OS file auditing tools, like Audit Policy for Windows and auditd for ' +
+                    'UNIX, and then configure the universal forwarder to monitor the file or Event Log channel that ' +
+                    'the auditing tool writes to.').t()
                     },
                     {
                         question: _('What is a source type?').t(),
-                        answer: _('A source type is a field that defines how Splunk handles a piece of incoming \
-                    data. The source type defines specifications for line break behavior, timestamp location, and character set.').t()
+                        answer: _('A source type is a field that defines how the Splunk platform handles a piece of incoming ' +
+                    'data. The source type defines specifications for line break behavior, timestamp location, and character set.').t()
                     },
                     {
                         question: _('How do I specify a whitelist or blacklist for a directory?').t(),
                         answer: _('Specify a ').t() + '<a class="external" href="' + arguments[0] + '" target="_blank">' + _("wildcard").t() + '</a>' +
-                        _(' or a directory in the "File or Directory" field, then click "Next." Splunk displays the whitelist and blacklist fields. ').t() +
+                        _(' or a directory in the "File or Directory" field, then click "Next." The Splunk platform displays the whitelist and blacklist fields. ').t() +
                         '<a class="external" href="' + arguments[1] + '" target="_blank">' + _("Learn More").t() + '</a>'
                     }
                 ];

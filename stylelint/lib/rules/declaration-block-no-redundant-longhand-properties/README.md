@@ -24,8 +24,8 @@ This rule will only complain if you've used the longhand equivalent of *all* the
 
 This rule complains when the following shorthand properties can be used:
 
--   `padding`
 -   `margin`
+-   `padding`
 -   `background`
 -   `font`
 -   `border`
@@ -36,8 +36,33 @@ This rule complains when the following shorthand properties can be used:
 -   `border-width`
 -   `border-style`
 -   `border-color`
+-   `list-style`
 -   `border-radius`
 -   `transition`
+-   `animation`
+-   `border-block-end`
+-   `border-block-start`
+-   `border-image`
+-   `border-inline-end`
+-   `border-inline-start`
+-   `column-rule`
+-   `columns`
+-   `flex`
+-   `flex-flow`
+-   `grid`
+-   `grid-area`
+-   `grid-column`
+-   `grid-gap`
+-   `grid-row`
+-   `grid-template`
+-   `outline`
+-   `text-decoration`
+-   `text-emphasis`
+-   `mask`
+
+**Please note** that properties are considered to be redundant if they may be written shorthand according to the specification, **regardless of the behavior of any individual browser**. For example, due to Internet Explorer's implementation of Flexbox, [it may not be possible to use the shorthand property `flex`](https://github.com/philipwalton/flexbugs#flexbug-8), but the longhand form is still considered a violation. 
+
+Flexbox-related properties can be ignored using `ignoreShorthands: ["/flex-/"]` (see below).
 
 ## Options
 
@@ -69,7 +94,7 @@ a {
 ```css
 a {
   -webkit-transition-property: top;
-  -webkit-transition-duration: 2s;  
+  -webkit-transition-duration: 2s;
   -webkit-transition-timing-function: ease;
   -webkit-transition-delay: 0.5s;
 }

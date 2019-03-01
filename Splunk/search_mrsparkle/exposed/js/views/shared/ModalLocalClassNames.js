@@ -5,6 +5,7 @@ define(
         'underscore',
         'views/Base',
         'views/shared/Button',
+        'views/shared/ButtonClose',
         'views/shared/delegates/StopScrollPropagation',
         './ModalLocalClassNames.pcssm',
         'util/keyboard'
@@ -15,6 +16,7 @@ define(
             _,
             Base,
             Button,
+            ButtonClose,
             StopScrollPropagation,
             css,
             keyboard
@@ -58,7 +60,7 @@ define(
                     this.keydownEventTarget = null;
                     this.shown = false;
 
-                    this.children.closeButton = new Button({icon: 'close', style: 'pill', action: 'close-modal', title: 'close'});
+                    this.children.closeButton = new ButtonClose({action: 'close-modal'});
                     this.clearButtons(); //setup empty arrays
                     //accessors
                     this.setHeaderView(this.options.headerView);

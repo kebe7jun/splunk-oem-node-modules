@@ -22,10 +22,10 @@ define(['jquery', 'underscore', 'module', 'views/Base', 'util/string_utils'], fu
             'click a': function(e){
                 var $target = $(e.currentTarget),
                     data = {
-                        'display.page.search.tab': $target.attr('data-tab')      
+                        'display.page.search.tab': $target.attr('data-tab')
                     },
                     type = $target.attr('data-type');
-                                
+
                 if (type) {
                     data['display.general.type'] = type;
                 }
@@ -38,7 +38,7 @@ define(['jquery', 'underscore', 'module', 'views/Base', 'util/string_utils'], fu
                 this.$el.addClass('active') :
                 this.$el.removeClass('active');
         },
-        render: function() { 
+        render: function() {
             this.$el.html(this.compiledTemplate({
                 _: _,
                 tab: this.options.tab,

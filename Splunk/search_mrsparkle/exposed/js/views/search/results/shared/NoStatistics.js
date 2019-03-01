@@ -54,9 +54,7 @@ define(
                     userCanPivot = this.model.user.canPivot();
 
                 this.$el.html(this.compiledTemplate({
-                    // DCE-OEM-CHANGE
-                    // showOpenInPivot: hasFieldSummary && userCanPivot,
-                    showOpenInPivot: false,
+                    showOpenInPivot: hasFieldSummary && userCanPivot,
                     moreDocRoute: route.docHelp(this.model.application.get("root"),
                         this.model.application.get("locale"),
                         'learnmore.search.transforming')
@@ -72,12 +70,15 @@ define(
 		                    <% if(showOpenInPivot) { %>\
 		                        <div class="no-stats-column">\
 	                            	<a href="" class="no-stats-link open-in-pivot-button">\
-		                                <svg width="102px" height="102px" viewBox="0 0 102 102" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\
-		                                    <g transform="translate(-23.000000, 0.000000)">\
-		                                        <circle class="circle-main" cx="74" cy="51" r="50"></circle>\
-		                                        <path stroke-linecap="round" d="M93,60 L99,60 L89,70 L79,60 L85,60 L85,40 L74,40 L66,32 L90,32 C91.5584826,32 92.6364594,33.0748175 93,35 L93,60 Z M63,62 L74,62 L82,70 L58,70 C56.4067439,70 55.3287671,68.9242009 55,67 L55,42 L49,42 L59,32 L69,42 L63,42 L63,62 Z"></path>\
-		                                    </g>\
-		                                </svg>\
+		                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
+                                            width="62px" height="62px" viewBox="0 0 62 62" enable-background="new 0 0 62 62" xml:space="preserve">\
+                                            <path id="XMLID_685_" d="M59,0H14.9h-2h-10C1.3,0,0,1.4,0,3.1v10v2v44C0,60.7,1.3,62,2.9,62h9c1.7,0,3.1-1.3,3.1-2.9V15h44\
+                                                c1.7,0,3-1.3,3-2.9v-9C62,1.4,60.7,0,59,0z M2,3.1C2,2.5,2.4,2,2.9,2H13v11H2V3.1z M13,59.1c0,0.6-0.5,0.9-1.1,0.9h-9\
+                                                C2.4,60,2,59.6,2,59.1V15h11V59.1z M60,12.1c0,0.6-0.4,0.9-1,0.9H15V2h44c0.6,0,1,0.5,1,1.1V12.1z"/>\
+                                            <polygon id="XMLID_444_" points="26.3,55.7 21.6,51 26.3,46.3 27.7,47.7 24.4,51 27.7,54.3 "/>\
+                                            <polygon id="XMLID_447_" points="54.3,27.7 51,24.4 47.7,27.7 46.3,26.3 51,21.6 55.7,26.3 "/>\
+                                            <path id="XMLID_528_" d="M23,52v-2c15,0,27-12,27-26h2C52,39,39,52,23,52z"/>\
+                                        </svg>\
 	                                    <h3><%- _("Pivot").t() %></h3>\
 		                            </a>\
 		                             <span>\
@@ -87,17 +88,30 @@ define(
 	                        <% } %>\
 	                        <div class="no-stats-column">\
 	                            <a href="" class="no-stats-link view-fields">\
-	                            	<svg width="102px" height="102px" viewBox="0 0 102 102" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\
-	                                    <g transform="translate(-21.000000, 0.000000)">\
-	                                        <circle class="circle-main" cx="72" cy="51" r="50"></circle>\
-	                                        <g transform="translate(50.000000, 29.000000)" >\
-	                                            <rect stroke-width="2" x="0" y="0" rx="2" ry="2" width="40" height="40"></rect>\
-	                                            <rect class="stroke-thin" x="13.5" y="0" width="14" height="40"></rect>\
-	                                            <rect class="stroke-thin" x="0" y="13.5" width="40" height="14"></rect>\
-	                                        </g>\
-	                                        <path class="fill-inverse" d="M90.2590371,53.4462684 C89.6295664,53.2273902 89.4578926,52.5707554 89.686791,52.0235598 L94.8370056,39.0550236 C95.5809255,37.1945584 94.2933718,36.2916857 92.9199813,37.6596747 L79.0716265,56.127527 C78.8713404,56.6473628 79.1002388,57.1671987 79.6438725,57.3860769 L88.2275635,60.6692506 C88.7711973,60.8881289 89.028708,61.4079647 88.8284219,61.9278006 L83.6209827,75.4708922 C83.3062474,76.2643259 83.7354319,77.00304 84.5365764,77.00304 C84.8226994,77.00304 85.0802102,76.8662411 85.251884,76.6473628 L98.7855034,58.1521508 C99.2433003,57.5502356 99.0144019,56.8115215 98.270482,56.5105639 L90.2590371,53.4462684 Z" stroke-linecap="square"></path>\
-	                                    </g>\
-	                            	</svg>\
+	                            	<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
+                                        width="60px" height="62px" viewBox="0 0 60 62" enable-background="new 0 0 60 62" xml:space="preserve">\
+                                            <path id="XMLID_680_" d="M39,60H4c-1,0-2-1-2-1.9V12h10V2h31.7C44.8,2,45,3,45,3.5V30c0.7-0.1,1.3-0.1,2-0.1V3.5\
+                                            C47,1.4,45.7,0,43.7,0H10.9L0,10.5v47.6c0,2,1.9,3.9,4,3.9h39c0.3,0,0.6-0.1,1-0.2C42.2,61.5,40.5,60.9,39,60z M10,3.6V10H3.4\
+                                            L10,3.6z"/>\
+                                        <g id="XMLID_959_">\
+                                            <rect id="XMLID_958_" x="11" y="17" width="25" height="2"/>\
+                                        </g>\
+                                        <g id="XMLID_957_">\
+                                            <rect id="XMLID_956_" x="11" y="23" width="20" height="2"/>\
+                                        </g>\
+                                        <g id="XMLID_955_">\
+                                            <rect id="XMLID_954_" x="11" y="29" width="23" height="2"/>\
+                                        </g>\
+                                        <g id="XMLID_953_">\
+                                            <rect id="XMLID_952_" x="11" y="35" width="18" height="2"/>\
+                                        </g>\
+                                        <path id="XMLID_666_" d="M31.8,41H11v2h20.3C31.4,42.3,31.6,41.6,31.8,41z"/>\
+                                        <path id="XMLID_798_" d="M49.8,45.8l-2.7-1.1c-0.2-0.1-0.3-0.3-0.2-0.5l1.7-4.5c0.2-0.7-0.2-1-0.6-0.5l-4.6,6.5\
+                                            c-0.1,0.2,0,0.4,0.2,0.4l2.9,1.1c0.2,0.1,0.3,0.3,0.2,0.4l-1.7,4.7c-0.1,0.3,0,0.5,0.3,0.5c0.1,0,0.2,0,0.2-0.1l4.5-6.5\
+                                            C50.1,46.1,50,45.9,49.8,45.8z"/>\
+                                        <path id="XMLID_659_" d="M47,59c-7.2,0-13-5.8-13-13s5.8-13,13-13s13,5.8,13,13S54.2,59,47,59z M47,35.3c-5.9,0-10.7,4.8-10.7,10.7\
+                                            S41.1,56.7,47,56.7S57.7,51.9,57.7,46S52.9,35.3,47,35.3z"/>\
+                                    </svg>\
 	                            	<h3><%- _("Quick Reports").t() %></h3>\
 	                            </a>\
 	                            <span>\
@@ -106,19 +120,24 @@ define(
                             </div>\
 	                        <div class="no-stats-column">\
 			                    <a href="<%- moreDocRoute %>" class="no-stats-link" target="_blank" title="<%- _("Splunk transforming commands documentation").t() %>">\
-				                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="102px" height="102px" >\
-						                <circle class="circle-main" cx="51" cy="51" r="50"></circle>\
-						                <g transform="translate(-2.000000, 0.000000)">\
-						                    <rect stroke-width="2" x="30" y="24" rx="4" ry="4" width="46" height="56"></rect>\
-				                    		<line class="stroke-thin" stroke-miterlimit="10" x1="37.5" y1="25" x2="37.5" y2="79"/>\
-				                    		<polygon class="stroke-thin bookmark" stroke-miterlimit="10" points="56.5,24 56.5,42 60.5,37.175 64.5,42 64.5,24"/>\
-				                    		<path class="stroke-none fill" d="M48.4,50.8c-0.6,0.9-0.8,1.9-0.8,3c0,2.2,1.2,4.2,3.1,5.3c0.9,0.6,1.9,0.8,3,0.8c2.2,0,4.2-1.2,5.3-3.1\
-				                    			c0.6-0.9,0.8-1.9,0.8-3c0-2.2-1.2-4.2-3.1-5.3c-0.9-0.6-1.9-0.8-3-0.8C51.5,47.7,49.5,48.9,48.4,50.8z M60.7,58l4.5,4.5\
-				                    			c0.2,0.2,0.3,0.4,0.3,0.7s-0.1,0.5-0.3,0.7l-1.4,1.4c-0.2,0.2-0.4,0.3-0.7,0.3s-0.5-0.1-0.7-0.3l-4.5-4.5\
-				                    			c-1.3,0.8-2.7,1.2-4.2,1.2c-2.9,0-5.6-1.6-7.1-4.1c-0.7-1.3-1.1-2.6-1.1-4.1c0-2.9,1.6-5.6,4.1-7.1c1.3-0.7,2.6-1.1,4.1-1.1\
-				                    			c2.9,0,5.6,1.6,7.1,4.1c0.7,1.3,1.1,2.6,1.1,4.1C61.8,55.3,61.4,56.7,60.7,58z"/>\
-				                    	</g>\
-				                    </svg>\
+                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
+                                        width="50px" height="62px" viewBox="0 0 50 62" enable-background="new 0 0 50 62" xml:space="preserve">\
+                                        <g id="XMLID_637_">\
+                                            <path id="XMLID_638_" d="M7.9,50c-0.9,0-2.3,1-2.3,2H47v-2H7.9z"/>\
+                                        </g>\
+                                        <g id="XMLID_628_">\
+                                            <path id="XMLID_633_" d="M7.9,57c-0.9,0-2.3-1-2.3-2H47v2H7.9z"/>\
+                                        </g>\
+                                        <path id="XMLID_571_" d="M49,62H8.5C4,62,0.3,58.4,0,54h0V10C0,4.5,4.5,0,10,0h37c1.7,0,3,1.3,3,3v41c0,1.7-1.3,3-3,3H8.5\
+                                            C4.9,47,2,49.9,2,53.5S4.9,60,8.5,60H49V62z M10,2c-4.4,0-8,3.6-8,8v38c1.5-1.8,3.8-3,6.4-3v0H47c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1H10z"/>\
+                                        <g id="XMLID_897_">\
+                                            <path id="XMLID_896_" d="M13.6,31.2l-1.2-2.4l11.3-5.6v-0.3l-11.3-5.6l1.2-2.4L25,20.5c0.8,0.4,1.3,1.2,1.3,2.1v0.8\
+                                                c0,0.9-0.5,1.7-1.3,2.1L13.6,31.2z"/>\
+                                        </g>\
+                                        <g id="XMLID_895_">\
+                                            <rect id="XMLID_894_" x="26" y="29" width="13" height="2"/>\
+                                        </g>\
+                                    </svg>\
 			                        <h3><%- _("Search Commands").t() %> <i class="icon-external"></i></h3>\
 		                        </a>\
 		                        <span><%- _("Use a transforming search command, like timechart or stats, to summarize the data.").t() %></span>\

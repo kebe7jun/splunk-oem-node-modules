@@ -1,4 +1,5 @@
 import events from 'events'
+import chalk from 'chalk'
 import humanizeDuration from 'humanize-duration'
 
 const DURATION_OPTIONS = {
@@ -17,6 +18,7 @@ class SpecReporter extends events.EventEmitter {
     constructor (baseReporter, config, options = {}) {
         super()
 
+        this.chalk = chalk
         this.baseReporter = baseReporter
         this.config = config
         this.options = options
@@ -110,11 +112,11 @@ class SpecReporter extends events.EventEmitter {
             color = 'green'
             break
         case 'pending':
-            color = 'pending'
+            color = 'cyan'
             break
         case 'fail':
         case 'failing':
-            color = 'fail'
+            color = 'red'
             break
         }
 
@@ -175,7 +177,7 @@ class SpecReporter extends events.EventEmitter {
 
                 output += preface
                 output += '   ' + indent
-                output += this.baseReporter.color(this.getColor(test.state), this.getSymbol(test.state))
+                output += this.chalk[this.getColor(test.state)](this.getSymbol(test.state))
                 output += ' ' + testTitle + '\n'
             }
 
@@ -208,8 +210,8 @@ class SpecReporter extends events.EventEmitter {
             }
 
             output += preface + ' '
-            output += this.baseReporter.color(this.getColor(state), testCount)
-            output += ' ' + this.baseReporter.color(this.getColor(state), state)
+            output += this.chalk[this.getColor(state)](testCount)
+            output += ' ' + this.chalk[this.getColor(state)](state)
             output += testDuration
             output += '\n'
             displayedDuration = true
@@ -224,13 +226,13 @@ class SpecReporter extends events.EventEmitter {
         failures.forEach((test, i) => {
             const title = typeof test.parent !== 'undefined' ? test.parent + ' ' + test.title : test.title
             output += `${preface.trim()}\n`
-            output += preface + ' ' + this.baseReporter.color('error title', `${(i + 1)}) ${title}:`) + '\n'
-            output += preface + ' ' + this.baseReporter.color('error message', test.err.message) + '\n'
+            output += `${preface} ${(i + 1)}) ${title}:\n`
+            output += `${preface} ${this.chalk.red(test.err.message)}\n`
             if (test.err.stack) {
-                const stack = test.err.stack.split(/\n/g).map((l) => `${preface} ${this.baseReporter.color('error stack', l)}`).join('\n')
+                const stack = test.err.stack.split(/\n/g).map((l) => `${preface} ${this.chalk.gray(l)}`).join('\n')
                 output += `${stack}\n`
             } else {
-                output += `${preface} ${this.baseReporter.color('error stack', 'no stack available')}\n`
+                output += `${preface} ${this.chalk.gray('no stack available')}\n`
             }
         })
 
@@ -243,7 +245,7 @@ class SpecReporter extends events.EventEmitter {
         }
 
         let output = ''
-        if (results.config.host.indexOf('saucelabs.com') > -1) {
+        if (results.config.host.indexOf('saucelabs.com') > -1 || results.config.sauceConnect === true) {
             output += `${preface.trim()}\n`
             output += `${preface} Check out job at https://saucelabs.com/tests/${results.sessionID}\n`
             return output
@@ -273,9 +275,23 @@ class SpecReporter extends events.EventEmitter {
         let output = ''
 
         output += '------------------------------------------------------------------\n'
-        output += `${preface} Session ID: ${results.sessionID}\n`
+
+        /**
+         * won't be available when running multiremote tests
+         */
+        if (results.sessionID) {
+            output += `${preface} Session ID: ${results.sessionID}\n`
+        }
+
         output += `${preface} Spec: ${this.specs[cid]}\n`
-        output += `${preface} Running: ${combo}\n`
+
+        /**
+         * won't be available when running multiremote tests
+         */
+        if (combo) {
+            output += `${preface} Running: ${combo}\n`
+        }
+
         output += `${preface}\n`
         output += this.getResultList(cid, spec.suites, preface)
         output += `${preface}\n`

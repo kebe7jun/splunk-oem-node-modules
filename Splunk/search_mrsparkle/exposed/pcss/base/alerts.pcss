@@ -1,21 +1,21 @@
-/*  Splunk: Alerts */
-/*  =================== */
+/*===============================================================================================*/
+/*  SPLUNK: ALERTS                                                                               */
+/*===============================================================================================*/
 
-
-/*  Alerts Container */
-/*  ------------------------- */
+/*************************************************************************************************/
+/*  ALERTS CONTAINER                                                                             */
+/*************************************************************************************************/
 .alerts:not(.alerts-view) {
     max-height: 500px;
     overflow-y: auto;
 }
 
-
-/*  Base styles */
-/*  ------------------------- */
-
+/*************************************************************************************************/
+/*  BASE STYLES                                                                                  */
+/*************************************************************************************************/
 .alert {
-    margin-bottom: $baseLineHeight;
-    border-radius: $baseBorderRadius;
+    margin-bottom: $lineHeight;
+    border-radius: $borderRadius;
     position: relative;
     padding: 8px 35px 8px 27px;
     word-wrap: break-word;
@@ -36,7 +36,7 @@
       position: relative;
       top: -2px;
       right: -21px;
-      line-height: $baseLineHeight;
+      line-height: $lineHeight;
     }
 }
 
@@ -47,37 +47,24 @@
 }
 
 
-
-/*  Alert Levels */
-/*  ------------------------- */
-
+/*************************************************************************************************/
+/*  ALERTS LEVELS                                                                                */
+/*************************************************************************************************/
 .alert-warning  .icon-alert {
-    color: $yellow;
-    &:before {
-        content: '\ECE2';
-    }
+    color: $warningColor;
 }
 
 .alert-info .icon-alert {
-    color: $splunkGreen;
+    color: $infoColor;
     &:before {
         content: 'I';
     }
 }
 
 .alert-404,
-.alert-error {
-    .icon-alert {
-        color: $red;
-    }
-}
-
-
-/*  Lite */
-/*  ------------------------- */
-
-@if $theme == lite {
-    .alert-info .icon-alert {
-        color: $splunkLiteBlack;
+.alert-error .icon-alert {
+    color: $errorColor;
+    &:before {
+        content: '\ECE2';
     }
 }

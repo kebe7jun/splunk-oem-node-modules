@@ -54,15 +54,16 @@ define([
                         mode: modeValue
                     });
 
-                    this.additionalClasses = ' input-append delta-time-range';
+                    this.additionalClasses = 'delta-time-range';
 
                     this.options.label = _('Compared to').t();
-                    this.options.controlClass = 'controls-block';
+                    this.options.controlsLayout = 'wrap';
+
                     this.options.controls = [
                         {
                             type: 'SyntheticSelect',
                             options: {
-                                className: Control.prototype.className + ' delta-time-range-mode',
+                                additionalClassNames: ' delta-time-range-mode',
                                 model: this.modeModel,
                                 modelAttribute: 'mode',
                                 toggleClassName: 'btn',
@@ -73,7 +74,7 @@ define([
                         {
                             type: 'Text',
                             options: {
-                                className: Control.prototype.className + this.additionalClasses + ' delta-time-range-amount',
+                                additionalClassNames: this.additionalClasses + ' input-append delta-time-range-amount',
                                 model: this.timeRangeStateModel,
                                 modelAttribute: 'amount',
                                 inputClassName: this.options.inputClassName
@@ -82,7 +83,7 @@ define([
                         {
                             type: 'SyntheticSelect',
                             options: {
-                                className: Control.prototype.className + this.additionalClasses + ' delta-time-range-unit',
+                                additionalClassNames: this.additionalClasses + ' delta-time-range-unit',
                                 model: this.timeRangeStateModel,
                                 modelAttribute: 'unit',
                                 toggleClassName: 'btn',

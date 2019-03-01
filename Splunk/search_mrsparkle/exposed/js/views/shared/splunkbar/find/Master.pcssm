@@ -1,5 +1,5 @@
 .view {
-    height: 25px;
+    height: inherit;
     padding-left: 10px;
     padding-right: 20px;
 }

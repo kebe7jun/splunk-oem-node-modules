@@ -61,15 +61,15 @@ function(
 
         template: '\
             <% if(useLink) { %>\
-                <a class="<%-css.brand%>" href="<%- homeLink %>" title="splunk &gt; <%- _("listen to your data").t() %>" data-role="logo">\
+                <a class="<%-css.brand%>" href="<%- homeLink %>" title="splunk &gt; <%- _("listen to your data").t() %>" data-role="logo"><!--\
             <% } else { %>\
-                 <div class="<%-css.brand%>" data-role="logo">\
+                 <div class="<%-css.brand%>" data-role="logo"><!--\
             <% } %>\
-            <span class="<%=css.gt%>" data-role="gt"></span>\
+            --><span class="<%=css.gt%>" data-role="gt"></span><!--\
             <% if (useLiteLogo) { %>\
-                <span class="<%-css.subBrand%>" data-role="lite-logo"></span>\
+                --><span class="<%-css.subBrand%>" data-role="lite-logo"></span>\
             <% } else { %>\
-                <span class="<%-css.appText%>" data-role="app-text"><%= appName %></span>\
+                --><span class="<%-css.appText%>" data-role="app-text"><%= appName %></span>\
             <% } %>\
             <% if(useLink) { %> </a> <% } else { %> </div> <% } %>\
         '

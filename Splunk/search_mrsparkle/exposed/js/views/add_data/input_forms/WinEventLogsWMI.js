@@ -47,7 +47,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -60,7 +59,6 @@ define(
                 this.children.lookupHost = new ControlGroup({
                     className: 'lookup-host control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.lookup_host',
                         model: this.model.input,
@@ -73,7 +71,6 @@ define(
                 this.children.hosts = new ControlGroup({
                     className: 'hosts control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'hosts',
                         model: this.model.input.entry.content,
@@ -149,7 +146,6 @@ define(
                 this.children.eventLogs = new ControlGroup({
                     className: 'net-port control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.logs',
                         model: this.model.input,
@@ -174,10 +170,10 @@ define(
                 return [
                 {
                     question: _('What is the best method for monitoring event logs of remote windows machines?').t(),
-                    answer: _('If possible, use a universal forwarder rather than WMI to collect data from remote \
-                    machines. The resource load of WMI can exceed that of a Splunk universal forwarder in \
-                    many cases. In particular, consider a forwarder if you collect multiple event logs or performance \
-                    counters from each host, or from very busy hosts like domain controllers. ').t() +
+                    answer: _('If possible, use a universal forwarder rather than WMI to collect data from remote ' +
+                    'machines. The resource load of WMI can exceed that of a Splunk universal forwarder in ' +
+                    'many cases. In particular, consider a forwarder if you collect multiple event logs or performance ' +
+                    'counters from each host, or from very busy hosts like domain controllers. ').t() +
                     '<a class="external" href="' + arguments[0] + '" target="_blank">' + _("Learn More").t() + '</a>'
                 }
                 ];
@@ -187,8 +183,8 @@ define(
                 '<div class="inputform_wrapper">\
                     <p> \
                         <%= _("Configure this instance to monitor Event Log channels of remote Windows machines using the \
-                        Windows Management Instrumentation (WMI) framework. Splunk must run as an Active Directory \
-                        user with appropriate access to the remote machine. Both Splunk and the remote machine must \
+                        Windows Management Instrumentation (WMI) framework. The Splunk platform must run as an Active Directory \
+                        user with appropriate access to the remote machine. Both the Splunk platform and the remote machine must \
                         reside in the same AD domain or forest.").t() %> \
                         <a class="external" href="<%- helpLink %>" target="_blank"> <%= _("Learn More").t() %> </a>\
                     </p>\

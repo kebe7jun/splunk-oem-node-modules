@@ -35,20 +35,21 @@ define(
             FORM_HORIZONTAL_COMPLEX = '<div class="form form-horizontal form-complex"></div>',
             FORM_HORIZONTAL_JUSTIFIED = '<div class="form form-horizontal form-justified"></div>',
             FOOTER_SELECTOR = "." + FOOTER_CLASS,
-            BUTTON_CANCEL = '<a href="#" class="btn cancel modal-btn-cancel" data-dismiss="modal">' + _('Cancel').t() + '</a>',
+            BUTTON_CANCEL = '<a href="#" class="btn cancel btn-secondary modal-btn-cancel" data-dismiss="modal">' + _('Cancel').t() + '</a>',
             BUTTON_CANCEL_PRIMARY = '<a href="#" class="btn btn-primary cancel modal-btn-primary modal-btn-cancel" data-dismiss="modal">' + _('Cancel').t() + '</a>',
-            BUTTON_CLOSE_X = '<button type="button" class="' + BUTTON_CLOSE_CLASS + '" data-dismiss="modal" aria-hidden="true">&times;</button>',
-            BUTTON_CLOSE = '<a href="#" class="btn modal-btn-close" data-dismiss="modal">' + _('Close').t() + '</a>',
+            BUTTON_CLOSE_SECONDARY = '<a href="#" class="btn btn-secondary cancel modal-btn-primary modal-btn-cancel" data-dismiss="modal">' + _('Close').t() + '</a>',
+            BUTTON_CLOSE_X = '<button aria-label="' +_('Close').t() +'" type="button" class="' + BUTTON_CLOSE_CLASS + '" data-dismiss="modal">&times;</button>',
+            BUTTON_CLOSE = '<a href="#" class="btn cancel modal-btn-cancel" data-dismiss="modal">' + _('Close').t() + '</a>',
             BUTTON_BACK = '<a href="#" class="btn back modal-btn-back">' + _('Back').t() + '</a>',
-            BUTTON_SAVE = '<a href="#" class="btn btn-primary modal-btn-primary pull-right">' + _('Save').t() + '</a>',
+            BUTTON_SAVE = '<a href="#" class="btn btn-primary modal-btn-primary btn-save">' + _('Save').t() + '</a>',
             BUTTON_APPLY = '<a href="#" class="btn btn-primary modal-btn-primary pull-right">' + _('Apply').t() + '</a>',
             BUTTON_DONE = '<a href="#" class="btn btn-primary modal-btn-primary pull-right" data-dismiss="modal">' + _('Done').t() + '</a>',
             BUTTON_OK = '<a href="#" class="btn btn-primary modal-btn-primary pull-right" data-dismiss="modal">' + _('OK').t() + '</a>',
             BUTTON_MOVE = '<a href="#" class="btn btn-primary modal-btn-move modal-btn-primary">' + _('Move').t() + '</a>',
             BUTTON_DELETE = '<a href="#" class="btn btn-primary modal-btn-delete modal-btn-primary">' + _('Delete').t() + '</a>',
-            BUTTON_DELETE_SECONDARY = '<a href="#" class="btn modal-btn-delete pull-right">' + _('Delete').t() + '</a>',
+            BUTTON_DELETE_SECONDARY = '<a href="#" class="btn modal-btn-delete">' + _('Delete').t() + '</a>',
             BUTTON_NEXT = '<a href="#" class="btn btn-primary modal-btn-primary">' + _('Next').t() + '</a>',
-            BUTTON_CONTINUE = '<a href="#" class="btn modal-btn-continue pull-left" data-dismiss="modal">' + _('Continue Editing').t() + '</a>',
+            BUTTON_CONTINUE = '<a href="#" class="btn modal-btn-continue" data-dismiss="modal">' + _('Continue Editing').t() + '</a>',
             TEMPLATE = '\
                 <div class="' + HEADER_CLASS + '">\
                    ' + BUTTON_CLOSE_X + '\
@@ -67,7 +68,8 @@ define(
                 className: CLASS_NAME,
                 attributes: {
                     style: 'display:none',
-                    tabindex: -1
+                    tabindex: -1,
+                    role: 'dialog'
                 },
                 initialize: function() {
                     Base.prototype.initialize.apply(this, arguments);
@@ -199,6 +201,7 @@ define(
                 FORM_HORIZONTAL_JUSTIFIED: FORM_HORIZONTAL_JUSTIFIED,
                 BUTTON_CANCEL: BUTTON_CANCEL,
                 BUTTON_CANCEL_PRIMARY: BUTTON_CANCEL_PRIMARY,
+                BUTTON_CLOSE_SECONDARY: BUTTON_CLOSE_SECONDARY,
                 BUTTON_CLOSE: BUTTON_CLOSE,
                 BUTTON_CLOSE_X: BUTTON_CLOSE_X,
                 BUTTON_BACK: BUTTON_BACK,

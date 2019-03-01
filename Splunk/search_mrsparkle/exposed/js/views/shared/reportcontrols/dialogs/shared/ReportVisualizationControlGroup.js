@@ -35,9 +35,8 @@ define([
                 }
                 _.extend(this.options, {
                     controlType:'SyntheticRadio',
-                    controlClass: 'controls-thirdblock',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             {
                                 value: 'chartandtable',

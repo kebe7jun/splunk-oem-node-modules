@@ -62,7 +62,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -75,7 +74,6 @@ define(
                 this.children.interval = new ControlGroup({
                     className: 'interval control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.interval',
                         model: this.model.input,
@@ -160,12 +158,11 @@ define(
                 this.children.availableObjects = new ControlGroup({
                     className: 'available-objects control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.object',
                         model: this.model.input,
                         items: availableObjectsList,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         toggleClassName: 'btn',
                         placeholder: _('optional').t()
                     },
@@ -188,7 +185,6 @@ define(
                 this.children.counters = new ControlGroup({
                     className: 'counters control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.counters',
                         model: this.model.input,
@@ -202,7 +198,6 @@ define(
                 this.children.instances = new ControlGroup({
                     className: 'instances control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.instances',
                         model: this.model.input,
@@ -228,15 +223,15 @@ define(
             faqList: function() {
                 return [
                     {
-                        question: _('What Windows performance metrics can Splunk collect?').t(),
-                        answer: _('Splunk can monitor all available performance monitoring metrics on the local system if you install it as the “Local System” user.').t()
+                        question: _('What Windows performance metrics can the Splunk platform collect?').t(),
+                        answer: _('The Splunk platform can monitor all available performance monitoring metrics on the local system if you install it as the “Local System” user.').t()
                     },
                     {
                         question: _('What is the best method for monitoring performance metrics of remote windows machines?').t(),
-                        answer: _('If possible, use a universal forwarder rather than WMI to collect data from remote \
-                    machines. The resource load of WMI can exceed that of a Splunk universal forwarder in \
-                    many cases. In particular, consider a forwarder if you collect multiple event logs or performance \
-                    counters from each host, or from very busy hosts like domain controllers. ').t() +
+                        answer: _('If possible, use a universal forwarder rather than WMI to collect data from remote ' +
+                    'machines. The resource load of WMI can exceed that of a Splunk universal forwarder in ' +
+                    'many cases. In particular, consider a forwarder if you collect multiple event logs or performance ' +
+                    'counters from each host, or from very busy hosts like domain controllers. ').t() +
                             '<a class="external" href="' + arguments[0] + '" target="_blank">' + _("Learn More").t() + '</a>'
                     }
                     ];
@@ -253,7 +248,7 @@ define(
                     <% } else { %>\
                     <p> \
                     <%= _("Configure selected Splunk Universal Forwarders to monitor Windows performance \
-                    counters. The performance objects available to Splunk for monitoring depend on the \
+                    counters. The performance objects available to the Splunk platform for monitoring depend on the \
                     performance libraries installed on the system. Both Microsoft and third-party vendors provide \
                     libraries that contain performance counters. ").t() %> \
                     <a class="external" href="<%- remoteHelpLink %>" target="_blank"> <%= _("Learn More").t() %> </a> \

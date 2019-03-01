@@ -1,12 +1,25 @@
+.adddata-forwardersselect {
+    position: absolute;
+    left: $spacing;
+    right: $spacing;
+    top: $spacing;
+    bottom: $spacing;
+    margin: auto;
+    @mixin create-card;
+}
+
 .forwarders-main {
   padding: 30px;
-  width:800px;
+  width: calc(100% - 60px);
+  .learn-more-link {
+    white-space: nowrap;
+  }
 }
 
 .forwarders-title {
   font-weight: 200;
   font-size: 24px;
-  font-family: Roboto;
+  font-family: $fontFamily;
 }
 
 .forwarders-form {
@@ -26,7 +39,7 @@
   margin-top: 30px;
 }
 .no-forwarders .icon-alert {
-  color: $red;
+  color: $errorColor;
   font-size: 200%;
   margin-right: 10px;
   vertical-align: middle;
@@ -47,6 +60,7 @@
 #group-fwders-placeholder select {
   width: 310px;
   margin-left: 10px;
+  -webkit-touch-callout: none;
   user-select: none;
 }
 

@@ -123,7 +123,8 @@ define(
                     this.deferredAlertActionUIsCollection = this.collection.alertActionUIs.fetch({
                         data: {
                             app: this.model.application.get("app"),
-                            owner: this.model.application.get("owner")
+                            owner: this.model.application.get("owner"),
+                            count: 1000
                         }
                     });
 

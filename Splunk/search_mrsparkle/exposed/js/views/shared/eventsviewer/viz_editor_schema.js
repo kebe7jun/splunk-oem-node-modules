@@ -22,9 +22,6 @@ define([
                     name: 'display.events.type',
                     label: _('Display').t(),
                     defaultValue: 'list',
-                    groupOptions: {
-                        controlClass: 'controls-thirdblock'
-                    },
                     control: SyntheticRadioControl,
                     controlOptions: {
                         items: [
@@ -38,9 +35,6 @@ define([
                     name: 'display.events.rowNumbers',
                     label: _('Row Numbers').t(),
                     defaultValue: '0',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl,
                     visibleWhen: function(reportContent) {
                         return reportContent.get('display.events.type') !== 'raw';
@@ -50,9 +44,6 @@ define([
                     name: 'display.events.list.wrap',
                     label: _('Wrap Results').t(),
                     defaultValue: '1',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl,
                     visibleWhen: function(reportContent) {
                         return reportContent.get('display.events.type') === 'list';
@@ -62,9 +53,6 @@ define([
                     name: 'display.events.table.wrap',
                     label: _('Wrap Results').t(),
                     defaultValue: '1',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl,
                     visibleWhen: function(reportContent) {
                         return reportContent.get('display.events.type') === 'table';
@@ -74,9 +62,6 @@ define([
                     name: 'display.events.maxLines',
                     label: _('Max Lines').t(),
                     defaultValue: '5',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: SyntheticSelectControl,
                     controlOptions: {
                         items: [
@@ -96,9 +81,6 @@ define([
                     name: 'display.events.raw.drilldown',
                     label: _('Click Selection').t(),
                     defaultValue: 'full',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: SyntheticSelectControl,
                     controlOptions: {
                         items: [
@@ -117,9 +99,6 @@ define([
                     name: 'display.events.list.drilldown',
                     label: _('Click Selection').t(),
                     defaultValue: 'full',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: SyntheticSelectControl,
                     controlOptions: {
                         items: [
@@ -138,9 +117,6 @@ define([
                     name: 'display.prefs.events.count',
                     label: _('Rows Per Page').t(),
                     defaultValue: '10',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: TextControl,
                     validation: {
                         pattern: 'digits',

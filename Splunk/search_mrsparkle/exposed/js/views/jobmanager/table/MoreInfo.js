@@ -36,26 +36,26 @@ define(
                     earliestTimeISO = this.model.job.entry.content.get("earliestTime"),
                     isRealTime = this.model.job.isRealtime(),
                     latestTimeISO = this.model.job.latestTimeSafe(),
-                    linkData = { 
+                    linkData = {
                         data: {
-                            sid: this.model.job.id 
+                            sid: this.model.job.id
                         }
                     },
                     search;
-                
+
                 if (savedSearchId) {
                     linkData.data.s = savedSearchId;
                     search = this.model.job.entry.content.get('label');
                 } else {
                     search = splunkUtil.stripLeadingSearchCommand(this.model.job.getSearch());
                 }
-                
+
                 var currentAppName = this.model.application.get('app'),
                     alternateAppName = (currentAppName !== 'system' && currentAppName !== 'launcher') ? currentAppName : 'search',
                     jobAppName = this.model.job.entry.acl.get('app'),
                     jobApp = _.find(this.collection.apps.models, function(app) {return app.entry.get('name') === jobAppName;}),
                     openInAppName = (jobApp && jobApp.entry.content.get('visible')) ? jobAppName : alternateAppName;
-                                
+
                 this.$el.html(this.compiledTemplate({
                     link: route.search(this.model.application.get('root'), this.model.application.get('locale'), openInAppName, linkData),
                     search: search,
@@ -68,15 +68,15 @@ define(
                     savedSearchId: savedSearchId,
                     i18n: i18n
                 }));
-                
+
                 return this;
             },
-            
+
             template: '\
                 <td class="details" colspan="<%= cols %>">\
                     <% if (search) { %>\
                         <a href="<%= link %>" class="search<% if (savedSearchId) { %> saved-search<% }%>"><%- search %></a>\
-                        <span class="timerange">\
+                        <span class="timerange" tabindex="0">\
                             <% if (isRealTime) { %>\
                                 <%- _("[real-time]").t() %>\
                             <% } else if (earliest_date) { %>\

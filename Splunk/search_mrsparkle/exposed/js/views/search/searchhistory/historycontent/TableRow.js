@@ -30,7 +30,8 @@ define(
                 BaseView.prototype.initialize.apply(this, arguments);
                 this.nameSpace = this.uniqueNS();
                 this.$el.addClass(this.options.isAccordion  ? 'more-info' : 'expand');
-                if (this.options.isAccordion ) {
+                this.$el.addClass(this.options.striped ? 'even' : 'odd');
+                if (this.options.isAccordion) {
                     this.$el.hide();
                 }
                 this.activate();
@@ -145,11 +146,10 @@ define(
                         <span><%-time%></span>\
                     </td>\
                 <% } else { %>\
-                    <td></td>\
-                    <td></td>\
+                    <td class="filler-cell"></td>\
+                    <td class="filler-cell"></td>\
                 <% } %>\
             '
         });
     }
 );
-

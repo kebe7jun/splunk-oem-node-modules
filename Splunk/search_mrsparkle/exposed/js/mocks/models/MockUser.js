@@ -2,7 +2,12 @@
  * @author jszeto
  * @date 9/4/13
  */
-define(['mocks/models/MockSplunkD', 'mocks/models/MockServerInfo'], function(MockSplunkD, MockServerInfo) {
+define([
+    'mocks/models/MockSplunkD',
+    'mocks/models/MockServerInfo',
+    'models/services/authentication/User'
+],
+function(MockSplunkD, MockServerInfo, UserModel) {
 
     return MockSplunkD.extend({
 
@@ -46,6 +51,10 @@ define(['mocks/models/MockSplunkD', 'mocks/models/MockServerInfo'], function(Moc
         },
 
         canEmbed: function() {
+            return true;
+        },
+
+        canEditIndexes: function() {
             return true;
         },
 
@@ -122,7 +131,7 @@ define(['mocks/models/MockSplunkD', 'mocks/models/MockServerInfo'], function(Moc
         },
 
         getSearchSyntaxHighlighting: function() {
-            return true;
+            return UserModel.EDITOR_THEMES.DEFAULT;
         },
 
         canUseAlerts: function() {
@@ -138,7 +147,11 @@ define(['mocks/models/MockSplunkD', 'mocks/models/MockServerInfo'], function(Moc
         },
 
         getSearchAssistant: function() {
-            return '';
+            return UserModel.SEARCH_ASSISTANT.COMPACT;
+        },
+        
+        canUseAdvancedEditor: function() {
+            return true;
         },
 
         canEditSearchScheduleWindow: function() {

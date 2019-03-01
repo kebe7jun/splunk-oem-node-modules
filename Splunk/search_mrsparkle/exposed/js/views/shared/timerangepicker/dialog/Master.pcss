@@ -8,240 +8,171 @@
 
 */
 .shared-timerangepicker-dialog {
-	width: 640px;
+    width: 650px;
+    border-radius: $containerInnerBorderRadius;
 
-	td {
-		vertical-align: top;
-	}
-
-    .mdy-input {
-        width: 65px;
-    }
-
-    .hms-input {
-        width: 70px;
-    }
-}
-
-/*  time range menu? */
-.timeRangeMenu, .trpCustomDateTime {
-	display: none;
-}
-
-/*  help block? FIXME: this should use control-feedback */
-.help-block-timestamp {
-	min-height: 1em;
-	line-height: 1em;
-	padding: 3px;
-	margin-top: -5px;
-	margin-right: 15px;
-	border-radius:3px;
-	background-color: $grayLighter;
-}
-
-.timerangepicker-range-type {
-	margin-right: 15px;
-	float: left;
-}
-
-.timerangepicker-range-type .btn {
-	min-width: 65px;
-}
-
-/* To Do: This is specific to the Alert Editor should be moved. */
-.btn.timerange-control > .icon-triangle-right-small {
-  padding-left: 5px;
-}
-
-
-input.timerangepicker-earliest-date {
-	margin-right: 0;
-}
-
-input.timerangepicker-real-time-earliest-time,
-input.timerangepicker-relative-earliest-time {
-	margin-right: 0;
-}
-
-.timerangepicker-realtime_range_type,
-.timerangepicker-relative_range_type {
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 25px;
-}
-
-.form-inline .radio {
-	line-height: 18px;
-	padding-top:5px;
-	padding-bottom: 5px;
-	display: block;
-}
-
-.form-inline .radio + .radio {
-	padding-top:0;
-}
-
-.shared-timerangepicker-dialog-daterange-afterdate input {
-    margin-right: 5px;
-}
-
-input.date-before-time {
-	margin-right: 5px
-}
-
-.relative-time-container,
-.real-time-container,
-.advanced-container {
-    > .timeinput.latest {
-        margin-left: 20px;
-    }
-
-    > .apply {
-        margin-top: 18px;
-        margin-left: 20px;
-    }
-
-    .control-label {
-        margin-bottom: 2px;
-    }
-}
-
-/*  PRESETS ACCORDIAN */
-.presets-container {
-    .presets-group {
-        float: left;
-        width: 130px;
-    }
-
-    .presets-group + .presets-group {
-        margin-left: 10px;
-    }
-
-    .presets-divider-wrap {
-        float: left;
-        margin: 10px;
-    }
-
-    .presets-divider {
-        position: absolute;
-        top: 10px;
-        bottom: 10px;
-        border-right: 1px dotted $borderColor;
-    }
-
-    .presets-group li {
-        color: $textGray;
-        padding-left: 20px;
-        text-indent: -20px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-
-/*  RELATIVE ACCORDIAN and REALTIME ACCORDIAN */
-.relative-time-container, .real-time-container {
-
-    input , .uneditable-input {
-        width: 4em;
-    }
-
-    /*  reset other input types */
-    input[type="file"],
-    input[type="image"],
-    input[type="submit"],
-    input[type="reset"],
-    input[type="button"],
-    input[type="radio"],
-    input[type="checkbox"]
-    {
-        width: auto;
-    }
-
-    .col-1, .col-2, .apply {
-        float: left;
-    }
-
-    /*  i18n might need some magic for long input append btn txt */
-    .input-append .btn  {
-        max-width: 8em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-
-/*  RELATIVE ACCORDIAN */
-.relative-time-container {
-    .help-block-timestamp {
-        margin-top: -3px;
-    }
-
-    input[type="radio"] {
-        margin-top: 0px;
-    }
-
-    > .timeinput.latest {
-        margin-left: 40px;
-    }
-}
-
-/*  DATE RANGE and DATE & TIME RANGE ACCORDIAN */
-.date-range-container {
-    overflow: hidden;
-
-    .shared-controls-datecontrol {
-        display: inline-block;
-    }
-
-    .time-between-dates {
-        @mixin clearfix;
-        float: left;
-        margin-right: 15px;
-
-        .col-1, .col-2 {
-            float: left;
+    .accordion-group {
+        &:first-child > .accordion-heading > .accordion-toggle {
+            border-top-left-radius: $containerInnerBorderRadius;
+            border-top-right-radius: $containerInnerBorderRadius;
         }
+        &:last-child {
+            margin-bottom: 0;
+
+            &:not(.active) > .accordion-heading > .accordion-toggle, > .accordion-body {
+                border-bottom-left-radius: $containerInnerBorderRadius;
+                border-bottom-right-radius: $containerInnerBorderRadius;
+            }
+        }
+    }
+    .presets-container {
+        display: flex;
+
+        .presets-group {
+            margin-right: $spacing;
+
+            li {
+                color: $timeRangePresetCategoryNameColor;
+                padding: 0 2px 0 calc($spacing + 4);
+                margin-left: -4px;
+                border-radius: $borderRadius;
+                text-indent: -$spacing;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                &.section-heading-small {
+                    margin-left: -2px;
+                }
+                > a {
+                    padding: 0 2px;
+                    border-radius: $borderRadius;
+                }
+            }
+        }
+    }
+
+    .control-group-container {
+        display: flex;
+
+        .radio {
+            @mixin radio-class-button-overlay;
+        }
+    }
+    .col-1, .col-2 {
+        width: 50%;
+        margin-bottom: 0;
+        box-sizing: border-box;
+    }
+    .col-1 {
+        padding-right: $spacingHalf;
+    }
+    .col-2 {
+        padding-left: $spacingHalf;
+    }
+
+    .input-append {
+        display: flex;
+        margin-bottom: $spacingQuarter;
 
         input {
-            margin-right: 0px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: 0;
+
+            &:focus {
+              position: relative;
+            }
         }
 
-        .time-hms > span {
-            margin-left: 0.5em;
-        }
-
-        .help-block {
-            display: block;
-            /* fix for SPL-103945 */
-            word-wrap: normal;
-        }
-
-        .help-block.up-to-now {
-            float: left;
-            margin:0px 4px;
-        }
-
-        .control-label {
-            float: left;
-            margin-left: 1em;
-            margin-right: 1em;
+        .btn-group .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
         }
     }
-}
 
-/*  ADVANCED ACCORDIAN */
-.advanced-container {
-    .control-group{
-        width: 50%;
+    input[type=text] {
+        margin-bottom: 2px;
+    }
+
+    .uneditable-input, .timeinput .time-advanced input[type=text]{
+        width: 100%;
+    }
+
+    .timerangepicker-range-type {
         float: left;
+        margin-right: $spacing;
     }
 
-    > .btn-documentation {
-        margin-left: 20px;
-    }
-}
+    .date-range-container .time-between-dates {
+        display: flex;
 
-/*  TODO: wrap this */
-.btn-documentation {
-  line-height:22px;
-  white-space: nowrap;
+        input {
+            margin-bottom: 0;
+            width: 100%;
+        }
+        .control-label {
+            line-height: 30px;
+        }
+        &.only-latest > .latest_picker {
+            padding-left: 0;
+        }
+        > .col-1, > .col-2 {
+            flex: 1;
+            width: 100%;
+
+            .timeinput {
+                display: block;
+				
+				.time-container {
+					display: flex;
+					
+					.time-mdy, .time-hms {
+	                    flex: 1;
+	                }
+	                .time-mdy {
+	                    margin-right: 2px;
+	                }
+	                .time-hms {
+	                    margin-left: 2px;
+	                }
+				}
+            }
+        }
+        .help-block {
+            margin: 0;
+            line-height: 30px;
+        }
+        input[type=text], span {
+            + .help-block {
+                line-height: 24px;
+            }
+        }
+    }
+
+    .help-block-timestamp {
+        min-height: 1em;
+        line-height: 1em;
+        padding: 3px;
+        border-radius: $borderRadius;
+        background-color: $timeRangeTimestampPreviewBackgroundColor;
+        margin: 3px 0 $spacingHalf !important;
+    }
+
+    .apply-button-wrapper {
+        clear:both;
+        text-align: right;
+        padding-bottom: $spacing;
+
+        .btn-documentation {
+            margin-right: $spacingHalf;
+            padding: 2px 4px;
+            border-radius: $borderRadius;
+        }
+        &:last-child {
+            padding-bottom: 0;
+        }
+        .apply.btn {
+            min-width: 100px;
+        }
+    }
 }

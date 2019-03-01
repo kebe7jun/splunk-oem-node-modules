@@ -51,11 +51,15 @@ define(
                         application: this.model.application,
                         session: this.model.session,
                         mfaStatus: this.model.mfaStatus,
-                        duo: this.model.duo
+                        duo: this.model.duo,
+                        rsa: this.model.rsa
                     }
                 });
                 this.listenTo(this.model.login, 'error', function() {
-                    this.shakeIt();
+                    // only shakeIt when the error is cause by invalid username or password
+                    if (this.model.login.error.get('status') === 1) {
+                        this.shakeIt();
+                    }
                     if (this.$el.is(':visible') && this.$('input[type=submit]').is(':focus')) {
                         this.children.username.focus();
                     }
@@ -107,7 +111,7 @@ define(
                 this.$el.html(html);
                 this.children.username.render().insertBefore(this.$('input[type=submit]'));
                 this.children.password.render().insertBefore(this.$('input[type=submit]'));
-                this.children.firstTimeModal.render().insertBefore(this.$('fieldset'));
+                this.children.firstTimeModal.render().insertAfter(this.$('fieldset'));
                 if (this.$('.login-content').length) {
                     this.children.error.render().insertBefore(this.$('.login-content'));
                 } else {

@@ -44,7 +44,7 @@ define(
                 this.children.row = new ControlGroup({
                     controlType: 'SyntheticRadio',
                     size: 'small',
-                    controlClass: 'controls-fill',
+
                     controlOptions: {
                         modelAttribute: 'order',
                         model: this.model,

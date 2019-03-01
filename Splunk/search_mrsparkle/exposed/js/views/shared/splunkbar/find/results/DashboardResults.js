@@ -4,20 +4,23 @@ define(
         'jquery',
         'module',
         'views/shared/splunkbar/find/results/BaseResults',
-        'uri/route'
+        'uri/route',
+        'splunk.util'
     ],
     function(
         _,
         $,
         module,
         BaseResultView,
-        route
+        route,
+        splunkUtils
     ){
         return BaseResultView.extend({
             className: 'dashboardResults',
             render: function() {
                 var html = this.compiledTemplate({
                     _: _,
+                    splunkUtils: splunkUtils,
                     collection: this.collection.dashboards || [],
                     className: "dashboards",
                     css: this.css,

@@ -59,7 +59,8 @@ define( ['module',
                 this.children.paginator = new Paginator(
                     {
                         model: this.model.paginator, 
-                        collection: this.collection.serverClasses
+                        collection: this.collection.serverClasses,
+						countLabel: _('Server Classes').t()
                     }
                 );
 

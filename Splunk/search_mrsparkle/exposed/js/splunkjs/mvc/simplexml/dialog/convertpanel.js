@@ -36,7 +36,6 @@ define(function(require, exports, module) {
 
             this.children.panelName = new ControlGroup({
                 label: _("ID").t(),
-                controlClass: 'controls-block',
                 controls: this.children.panelNameTextControl,
                 tooltip: _('The ID is used as the filename on disk. Cannot be changed later.').t(),
                 help: _('Can only contain letters, numbers and underscores.').t()
@@ -45,9 +44,8 @@ define(function(require, exports, module) {
             this.children.panelPerm = new ControlGroup({
                 label: _("Permissions").t(),
                 controlType: 'SyntheticRadio',
-                controlClass: 'controls-halfblock',
                 controlOptions: {
-                    className: "btn-group btn-group-2",
+                    additionalClassNames: "btn-group-2",
                     items: [
                         {value: "private", label: _("Private").t()},
                         {value: "shared", label: (this.model.user.canUseApps()) ? _('Shared in App').t() : _('Shared').t()}
@@ -63,10 +61,10 @@ define(function(require, exports, module) {
             this.children.flashMessage.render().prependTo(this.$(Modal.BODY_SELECTOR));
             this.$(Modal.BODY_SELECTOR).append(Modal.FORM_HORIZONTAL);
             var $form = this.$(Modal.BODY_FORM_SELECTOR);
-            
+
             this.children.panelName.render().appendTo($form);
             this.children.panelPerm.render().appendTo($form);
-            
+
             this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL);
             this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_SAVE);
 
@@ -84,7 +82,7 @@ define(function(require, exports, module) {
         createReferencePanel: function() {
             var dfd = $.Deferred();
             var structure = this.model.inmem.get('panelStructure');
-            
+
             var structureMap = Dashboard.model.view.getCurrentStructureMap();
             var panelXML = Serializer.serializePanelStructure(structure, { tokens: true, structureMap: structureMap });
             var panelXMLStr = XML.serializeDashboardXML(panelXML, true);

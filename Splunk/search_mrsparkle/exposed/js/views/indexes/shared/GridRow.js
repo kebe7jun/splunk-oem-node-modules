@@ -61,7 +61,10 @@ define([
                     this.model.controller.trigger("enableEntity", this.model.entity);
                     e.preventDefault();
                 };
-
+                events['click .retrieve-action'] = function(e) {
+                    e.preventDefault();
+                    this.model.controller.trigger("restoreEntity", this.model.entity);
+                };
                 return events;
             })(),
 
@@ -118,6 +121,17 @@ define([
             formatToRelativeTime: function(isoTime) {
                 return timeUtils.convertToRelativeTime(this.formatToEpochTime(isoTime));
             },
+            formatBucketLocationLink: function(bucketLocation) {
+                var archiverApp = this.collection.appLocals.isArchiverAppInstalled();
+                if (archiverApp) {
+                    return route.page(this.model.application.get('root'),
+                                      this.model.application.get('locale'),
+                                      archiverApp.entry.attributes.name,
+                                      'self-storage-locations',
+                                      {'data': {'show': bucketLocation}
+                                      });
+                }
+            },
             formatDataType: function(dataType) {
                 switch (dataType) {
                     case 'event':
@@ -128,7 +142,15 @@ define([
                         return _("Unknown").t();
                 }
             },
-
+            getStorageType: function() {
+                if (this.model.entity.entry.content.get('archiver.selfStorageProvider')) {
+                    return _('Self Storage').t();
+                }
+                if (this.model.entity.entry.content.get('archiver.coldStorageProvider')) {
+                    return _('Splunk Archive').t();
+                }
+                return '';
+            },
             render: function () {
                 this.children.checkBoxSelected.detach();
 
@@ -136,6 +158,10 @@ define([
                                                  this.model.application.get('locale'),
                                                  this.model.application.get('app'),
                                                  {});
+                              
+                var bucketLocation = this.model.entity.entry.content.get("archiver.selfStorageBucket");
+                var bucketLocationLink = this.formatBucketLocationLink(bucketLocation);
+                
                 var html = _(this.template).template({
                     _: _,
                     model: {
@@ -143,11 +169,18 @@ define([
                         user: this.model.user
                     },
                     archiveLink: archiveLink,
+                    archiverAppInstalled: this.collection.appLocals.isArchiverAppInstalled(),
+                    archiveBucketExists: bucketLocation,
+                    bucketLocationLink: bucketLocationLink,
                     editLink: splunkUtils.sprintf('indexes/%s?uri=%s&ns=%s&action=edit', this.model.entity.entry.get('name'), encodeURIComponent(this.model.entity.id), this.model.entity.entry.acl.get('app')),
                     user: this.model.user,
                     isExpanded: this.isExpanded,
+                    isDataArchiveEnabled: _.isFunction(this.collection.entities.isDataArchiveEnabled) && 
+                                            this.collection.entities.isDataArchiveEnabled(),
+                    hasArchive: !!this.model.entity.entry.content.get('archiver.coldStorageProvider'),
                     isEnabled: this.isEnabled(),
                     isInternal: this.isInternal(),
+                    storageType: this.getStorageType(),
                     formatNumbersUtils: formatNumbersUtils,
                     timeUtils: timeUtils,
                     splunkUtil: splunkUtils,
@@ -217,15 +250,15 @@ define([
                     }
                 }, {
                     id: 'frozenTimePeriodInSecs',
-                    title: _('Retention').t(),
+                    title: _('Searchable Retention').t(),
                     visible: function() {
-                        return this.model.controller.get('mode') === 'cloud';
+                        return (this.model.controller.get('mode') === 'cloud');
                     }
                 }, {
-                    id: 'archive.provider',
-                    title: _('Archive Destination').t(),
+                    id: 'storageType',
+                    title: _('Storage Type').t(),
                     visible: function() {
-                        return ((this.model.controller.get('mode') === 'cloud') && this.model.user.canViewArchives());
+                        return ((this.model.controller.get('mode') === 'cloud') && this.collection.appLocalsUnfilteredAll.findByEntryName('dynamic-data-self-storage-app'));
                     }
                 }
             ]

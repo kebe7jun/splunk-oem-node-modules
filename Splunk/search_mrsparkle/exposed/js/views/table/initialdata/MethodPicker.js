@@ -25,53 +25,58 @@ define(
 
             initialize: function() {
                 BaseView.prototype.initialize.apply(this, arguments);
+            },
 
-                this.children.initialDataTabs = new ControlGroup({
-                    controlType: 'SyntheticRadio',
-                    additionalClassNames: ['method-options'],
-                    controlOptions: {
-                        model: this.model.command,
-                        modelAttribute: 'selectedMethod',
-                        showAsButtonGroup: false,
-                        linkClassName: 'method-option',
-                        items: [
-                            {
-                                svg: IndexesAndSourcetypesSVG,
-                                label: _('Indexes & Source Types').t(),
-                                value: InitialDataCommand.METHODS.INDEXES_AND_SOURCETYPES
-                            },
-                            {
-                                svg: DatasetSVG,
-                                label: _('Existing Datasets').t(),
-                                value: InitialDataCommand.METHODS.DATASET
-                            },
-                            {
-                                svg: SearchSVG,
-                                label: _('Search (Advanced)').t(),
-                                value: InitialDataCommand.METHODS.SEARCH
-                            }
-                        ]
-                    }
-                });
+            events: {
+                'click .methodIndexes a': function (e) {
+                    e.preventDefault();
+                    this.model.command.set('selectedMethod', InitialDataCommand.METHODS.INDEXES_AND_SOURCETYPES);
+                },
+
+                'click .methodDataset a': function(e) {
+                    e.preventDefault();
+                    this.model.command.set('selectedMethod', InitialDataCommand.METHODS.DATASET);
+                },
+
+                'click .methodSearch a': function(e) {
+                    e.preventDefault();
+                    this.model.command.set('selectedMethod', InitialDataCommand.METHODS.SEARCH);
+                }
+            },
+
+            updateTabs: function() {
+                var current = this.model.command.get('selectedMethod');
+                var methods = InitialDataCommand.METHODS;
+                this.$('.nav-tabs li').removeClass('active');
+                this.$('.methodIndexes')[current === methods.INDEXES_AND_SOURCETYPES ? 'addClass': 'removeClass']('active');
+                this.$('.methodDataset')[current === methods.DATASET ? 'addClass': 'removeClass']('active');
+                this.$('.methodSearch')[current === methods.SEARCH ? 'addClass': 'removeClass']('active');
+            },
+
+            startListening: function(options) {
+                this.listenTo(this.model.command, 'change:selectedMethod', this.updateTabs);
             },
 
             render: function() {
                 if (!this.$el.html()) {
                     this.$el.html(this.compiledTemplate({
-                        _: _
+                        _: _,
+                        IndexesAndSourcetypesSVG: IndexesAndSourcetypesSVG,
+                        DatasetSVG: DatasetSVG,
+                        SearchSVG: SearchSVG
                     }));
-                    this.children.initialDataTabs.activate({ deep: true }).render().appendTo(this.$el);
                 }
+                this.updateTabs();
 
                 return this;
             },
 
             template: '\
-                <div class="select-method">\
-                    <h3>\
-                        <%- _("Select one:").t() %>\
-                    </h3>\
-                </div>\
+                <ul class="nav nav-tabs">\
+                    <li class="methodIndexes"><a href="#"><%= IndexesAndSourcetypesSVG %><div><%- _(\'Indexes & Source Types\').t() %></div></a></li>\
+                    <li class="methodDataset"><a href="#"><%= DatasetSVG %><div><%- _(\'Existing Datasets\').t() %></div></a></li>\
+                    <li class="methodSearch"><a href="#"><%= SearchSVG %><div><%- _(\'Search (Advanced)\').t() %></div></a></li>\
+                </ul>\
             '
         });
     }

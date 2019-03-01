@@ -152,7 +152,7 @@ function (
 
             if (nodeName === 'collection') {
                 obj = {
-                    label: $node.attr('label'),
+                    label: _($node.attr('label')).t(),
                     uri: '#'
                 };
                 // recursion warning!
@@ -249,7 +249,7 @@ function (
                         href = splunk_util.make_url(href);
                     }
                     obj = {
-                        label: $node.text(),
+                        label: _($node.text()).t(),
                         uri: href,
                         viewName: $node.attr('name') || ''
                     };

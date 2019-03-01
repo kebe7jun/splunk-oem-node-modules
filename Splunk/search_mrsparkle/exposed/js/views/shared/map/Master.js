@@ -41,6 +41,7 @@ define(function(require, exports, module) {
     var NumericLegend = require("splunk/mapping/controls/NumericalLegend");
     var GeneralUtils = require("util/general_utils");
     var CategoricalVisualLegend = require("splunk/mapping/controls/CategoricalVisualLegend");
+    var themeUtils = require('util/theme_utils');
 
     var css = require("./Master.pcss");
 
@@ -69,7 +70,7 @@ define(function(require, exports, module) {
         "markerLayer.markerMaxSize": "50",
         "drilldown": "all",
         "choroplethLayer.colorMode": "auto",
-        "choroplethLayer.maximumColor": "0xDB5800",
+        "choroplethLayer.maximumColor": "0xAF575A",
         "choroplethLayer.minimumColor": "0x2F25BA",
         "choroplethLayer.neutralPoint": "0",
         "choroplethLayer.shapeOpacity": "0.75",
@@ -77,6 +78,12 @@ define(function(require, exports, module) {
         "choroplethLayer.showBorder": "1",
         "layerType": "marker"
     };
+    var _THEMABLE_PROPERTY_VALUES = themeUtils.getCurrentTheme() === 'dark' ? {
+        "tileLayer.url": "/splunkd/__raw/services/mbtiles/splunk-tiles-dark/{z}/{x}/{y}"
+    } : {
+        "tileLayer.url": "/splunkd/__raw/services/mbtiles/splunk-tiles/{z}/{x}/{y}"
+    };
+    var _THEMED_DEFAULT_PROPERTY_VALUES = _.extend({}, _DEFAULT_PROPERTY_VALUES, _THEMABLE_PROPERTY_VALUES);
 
     var _R_PROPERTY_PREFIX = /^display\.visualizations\.mapping\./;
 
@@ -362,9 +369,8 @@ define(function(require, exports, module) {
                 if (curValues.hasOwnProperty(p))
                     newValues[p] = null;
             }
-
             // copy default property values
-            var defaultValues = _DEFAULT_PROPERTY_VALUES;
+            var defaultValues = _THEMED_DEFAULT_PROPERTY_VALUES;
             for (p in defaultValues) {
                 if (defaultValues.hasOwnProperty(p))
                     newValues[p] = defaultValues[p];
@@ -419,7 +425,6 @@ define(function(require, exports, module) {
                 this._choroplethLayer.set('sharedMinimum', -Infinity);
                 this._choroplethLayer.set('sharedMaximum', Infinity);
             }
-
             // apply remaining properties
             // the viewport properties haven't changed, so they will be ignored by _setMapProperty
             for (p in newValues) {
@@ -904,7 +909,7 @@ define(function(require, exports, module) {
         }
 
     }, {
-        DEFAULT_PROPERTY_VALUES: _DEFAULT_PROPERTY_VALUES
+        DEFAULT_PROPERTY_VALUES: _THEMED_DEFAULT_PROPERTY_VALUES
     });
 
 });

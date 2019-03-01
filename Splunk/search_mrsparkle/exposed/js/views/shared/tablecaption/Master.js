@@ -5,7 +5,7 @@ define(
         'views/Base',
         'views/shared/CollectionPaginator',
         'views/shared/CollectionCount',
-        'views/shared/controls/ControlGroup',
+        'views/shared/controls/SyntheticRadioControl',
         'views/shared/FindInput',
         'views/shared/delegates/Dock'
     ],
@@ -15,7 +15,7 @@ define(
         BaseView,
         PaginatorView,
         CountView,
-        ControlGroup,
+        SyntheticRadioView,
         InputView,
         Dock
     )
@@ -60,13 +60,10 @@ define(
                         ];
                     }
 
-                    this.children.filterButtons = new ControlGroup({
-                        controlType: 'SyntheticRadio',
-                        controlOptions: {
-                            modelAttribute: 'display.prefs.aclFilter',
-                            model: this.model.uiPrefs.entry.content,
-                            items: filterButtons
-                         }
+                    this.children.filterButtons = new SyntheticRadioView({
+                        modelAttribute: 'display.prefs.aclFilter',
+                        model: this.model.uiPrefs.entry.content,
+                        items: filterButtons
                     });
                 }
 
@@ -84,16 +81,13 @@ define(
                 }
 
                 if (this.options.showListModeButtons) {
-                    this.children.listModeButtons = new ControlGroup({
-                        controlType: 'SyntheticRadio',
-                        controlOptions: {
-                            modelAttribute: 'display.prefs.listMode',
-                            model: this.model.uiPrefs.entry.content,
-                            items: [
-                                { icon: 'tiles', iconSize: 'icon-small', tooltip: _('Tiles').t(), value: 'tiles' },
-                                { icon: 'rows', iconSize: 'icon-small', tooltip: _('Table').t(), value: 'table' }
-                            ]
-                        }
+                    this.children.listModeButtons = new SyntheticRadioView({
+                        modelAttribute: 'display.prefs.listMode',
+                        model: this.model.uiPrefs.entry.content,
+                        items: [
+                            { icon: 'tiles', iconSize: 'icon-small', tooltip: _('Tiles').t(), value: 'tiles' },
+                            { icon: 'rows', iconSize: 'icon-small', tooltip: _('Table').t(), value: 'table' }
+                        ]
                     });
                 }
             },

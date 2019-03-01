@@ -10,6 +10,10 @@ var _events = require('events');
 
 var _events2 = _interopRequireDefault(_events);
 
+var _chalk = require('chalk');
+
+var _chalk2 = _interopRequireDefault(_chalk);
+
 var _humanizeDuration = require('humanize-duration');
 
 var _humanizeDuration2 = _interopRequireDefault(_humanizeDuration);
@@ -44,6 +48,7 @@ var SpecReporter = function (_events$EventEmitter) {
 
         var _this = _possibleConstructorReturn(this, (SpecReporter.__proto__ || Object.getPrototypeOf(SpecReporter)).call(this));
 
+        _this.chalk = _chalk2.default;
         _this.baseReporter = baseReporter;
         _this.config = config;
         _this.options = options;
@@ -130,7 +135,7 @@ var SpecReporter = function (_events$EventEmitter) {
                     symbol = symbols.ok;
                     break;
                 case 'pending':
-                    symbol = '-';
+                    symbol = '!!';
                     break;
                 case 'fail':
                     this.errorCount++;
@@ -151,11 +156,11 @@ var SpecReporter = function (_events$EventEmitter) {
                     color = 'green';
                     break;
                 case 'pending':
-                    color = 'pending';
+                    color = 'cyan';
                     break;
                 case 'fail':
                 case 'failing':
-                    color = 'fail';
+                    color = 'red';
                     break;
             }
 
@@ -176,20 +181,20 @@ var SpecReporter = function (_events$EventEmitter) {
              */
             if (device) {
                 var program = (caps.app || '').replace('sauce-storage:', '') || caps.browserName;
-                var executing = program ? 'executing ' + program : '';
+                var executing = program ? `executing ${program}` : '';
 
                 if (!verbose) {
-                    return device + ' ' + platform + ' ' + version;
+                    return `${device} ${platform} ${version}`;
                 }
 
-                return (device + ' on ' + platform + ' ' + version + ' ' + executing).trim();
+                return `${device} on ${platform} ${version} ${executing}`.trim();
             }
 
             if (!verbose) {
                 return (browser + ' ' + (version || '') + ' ' + (platform || '')).trim();
             }
 
-            return browser + (version ? ' (v' + version + ')' : '') + (platform ? ' on ' + platform : '');
+            return browser + (version ? ` (v${version})` : '') + (platform ? ` on ${platform}` : '');
         }
     }, {
         key: 'getResultList',
@@ -209,7 +214,7 @@ var SpecReporter = function (_events$EventEmitter) {
                 var specTitle = suites[specUid].title;
 
                 if (specUid.indexOf('"before all"') !== 0) {
-                    output += preface + ' ' + indent + specTitle + '\n';
+                    output += `${preface} ${indent}${specTitle}\n`;
                 }
 
                 for (var testUid in spec.tests) {
@@ -222,7 +227,7 @@ var SpecReporter = function (_events$EventEmitter) {
 
                     output += preface;
                     output += '   ' + indent;
-                    output += this.baseReporter.color(this.getColor(test.state), this.getSymbol(test.state));
+                    output += this.chalk[this.getColor(test.state)](this.getSymbol(test.state));
                     output += ' ' + testTitle + '\n';
                 }
 
@@ -258,8 +263,8 @@ var SpecReporter = function (_events$EventEmitter) {
                 }
 
                 output += preface + ' ';
-                output += this.baseReporter.color(this.getColor(state), testCount);
-                output += ' ' + this.baseReporter.color(this.getColor(state), state);
+                output += this.chalk[this.getColor(state)](testCount);
+                output += ' ' + this.chalk[this.getColor(state)](state);
                 output += testDuration;
                 output += '\n';
                 displayedDuration = true;
@@ -276,16 +281,16 @@ var SpecReporter = function (_events$EventEmitter) {
 
             failures.forEach(function (test, i) {
                 var title = typeof test.parent !== 'undefined' ? test.parent + ' ' + test.title : test.title;
-                output += preface.trim() + '\n';
-                output += preface + ' ' + _this2.baseReporter.color('error title', i + 1 + ') ' + title + ':') + '\n';
-                output += preface + ' ' + _this2.baseReporter.color('error message', test.err.message) + '\n';
+                output += `${preface.trim()}\n`;
+                output += `${preface} ${i + 1}) ${title}:\n`;
+                output += `${preface} ${_this2.chalk.red(test.err.message)}\n`;
                 if (test.err.stack) {
                     var stack = test.err.stack.split(/\n/g).map(function (l) {
-                        return preface + ' ' + _this2.baseReporter.color('error stack', l);
+                        return `${preface} ${_this2.chalk.gray(l)}`;
                     }).join('\n');
-                    output += stack + '\n';
+                    output += `${stack}\n`;
                 } else {
-                    output += preface + ' ' + _this2.baseReporter.color('error stack', 'no stack available') + '\n';
+                    output += `${preface} ${_this2.chalk.gray('no stack available')}\n`;
                 }
             });
 
@@ -300,8 +305,8 @@ var SpecReporter = function (_events$EventEmitter) {
 
             var output = '';
             if (results.config.host.indexOf('saucelabs.com') > -1) {
-                output += preface.trim() + '\n';
-                output += preface + ' Check out job at https://saucelabs.com/tests/' + results.sessionID + '\n';
+                output += `${preface.trim()}\n`;
+                output += `${preface} Check out job at https://saucelabs.com/tests/${results.sessionID}\n`;
                 return output;
             }
 
@@ -313,7 +318,7 @@ var SpecReporter = function (_events$EventEmitter) {
             var cid = runner.cid;
             var stats = this.baseReporter.stats;
             var results = stats.runners[cid];
-            var preface = '[' + this.getBrowserCombo(results.capabilities, false) + ' #' + cid + ']';
+            var preface = `[${this.getBrowserCombo(results.capabilities, false)} #${cid}]`;
             var specHash = stats.getSpecHash(runner);
             var spec = results.specs[specHash];
             var combo = this.getBrowserCombo(results.capabilities);
@@ -332,16 +337,30 @@ var SpecReporter = function (_events$EventEmitter) {
             var output = '';
 
             output += '------------------------------------------------------------------\n';
-            output += preface + ' Session ID: ' + results.sessionID + '\n';
-            output += preface + ' Spec: ' + this.specs[cid] + '\n';
-            output += preface + ' Running: ' + combo + '\n';
-            output += preface + '\n';
+
+            /**
+             * won't be available when running multiremote tests
+             */
+            if (results.sessionID) {
+                output += `${preface} Session ID: ${results.sessionID}\n`;
+            }
+
+            output += `${preface} Spec: ${this.specs[cid]}\n`;
+
+            /**
+             * won't be available when running multiremote tests
+             */
+            if (combo) {
+                output += `${preface} Running: ${combo}\n`;
+            }
+
+            output += `${preface}\n`;
             output += this.getResultList(cid, spec.suites, preface);
-            output += preface + '\n';
+            output += `${preface}\n`;
             output += this.getSummary(this.results[cid], spec._duration, preface);
             output += this.getFailureList(failures, preface);
             output += this.getJobLink(results, preface);
-            output += preface + '\n';
+            output += `${preface}\n`;
             return output;
         }
     }, {

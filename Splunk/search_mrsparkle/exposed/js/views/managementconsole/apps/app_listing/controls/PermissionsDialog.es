@@ -26,7 +26,6 @@ export default Modal.extend({
         this.model.inmem = new ACLReadOnlyModel($.extend(true, {}, this.model.app.entry.acl.toJSON()));
 
         this.permissionsView = new PermissionsView({
-            displayForControlClass: 'controls-thirdblock',
             displayForLabel: _('Display For').t(),
             model: {
                 inmem: this.model.inmem,

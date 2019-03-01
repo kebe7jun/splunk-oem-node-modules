@@ -1,11 +1,12 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ItemSelector from 'dashboard/components/shared/ItemSelector';
 import Parameters from 'dashboard/components/editor/drilldown/dashboard/Parameters';
 import Advanced from 'dashboard/components/editor/drilldown/dashboard/AdvancedSection';
 import PreviewURL from 'dashboard/components/editor/drilldown/dashboard/PreviewURL';
 import OpenInNewTab from 'dashboard/components/shared/OpenInNewTab';
-import Link from 'splunk-ui/components/Link';
+import Link from '@splunk/react-ui/Link';
 import { createTestHook } from 'util/test_support';
 
 const DashboardActionEditor = ({
@@ -36,7 +37,7 @@ const DashboardActionEditor = ({
             onChange={onAppChange}
             filter
             error={activeAppError}
-            {...createTestHook(module.id, 'dashboardAppSelector')}
+            {...createTestHook(null, 'dashboardAppSelector')}
         />
         <ItemSelector
             label={_('Dashboard').t()}
@@ -46,7 +47,7 @@ const DashboardActionEditor = ({
             onChange={onDashboardChange}
             filter
             error={activeDashboardError}
-            {...createTestHook(module.id, 'dashboardSelector')}
+            {...createTestHook(null, 'dashboardSelector')}
         />
         <OpenInNewTab
             value={target}

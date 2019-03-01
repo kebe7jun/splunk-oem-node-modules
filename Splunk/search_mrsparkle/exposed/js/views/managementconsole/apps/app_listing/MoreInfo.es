@@ -56,6 +56,7 @@ export default BaseView.extend({
             releaseNoteLink: this.model.entity.getReleaseNotesURI(),
             installedBy: this.model.entity.getDeployedBy(),
             installedOn: this.model.entity.getDeployedOn(),
+            appTemplate: this.model.entity.getTemplate(),
         }));
 
         return this;
@@ -63,7 +64,7 @@ export default BaseView.extend({
 
     /* eslint-disable no-multi-str */
     template: ' \
-        <td colspan="9"> \
+        <td colspan="10"> \
             <dl class="list-dotted"> \
                 <% if (!isIndexerOnly) { %> \
                     <dt>View objects</dt> \
@@ -94,6 +95,9 @@ export default BaseView.extend({
                     <dt>Installed on</dt><dd><%- installedOn %></dd> \
                 <% } %> \
                 <dt>Description</dt><dd><%- description %></dd> \
+                <% if (appTemplate) { %> \
+                    <dt>Template</dt><dd><%- appTemplate %></dd> \
+                <% } %> \
             </dl> \
         </td> \
     ',

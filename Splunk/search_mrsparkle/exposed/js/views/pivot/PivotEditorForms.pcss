@@ -4,10 +4,12 @@
 
 /* TO DO: This file should be broken up and moved into views */
 
+$labelWidth: 85px;
+$labelMargin: calc($labelWidth + $spacingHalf);
 
 @define-mixin popup-container {
     h4 {
-        font-size: $baseFontSize;
+        font-size: $fontSize;
         margin-top: 0;
     }
 
@@ -60,7 +62,7 @@
 
 .pivot-configpopups-timerangeinspector {
     @mixin popup-container;
-    width: 640px;
+    width: 650px;
 }
 
 $creator-width: 440px;
@@ -109,7 +111,7 @@ $slide-buffer: 20px;
         }
 
         .sub-pane-divider {
-            border-top: 1px solid $grayLighter;
+            border-top: 1px solid $gray92;
             margin-top: 5px;
             margin-bottom: 10px;
         }
@@ -131,19 +133,16 @@ $slide-buffer: 20px;
         margin-bottom: 5px;
     }
 
-    .control-group {
-        margin-bottom: 10px;
-    }
 
     .control-label {
-        width: 85px;
         text-align: left;
+        width: $labelWidth;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     .controls {
-        margin-left: 85px;
+        margin-left: $labelMargin;
     }
 
     .inline-control {
@@ -156,8 +155,7 @@ $slide-buffer: 20px;
     }
 
     .pivot-inspector-help-text {
-        font-size: 11px;
-        margin-top: 5px;
+        margin-left: $labelMargin;
 
         .help-tooltip {
             color: $linkColor;
@@ -176,7 +174,7 @@ $slide-buffer: 20px;
 .pivot-configforms-filters-numberfilterform {
 
     .control-label {
-      width: 75px;
+      width: $labelMargin;
     }
 
     input[type="text"].limit-amount-input {
@@ -195,20 +193,7 @@ $slide-buffer: 20px;
 .pivot-configforms-rows-numberrowform {
 
     .control-label {
-        width: 105px;
-    }
-
-    .pivot-inspector-help-text, input[type="text"] + .placeholder {
-        margin-left: 20px;
-    }
-
-}
-
-.pivot-configforms-columns-booleancolumnform,
-.pivot-configforms-rows-booleanrowform {
-
-    .control-label {
-        width: 75px;
+        width: $labelWidth;
     }
 
 }
@@ -226,6 +211,6 @@ $slide-buffer: 20px;
     white-space: normal;
     display: block;
     text-decoration: none;
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
     color: $textGray;
 }

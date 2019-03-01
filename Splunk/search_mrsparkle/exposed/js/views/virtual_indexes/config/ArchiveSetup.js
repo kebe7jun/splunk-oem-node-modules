@@ -172,7 +172,6 @@ define(
 
                 this.children.originIndex = new ControlGroup({
                     className: 'index-origin control-group',
-                    controlClass: 'controls-block',
                     controls: [this.originIndexControl],
                     label: _('Splunk Index(es)').t(),
                     tooltip: _('You can add multiple Splunk Enterprise indexes, separated by commas').t()
@@ -181,7 +180,6 @@ define(
 
                 this.children.suffix = new ControlGroup({
                     className: 'index-name control-group',
-                    controlClass: 'controls-block',
                     controlType: 'Text',
                     controlOptions: {
                         modelAttribute: 'suffix',
@@ -198,12 +196,11 @@ define(
                 this.children.provider = new ControlGroup({
                     className: 'index-provider control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'provider',
                         model: this.model.addArchive,
                         items: this.providerNames,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'wide',
                         maxLabelLength: 80,
                         toggleClassName: 'btn',
@@ -215,7 +212,6 @@ define(
                 this.children.archiveDirectory = new ControlGroup({
                     className: 'index-path-hdfs control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'outputDirectory',
                         model: this.model.addArchive
@@ -232,7 +228,6 @@ define(
 
                 this.children.timeThreshold = new ControlGroup({
                     className: 'control-group',
-                    controlClass: 'controls-block',
                     controls: [this.timeThresholdControl],
                     label: _('Older Than').t(),
                     tooltip: _('Age at which bucket data should be archived').t()
@@ -360,8 +355,8 @@ define(
                     <div class="input-age-placeholder"></div>\
                     <div class="unified-search-cutoff-wrapper"></div>\
                     <div class="button-wrapper">\
-                        <a href="#" class="btn cancel pull-left"><%- _("Cancel").t() %></a>\
                         <a href="#" class="btn btn-primary pull-right"><%- _("Save").t() %></a>\
+                        <a href="#" class="btn cancel btn-secondary pull-right"><%- _("Cancel").t() %></a>\
                     </div>\
                 </div>\
             </div>'

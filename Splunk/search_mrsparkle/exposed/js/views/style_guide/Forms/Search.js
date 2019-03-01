@@ -6,7 +6,6 @@ define(
         'models/Base',
         'views/Base',
         'views/shared/FindInput',
-        'views/shared/controls/ControlGroup',
        '../Master.pcss'
     ],
     function(
@@ -16,7 +15,6 @@ define(
         BaseModel,
         BaseView,
         FindInputView,
-        ControlGroup,
         css
     ) {
         return BaseView.extend({
@@ -30,15 +28,8 @@ define(
                 // Dummy model
                 this.model = new BaseModel({
                 });
-                this.children.searchingView = new ControlGroup({
-                    className: 'form-horizontal',
-                    controls: [
-                        new FindInputView({
-                            model: this.model,
-                            modelAttribute: 'searchInput'
-                        })
-                    ],
-                    label: _('Search Input').t()
+                this.children.searchingView = new FindInputView({
+                    model: this.model
                 });
             },
             render: function() {

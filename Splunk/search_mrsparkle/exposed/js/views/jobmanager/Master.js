@@ -59,7 +59,8 @@ define(
                     },
                     collection: {
                         jobs: this.collection.jobs,
-                        apps: this.collection.apps
+                        apps: this.collection.apps,
+                        workloadManagementStatus: this.collection.workloadManagementStatus
                     }
                 });
 
@@ -111,14 +112,13 @@ define(
             },
 
             template: '\
-                <div class="section-header section-padded">\
+                <div class="section-header section-padded page-heading">\
                     <h1 class="section-title"><%- _("Jobs").t() %></h1>\
                     <div>\
                         <%- _("Manage your jobs.").t() %>\
                         <a href="<%- docUrl %>" target="_blank" class="help-link"><%- _("Learn More").t() %> <i class="icon-external"></i></a>\
                     </div>\
                 </div>\
-                <div class="divider"></div>\
             '
         });
     }

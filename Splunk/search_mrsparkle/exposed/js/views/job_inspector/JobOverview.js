@@ -98,17 +98,28 @@ define(
                     <% } else if (searchJob.entry.content.get("isDone")) { %>\
                         <% if (searchJob.entry.content.get("resultCount") == 0) { %>\
                             <% if (searchJob.entry.content.get("eventCount") == 0) { %>\
-                                <p>\
-                                    <%- splunkUtil.sprintf(_("This search has completed in %s seconds, but did not match any events.  The terms \
-                                        specified in the highlighted portion of the search:").t(), i18n.format_number(searchJob.entry.content.get("runDuration"))) \
-                                    %>\
-                                </p>\
-                                <pre>\
-                                    <span class="highlighted"><%- searchJob.entry.content.get("eventSearch") || "None" %></span>\
-                                    <% if (searchJob.entry.content.get("reportSearch")) { %>\
-                                        <span>| <%- searchJob.entry.content.get("reportSearch") %></span>\
-                                    <% } %>\
-                                </pre>\
+                                <% if (!searchJob.isDataFabricEnabled()) { %>\
+                                    <p>\
+                                        <%- splunkUtil.sprintf(_("This search has completed in %s seconds, but did not match any events. The terms \
+                                            specified in the highlighted portion of the search:").t(), i18n.format_number(searchJob.entry.content.get("runDuration"))) \
+                                        %>\
+                                    </p>\
+                                    <pre>\
+                                        <span class="highlighted"><%- searchJob.entry.content.get("eventSearch") || _("None").t() %></span>\
+                                        <% if (searchJob.entry.content.get("reportSearch")) { %>\
+                                            <span>| <%- searchJob.entry.content.get("reportSearch") %></span>\
+                                        <% } %>\
+                                    </pre>\
+                                <% } else { %>\
+                                    <p>\
+                                        <%- splunkUtil.sprintf(_("This search has completed in %s seconds, but did not match any events. \
+                                        The search:").t(), i18n.format_number(searchJob.entry.content.get("runDuration"))) \
+                                        %>\
+                                    </p>\
+                                    <pre>\
+                                        <span> <%- searchJob.entry.content.get("search") %></span>\
+                                    </pre>\
+                                <% } %>\
                                 <p>\
                                     <%- _("over the time range:").t() %>\
                                 </p>\
@@ -116,7 +127,7 @@ define(
                                     <%- earliestTime %> - <%- latestTime %>\
                                 </pre>\
                                 <p>\
-                                    <%- _("did not return any data.  Possible solutions are to:").t() %>\
+                                    <%- _("did not return any data. Possible solutions are to:").t() %>\
                                 </p>\
                                 <ul>\
                                     <li><%- _("relax the primary search criteria").t() %></li>\

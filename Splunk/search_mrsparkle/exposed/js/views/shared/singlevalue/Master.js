@@ -16,7 +16,9 @@ define(
         'util/color_utils',
         'util/general_utils',
         'util/moment/relative',
-        'util/numeral'
+        'util/theme_utils',
+        'util/numeral',
+        'splunk/palettes/ColorCodes'
     ],
     function(
         $,
@@ -35,28 +37,61 @@ define(
         colorUtil,
         generalUtil,
         relativeMomentUtil,
-        numeral
+        themeUtils,
+        numeral,
+        ColorCodes
     ) {
-        return VisualizationBase.extend({
+
+        var THEMES = {
+            enterprise: {
+                SEVERITY_COLORS: {
+                    severe: ColorCodes.SEMANTIC_BY_NAME.error,
+                    high: ColorCodes.SEMANTIC_BY_NAME.alert,
+                    elevated: ColorCodes.SEMANTIC_BY_NAME.warning,
+                    guarded: ColorCodes.SEMANTIC_BY_NAME.info,
+                    low: ColorCodes.SEMANTIC_BY_NAME.success,
+                    none: ColorCodes.DARK_GREY
+                },
+                SEVERITIES: ['none', 'low', 'guarded', 'elevated', 'high', 'severe'],
+                BLOCK_DEFAULT_FONT_COLOR: '#FFFFFF',
+                BLOCK_DEFAULT_BACKGROUND_COLOR: '#333333',
+                DEFAULT_FONT_COLOR: '#333333',
+                DEFAULT_BACKGROUND_COLOR: '#FFFFFF',
+                UNDERLABEL_COLOR: ColorCodes.DARK_GREY,
+                NEUTRAL_CHANGE_COLOR: ColorCodes.DARK_GREY,
+                NEUTRAL_CHANGE_BACKGROUND_COLOR: ColorCodes.DARK_GREY,
+                DELTA_GREEN: ColorCodes.SEMANTIC_BY_NAME.success,
+                DELTA_RED: ColorCodes.SEMANTIC_BY_NAME.error,
+                EDGE_PADDING: 32,
+                NEUTRAL_SPARKLINE_COLOR: '#999999'
+            },
+            dark: {
+                SEVERITY_COLORS: {
+                    severe: ColorCodes.SEMANTIC_BY_NAME.error,
+                    high: ColorCodes.SEMANTIC_BY_NAME.alert,
+                    elevated: ColorCodes.SEMANTIC_BY_NAME.warning,
+                    guarded: ColorCodes.SEMANTIC_BY_NAME.info,
+                    low: ColorCodes.SEMANTIC_BY_NAME.success,
+                    none: '#FFFFFF'
+                },
+                SEVERITIES: ['none', 'low', 'guarded', 'elevated', 'high', 'severe'],
+                BLOCK_DEFAULT_FONT_COLOR: '#FFFFFF', // $white
+                BLOCK_DEFAULT_BACKGROUND_COLOR: '#212527', // $gray21
+                DEFAULT_FONT_COLOR: '#FFFFFF', // $white
+                DEFAULT_BACKGROUND_COLOR: '#212527', // $gray21
+                UNDERLABEL_COLOR: '#C3CBD4', // $gray80
+                NEUTRAL_CHANGE_COLOR: '#FFFFFF', // $white
+                NEUTRAL_CHANGE_BACKGROUND_COLOR: '#212527', // $gray21
+                DELTA_GREEN: ColorCodes.SEMANTIC_BY_NAME.success,
+                DELTA_RED: ColorCodes.SEMANTIC_BY_NAME.error,
+                EDGE_PADDING: 32,
+                NEUTRAL_SPARKLINE_COLOR: '#FFFFFF'
+            }
+        };
+
+        return VisualizationBase.extend(_.extend({
             moduleId: module.id,
             className: "single-value",
-            SEVERITY_COLORS: {
-                severe : '#d93f3c', //red
-                high : '#f58f39', //orange
-                elevated: '#f7bc38', //yellow
-                guarded: '#6db7c6', //blue
-                low: '#65a637', //green
-                none: '#555555'
-            },
-            SEVERITIES: ['none', 'low', 'guarded', 'elevated', 'high', 'severe'],
-            BLOCK_DEFAULT_FONT_COLOR: '#FFFFFF',
-            DEFAULT_FONT_COLOR: '#333333',
-            UNDERLABEL_COLOR: '#555555',
-            NEUTRAL_CHANGE_COLOR: '#555555',
-            DELTA_GREEN: '#65a637',
-            DELTA_RED: '#d93f3c',
-            EDGE_PADDING: 32,
-            NEUTRAL_SPARKLINE_COLOR: '#999999',
 
             MAX_RESULT_COUNT: 1000,
 
@@ -149,7 +184,9 @@ define(
                 }
 
                 this.severityColor = this.getSeverityColor(resultFieldValue);
-                this.deltaColor = this.getDeltaColor(resultFieldValue);
+                this.severityBackgroundColor = this.getSeverityColor(resultFieldValue, { isBackground: true });
+                this.deltaColor = this.getDeltaColor();
+                this.deltaBackgroundColor = this.getDeltaColor({ isBackground: true });
 
                 deltaIndicatorColor = this.getDeltaIndicatorColor();
                 if ((this.useColors() && this.model.config.get('display.visualizations.singlevalue.colorBy') === 'trend')
@@ -164,12 +201,12 @@ define(
                 this.model.presentation.set('formatPattern', this.getFormatPattern());
             },
 
-            getDeltaColor: function() {
+            getDeltaColor: function(options) {
                 var deltaMode = this.model.config.get('display.visualizations.singlevalue.trendColorInterpretation') || 'standard', // defaults to standard
                     deltaValue = this.model.results.get('deltaValue'),
                     deltaIncreased = deltaValue === 'percentageIncrease' || deltaValue > 0;
                 if (deltaValue === 0) {
-                    return this.NEUTRAL_CHANGE_COLOR;
+                    return options && options.isBackground ? this.NEUTRAL_CHANGE_BACKGROUND_COLOR : this.NEUTRAL_CHANGE_COLOR;
                 }
                 if (deltaMode === 'inverse') {
                     if (deltaIncreased) {
@@ -184,10 +221,11 @@ define(
                 }
             },
 
-            getSeverityColor: function(resultFieldValue) {
+            getSeverityColor: function(resultFieldValue, options) {
                 var ranges = this.model.config.get('display.visualizations.singlevalue.rangeValues'),
                     colors = this.model.config.get('display.visualizations.singlevalue.rangeColors'),
                     useColors = splunkUtil.normalizeBoolean(this.model.config.get('display.visualizations.singlevalue.useColors')) || false,
+                    defaultColor = options && options.isBackground ? this.BLOCK_DEFAULT_BACKGROUND_COLOR : this.DEFAULT_FONT_COLOR,
                     rangeMapValue = this.getResultField('range'),
                     parsedRanges,
                     parsedColors,
@@ -198,37 +236,37 @@ define(
                 // We also check that useColors is false. If it is true, the user is explicitly using the rangeColors
                 if (rangeMapValue && !useColors) {
                     // If the classField is used and the range field contains is a valid severity, use this as the severity
-                    return this.SEVERITY_COLORS[rangeMapValue] || this.DEFAULT_FONT_COLOR;
+                    return this.SEVERITY_COLORS[rangeMapValue] || defaultColor;
                 }
                 if (ranges) {
                     parsedRanges = generalUtil.stringToArray(ranges);
                     parsedColors = generalUtil.stringToArray(colors);
                     colorsDefined = parsedColors.length > 0;
                     if (parsedRanges.length === 0 || isNaN(resultFieldValue)) {
-                        return this.DEFAULT_FONT_COLOR;
+                        return defaultColor;
                     }
                     severities = this.SEVERITIES.slice(1, 6); // discard 'none'
                     for (var i = 0; i < parsedRanges.length; i++) {
                         if(isNaN(parsedRanges[i])){
-                            return this.DEFAULT_FONT_COLOR;
+                            return defaultColor;
                         }
                         if (parseFloat(resultFieldValue) <= parseFloat(parsedRanges[i])) {
                             // As soon as we encounter a range that is greater than or equal to the resultFieldValue,
                             // that is the severity range that the resultFieldValue falls into, so we exit the loop and function.
                             if (colorsDefined) {
-                                return colorUtil.replaceSymbols(parsedColors[i], '#') || this.DEFAULT_FONT_COLOR;
+                                return colorUtil.replaceSymbols(parsedColors[i], '#') || defaultColor;
                             }
                             return this.SEVERITY_COLORS[severities[i]];
                         }
                     }
                     if (colorsDefined) {
                         // If there are more ranges than colors, assign the default grey color
-                        return colorUtil.replaceSymbols(parsedColors[parsedRanges.length], '#') || this.DEFAULT_FONT_COLOR;
+                        return colorUtil.replaceSymbols(parsedColors[parsedRanges.length], '#') || defaultColor;
                     }
                     return this.SEVERITY_COLORS[severities[severities.length - 1]]; // if no severity has yet been assigned, has fallen through to highest severity
                 }
 
-                return this.DEFAULT_FONT_COLOR; // fall through to default
+                return defaultColor; // fall through to default
             },
 
             getDeltaIndicatorColor: function() {
@@ -272,11 +310,11 @@ define(
                 var colorBy = this.model.config.get('display.visualizations.singlevalue.colorBy');
                 if (this.useColors()) {
                     if (colorBy === 'trend') {
-                        return this.deltaColor;
+                        return this.deltaBackgroundColor;
                     }
-                    return this.severityColor;
+                    return this.severityBackgroundColor;
                 }
-                return this.DEFAULT_FONT_COLOR;
+                return this.BLOCK_DEFAULT_BACKGROUND_COLOR;
             },
 
             getFormatPattern: function() {
@@ -795,6 +833,6 @@ define(
                     this.reflow();
                 }
             }
-        });
+        }, themeUtils.getCurrentTheme() === 'dark' ? THEMES.dark : THEMES.enterprise));
     }
 );

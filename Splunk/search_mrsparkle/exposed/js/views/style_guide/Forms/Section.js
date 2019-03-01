@@ -69,7 +69,6 @@ define(
 
                 this.textFieldView = new ControlGroup({
                     controlType: 'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'email',
                         placeholder: _('Optional').t()

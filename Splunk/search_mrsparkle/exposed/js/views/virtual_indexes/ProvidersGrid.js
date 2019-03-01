@@ -31,7 +31,6 @@ define([
         return BaseView.extend({
             moduleId: module.id,
             template: template,
-            className: 'push-margins',
             initialize: function(options) {
                 BaseView.prototype.initialize.call(this, options);
 

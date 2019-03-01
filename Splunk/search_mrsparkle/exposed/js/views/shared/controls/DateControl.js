@@ -109,7 +109,7 @@ function(
             return this;
         },
         template: '\
-            <input type="text" class="mdy-input <%= options.inputClassName %>" value=""/>\
+            <input type="text" aria-label="<%- options.ariaLabel %>" class="mdy-input <%= options.inputClassName %>" value=""/>\
         '
     });
 });

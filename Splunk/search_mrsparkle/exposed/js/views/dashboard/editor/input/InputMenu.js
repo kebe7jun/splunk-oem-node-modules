@@ -24,6 +24,15 @@ define(
         return EditInputMenuView.extend({
 
             moduleId: module.id,
+            className: function () {
+                // this is to make sure the backbone-based popdown in the form input editor works with the react-based popdown,
+                // ref SPL-147731, SPL-147905.
+                // The problem is, react-based popdown is appended to the DOM before the backbone-based popdown is appended
+                // to the DOM. So even if they have the same z-index, backbone-based popdown is layered on top of
+                // the react-based popdown.
+                // The solution is to give the react-based popdown a smaller z-index.
+                return _.result(EditInputMenuView.prototype, 'className') + ' dashboard-form-input-editor-popdown';
+            },
             initialize: function(options) {
                 this.inputSettings = options.inputSettings;
                 EditInputMenuView.prototype.initialize.apply(this, arguments);

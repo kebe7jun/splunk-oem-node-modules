@@ -42,10 +42,16 @@ define(
                 return SplunkDBaseModel.prototype.parse.call(this, response, options);
             },
 
-            checkInputExists: function() {
+            /**
+             * Check whether current input instance exists.
+             * @param {string} customizedName   This argument would be used to construct validation url for checking existence of current input instance.
+             *                                  If not passed or value is empty, it will use the value of ui.name to do validation.
+             *                                  Child class can take advantage of this argument to construct a customized url to validate the existence.
+             */
+            checkInputExists: function(customizedName) {
                 // Quickly lookup if a config with entered name already exists.
                 // If it's new, there will be a 404 and then we can move forward. Otherwise we throw an error, as input already exists.\
-                var name = this.get('ui.name');
+                var name = customizedName || this.get('ui.name');
                 if (_.isUndefined(name)) {
                      return;
                 }

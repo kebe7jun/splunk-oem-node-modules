@@ -11,7 +11,8 @@ define(
         'views/shared/controls/TextControl',
         'views/shared/controls/Control',
         'views/shared/DrilldownPopTart',
-        'strftime'
+        'strftime',
+        './TimeInfo.pcss'
     ],
     function(
         _,
@@ -45,27 +46,27 @@ define(
                     controls: [
                         new SyntheticSelectControl ({
                             modelAttribute: 'type',
-                            className: Control.prototype.className + ' input-prepend',
                             model: this.model.timewindow,
+                            additionalClassNames: 'range-type',
                             items: [
                                 { label: _('+').t(), value: 'plus' },
                                 { label: _('-').t(), value: 'minus' },
                                 { label: _('+/-').t(), value: 'plusminus' }
                             ],
-                            toggleClassName: 'btn range-type',
+                            toggleClassName: 'btn',
                             menuWidth: 'narrow'
                         }),
                         new TextControl({
                             modelAttribute: 'amount',
-                            className: Control.prototype.className + ' input-append input-prepend range-amount',
+                            additionalClassNames: 'range-amount',
                             inputClassName: 'input-mini',
                             model: this.model.timewindow
                         }),
                         new SyntheticSelectControl ({
                             modelAttribute: 'unit',
-                            className: Control.prototype.className + ' input-append',
                             model: this.model.timewindow,
                             menuWidth: 'narrow',
+                            additionalClassNames: 'range-units',
                             items: [
                                 { label: _('week(s)').t(), value: 'w' },
                                 { label: _('day(s)').t(), value: 'd' },
@@ -74,11 +75,11 @@ define(
                                 { label: _('second(s)').t(), value: 's' },
                                 { label: _('millisecond(s)').t(), value: 'ms' }
                             ],
-                            toggleClassName: 'btn range-units'
+                            toggleClassName: 'btn'
                         })
                     ]
                 });
-                
+
                 this.model.timewindow.on('validated', function(isValid, model, invalidResults) {
                     if(isValid) {
                         var ranges = this.model.timewindow.getRanges(this.options.time);
@@ -107,14 +108,14 @@ define(
                         this.model.report.entry.content.set({
                             'dispatch.earliest_time': epochTime.toFixed(3),
                             'dispatch.latest_time': 'now'
-                        }); 
+                        });
                     } else {
                         earliestTime = epochTime; //inclusive
                         latestTime = earliestTime + 0.001; //exclusive
                         this.model.report.entry.content.set({
                             'dispatch.earliest_time': earliestTime.toFixed(3),
                             'dispatch.latest_time': latestTime.toFixed(3)
-                        });  
+                        });
                     }
                     this.model.report.trigger('eventsviewer:drilldown');
                     e.preventDefault();
@@ -136,7 +137,7 @@ define(
                 return this;
             },
             template: '\
-                <h3 class="before-after-header"><%- _("Events Before or After").t() %></h3>\
+                <h3 class="before-after-header" tabindex="0"><%- _("Events Before or After").t() %></h3>\
                 <table class="before-after">\
                     <tbody>\
                         <tr class="before-after-values">\
@@ -146,7 +147,7 @@ define(
                         </tr>\
                     </tbody>\
                 </table>\
-                <h3 class="nearby-header"><%- _("Nearby Events").t() %></h3>\
+                <h3 class="nearby-header" tabindex="0"><%- _("Nearby Events").t() %></h3>\
                 <div class="nearby-value"></div>\
             '
         });

@@ -164,14 +164,7 @@ export default DMCBaseDialog.extend({
 
     getConfirmBodyHTML() {
         const operationLabels = [_('install').t(), _('Installing').t()];
-        const bodyHtml = splunkUtils.sprintf(DMCBaseDialog.CONFIRM_MSG_TEMPLATE,
-            operationLabels[0],
-            _.escape(this.appName),
-            _.escape(this.appVersionLabel),
-            operationLabels[1],
-        );
-
-        return bodyHtml;
+        return this.getConfirmBodyHTMLForOperation(operationLabels);
     },
 
     getLoginTitle() {

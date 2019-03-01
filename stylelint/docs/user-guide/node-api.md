@@ -7,6 +7,8 @@ stylelint.lint(options)
   .then(function(resultObject) { .. });
 ```
 
+<!-- TOC -->
+
 ## Installation
 
 stylelint is an [npm package](https://www.npmjs.com/package/stylelint). Install it using:
@@ -57,15 +59,23 @@ The difference between the `configOverrides` and `config` options is this: If an
 
 ### `files`
 
-A file glob, or array of file globs. Ultimately passed to [node-glob](https://github.com/isaacs/node-glob) to figure out what files you want to lint.
+A file glob, or array of file globs. Ultimately passed to [globby](https://github.com/sindresorhus/globby) to figure out what files you want to lint.
 
-Relative globs are considered relative to `process.cwd()`.
+Relative globs are considered relative to `globbyOptions.cwd`.
 
-`node_modules` and `bower_components` are always ignored.
+By default, all `node_modules` and `bower_components` are ignored.
+
+### `globbyOptions`
+
+The options that will be passed with `files` when use globby.
+
+For example, you can set a specific `cwd` manually, which is a folder path of current working directory for `files` glob. Relative globs in `files` are considered relative to this path. And by default, `cwd` will be set by `process.cwd()`.
+
+For more detail usage, see [Globby Guide](https://github.com/sindresorhus/globby#options).
 
 ### `formatter`
 
-Options: `"json"|"string"|"verbose"`, or a function. Default is `"json"`.
+Options: `"compact"|"json"|"string"|"unix"|"verbose"`, or a function. Default is `"json"`.
 
 Specify the formatter that you would like to use to format your results.
 
@@ -76,6 +86,10 @@ If you pass a function, it must fit the signature described in the [Developer Gu
 If `true`, all disable comments (e.g. `/* stylelint-disable block-no-empty */`) will be ignored.
 
 You can use this option to see what your linting results would be like without those exceptions.
+
+### `disableDefaultIgnores`
+
+If `true`, stylelint will not automatically ignore the contents of `node_modules` and `bower_components`. (By default, these directories are automatically ignored.)
 
 ### `cache`
 
@@ -101,17 +115,24 @@ Use this report to clean up your codebase, keeping only the stylelint-disable co
 
 *The recommended way to use this option is through the CLI.* It will output a clean report to the console.
 
+### `maxWarnings`
+
+Sets a limit to the number of warnings accepted. Will add a `maxWarningsExceeded` property to the returned data if the number of found warnings exceeds the given limit.
+The value is an Object (e.g. `{ maxWarnings: 0, foundWarnings: 12 }`).
+
+*The recommended way to use this option is through the CLI.* It will exit with code 2 when `maxWarnings` is exceeded.
+
 ### `ignorePath`
 
 A path to a file containing patterns describing files to ignore. The path can be absolute or relative to `process.cwd()`. By default, stylelint looks for `.stylelintignore` in `process.cwd()`. See [Configuration](configuration.md#stylelintignore).
 
 ### `syntax`
 
-Options: `"scss"|"less"|"sugarss"`
+Options: `"sass"|"scss"|"less"|"sugarss"|"html"|"styled"|"jsx"`
 
-Specify a non-standard syntax that should be used to parse source stylesheets.
+Force a specific non-standard syntax that should be used to parse source stylesheets.
 
-If you do not specify a syntax, non-standard syntaxes will be automatically inferred by the file extensions `.scss`, `.less`, and `.sss`.
+If you do not specify a syntax, non-standard syntaxes will be automatically inferred.
 
 See the [`customSyntax`](#customsyntax) option below if you would like to use stylelint with a custom syntax.
 
@@ -139,7 +160,7 @@ A string displaying the formatted violations (using the default formatter or whi
 
 ### `postcssResults`
 
-An array containing all the [PostCSS LazyResults](https://github.com/postcss/postcss/blob/master/docs/api.md#lazyresult-class) that were accumulated during processing.
+An array containing all the [PostCSS LazyResults](https://api.postcss.org/LazyResult.html) that were accumulated during processing.
 
 ### `results`
 
@@ -166,7 +187,7 @@ stylelint.lint({
   .catch(function(err) {
     // do things with err e.g.
     console.error(err.stack);
-  });;
+  });
 ```
 
 If `myConfig` *does* contain relative paths for `extends` or `plugins`, you *do* have to use `configBasedir`:

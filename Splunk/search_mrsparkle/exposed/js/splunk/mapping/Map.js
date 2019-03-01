@@ -24,6 +24,7 @@ define(function(require, exports, module) {
     var HTMLCleaner = require("util/htmlcleaner");
 
     require("jquery.resize");
+    require("./Map.pcss");
 
     return Class(module.id, VizBase, function(Map, base) {
 
@@ -457,18 +458,18 @@ define(function(require, exports, module) {
                     var slice;
                     var i, l;
 
-                    content += "<table style=\"border: 0 none; border-spacing: 0; border-collapse: collapse;\">";
+                    content += "<table class=\"map-tooltip-table\">";
                     if (sliceList) {
                         for (i = 0, l = Math.min(fields.length, 2); i < l; i++) {
                             field = fields[i];
                             content += "<tr>";
-                            content += "<td style=\"padding: 0; text-align: left; white-space: nowrap; color: #333333;\">" + StringUtil.escapeHTML(field) + ":&nbsp;&nbsp;</td><td style=\"padding: 0; text-align: right; white-space: nowrap;\">" + StringUtil.escapeHTML(this._formatDegrees(data[field], (i === 0) ? "ns" : "ew")) + "</td>";
+                            content += "<td class=\"tooltip-column-left\">" + StringUtil.escapeHTML(field) + ":&nbsp;&nbsp;</td><td class=\"tooltip-column-right\">" + StringUtil.escapeHTML(this._formatDegrees(data[field], (i === 0) ? "ns" : "ew")) + "</td>";
                             content += "</tr>";
                         }
                         for (i = 0, l = sliceList.length; i < l; i++) {
                             slice = sliceList[i];
                             content += "<tr>";
-                            content += "<td style=\"padding: 0; text-align: left; white-space: nowrap; color: " + ("#" + (slice.series.color | 0x1000000).toString(16).substring(1)) + ";\">" + StringUtil.escapeHTML(slice.series.name) + ":&nbsp;&nbsp;</td><td style=\"padding: 0; text-align: right; white-space: nowrap;\">" + StringUtil.escapeHTML(this._formatNumber(slice.value)) + "</td>";
+                            content += "<td class=\"tooltip-column-left\" style=\"color: " + ("#" + (slice.series.color | 0x1000000).toString(16).substring(1)) + ";\">" + StringUtil.escapeHTML(slice.series.name) + ":&nbsp;&nbsp;</td><td class=\"tooltip-column-right\">" + StringUtil.escapeHTML(this._formatNumber(slice.value)) + "</td>";
                             content += "</tr>";
                         }
                     } else if (tooltipFields) {
@@ -483,14 +484,14 @@ define(function(require, exports, module) {
                                 fieldContent = StringUtil.escapeHTML(fieldContent);
                             }
                             content += "<tr>";
-                            content += "<td style=\"padding: 0; text-align: left; white-space: nowrap; color: #333333;\">" + StringUtil.escapeHTML(field) + ":&nbsp;&nbsp;</td><td style=\"padding: 0; text-align: right; white-space: nowrap;\">" + fieldContent + "</td>";
+                            content += "<td class=\"tooltip-column-left\">" + StringUtil.escapeHTML(field) + ":&nbsp;&nbsp;</td><td class=\"tooltip-column-right\">" + fieldContent + "</td>";
                             content += "</tr>";
                         }
                     } else {
                         for (i = 0, l = fields.length; i < l; i += 2) {
                             field = fields[i];
                             content += "<tr>";
-                            content += "<td style=\"padding: 0; text-align: left; white-space: nowrap; color: #333333;\">" + StringUtil.escapeHTML(field) + ":&nbsp;&nbsp;</td><td style=\"padding: 0; text-align: right; white-space: nowrap;\">" + StringUtil.escapeHTML(data[field]) + "</td>";
+                            content += "<td class=\"tooltip-column-left\">" + StringUtil.escapeHTML(field) + ":&nbsp;&nbsp;</td><td class=\"tooltip-column-right\">" + StringUtil.escapeHTML(data[field]) + "</td>";
                             content += "</tr>";
                         }
                     }

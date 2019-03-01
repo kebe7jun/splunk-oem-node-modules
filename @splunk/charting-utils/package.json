@@ -1,0 +1,50 @@
+{
+    "name": "@splunk/charting-utils",
+    "version": "0.8.4",
+    "license": "SEE LICENSE IN LICENSE.md",
+    "publishConfig": {
+        "registry": "https://repo.splunk.com/artifactory/api/npm/npm-solutions-local"
+    },
+    "scripts": {
+        "build": "webpack",
+        "build:watch": "yarn build -- --watch --progress",
+        "start": "yarn build:watch",
+        "lint": "eslint src test",
+        "lint:ci": "yarn run lint -- -f junit -o test-reports/lint-results.xml",
+        "test:unit": "NODE_ENV=test jest",
+        "test:unit:watch": "NODE_ENV=test jest --watchAll",
+        "test:unit:coverage": "NODE_ENV=test jest --coverage",
+        "test:unit:ci": "yarn test:unit -- --ci"
+    },
+    "dependencies": {
+        "jquery": "2.1.0",
+        "moment": "^2.18.1",
+        "underscore": "1.6.0"
+    },
+    "devDependencies": {
+        "@splunk/charting-webpack-config": "^0.8.4",
+        "eslint": "^3.19.0",
+        "jest-cli": "^20.0.4",
+        "webpack": "^3.4.1"
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "src/**/*.js"
+        ],
+        "coverageReporters": [
+            "json",
+            "lcov",
+            "text",
+            "html"
+        ],
+        "moduleDirectories": [
+            "node_modules",
+            "src"
+        ],
+        "testRegex": "test/unit/.*\\.test\\.js$",
+        "transform": {
+            "^.+\\.(jsx?|js)$": "babel-jest"
+        },
+        "testResultsProcessor": "./tools/jestresultsprocessor"
+    }
+}

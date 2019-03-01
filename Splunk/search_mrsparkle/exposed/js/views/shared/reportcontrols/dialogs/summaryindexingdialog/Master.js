@@ -6,7 +6,7 @@ define([
     'models/services/search/IntentionsParser',
     'views/shared/Modal',
     'views/shared/controls/ControlGroup',
-    'views/shared/controls/SyntheticSelectControl',
+	'views/shared/basemanager/SearchableDropdown/Master',
     'views/shared/FlashMessages',
     'views/shared/reportcontrols/dialogs/summaryindexingdialog/AddFieldsSection',
     'views/shared/reportcontrols/dialogs/summaryindexingdialog/Master.pcss',
@@ -23,7 +23,7 @@ define([
         IntentionsParserModel,
         Modal,
         ControlGroup,
-        SyntheticSelectControl,
+		SearchableDropdown,
         FlashMessage,
         AddFieldsSection,
         css,
@@ -140,7 +140,8 @@ define([
                     q:this.model.report.entry.content.get('search'),
                     timeline: false,
                     app: this.model.application.get('app'),
-                    owner: this.model.application.get('owner')
+                    owner: this.model.application.get('owner'),
+                    parse_only: true
                 }
             });
 
@@ -172,23 +173,17 @@ define([
                       '<a href="' + _.escape(summaryIndexingHelpLink) + '" target="_blank">' + _("Learn More").t() + ' <i class="icon-external"></i></a>'
             });
 
-            this.summaryIndexesSelect = new SyntheticSelectControl({
+            this.summaryIndexesSelect = new SearchableDropdown({
                 modelAttribute: 'action.summary_index._name',
                 model: this.model.inmem.entry.content,
-                save: false,
+				multiSelect: false,
                 toggleClassName: 'btn',
-                labelPosition: 'outside',
-                elastic: true,
                 popdownOptions: {
                     attachDialogTo: '.modal:visible',
                     scrollContainer: '.modal:visible .modal-body:visible'
-                }
+                },
+				collection: {search: this.collection.indexes, listing: this.collection.indexes}
             });
-            var indexes = this.collection.indexes.map(function(index) {
-                var name = index.entry.get("name");
-                return {label: name, value: name, icon: index.getDataType()};
-            }, this);
-            this.summaryIndexesSelect.setItems(indexes);
 
             this.children.summaryIndexes = new ControlGroup({
                 controls: [this.summaryIndexesSelect],

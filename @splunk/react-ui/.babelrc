@@ -1,0 +1,28 @@
+{
+  "presets": [
+    [
+      "@splunk/babel-preset",
+      {
+        "webpack": true
+      }
+    ]
+  ],
+  "plugins": [
+    "babel-plugin-styled-components"
+  ],
+  "env": {
+    "test-coverage": {
+      "plugins": [
+        [
+          "babel-plugin-istanbul",
+          {
+            "include": [
+              "src/**/*.{js,jsx}"
+            ],
+            "exclude": []
+          }
+        ]
+      ]
+    }
+  }
+}

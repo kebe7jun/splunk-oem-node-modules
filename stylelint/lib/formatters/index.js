@@ -1,7 +1,10 @@
-"use strict"
+/* @flow */
+"use strict";
 
 module.exports = {
+  compact: require("./compactFormatter"),
   json: require("./jsonFormatter"),
   string: require("./stringFormatter"),
-  verbose: require("./verboseFormatter"),
-}
+  unix: require("./unixFormatter"),
+  verbose: require("./verboseFormatter")
+};

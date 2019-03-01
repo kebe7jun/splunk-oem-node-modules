@@ -122,9 +122,9 @@
 			</ul>
 		</div>
 	</div>
-
-
 */
+
+$eventsPaneWidth: 280px;
 
 .search-results-eventspane-controls {
 	min-height: 36px;
@@ -132,13 +132,33 @@
 
 /*  docking controls */
 .events-controls-inner {
-	padding:5px 20px 0 10px;
+	padding: 4px $spacing 4px 0;
 	background-color: $white;
-	height: 31px;
+	height: 42px;
 	position: relative;
+	box-sizing: border-box;
+
+	.pagination {
+		padding-top: 1px;
+	}
 	/* SPL-73911, removing this to fix event controls/modalize issues. */
 	/* --> can't track down why this was here. */
 	/* z-index: 2; */
+
+	i[class^="icon-"] + .link-label {
+		margin-left: $spacingQuarter;
+	}
+
+	.shared-vizcontrols-format {
+		vertical-align: top;
+		> .btn-pill {
+			margin-bottom: 3px;
+		}
+	}
+
+	.btn-group + .btn-group {
+		margin-left: 0;
+	}
 
 	&.affix-top {
 		position: fixed;
@@ -146,8 +166,7 @@
 		left: 0;
 		right: 0;
 		margin-bottom: -1px;
-		border-bottom: 1px solid $borderColor;
-		z-index: $zindexHeaderTable;
+		z-index: calc($zindexHeaderTable + 5);
 		&.disabled .events-controls-inner-cover {
 			position: absolute;
 			top: 0px;
@@ -155,7 +174,7 @@
 			bottom: 0px;
 			left: 0px;
 			opacity: 0.30;
-			background-color: $gray;
+			background-color: $gray45;
 			z-index: 404;
 		}
 	}
@@ -163,26 +182,27 @@
 
 
 .search-results-eventspane-controls-showfield {
-	margin-right: 10px;
+	margin: 0 $spacingHalf;
 }
 
 /*  state for field picker */
 .show-fields {
 	.search-results-wrapper
 	{
-		padding-left: 240px;
+		padding-left: $eventsPaneWidth;
 	}
 	.search-results-eventspane-fieldsviewer {
-		margin-left: -240px;
-		width: 240px;
+		margin-left: -$eventsPaneWidth;
+		width: $eventsPaneWidth;
 		float:left;
+        border-right: $borderLight;
 	}
 
 	.events-controls-inner {
-		margin-left: 241px;
+		margin-left: calc($eventsPaneWidth + 1);
 
 		&.affix-top {
-			left: 241px;
+			left: calc($eventsPaneWidth + 1);
 			margin-left: 0;
 		}
 	}

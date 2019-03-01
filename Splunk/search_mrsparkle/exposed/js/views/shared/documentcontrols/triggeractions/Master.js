@@ -159,7 +159,7 @@ define(
                 this.$el.html(this.compiledTemplate({
                     _: _
                 }));
-                this.$addActionActivator = $('<div class="controls trigger-actions-controls add-action-btn"><a class="dropdown-toggle btn" href="#">' + _('+ Add Actions').t() + '<span class="caret"></span></a></div>');
+                this.$addActionActivator = $('<div class="controls trigger-actions-controls add-action-btn"><a class="dropdown-toggle btn" href="#" aria-label="'+_('Add trigger actions').t() +'">' + _('+ Add Actions').t() + '<span class="caret"></span></a></div>');
                 this.$addActionActivator.appendTo(this.$el);
                 this.children.table.render().appendTo(this.$el);
                 this.toggleTable();

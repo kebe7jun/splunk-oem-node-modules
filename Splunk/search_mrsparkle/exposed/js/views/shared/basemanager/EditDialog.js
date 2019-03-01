@@ -66,7 +66,6 @@ define([
                         // we can only get the 'name' field from this.model.entity.entry
                         model: this.model.entity.entry
                     },
-                    controlClass: 'controls-block',
                     label: _('Name').t()
                 });
             },
@@ -120,7 +119,7 @@ define([
             renderFormControls: function($modalBodyForm) {
                 $modalBodyForm.html(_(this.formControlsTemplate).template({}));
                 this.children.flashMessagesView.render().appendTo(this.$(".flash-messages-view-placeholder"));
-                // TODO: should we hide the input box or disable it? 
+                // TODO: should we hide the input box or disable it?
                 if (this.options.isNew || this.options.isClone) {
                     this.children.name.render().appendTo(this.$(".name-placeholder"));
                 }

@@ -1,0 +1,230 @@
+{
+  "dependencies": {},
+  "devDependencies": {
+    "@splunk/babel-preset": {
+      "version": "0.5.0",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "@splunk/css-loader": {
+      "version": "0.3.4",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "@splunk/eslint-config": {
+      "version": "0.4.0",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "@splunk/karma-unit-test-runner": {
+      "version": "0.13.0",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "@splunk/react-ui": {
+      "version": "0.13.2",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "@splunk/stylelint-config": {
+      "version": "1.2.0",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "@splunk/webpack-configs": {
+      "version": "0.4.0",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "babel-eslint": {
+      "version": "7.2.3",
+      "license": "MIT",
+      "repoUrl": "https://github.com/babel/babel-eslint.git",
+      "vendorUrl": "https://github.com/babel/babel-eslint",
+      "vendorName": "Sebastian McKenzie",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "babel-loader": {
+      "version": "7.1.2",
+      "license": "MIT",
+      "repoUrl": "https://github.com/babel/babel-loader.git",
+      "vendorUrl": "https://github.com/babel/babel-loader",
+      "vendorName": "Luis Couto",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "chai": {
+      "version": "3.5.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/chaijs/chai",
+      "vendorUrl": "http://chaijs.com/",
+      "vendorName": "Jake Luer",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "enzyme": {
+      "version": "2.9.1",
+      "license": "MIT",
+      "repoUrl": "https://github.com/airbnb/enzyme.git",
+      "vendorUrl": "http://airbnb.io/enzyme/",
+      "vendorName": "Leland Richardson",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint": {
+      "version": "4.7.2",
+      "license": "MIT",
+      "repoUrl": "https://github.com/eslint/eslint.git",
+      "vendorUrl": "http://eslint.org/",
+      "vendorName": "Nicholas C. Zakas",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-config-airbnb": {
+      "version": "15.1.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/airbnb/javascript",
+      "vendorUrl": "https://github.com/airbnb/javascript",
+      "vendorName": "Jake Teton-Landis",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-config-prettier": {
+      "version": "2.6.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/prettier/eslint-config-prettier.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Simon Lydell",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-import-resolver-webpack": {
+      "version": "0.8.3",
+      "license": "MIT",
+      "repoUrl": "git+https://github.com/benmosher/eslint-plugin-import.git",
+      "vendorUrl": "https://github.com/benmosher/eslint-plugin-import#readme",
+      "vendorName": "Ben Mosher",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-plugin-import": {
+      "version": "2.7.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/benmosher/eslint-plugin-import",
+      "vendorUrl": "https://github.com/benmosher/eslint-plugin-import",
+      "vendorName": "Ben Mosher",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-plugin-jsx-a11y": {
+      "version": "5.1.1",
+      "license": "MIT",
+      "repoUrl": "https://github.com/evcohen/eslint-plugin-jsx-a11y",
+      "vendorUrl": "Unknown",
+      "vendorName": "Ethan Cohen",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-plugin-react": {
+      "version": "7.4.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/yannickcr/eslint-plugin-react",
+      "vendorUrl": "https://github.com/yannickcr/eslint-plugin-react",
+      "vendorName": "Yannick Croissant",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "html-webpack-plugin": {
+      "version": "2.30.1",
+      "license": "MIT",
+      "repoUrl": "https://github.com/jantimon/html-webpack-plugin.git",
+      "vendorUrl": "https://github.com/jantimon/html-webpack-plugin",
+      "vendorName": "Charles Blaxland",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "lodash": {
+      "version": "4.17.4",
+      "license": "MIT",
+      "repoUrl": "https://github.com/lodash/lodash.git",
+      "vendorUrl": "https://lodash.com/",
+      "vendorName": "John-David Dalton",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "prettier": {
+      "version": "1.7.4",
+      "license": "MIT",
+      "repoUrl": "https://github.com/prettier/prettier.git",
+      "vendorUrl": "https://prettier.io/",
+      "vendorName": "James Long",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "react": {
+      "version": "16.2.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/facebook/react.git",
+      "vendorUrl": "https://reactjs.org/",
+      "vendorName": "Unknown",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "react-dom": {
+      "version": "16.2.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/facebook/react.git",
+      "vendorUrl": "https://reactjs.org/",
+      "vendorName": "Unknown",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "react-test-renderer": {
+      "version": "15.6.2",
+      "license": "MIT",
+      "repoUrl": "https://github.com/facebook/react.git",
+      "vendorUrl": "https://facebook.github.io/react/",
+      "vendorName": "Unknown",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "sinon": {
+      "version": "2.4.1",
+      "license": "BSD-3-Clause",
+      "repoUrl": "http://github.com/sinonjs/sinon.git",
+      "vendorUrl": "http://sinonjs.org/",
+      "vendorName": "Christian Johansen",
+      "licenseLink": "https://spdx.org/licenses/BSD-3-Clause.html"
+    },
+    "stylelint": {
+      "version": "8.1.1",
+      "license": "MIT",
+      "repoUrl": "https://github.com/stylelint/stylelint.git",
+      "vendorUrl": "https://stylelint.io/",
+      "vendorName": "Unknown",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "webpack": {
+      "version": "3.6.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/webpack/webpack.git",
+      "vendorUrl": "https://github.com/webpack/webpack",
+      "vendorName": "Tobias Koppers @sokra",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "webpack-dev-server": {
+      "version": "2.9.4",
+      "license": "MIT",
+      "repoUrl": "https://github.com/webpack/webpack-dev-server.git",
+      "vendorUrl": "https://github.com/webpack/webpack-dev-server",
+      "vendorName": "Tobias Koppers @sokra",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "webpack-merge": {
+      "version": "3.0.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/survivejs/webpack-merge.git",
+      "vendorUrl": "https://github.com/survivejs/webpack-merge",
+      "vendorName": "Juho Vepsalainen",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    }
+  }
+}

@@ -1,6 +1,22 @@
-// HumanizeDuration.js - http://git.io/j0HgmQ
+// HumanizeDuration.js - https://git.io/j0HgmQ
 
 ;(function () {
+  // This has to be defined separately because of a bug: we want to alias
+  // `gr` and `el` for backwards-compatiblity. In a breaking change, we can
+  // remove `gr` entirely.
+  // See https://github.com/EvanHahn/HumanizeDuration.js/issues/143 for more.
+  var greek = {
+    y: function (c) { return c === 1 ? 'χρόνος' : 'χρόνια' },
+    mo: function (c) { return c === 1 ? 'μήνας' : 'μήνες' },
+    w: function (c) { return c === 1 ? 'εβδομάδα' : 'εβδομάδες' },
+    d: function (c) { return c === 1 ? 'μέρα' : 'μέρες' },
+    h: function (c) { return c === 1 ? 'ώρα' : 'ώρες' },
+    m: function (c) { return c === 1 ? 'λεπτό' : 'λεπτά' },
+    s: function (c) { return c === 1 ? 'δευτερόλεπτο' : 'δευτερόλεπτα' },
+    ms: function (c) { return c === 1 ? 'χιλιοστό του δευτερολέπτου' : 'χιλιοστά του δευτερολέπτου' },
+    decimal: ','
+  }
+
   var languages = {
     ar: {
       y: function (c) { return c === 1 ? 'سنة' : 'سنوات' },
@@ -8,9 +24,22 @@
       w: function (c) { return c === 1 ? 'أسبوع' : 'أسابيع' },
       d: function (c) { return c === 1 ? 'يوم' : 'أيام' },
       h: function (c) { return c === 1 ? 'ساعة' : 'ساعات' },
-      m: function (c) { return c === 1 ? 'دقيقة' : 'دقائق' },
+      m: function (c) {
+        return ['دقيقة', 'دقائق'][getArabicForm(c)]
+      },
       s: function (c) { return c === 1 ? 'ثانية' : 'ثواني' },
       ms: function (c) { return c === 1 ? 'جزء من الثانية' : 'أجزاء من الثانية' },
+      decimal: ','
+    },
+    bg: {
+      y: function (c) { return ['години', 'година', 'години'][getSlavicForm(c)] },
+      mo: function (c) { return ['месеца', 'месец', 'месеца'][getSlavicForm(c)] },
+      w: function (c) { return ['седмици', 'седмица', 'седмици'][getSlavicForm(c)] },
+      d: function (c) { return ['дни', 'ден', 'дни'][getSlavicForm(c)] },
+      h: function (c) { return ['часа', 'час', 'часа'][getSlavicForm(c)] },
+      m: function (c) { return ['минути', 'минута', 'минути'][getSlavicForm(c)] },
+      s: function (c) { return ['секунди', 'секунда', 'секунди'][getSlavicForm(c)] },
+      ms: function (c) { return ['милисекунди', 'милисекунда', 'милисекунди'][getSlavicForm(c)] },
       decimal: ','
     },
     ca: {
@@ -25,14 +54,14 @@
       decimal: ','
     },
     cs: {
-      y: function (c) { return ['rok', 'roku', 'roky', 'let'][getCzechForm(c)] },
-      mo: function (c) { return ['měsíc', 'měsíce', 'měsíce', 'měsíců'][getCzechForm(c)] },
-      w: function (c) { return ['týden', 'týdne', 'týdny', 'týdnů'][getCzechForm(c)] },
-      d: function (c) { return ['den', 'dne', 'dny', 'dní'][getCzechForm(c)] },
-      h: function (c) { return ['hodina', 'hodiny', 'hodiny', 'hodin'][getCzechForm(c)] },
-      m: function (c) { return ['minuta', 'minuty', 'minuty', 'minut'][getCzechForm(c)] },
-      s: function (c) { return ['sekunda', 'sekundy', 'sekundy', 'sekund'][getCzechForm(c)] },
-      ms: function (c) { return ['milisekunda', 'milisekundy', 'milisekundy', 'milisekund'][getCzechForm(c)] },
+      y: function (c) { return ['rok', 'roku', 'roky', 'let'][getCzechOrSlovakForm(c)] },
+      mo: function (c) { return ['měsíc', 'měsíce', 'měsíce', 'měsíců'][getCzechOrSlovakForm(c)] },
+      w: function (c) { return ['týden', 'týdne', 'týdny', 'týdnů'][getCzechOrSlovakForm(c)] },
+      d: function (c) { return ['den', 'dne', 'dny', 'dní'][getCzechOrSlovakForm(c)] },
+      h: function (c) { return ['hodina', 'hodiny', 'hodiny', 'hodin'][getCzechOrSlovakForm(c)] },
+      m: function (c) { return ['minuta', 'minuty', 'minuty', 'minut'][getCzechOrSlovakForm(c)] },
+      s: function (c) { return ['sekunda', 'sekundy', 'sekundy', 'sekund'][getCzechOrSlovakForm(c)] },
+      ms: function (c) { return ['milisekunda', 'milisekundy', 'milisekundy', 'milisekund'][getCzechOrSlovakForm(c)] },
       decimal: ','
     },
     da: {
@@ -57,6 +86,7 @@
       ms: function (c) { return 'Millisekunde' + (c === 1 ? '' : 'n') },
       decimal: ','
     },
+    el: greek,
     en: {
       y: function (c) { return 'year' + (c === 1 ? '' : 's') },
       mo: function (c) { return 'month' + (c === 1 ? '' : 's') },
@@ -78,6 +108,17 @@
       s: function (c) { return 'segundo' + (c === 1 ? '' : 's') },
       ms: function (c) { return 'milisegundo' + (c === 1 ? '' : 's') },
       decimal: ','
+    },
+    fa: {
+      y: 'سال',
+      mo: 'ماه',
+      w: 'هفته',
+      d: 'روز',
+      h: 'ساعت',
+      m: 'دقیقه',
+      s: 'ثانیه',
+      ms: 'میلی ثانیه',
+      decimal: '.'
     },
     fi: {
       y: function (c) { return c === 1 ? 'vuosi' : 'vuotta' },
@@ -101,15 +142,62 @@
       ms: function (c) { return 'milliseconde' + (c >= 2 ? 's' : '') },
       decimal: ','
     },
-    gr: {
-      y: function (c) { return c === 1 ? 'χρόνος' : 'χρόνια' },
-      mo: function (c) { return c === 1 ? 'μήνας' : 'μήνες' },
-      w: function (c) { return c === 1 ? 'εβδομάδα' : 'εβδομάδες' },
-      d: function (c) { return c === 1 ? 'μέρα' : 'μέρες' },
-      h: function (c) { return c === 1 ? 'ώρα' : 'ώρες' },
-      m: function (c) { return c === 1 ? 'λεπτό' : 'λεπτά' },
-      s: function (c) { return c === 1 ? 'δευτερόλεπτο' : 'δευτερόλεπτα' },
-      ms: function (c) { return c === 1 ? 'χιλιοστό του δευτερολέπτου' : 'χιλιοστά του δευτερολέπτου' },
+    gr: greek,
+    hr: {
+      y: function (c) {
+        if (c % 10 === 2 || c % 10 === 3 || c % 10 === 4) {
+          return 'godine'
+        }
+        return 'godina'
+      },
+      mo: function (c) {
+        if (c === 1) {
+          return 'mjesec'
+        } else if (c === 2 || c === 3 || c === 4) {
+          return 'mjeseca'
+        }
+        return 'mjeseci'
+      },
+      w: function (c) {
+        if (c % 10 === 1 && c !== 11) {
+          return 'tjedan'
+        }
+        return 'tjedna'
+      },
+      d: function (c) { return c === 1 ? 'dan' : 'dana' },
+      h: function (c) {
+        if (c === 1) {
+          return 'sat'
+        } else if (c === 2 || c === 3 || c === 4) {
+          return 'sata'
+        }
+        return 'sati'
+      },
+      m: function (c) {
+        var mod10 = c % 10
+        if ((mod10 === 2 || mod10 === 3 || mod10 === 4) && (c < 10 || c > 14)) {
+          return 'minute'
+        }
+        return 'minuta'
+      },
+      s: function (c) {
+        if ((c === 10 || c === 11 || c === 12 || c === 13 || c === 14 || c === 16 || c === 17 || c === 18 || c === 19) || (c % 10 === 5)) {
+          return 'sekundi'
+        } else if (c % 10 === 1) {
+          return 'sekunda'
+        } else if (c % 10 === 2 || c % 10 === 3 || c % 10 === 4) {
+          return 'sekunde'
+        }
+        return 'sekundi'
+      },
+      ms: function (c) {
+        if (c === 1) {
+          return 'milisekunda'
+        } else if (c % 10 === 2 || c % 10 === 3 || c % 10 === 4) {
+          return 'milisekunde'
+        }
+        return 'milisekundi'
+      },
       decimal: ','
     },
     hu: {
@@ -178,6 +266,17 @@
       ms: '밀리 초',
       decimal: '.'
     },
+    lo: {
+      y: 'ປີ',
+      mo: 'ເດືອນ',
+      w: 'ອາທິດ',
+      d: 'ມື້',
+      h: 'ຊົ່ວໂມງ',
+      m: 'ນາທີ',
+      s: 'ວິນາທີ',
+      ms: 'ມິນລິວິນາທີ',
+      decimal: ','
+    },
     lt: {
       y: function (c) { return ((c % 10 === 0) || (c % 100 >= 10 && c % 100 <= 20)) ? 'metų' : 'metai' },
       mo: function (c) { return ['mėnuo', 'mėnesiai', 'mėnesių'][getLithuanianForm(c)] },
@@ -235,7 +334,7 @@
     },
     pt: {
       y: function (c) { return 'ano' + (c === 1 ? '' : 's') },
-      mo: function (c) { return c !== 1 ? 'meses' : 'mês' },
+      mo: function (c) { return c === 1 ? 'mês' : 'meses' },
       w: function (c) { return 'semana' + (c === 1 ? '' : 's') },
       d: function (c) { return 'dia' + (c === 1 ? '' : 's') },
       h: function (c) { return 'hora' + (c === 1 ? '' : 's') },
@@ -258,12 +357,34 @@
     uk: {
       y: function (c) { return ['років', 'рік', 'роки'][getSlavicForm(c)] },
       mo: function (c) { return ['місяців', 'місяць', 'місяці'][getSlavicForm(c)] },
-      w: function (c) { return ['неділь', 'неділя', 'неділі'][getSlavicForm(c)] },
+      w: function (c) { return ['тижнів', 'тиждень', 'тижні'][getSlavicForm(c)] },
       d: function (c) { return ['днів', 'день', 'дні'][getSlavicForm(c)] },
       h: function (c) { return ['годин', 'година', 'години'][getSlavicForm(c)] },
       m: function (c) { return ['хвилин', 'хвилина', 'хвилини'][getSlavicForm(c)] },
       s: function (c) { return ['секунд', 'секунда', 'секунди'][getSlavicForm(c)] },
       ms: function (c) { return ['мілісекунд', 'мілісекунда', 'мілісекунди'][getSlavicForm(c)] },
+      decimal: ','
+    },
+    ur: {
+      y: 'سال',
+      mo: function (c) { return c === 1 ? 'مہینہ' : 'مہینے' },
+      w: function (c) { return c === 1 ? 'ہفتہ' : 'ہفتے' },
+      d: 'دن',
+      h: function (c) { return c === 1 ? 'گھنٹہ' : 'گھنٹے' },
+      m: 'منٹ',
+      s: 'سیکنڈ',
+      ms: 'ملی سیکنڈ',
+      decimal: '.'
+    },
+    sk: {
+      y: function (c) { return ['rok', 'roky', 'roky', 'rokov'][getCzechOrSlovakForm(c)] },
+      mo: function (c) { return ['mesiac', 'mesiace', 'mesiace', 'mesiacov'][getCzechOrSlovakForm(c)] },
+      w: function (c) { return ['týždeň', 'týždne', 'týždne', 'týždňov'][getCzechOrSlovakForm(c)] },
+      d: function (c) { return ['deň', 'dni', 'dni', 'dní'][getCzechOrSlovakForm(c)] },
+      h: function (c) { return ['hodina', 'hodiny', 'hodiny', 'hodín'][getCzechOrSlovakForm(c)] },
+      m: function (c) { return ['minúta', 'minúty', 'minúty', 'minút'][getCzechOrSlovakForm(c)] },
+      s: function (c) { return ['sekunda', 'sekundy', 'sekundy', 'sekúnd'][getCzechOrSlovakForm(c)] },
+      ms: function (c) { return ['milisekunda', 'milisekundy', 'milisekundy', 'milisekúnd'][getCzechOrSlovakForm(c)] },
       decimal: ','
     },
     sv: {
@@ -477,19 +598,6 @@
     return destination
   }
 
-  // Internal helper function for Czech language.
-  function getCzechForm (c) {
-    if (c === 1) {
-      return 0
-    } else if (Math.floor(c) !== c) {
-      return 1
-    } else if (c % 10 >= 2 && c % 10 <= 4 && c % 100 < 10) {
-      return 2
-    } else {
-      return 3
-    }
-  }
-
   // Internal helper function for Polish language.
   function getPolishForm (c) {
     if (c === 1) {
@@ -518,6 +626,19 @@
     }
   }
 
+  // Internal helper function for Slovak language.
+  function getCzechOrSlovakForm (c) {
+    if (c === 1) {
+      return 0
+    } else if (Math.floor(c) !== c) {
+      return 1
+    } else if (c % 10 >= 2 && c % 10 <= 4 && c % 100 < 10) {
+      return 2
+    } else {
+      return 3
+    }
+  }
+
   // Internal helper function for Lithuanian language.
   function getLithuanianForm (c) {
     if (c === 1 || (c % 10 === 1 && c % 100 > 20)) {
@@ -529,10 +650,17 @@
     }
   }
 
+  // Internal helper function for Arabic language.
+  function getArabicForm (c) {
+    if (c <= 2) { return 0 }
+    if (c > 2 && c < 11) { return 1 }
+    return 0
+  }
+
   humanizeDuration.getSupportedLanguages = function getSupportedLanguages () {
     var result = []
     for (var language in languages) {
-      if (languages.hasOwnProperty(language)) {
+      if (languages.hasOwnProperty(language) && language !== 'gr') {
         result.push(language)
       }
     }
@@ -550,4 +678,4 @@
   } else {
     this.humanizeDuration = humanizeDuration
   }
-})();  // eslint-disable-line semi
+})(); // eslint-disable-line semi

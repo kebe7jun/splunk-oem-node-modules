@@ -3,7 +3,12 @@
     Page Presentation
 *********************************************/
 
-@import '../shared/pcss/data-enrichment-vars-mixins.pcss';
+@define-mixin highlighted-match-container  {
+  .remove-button {
+    position: relative;
+    margin-left: 3px;
+  }
+}
 
 .main-section-body > .alerts {
     padding: 25px 50px;
@@ -14,20 +19,51 @@
     min-height: 0;
 }
 
+
+.field-extractor-master {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: $navbarHeight;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
 .page-header {
     margin: 0px;
     height: 80px;
-    border-bottom: 1px solid $borderColor;
+    flex: 0 0 auto;
+    border-bottom: $borderDefault;
+    padding-bottom: 0;
+    background: $bodyBackgroundColor;
+    box-shadow: $affixTopBoxShadow;
+    text-align: center;
+    z-index: 2;
+
+    &[data-mode="manual"] {
+        text-align: left;
+
+        .extract-fields-page-title {
+            line-height: 48px;
+        }
+    }
+}
+
+.instruction-title {
+    margin-top: 0;
 }
 
 .page-content {
-    min-height: 0;
+    min-height: calc(100vh - (80px + $navbarHeight + 50px));
+    padding: $spacing;
+    overflow-y: auto;
 }
 
 .content-header {
-    padding: 15px 20px 0 20px;
-    background-color: $white;
+    padding: $spacing $spacing 0 $spacing;
     @mixin clearfix;
+    @mixin create-card;
 
     .remove-button {
         float: left;
@@ -35,19 +71,25 @@
         font-size: 18px;
         clear: both;
         line-height: 28px;
-        margin-top: -10px;
+        margin-top: -$spacingHalf;
     }
+}
+
+.content-header-narrow {
+    width: 940px;
+    margin: 0 auto;
 }
 
 
 .content-body {
     width: 100%;
-    background-color: $white;
     min-height: 400px;
+    @mixin create-card;
 
     .body-instructions {
-        margin-left: 20px;
-        margin-bottom: 10px;
+        padding-top: $spacing;
+        margin-left: $spacing;
+        margin-bottom: $spacingHalf;
     }
 }
 
@@ -70,55 +112,31 @@
     }
 }
 
-.highlighted-border-green {
-    box-shadow: inset 0 0 0 3px $greenHighlight;
+@for $i from 1 to 3 {
+    .highlighted-border-cat$i {
+        box-shadow: inset 0 0 0 3px $cat$(i)ColorL;
+    }
 }
 
-.highlighted-border-yellow {
-    box-shadow: inset 0 0 0 3px $yellowHighlight;
-}
-
-.highlighted-border-pink {
-    box-shadow: inset 0 0 0 3px $pinkHighlight;
-}
-
-.highlighted-border-blue {
-    box-shadow: inset 0 0 0 3px $blueHighlight;
-}
-
-.highlighted-border-orange {
-    box-shadow: inset 0 0 0 3px $orangeHighlight;
-}
-
-.highlighted-border-salmon {
-    box-shadow: inset 0 0 0 3px $salmonHighlight;
-}
-
-.highlighted-border-purple {
-    box-shadow: inset 0 0 0 3px $purpleHighlight;
-}
 
 /********************************************
     Header Bar
 *********************************************/
-
-$headerLineHeight: 80px;
 .extract-fields-page-title {
-    font-size: 20px;
-    padding: 0px 20px;
-    float: left;
-    line-height: $headerLineHeight;
+    padding: 0px $spacing;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .view-all-extractions-button-container {
     display: inline-block;
     float: right;
     line-height: 63px;
-    margin-right: 20px;
+    margin-right: $spacing;
     margin-top: 8px;
     .icon-alert {
-        color: $red;
-        margin-right: 10px;
+        color: $errorColor;
+        margin-right: $spacingHalf;
         font-size: 200%;
     }
     .view-extractions-button {
@@ -127,20 +145,16 @@ $headerLineHeight: 80px;
 }
 
 .instruction{
-    padding: 8px 0px 20px 0px;
+    padding-bottom: $spacing;
 }
 
 .step-buttons-container {
     display: inline-block;
-    margin-top: 8px;
-}
-
-.return-automatic-mode, .return-manual-page, .manual-save-button {
-    margin-top: calc(($headerLineHeight - 27px) / 2);
+    vertical-align: middle;
 }
 
 .manual-save-button {
-    margin-left: 15px;
+    margin-left: $spacingThreeQuarters;
 }
 
 .button-big {
@@ -150,12 +164,12 @@ $headerLineHeight: 80px;
     line-height: 100px;
     font-size: 29px;
     float: left;
-    margin-bottom: 20px;
+    margin-bottom: $spacing;
 }
 
 .method-desc {
     float: left;
-    padding: 20px;
+    padding: $spacing;
     line-height: 26px;
 }
 
@@ -172,6 +186,7 @@ $headerLineHeight: 80px;
     width: 900px;
     margin: 0 auto;
     text-align: center;
+    margin-bottom: $spacing;
 }
 
 .type-container {
@@ -184,89 +199,68 @@ $headerLineHeight: 80px;
 
 .type-btn {
     display: block;
-    margin: 0 auto 10px auto;
-    padding: 10px 0 5px 0;
+    margin: 0 auto $spacingHalf auto;
+    padding: $spacingHalf 0 $spacingQuarter 0;
     cursor: pointer;
     width: 220px;
-    border-radius: 4px;
+    border-radius: $borderRadius;
+    transition: $transitionBackgroundColor;
 
     svg {
         fill: none;
     }
 
-    @if $theme == enterprise {
-        .stroke {
-            stroke: $splunkGreen;
-            stroke-width: 1px ;
-        }
-        .stroke-thick {
-            stroke-width: 2px;
-        }
-        .fill {
-            fill: $splunkGreen;
-        }
-        &:hover {
-            background-color: color($splunkGreen l(+50%));
-        }
+    .stroke {
+        stroke: $brandColor;
+        stroke-width: 1px ;
     }
-
-    @if $theme == lite {
-        .stroke {
-            stroke: $splunkLiteOrange;
-            stroke-width: 1px ;
-        }
-        .stroke-thick {
-            stroke-width: 2px;
-        }
-        .fill {
-            fill: $splunkLiteOrange;
-        }
-        &:hover {
-            background-color: color($splunkLiteOrange l(+39%));
-        }
+    .stroke-thick {
+        stroke-width: 2px;
+    }
+    .fill {
+        fill: $brandColor;
+    }
+    &:hover {
+        background-color: $gray98;
+    }
+    &:focus {
+        @mixin focus-element;
     }
 }
 
 .selected-method {
-    /*  selected color is light blue for both enterprise and lite */
-    background-color: color($blue blend($white 88%));
+    background-color: $accentColorL40;
 }
 
 .type-title-text {
-    color: $splunkGreen;
-    font-size: 20px;
+    font-weight: bold;
     line-height: 24px;
 }
 
 .type-desc-text {
-    font-size: 11px;
-    line-height: 16px;
+    font-size: $fontSizeSmall;
+    line-height: $lineHeight;
     color: $textGray;
     width: 220px;
     margin-left: 65px;
     margin-right: 65px;
 }
 
-@if $theme == lite {
-    .type-title-text {
-        color: $splunkLiteOrange;
-    }
-}
 
 /********************************************
     Pick Sample Event Mode
 *********************************************/
 .instructions-container {
-    padding: 20px 0px 10px 20px;
+    padding: $spacing 0px $spacingHalf $spacing;
 }
 
 .sourcetype-label-container {
-    padding: 10px 0px 10px 20px;
+    padding: $spacingHalf 0px $spacingHalf $spacing;
 }
 
 .sourcetype-label, .type-label {
-    margin-left: 20px;
-    margin-right: 5px;
+    margin-left: $spacing;
+    margin-right: $spacingQuarter;
     margin-left: 0px;
 }
 
@@ -276,13 +270,12 @@ $headerLineHeight: 80px;
 
 .select-sample-header {
     .manual-mode-button-container {
-        margin-top: 5px;
+        margin-top: $spacingQuarter;
     }
 }
 
 .type-wrapper {
     display: inline-block;
-    margin-bottom: 20px;
 }
 
 .sourcetype-dropdown-wrapper, .type-dropdown-wrapper {
@@ -295,7 +288,7 @@ $headerLineHeight: 80px;
 
 .source-wrapper {
     display: block;
-    margin-top: 20px;
+    margin-top: $spacing;
 }
 
 .sourcetypeMenu {
@@ -303,16 +296,8 @@ $headerLineHeight: 80px;
 }
 
 .sourcetype-wrapper {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.input-container .shared-findinput {
-    text-align: center;
-    margin: 5px;
-    .search-query {
-        width: 190px;
-    }
+    margin-top: $spacing;
+    margin-bottom: $spacing;
 }
 
 .dropdown-submenu .dropdown-menu {
@@ -324,7 +309,7 @@ $headerLineHeight: 80px;
 }
 
 .dropdown-submenu > .dropdown-menu {
-  border-radius: 3px;
+  border-radius: $borderRadius;
 }
 
 /********************************************
@@ -333,14 +318,14 @@ $headerLineHeight: 80px;
 
 .event-wrapper {
     background-color: $white;
-    border-radius: 5px;
-    padding: 5px;
+    border-radius: $borderRadius;
+    padding: $spacingQuarter;
     border: 1px solid rgba(82,168,236,.8);
-    margin: 20px 0;
+    margin: $spacing 0;
 
     &.not-interactive {
-        background-color: $blueDark;
-        border-color: $blueDark;
+        background-color: $accentColorD20;
+        border-color: $accentColorD20;
         color: $white;
         user-select:none;
     }
@@ -348,12 +333,12 @@ $headerLineHeight: 80px;
 
 
 .remove-button +  .event-wrapper {
-	margin-top: -10px;
+	margin-top: -$spacingHalf;
 }
 
 
 .select-fields-header + .automatic-extraction-editor {
-	margin-top: -20px;
+	margin-top: -$spacing;
 }
 
 
@@ -364,7 +349,7 @@ $headerLineHeight: 80px;
     }
 
     .sample-event-wrapper {
-        margin-left: 20px;
+        margin-left: $spacing;
     }
 
     .highlighted-match, .highlighted-existing-match, .required-text {
@@ -381,11 +366,20 @@ $headerLineHeight: 80px;
 
 }
 
+.interactive-extraction-cell {
+  @mixin highlighted-match-container;
+  white-space: pre-wrap !important;
+  font-family: $monoFontFamily;
+  .shared-resultstable-resultstablerow > &:only-child {
+    position: relative;
+  }
+}
+
 .fieldextractor-mastereventdelimeditor {
     overflow: auto;
     .master-event-container {
         margin-top: 35px;
-        margin-bottom: 20px;
+        margin-bottom: $spacing;
         overflow-x: visible;
         table {
             border: 0px;
@@ -394,7 +388,7 @@ $headerLineHeight: 80px;
                 cursor: pointer;
                 .icon-pencil {
                     padding-left: 4px;
-                    color: $blueDark;
+                    color: $accentColorD20;
                 }
             }
             td {
@@ -411,11 +405,11 @@ $headerLineHeight: 80px;
     }
 
     .counter-example-wrapper {
-        margin-left: 20px;
-        border-color: $red;
+        margin-left: $spacing;
+        border-color: $errorColor;
 
         .removed-text {
-            color: $red;
+            color: $errorColor;
             text-decoration: line-through;
         }
     }
@@ -426,22 +420,22 @@ $headerLineHeight: 80px;
 *********************************************/
 
 .manual-extraction-editor {
-    margin-top: 5px;
+    margin-top: $spacingQuarter;
     .input-title {
         display: inline-block;
-        margin-right: 10px;
+        margin-right: $spacingHalf;
     }
     a.btn, a.btn-pill, .preview-in-search-button, .regex-docs-link {
         float: right;
-        margin-left: 10px;
+        margin-left: $spacingHalf;
     }
     .regex-editor-wrapper {
         textarea {
-            width: 99%;
+            width: 100%;
         }
     }
     .preview-in-search-button, .regex-docs-link {
-        margin-top: 5px;
+        margin-top: $spacingQuarter;
     }
 
     .required-text-warning .icon-info-circle {
@@ -457,20 +451,20 @@ $headerLineHeight: 80px;
     Delimiter mode
 *********************************************/
 .delim-selector {
-    padding-top: 10px;
+    padding-top: $spacingHalf;
 
     .delimiter-radio {
-        padding-top:5px;
+        padding-top: $spacingQuarter;
 
         .shared-controls-syntheticradiocontrol {
-            padding-top: 5px;
+            padding-top: $spacingQuarter;
         }
 
         .delim-custom {
-            margin-top: 5px;
+            margin-top: $spacingQuarter;
             margin-bottom: 0px;
-            margin-left: 10px;
-            margin-right: 10px;
+            margin-left: $spacingHalf;
+            margin-right: $spacingHalf;
             padding-right: 0px;
             width: 45px;
         }
@@ -482,17 +476,21 @@ $headerLineHeight: 80px;
     Save Extractions
 *********************************************/
 .save-extractions-container {
-    margin-right: 20px;
-    padding-bottom: 10px;
+    margin-right: $spacing;
+    padding-bottom: $spacingHalf;
 }
 
 .save-extractions-form {
-    margin-bottom: 20px;
+    margin-bottom: $spacing;
+
+    .shared-permissions-acl {
+        margin: 0 0 0 180px;
+    }
 }
 
 .shared-documentcontrols-dialogs-permissionsdialog-acl {
-    margin: 15px 0px 10px 180px;
-    border: 1px solid $borderColor;
+    margin: $spacingThreeQuarters 0px $spacingHalf 180px;
+    border: $borderDefault;
     border-top: 0px;
     width: 600px;
 }
@@ -502,21 +500,15 @@ $headerLineHeight: 80px;
     margin-bottom: 0px;
 }
 
-.save-extractions-form, .review-extractions-form {
-    .control-label {
-        font-weight: bold;
-    }
-}
-
 .review-extractions-form {
     display: inline-block;
-    border-top: 1px solid $borderColor;
-    padding-top: 15px;
+    border-top: $borderDefault;
+    padding-top: $spacingThreeQuarters;
     width: 100%;
 }
 
 .sample-event-container {
-    margin-top: 15px;
+    margin-top: $spacingThreeQuarters;
 }
 
 .sample-event-label {
@@ -529,10 +521,10 @@ $headerLineHeight: 80px;
 
 .event-text {
     white-space: pre-wrap;
-    margin-top: 5px;
-    margin-bottom: 15px;
+    margin-top: $spacingQuarter;
+    margin-bottom: $spacingThreeQuarters;
     font-family: $monoFontFamily;
-    line-height: 20px;
+    line-height: $spacing;
     padding-bottom: 0px;
     word-wrap: break-word;
 }
@@ -550,6 +542,7 @@ $headerLineHeight: 80px;
 .extract-prelabel {
     position: relative;
     top: 2px;
+    font-weight: 500;
 }
 
 /********************************************
@@ -565,14 +558,14 @@ $headerLineHeight: 80px;
         line-height: 25px;
 
         i {
-            font-size: 15px;
-            margin-right: 10px
+            font-size: $spacingThreeQuarters;
+            margin-right: $spacingHalf;
         }
     }
 
     h4 {
     	font-weight: normal;
-    	font-size: $baseFontSizeLarge;
+    	font-size: $fontSizeLarge;
     }
 }
 
@@ -581,28 +574,28 @@ $headerLineHeight: 80px;
 *********************************************/
 
 .extraction-viewer {
-    margin-bottom: 10px;
+    margin-bottom: $spacingHalf;
 
     .regex-text-container {
-        margin-top: 10px;
-        margin-bottom: 5px;
-        padding: 10px;
-        border: 1px solid $borderColor;
+        margin-top: $spacingHalf;
+        margin-bottom: $spacingQuarter;
+        padding: $spacingHalf;
+        border: $borderDefault;
     }
 
     .regex-button-container {
         a.btn {
             float: right;
-            margin-left: 10px;
+            margin-left: $spacingHalf;
         }
     }
 
     .search-button-container {
         a.btn {
             float: right;
-            margin-left: 10px;
+            margin-left: $spacingHalf;
         }
-        padding-bottom: 10px;
+        padding-bottom: $spacingHalf;
     }
 }
 
@@ -613,12 +606,12 @@ $headerLineHeight: 80px;
     display: inline;
 
     .match-results-control-bar {
-        padding-top: 5px;
-        padding-left: 20px;
-        padding-right: 10px;
+        padding-left: $spacing;
+        padding-right: $spacingHalf;
 
-        .count-container {
-            padding-top: 5px;
+        .spinner-container > .spinner-small {
+            margin-top: 2px;
+            margin-right: $spacingQuarter;
         }
 
         .search-filter-container {
@@ -633,7 +626,7 @@ $headerLineHeight: 80px;
     table {
         margin-bottom: 0;
         .selected-master-event-cell {
-            $selectedBgColor: $blueDark;
+            $selectedBgColor: $accentColorD20;
             $selectedColor: $white;
             background-color: $selectedBgColor !important;
             color: $selectedColor !important;
@@ -652,22 +645,27 @@ $headerLineHeight: 80px;
 
 .add-sample-event-button {
     position: absolute;
-    right: 50px;
+    right: 3px;
     background-color: $linkColor;
     color:white;
-    padding: 3px 10px;
-    border-radius: 8px;
-    margin-top: -19px;
+    padding: 3px $spacingHalf;
+    border-radius: $borderRadius;
+    margin-top: -23px;
     cursor: pointer;
-    font-family: $baseFontFamily;
+    font-family: $fontFamily;
+
+    .interactive-extraction-cell.field-extraction > & {
+        margin-top: 0;
+        top: 3px;
+    }
 }
 
 .nav-tabs {
   background-color: $white;
-  @mixin gradient-vertical $white, $white;
+  background-image: linear-gradient(to bottom, $white, $white);
   border-top: none;
-  padding-top: 15px;
-  height: 35px;
+  padding-top: $spacingThreeQuarters;
+  height: auto;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
@@ -679,7 +677,6 @@ $headerLineHeight: 80px;
 }
 
 .shared-tabcontrols-tabbase{
-    padding-bottom: 23px;
     min-width: -webkit-min-content;
 }
 
@@ -689,17 +686,17 @@ $headerLineHeight: 80px;
 *********************************************/
 
 .existing-extractions-list {
-    padding: 15px;
+    padding: $spacingThreeQuarters;
     .sourcetype-name, .source-name {
         font-weight: bold;
     }
     .table {
-        margin-top: 20px;
-        border: 1px solid $borderColor;
+        margin-top: $spacing;
+        border: $borderDefault;
         width: 385px;
     }
     .extractions-sidebar-instructions {
-        margin-top: 10px;
+        margin-top: $spacingHalf;
     }
 }
 
@@ -713,43 +710,43 @@ $headerLineHeight: 80px;
 *********************************************/
 
 .edit-extraction-action, .remove-required-text {
-    padding-left: 20px !important;
+    padding-left: $spacing !important;
 }
 
 .dropdown-menu li.dropdown-title-field-name, li.dropdown-title-required-text {
-    margin-left: 10px;
-    padding: 7px 10px;
+    margin-left: $spacingHalf;
+    padding: 7px $spacingHalf;
 }
 
 .extraction-form-mode-toggle div.btn-group-radio {
     margin-left: 85px;
-    padding-bottom: 10px;
+    padding-bottom: $spacingHalf;
     .btn {
         width: 82px;
     }
 }
 
 .require-message {
-    padding-top: 10px;
-    padding-bottom: 20px;
+    padding-top: $spacingHalf;
+    padding-bottom: $spacing;
 }
 
 .field-extraction-form {
-    padding: 10px 0px 0px 0px;
+    padding: $spacingHalf 0px 0px 0px;
     background-color: $white;
     width: 269px;
     .extraction-form-container {
-        padding: 0px 10px;
+        padding: 0px $spacingHalf;
     }
     .extraction-form-buttons {
-        background-color: $grayLighter;
-        padding-bottom: 10px;
+        background-color: $gray92;
+        padding-bottom: $spacingHalf;
         .submit-button {
-            margin-right: 10px;
+            margin-right: $spacingHalf;
         }
     }
     .alerts{
-        margin: 0px 10px;
+        margin: 0px $spacingHalf;
         .alert {
             padding: 8px 8px 8px 27px;
             margin: 0px;
@@ -758,13 +755,13 @@ $headerLineHeight: 80px;
 }
 
 .no-fields-message-container {
-    margin: 0px 10px;
+    margin: 0px $spacingHalf;
     .no-fields-message {
         position: relative;
         padding: 8px 8px 18px 42px;
         margin: 0px;
         .icon-alert {
-            color: $red;
+            color: $errorColor;
             font-size: 200%;
             position: absolute;
             left: 10px;
@@ -775,7 +772,7 @@ $headerLineHeight: 80px;
 
 .extraction-form-content {
     .no-fields-message {
-        padding: 5px 10px 10px 10px;
+        padding: $spacingQuarter $spacingHalf $spacingHalf;
     }
     .selected-text-control {
         overflow: hidden;

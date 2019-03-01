@@ -78,7 +78,6 @@ define(
                     this.children.scheduleWindow = new ControlGroup({
                         className: 'control-group',
                         controlType: 'SyntheticSelect',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: 'schedule_window_option',
                             model: this.model.scheduleWindow,
@@ -115,7 +114,6 @@ define(
                     this.children.schedulePriority = new ControlGroup({
                         className: 'control-group',
                         controlType: 'SyntheticSelect',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: 'schedule_priority',
                             model: this.model.inmem.entry.content,
@@ -164,7 +162,7 @@ define(
                     this.children.customWindow.render().appendTo(this.$el);
                     this.$('.custom-window').append('<span class="custom-window-text">'+_('minutes').t()+'</span>');
                 }
-                
+
                 this.setLabel();
                 this.toggleCustomWindow();
 

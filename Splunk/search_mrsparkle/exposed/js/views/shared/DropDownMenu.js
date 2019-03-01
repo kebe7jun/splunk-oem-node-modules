@@ -66,12 +66,12 @@ define(
         moduleId: module.id,
         DEFAULT_CLASS_NAME: "btn-group pull-right",
         DEFAULT_ANCHOR_CLASS_NAME: "btn",
-        initialize: function(options) {
-            BaseView.prototype.initialize.call(this, options);
-            options = options || {};
+        initialize: function() {
+            BaseView.prototype.initialize.apply(this, arguments);
             this.enabled = true;
-            this.$el.addClass(options.hasOwnProperty('className') ? options.className : this.DEFAULT_CLASS_NAME);
-            this.anchorClassName = options.hasOwnProperty('anchorClassName') ? options.anchorClassName : this.DEFAULT_ANCHOR_CLASS_NAME;
+            this.$el.addClass(this.options.hasOwnProperty('className') ? this.options.className : this.DEFAULT_CLASS_NAME);
+            this.anchorClassName = this.options.hasOwnProperty('anchorClassName') ? this.options.anchorClassName : this.DEFAULT_ANCHOR_CLASS_NAME;
+            this.iconSizeClassName = this.options.hasOwnProperty('largeIcons') ? 'icon-large' : '';
             this.options.popdownOptions = $.extend(true, { el: this.el , attachDialogTo: 'body'}, this.options.popdownOptions);
         },
         setItems: function(items) {
@@ -146,7 +146,7 @@ define(
 
         template: '\
             <a class="dropdown-toggle" href="#">\
-                <% if (options.labelIcon) { %><i class="icon-<%- options.labelIcon %> icon-large"></i><% } %><span class="link-label"><%- options.label %></span><span class="caret"></span>\
+                <% if (options.labelIcon) { %><i class="icon-<%- options.labelIcon %> <%- this.iconSizeClassName %>"></i><% } %><span class="link-label"><%- options.label %></span><span class="caret"></span>\
             </a>\
             <div class="dropdown-menu <%- options.dropdownClassName || \'\' %>">\
                 <div class="arrow"></div>\
@@ -161,7 +161,7 @@ define(
                                     <% } %>\
                                 >\
                                     <% if (object.icon) { %> \
-                                        <i class="icon-<%- object.icon %> icon-large"></i>\
+                                        <i class="icon-<%- object.icon %> <%- this.iconSizeClassName %>"></i>\
                                     <% } %>\
                                     <%- object.label %>\
                                 </a>\
@@ -179,7 +179,7 @@ define(
                                     <% } %>\
                                     >\
                                     <% if (object.icon) { %> \
-                                        <i class="icon-<%- object.icon %> icon-large"></i>\
+                                        <i class="icon-<%- object.icon %> <%- this.iconSizeClassName %>"></i>\
                                     <% } %>\
                                     <%- object.label %>\
                                 </a>\

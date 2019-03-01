@@ -219,7 +219,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'prov-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'name',
                         model: this.model.provider.entry.content,
@@ -231,7 +230,6 @@ define(
                 this.children.description = new ControlGroup({
                     className: 'provider-description control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.description',
                         model: this.model.provider.entry.content,
@@ -248,12 +246,11 @@ define(
                 this.children.family = new ControlGroup({
                     className: 'prov-family control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.family',
                         model: this.model.provider.entry.content,
                         items: this.familyNames,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'narrow',
                         toggleClassName: 'btn'
                     },
@@ -290,7 +287,6 @@ define(
                 this.children.enableThrottling = new ControlGroup({
                     className: 'prov-enable-throttling control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: ENABLE_THROTTLING,
                         model: this.model.throttling,
@@ -301,7 +297,6 @@ define(
 
                 this.children.throttling = new ControlGroup({
                     className: 'bandwidth-throttling control-group',
-                    controlClass: 'controls-block',
                     controls: [new BandwidthControl({model: this.model.throttling,
                         modelAttribute: "maxBandwidth"})],
                     label: _('Max Archiving Bandwidth').t(),
@@ -320,7 +315,6 @@ define(
                 this.children.javaHome = new ControlGroup({
                     className: 'prov-java-home control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.env.JAVA_HOME',
                         model: this.model.provider.entry.content,
@@ -333,7 +327,6 @@ define(
                 this.children.hadoopHome = new ControlGroup({
                     className: 'prov-hadoop-home control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.env.HADOOP_HOME',
                         model: this.model.provider.entry.content,
@@ -366,7 +359,7 @@ define(
                             {label: _('Hadoop 2.x, (MRv1)').t(), value: HADOOP_2X},
                             {label: _('Hadoop 2.x, (Yarn)').t(), value: HADOOP_2X_YARN}
                         ],
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'narrow',
                         toggleClassName: 'btn'
                     },
@@ -376,7 +369,6 @@ define(
                 this.children.jobTracker = new ControlGroup({
                     className: 'prov-job-tracker control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: JOB_TRACKER,
                         model: this.model.provider.entry.content,
@@ -390,7 +382,6 @@ define(
                 this.children.fileSystem = new ControlGroup({
                     className: 'prov-file-system control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.fs.default.name',
                         model: this.model.provider.entry.content,
@@ -403,7 +394,6 @@ define(
                 this.children.enablePassThrough = new ControlGroup({
                     className: 'control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.splunk.impersonation',
                         model: this.model.provider.entry.content,
@@ -415,27 +405,25 @@ define(
                 this.children.resourceManager = new ControlGroup({
                     className: 'prov-resource-manager control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.yarn.resourcemanager.address',
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Resource Manager Address').t(),
-                    help: _('').t()
+                    help: ''
                 });
 
                 this.children.resourceScheduler = new ControlGroup({
                     className: 'prov-resource-scheduler control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.yarn.resourcemanager.scheduler.address',
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Resource Scheduler Address').t(),
-                    help: _('').t()
+                    help: ''
                 });
 
                 this.sections.providerPaths = new Section({
@@ -453,7 +441,6 @@ define(
                 this.children.homeHdfs = new ControlGroup({
                     className: 'prov-home-hdfs control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.splunk.home.hdfs',
                         model: this.model.provider.entry.content,
@@ -467,7 +454,6 @@ define(
                 this.children.jobQueue = new ControlGroup({
                     className: 'prov-job-queue control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.mapred.job.queue.name',
                         model: this.model.provider.entry.content,
@@ -494,7 +480,6 @@ define(
                 this.children.addSecureCluster = new ControlGroup({
                     className: 'prov-secure-cluster control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: KERBEROS_AUTHORIZATION,
                         model: this.model.provider.entry.content,
@@ -506,7 +491,6 @@ define(
                 this.children.kerberosMode = new ControlGroup({
                     className: 'prov-kerberos-mode control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: KERBEROS_MODE,
                         model: this.model.provider.entry.content,
@@ -516,8 +500,8 @@ define(
                         save: false
                     },
                     label: _('Mode').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 this.children.kerberosConfig = new ControlGroup({
@@ -531,137 +515,128 @@ define(
                             {label: _('Server Name and Realm').t(), value: KERBEROS_CONFIG_SWITCH_SERVER_NAME_AND_REALM},
                             {label: _('Configuration File Path').t(), value: KERBEROS_CONFIG_SWITCH_FILE_PATH}
                         ],
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         toggleClassName: 'btn'
                     },
-                    label: _('').t()
+                    label: ''
                 });
 
                 this.children.kerberosServerName = new ControlGroup({
                     className: 'prov-kerberos-server-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: KERBEROS_SERVER_NAME,
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Kerberos Server Name').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 this.children.kerberosDefaultRealm = new ControlGroup({
                     className: 'prov-kerberos-default-realm control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: KERBEROS_REALM,
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Kerberos Default Realm').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 // ERP-582: Configuration File Path
                 this.children.kerberosConfigurationFilePath = new ControlGroup({
                     className: 'prov-kerberos-configuration-file-path control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: KERBEROS_CONFIGURATION_FILE_PATH,
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Kerberos Configuration File Path').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 this.children.kerberosPrincipalName = new ControlGroup({
                     className: 'prov-kerberos-principal-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.kerberos.principal',
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Kerberos Principal Name').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 this.children.kerberosKeytabPath = new ControlGroup({
                     className: 'prov-kerberos-keytab-path control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.kerberos.keytab',
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Kerberos Keytab Path').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 this.children.hdfsPrincipal = new ControlGroup({
                     className: 'prov-hdfs-principal control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.dfs.namenode.kerberos.principal',
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('HDFS Principal').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 this.children.mapreducePrincipal = new ControlGroup({
                     className: 'prov-mapreduce-principal control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: KERBEROS_MAPREDUCE_PRINCIPAL,
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('MapReduce Principal').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 this.children.resourcemanagerPrincipal = new ControlGroup({
                     className: 'prov-resourcemanager-principal control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.yarn.resourcemanager.principal',
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Resource Manager Principal').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 this.children.nodemanagerPrincipal = new ControlGroup({
                     className: 'prov-nodemanager-principal control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.yarn.nodemanager.principal',
                         model: this.model.provider.entry.content,
                         save: false
                     },
                     label: _('Node Manager Principal').t(),
-                    help: _('').t(),
-                    tooltip: _('').t()
+                    help: '',
+                    tooltip: ''
                 });
 
                 // Section
@@ -915,8 +890,8 @@ define(
                     $html.find('.admin-content').append(this.sections.additionalSettings.render().el);
 
                     $html.find('.admin-content').append('<div class="button-wrapper" />');
-                    $html.find('.admin-content .button-wrapper').append('<a href="#" class="btn cancel pull-left">' + _('Cancel').t() + '</a>');
                     $html.find('.admin-content .button-wrapper').append('<a href="#" class="btn btn-primary pull-right">' + _('Save').t() + '</a>');
+                    $html.find('.admin-content .button-wrapper').append('<a href="#" class="btn btn-secondary cancel pull-right">' + _('Cancel').t() + '</a>');
                 }
                 this.$el.html($html);
 

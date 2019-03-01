@@ -28,7 +28,7 @@ define(
     ) {
         return Base.extend({
             moduleId: module.id,
-            className:'section-content',
+            className:'main-section',
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
 
@@ -54,7 +54,7 @@ define(
                     this.model.sourcesResult.fetchData.set({count: 50}, {silent: true});
                     this.model.sourcetypesResult = new ResultModel();
                     this.model.sourcetypesResult.fetchData.set({count: 50}, {silent: true});
-                    
+
                     this.model.hostsJob = JobModel.createMetaDataSearch(
                         '| metadata type=hosts | search totalCount > 0 | table host totalCount recentTime | fieldformat totalCount=tostring(totalCount, "commas") | fieldformat recentTime=strftime(recentTime, "' + time_utils.ISO_PATTERN + '")',
                         hostsJobDeferred,
@@ -62,7 +62,7 @@ define(
                         minDelay,
                         {data: {provenance: 'UI:Search'}}
                     );
-                    
+
                     this.model.sourcesJob = JobModel.createMetaDataSearch(
                         '| metadata type=sources | search totalCount > 0 | table source totalCount recentTime | fieldformat totalCount=tostring(totalCount, "commas") | fieldformat recentTime=strftime(recentTime, "' + time_utils.ISO_PATTERN + '")',
                         sourcesJobDeferred,
@@ -70,7 +70,7 @@ define(
                         minDelay,
                         {data: {provenance: 'UI:Search'}}
                     );
-                    
+
                     this.model.sourcetypesJob = JobModel.createMetaDataSearch(
                         '| metadata type=sourcetypes | search totalCount > 0 | table sourcetype totalCount recentTime | fieldformat totalCount=tostring(totalCount, "commas") | fieldformat recentTime=strftime(recentTime, "' + time_utils.ISO_PATTERN + '")',
                         sourcetypesJobDeferred,
@@ -106,8 +106,8 @@ define(
                             this
                         );
                     }.bind(this));
-                    
-                    $.when(sourcetypesJobDeferred).then(function() {                        
+
+                    $.when(sourcetypesJobDeferred).then(function() {
                         this.model.sourcetypesJob.registerJobProgressLinksChild(
                             JobModel.RESULTS_PREVIEW,
                             this.model.sourcetypesResult,
@@ -184,20 +184,22 @@ define(
                 return this;
             },
             template: '\
-                <div class="column column-what">\
-                </div>\
-                <div class="column column-how">\
-                    <% if (isAdmin) { %>\
-                        <h3><%- _("Data").t() %></h3>\
-                        <a href="<%- addDataRoute %>" title="<%- _("Add Data").t() %>" class="btn btn-wide add-data"><%- _("Add Data").t() %></a>\
-                        <p><%=link%></p>\
-            	<% } %>\
-                    <ul class="howto">\
-                        <h3><%- _("Documentation").t() %></h3>\
-                        <li><a href="<%- gettingStartedRoute %>" class="external" target="_blank" title="<%- _("Getting Started").t() %>"><%- _("Getting Started").t() %></a></li>\
-                        <li><a href="<%- searchExamplesRoute %>" class="external" target="_blank" title="<%- _("Search Examples").t() %>"><%- _("Search Examples").t() %></a></li>\
-                        <li><a href="http://www.splunk.com/view/SP-CAAAN57" class="external" target="_blank" title="<%- _("Video Product Tour").t() %>"><%- _("Video Product Tour").t() %></a></li>\
-                    </ul>\
+                <div class="columns">\
+                    <div class="column column-what">\
+                    </div>\
+                    <div class="column column-how">\
+                        <% if (isAdmin) { %>\
+                            <h3><%- _("Data").t() %></h3>\
+                            <a href="<%- addDataRoute %>" title="<%- _("Add Data").t() %>" class="btn btn-wide add-data"><%- _("Add Data").t() %></a>\
+                             <p><%=link%></p>\
+                    <% } %>\
+                        <ul class="howto">\
+                            <h3><%- _("Documentation").t() %></h3>\
+                            <li><a href="<%- gettingStartedRoute %>" class="external" target="_blank" title="<%- _("Getting Started").t() %>"><%- _("Getting Started").t() %></a></li>\
+                            <li><a href="<%- searchExamplesRoute %>" class="external" target="_blank" title="<%- _("Search Examples").t() %>"><%- _("Search Examples").t() %></a></li>\
+                            <li><a href="http://www.splunk.com/view/SP-CAAAN57" class="external" target="_blank" title="<%- _("Video Product Tour").t() %>"><%- _("Video Product Tour").t() %></a></li>\
+                        </ul>\
+                    </div>\
                 </div>\
             '
         });

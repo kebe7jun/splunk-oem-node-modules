@@ -9,12 +9,14 @@
 define([
             'underscore',
             'module',
-            'views/shared/controls/ControlGroup'
+            'views/shared/controls/ControlGroup',
+            'views/shared/controls/Control'
         ],
         function(
             _,
             module,
-            ControlGroup
+            ControlGroup,
+            Control
         ) {
 
     return ControlGroup.extend({

@@ -27,18 +27,7 @@ define(function(require, exports, module) {
             $td.html(_.template(this.template, cellData));
         },
 
-        template: '\
-            <% if (_.isArray(value)) { %>\
-                <% _(value).each(function(subValue, i) { %>\
-                    <div tabindex="0" class="<%- MV_SUBCELL_CLASSNAME %>" <%- MV_INDEX_ATTR %>="<%- i %>">\
-                        <%- subValue %>\
-                    </div>\
-                <% }) %>\
-            <% } else { %>\
-                <%- value %>\
-            <% } %>\
-        '
-
+        template: '<% if (_.isArray(value)) { %><% _(value).each(function(subValue, i) { %><div tabindex="0" class="<%- MV_SUBCELL_CLASSNAME %>" <%- MV_INDEX_ATTR %>="<%- i %>"><%- subValue %></div><% }) %><% } else { %><%- value %><% } %>'
     });
 
 });

@@ -60,6 +60,7 @@ define(
                 */
 
                 this.children.hostsPane = new Pane({
+                    id: "hosts",
                     type: "host",
                     label: _("Host").t(),
                     model: {
@@ -72,6 +73,7 @@ define(
                 });
 
                 this.children.sourcesPane = new Pane({
+                    id: "sources",
                     type: "source",
                     label: _("Source").t(),
                     model: {
@@ -84,6 +86,7 @@ define(
                 });
 
                 this.children.sourcetypesPane = new Pane({
+                    id: "sourcetypes",
                     type: "sourcetype",
                     label: _("Sourcetype").t(),
                     model: {
@@ -110,7 +113,12 @@ define(
 
                     this.hide();
                 });
-
+                
+                this.listenTo(this,'shown', function(){
+                    if (this.selectedView) {
+                        this.selectedView.focus();
+                    }
+                });
                 /*
                 this.children.tagsPane = new TagsPane();
                 this.children.eventtypesPane = new EventtypesPane();
@@ -127,33 +135,22 @@ define(
                 Modal.prototype.show.apply(this, arguments);
             },
             wake: function (selectedTab) {
-                this.children.hostsPane.sleep().$el.hide();
-                this.children.sourcesPane.sleep().$el.hide();
-                this.children.sourcetypesPane.sleep().$el.hide();
-                /*
-                this.children.tagsPane.sleep().$el.hide();
-                this.children.eventtypesPane.sleep().$el.hide();
-                */
-
-                switch (selectedTab) {
-                    case 'hosts':
-                        this.children.hostsPane.wake().$el.show();
-                        break;
-                    case 'sources':
-                        this.children.sourcesPane.wake().$el.show();
-                        break;
-                    case 'sourcetypes':
-                        this.children.sourcetypesPane.wake().$el.show();
-                        break;
-                    /*
-                    case 'tags':
-                        this.children.tagsPane.wake().$el.show();
-                        break;
-                    case 'eventtypes':
-                        this.children.eventtypesPane.wake().$el.show();
-                        break;
-                    */
-                }
+                var tabToView = {
+                    hosts: this.children.hostsPane,
+                    sources: this.children.sourcesPane,
+                    sourcetypes: this.children.sourcetypesPane
+                    //tags: this.children.tagsPane,
+                    //eventTypes: this.children.eventTypes
+                };
+                
+                _.values(tabToView).forEach(function(view) {
+                    view.sleep().$el.hide();
+                });
+                
+                this.selectedView = tabToView[selectedTab];
+                this.selectedView.wake().$el.show();
+                this.selectedView.focus();
+                
                 this.children.tabsDelegate.show(this.$('a[data-type="' + selectedTab + '"]'));
                 return this;
             },
@@ -166,7 +163,7 @@ define(
 
                 this.$(Modal.HEADER_TITLE_SELECTOR).html(_("Data Summary").t());
 
-                this.$(Modal.BODY_SELECTOR).append(template);
+                this.$(Modal.BODY_SELECTOR).append(template).removeClass(Modal.BODY_SCROLLING_CLASS);
 
                 this.children.hostsTab.render().appendTo(this.$('.main-tabs'));
                 this.children.sourcesTab.render().appendTo(this.$('.main-tabs'));

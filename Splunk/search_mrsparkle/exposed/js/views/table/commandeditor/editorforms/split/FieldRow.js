@@ -21,7 +21,8 @@ define(
                 this.children.nameInput = new TextControl({
                     modelAttribute: 'name',
                     model: this.model,
-                    updateOnKeyUp: true
+                    updateOnKeyUp: true,
+                    size: 'small'
                 });
             },
 

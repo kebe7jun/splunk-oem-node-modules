@@ -42,6 +42,7 @@ define([
             hideFooter: false,
             hideTitle: false,
             hideEdit: false,
+            hideExport: false,
             targetTop: false,
             hideFilters: false
         },

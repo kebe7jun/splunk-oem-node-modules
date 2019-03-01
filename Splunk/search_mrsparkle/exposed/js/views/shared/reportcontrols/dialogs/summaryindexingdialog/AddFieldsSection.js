@@ -43,14 +43,17 @@ define([
 
                 // create any existing fields
                 _.each(_.keys(this.model.fieldList.attributes), function(k) {
-                    var newRow = new NewFieldRow({
-                        model: this.model.fieldList,
-                        numRow: this.settingRows.length,
-                        defaultKey: k,
-                        defaultValue: this.model.fieldList.attributes[k]
-                    });
-                    this.settingRows.push(newRow);
-                    this.listenTo(newRow, 'closeRow', this.onCloseRow);
+                    // SPL-159480: Remove forceCsvResults parameter from summary indexing dialog.
+                    if(k.toString() !== "forceCsvResults" ) {
+                        var newRow = new NewFieldRow({
+                            model: this.model.fieldList,
+                            numRow: this.settingRows.length,
+                            defaultKey: k,
+                            defaultValue: this.model.fieldList.attributes[k]
+                        });
+                        this.settingRows.push(newRow);
+                        this.listenTo(newRow, 'closeRow', this.onCloseRow);
+                    }
                 }.bind(this));
 
                 // add empty field if no existing fields

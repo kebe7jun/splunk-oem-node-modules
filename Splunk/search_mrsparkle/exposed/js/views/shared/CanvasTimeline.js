@@ -499,10 +499,10 @@ define(function(require, exports, module) {
         showDataControls: function(show) {
             if (show) {
                 $(".controlLinks", this.container).removeClass("noData");
-                this.zoomOutLink.removeClass("disabled");
+                this.enableControlLink(this.zoomOutLink);
             } else {
                 $(".controlLinks", this.container).addClass("noData");
-                this.zoomOutLink.addClass("disabled");
+                this.disableControlLink(this.zoomOutLink);
             }
         },
 
@@ -641,11 +641,11 @@ define(function(require, exports, module) {
             this.isEntireRangeSelected = false;
 
             if (this.selectAllLink) {
-                this.selectAllLink.removeClass("disabled");
+                this.enableControlLink(this.selectAllLink);
             }
 
             if (this.zoomInLink) {
-                this.zoomInLink.removeClass("disabled");
+                this.enableControlLink(this.zoomInLink);
             }
 
             if (this._timeline) {
@@ -665,11 +665,11 @@ define(function(require, exports, module) {
             this.isEntireRangeSelected = true;
 
             if (this.selectAllLink) {
-                this.selectAllLink.addClass("disabled");
+                this.disableControlLink(this.selectAllLink);
             }
 
             if (this.zoomInLink) {
-                this.zoomInLink.addClass("disabled");
+                this.disableControlLink(this.zoomInLink);
             }
 
             if (this._timeline) {
@@ -862,8 +862,8 @@ define(function(require, exports, module) {
             }
 
             this.isEntireRangeSelected = false;
-            this.selectAllLink.removeClass("disabled");
-            this.zoomInLink.removeClass("disabled");
+            this.enableControlLink(this.selectAllLink);
+            this.enableControlLink(this.zoomInLink);
 
             if ((earliestTime !== this._selectedEarliestTime) || (latestTime !== this._selectedLatestTime)) {
                 this._selectedEarliestTime = earliestTime;
@@ -915,6 +915,20 @@ define(function(require, exports, module) {
                 return false;
 
             return true;
+        },
+        
+        disableControlLink: function(controlLink) {
+            if (controlLink && controlLink.addClass && controlLink.attr) {
+                controlLink.addClass("disabled");
+                controlLink.attr("aria-disabled", "true");
+            }
+        },
+        
+        enableControlLink: function(controlLink) {
+            if (controlLink && controlLink.removeClass && controlLink.attr) {
+                controlLink.removeClass("disabled");
+                controlLink.attr("aria-disabled", "false");
+            }
         },
 
         /**
@@ -1015,9 +1029,9 @@ define(function(require, exports, module) {
                 </div>\
             </div>\
             <div class="controlLinks noData noSelection">\
-                <a href="#" class="zoomOut disabled btn-pill"><span class="icon-minus"></span> <%- zoomOutLabel %></a>\
-                <a href="#" class="zoomIn disabled btn-pill"><span class="icon-plus"></span> <%- zoomInLabel %></a>\
-                <a href="#" class="selectAll disabled btn-pill"><span class="icon-x"></span> <%- deselectLabel %></a>\
+                <a href="#" aria-disabled="true" class="zoomOut disabled btn-pill"><span class="icon-minus"></span> <%- zoomOutLabel %></a>\
+                <a href="#" aria-disabled="true" class="zoomIn disabled btn-pill"><span class="icon-plus"></span> <%- zoomInLabel %></a>\
+                <a href="#" aria-disabled="true" class="selectAll disabled btn-pill"><span class="icon-x"></span> <%- deselectLabel %></a>\
                 <span class="bucketSize pull-right"></span>\
             </div>\
             <div class="timelineContainer" style="width:<%- width %>; height:<%- height %>; <%- wrapperStyle %>"></div>\
@@ -1081,8 +1095,7 @@ define(function(require, exports, module) {
 
                 if (module.model.serverInfo && module.model.serverInfo.isLite())
                     this._timeline.set("seriesColor", 0xF58220);
-
-                this._timeline.set("seriesColor", 0x7191A8);
+                    this._timeline.set("borderColor", 0xFFFFFF);
 
                 //var foregroundColor = module.getCSSColor([module.container], "border-left-color");
                 //if (foregroundColor)

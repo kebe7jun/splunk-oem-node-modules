@@ -8,7 +8,8 @@ var DEFAULT_OPTIONS = {
     extractText: false,
     extractTextFilename: "[name].css",
     splunkVersion: 'dev',
-    profileName: ''
+    profileName: '',
+    loadTheme: 'enterprise'
 };
 
 /**
@@ -26,9 +27,8 @@ var DEFAULT_OPTIONS = {
  * output a css file.
  * @param {String} [options.extractTextFilename = '[name].css'] - A name file
  * name to use with the extract text plugin.
- * @param {String} [options.loadTheme] - If supplied, use the
- * splunk-postcss-theme-import with the provided value. Must be 'enterprise' or
- * 'lite'.
+ * @param {String} [options.loadTheme = 'enterprise'] - Determines the brand
+ * color. Must be 'enterprise' or 'lite'.
  * @returns {Object} webpack configuration object
  */
 module.exports = function(options) {
@@ -68,39 +68,31 @@ module.exports = function(options) {
         });
     }
 
-    var config = {
+    return {
         plugins: plugins,
         module: {
             loaders: loaders
         },
         postcss: function (webpack) {
-            var postCssPlugins = [];
-            if (options.loadTheme) {
-                var themeImport = require('../../postcss_plugins/splunk-postcss-theme-import');
-                postCssPlugins.push(themeImport({
-                    theme: options.loadTheme
-                }));
-            }
 
-            return postCssPlugins.concat([
+            return [
+                require('../../postcss_plugins/splunk-postcss-theme-import')({ theme: options.loadTheme }),
                 require('postcss-import')({
                     path: options.path,
                     addDependencyTo: webpack
                 }),
                 require('postcss-mixins'),
-            //    require('../../postcss_plugins/splunk-postcss-mixin-class'),
                 require('postcss-for'),
                 require('postcss-simple-vars')({
-                    variables: options.variables
+                    variables: _.merge({ theme: options.loadTheme }, options.variables)
                 }),
                 require('postcss-conditionals'),
                 require('postcss-calc'),
                 require('postcss-color-function'),
-                require('postcss-initial'),
+                require('postcss-initial')({ replace: true }),
                 require('autoprefixer')({ browsers: ['last 2 versions'] }),
                 require('postcss-nested')
-            ]);
+            ];
         }
     };
-    return config;
 };

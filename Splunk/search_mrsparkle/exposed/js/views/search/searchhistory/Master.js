@@ -49,17 +49,15 @@ define([
             events: {
                 'click a.show-history': function(e) {
                     e.preventDefault();
-                    var $span = this.$('.show-history > span');
+                    var $title = this.$('.show-history > h3');
                     if (this.$('.show-history > i').hasClass('icon-chevron-down')) {
                         this.children.historyContent.$el.hide();
                         this.children.historyContent.deactivate({deep: true});
-                        this.$('i.icon-chevron-down').removeClass('icon-chevron-down').addClass('icon-chevron-right');
-                        $span.text(_("Expand your search history").t());
+                        this.$('.show-history > i').removeClass('icon-chevron-down').addClass('icon-chevron-right');
                     } else {
                         this.children.historyContent.$el.show();
                         this.children.historyContent.activate({deep: true});
-                        this.$('i.icon-chevron-right').removeClass('icon-chevron-right').addClass('icon-chevron-down');
-                        $span.text(_("Hide your search history").t());
+                        this.$('.show-history > i').removeClass('icon-chevron-right').addClass('icon-chevron-down');
                     }
                 }
             },
@@ -80,15 +78,14 @@ define([
                 this.$el.html(this.compiledTemplate({
                     _: _
                 }));
+                var $title = this.$('.show-history > h3');
                 this.children.historyContent.render().appendTo(this.$el).$el.hide();
                 return this;
             },
             template: '\
                 <div class="search-history-label">\
-                    <h3><%= _("Search History").t() %></h3>\
                     <a class="show-history" href="#">\
-                        <i class="icon-chevron-right"></i>\
-                        <span><%= _("Expand your search history").t() %></span>\
+                        <i class="icon-chevron-right"></i> <h3 class="h3"><%= _("Search History").t() %></h3>\
                     </a>\
                 </div>\
             '

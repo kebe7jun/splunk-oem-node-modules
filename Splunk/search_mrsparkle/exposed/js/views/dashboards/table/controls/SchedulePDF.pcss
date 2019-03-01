@@ -16,11 +16,16 @@
 		}
 		/*  TODO: this should probably be inline-block */
 		.test-email {
-			width: 100px;
+			max-width: 150px;
 			float: left;
+            margin-right: $spacingHalf;
 			.error {
-				color: $red;
+				color: $errorColor;
 			}
 		}
 	}
+}
+
+.control.shared-controls-textareacontrol.control-default .messagearea {
+		min-height: calc($inputHeight * 2);
 }

@@ -43,7 +43,6 @@ define([
                 }
 
                 var control = new SyntheticSelectControl({
-                    className: 'control-block',
                     items: items,
                     modelAttribute: 'display.visualizations.trellis.splitBy',
                     model: this.model,
@@ -67,7 +66,7 @@ define([
                 else if (sources.length > 1) {
                     label = splunk.util.sprintf(_('Aggregations (%s)').t(), sources.length);
                 }
-                
+
                 return {
                     label: label,
                     value: name,

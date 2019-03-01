@@ -61,7 +61,11 @@ define(
                 if (response.entry.length > 0) {
                     var attr, val,
                         protocolEndpoints = response.entry[0].content.protocol_endpoints,
-                        attributeAliases = response.entry[0].content.attribute_aliases;
+                        attributeAliases = response.entry[0].content.attribute_aliases,
+                        signatureAlgorithm = response.entry[0].content.signatureAlgorithm,
+                        inboundSignatureAlgorithm = response.entry[0].content.inboundSignatureAlgorithm,
+                        outboundAlgs = [],
+                        inboundAlgs = [];
                     for (attr in protocolEndpoints) {
                         if (protocolEndpoints.hasOwnProperty(attr)) {
                             val = protocolEndpoints[attr];
@@ -75,8 +79,20 @@ define(
                         }
                     }
 
-                    // This is a hack but there is no alternative
-                    response.entry[0].content.signatureAlgorithm = response.entry[0].content.signatureAlgorithm.name;
+                    for (attr in signatureAlgorithm) {
+                        if (signatureAlgorithm.hasOwnProperty(attr)) {
+                            outboundAlgs.push(attr);
+                        }
+                    }
+                    response.entry[0].content.signatureAlgorithm = outboundAlgs[0];
+
+                    for (attr in inboundSignatureAlgorithm) {
+                        if (inboundSignatureAlgorithm.hasOwnProperty(attr)) {
+                            inboundAlgs.push(attr);
+                        }
+                    }
+                    response.entry[0].content.inboundSignatureAlgorithm = inboundAlgs;
+
                 }
                 BaseInputModel.prototype.parse.apply(this, arguments);
             }

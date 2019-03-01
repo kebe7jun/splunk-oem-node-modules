@@ -1,32 +1,43 @@
 .main-section .entities-grid .shared-alertcontrols-editmenu .dropdown-menu a {
-	margin-right: 0;
+    margin-right: 0;
 }
 
 .cell-actions,
 .shared-basemanager-statuscell {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 .cell-actions {
-  .shared-reportcontrols-editmenu {
-  	display: inline-block;
-  }
+    .shared-reportcontrols-editmenu {
+        display: inline-block;
+        margin-right: 1em;
+    }
 
-  .shared-alertcontrols-editmenu {
-  	display: inline-block;
-  }
+    .shared-alertcontrols-editmenu {
+        display: inline-block;
+    }
 }
 
 .icon-lightning {
-	color: $textGray;
-	cursor: default;
-	font-size: 18px;
-	height: $baseLineHeight;
-	display: block;
-	overflow: hidden;
+    color: $textGray;
+    cursor: pointer;
+    font-size: 18px;
+    height: $lineHeight;
+    display: block;
+    overflow: hidden;
 }
 
 .icon-lightning-selected {
-	color: $yellow;
-	text-shadow: 0 1px 0 color($yellow l(-20%));
+    color: $warningColor;
+}
+
+.table td .tooltip-link {
+    display: inline-block;
+    line-height: inherit;
+    position: inherit;
+
+    .entity-summarization {
+        display: inline-block;
+        height: $lineHeight;
+    }
 }

@@ -1,16 +1,15 @@
 .input_item{
-  padding:10px 30px 10px 20px;
-  border-bottom: 1px dotted $interactiveBorderBottomColor;
+  padding: $spacingHalf $spacingOneAndAHalf $spacingHalf $spacingThreeQuarters;
+  border-bottom: 1px dotted $interactiveBorderColor;
   position: relative;
   font-size: 14px;
-  
-    
+
     &.selected {
       color: $textGrayDark;
-      background-color: $grayLighter;
-      
+      background-color: $gray92;
+
       &:after {
-      	content: "\203A"; 
+      	content: "\203A";
       	color: $textDisabledColor;
       	font-size: 24px;
       	position: absolute;
@@ -24,33 +23,29 @@
 }
 
 .input_type {
-	line-height: 20px;
+    line-height: 20px;
 }
 
 .input_desc {
   color: $textGray;
-  font-size: 11px;
+  font-size: $fontSizeSmall;
 }
 
 
 
 .input_list .link-wrap {
-  display: block;
-  text-decoration: none !important;
-  
-	&:hover {
-		background-color: $pillBackgroundColorHover;
-	}
-	
-	&:focus {
-		background-color: $pillBackgroundColorFocus;
-		outline: none;
-		
-		
-		.selected {
-			background-color: transparent;
-		}
-	}
+    display: block;
+    text-decoration: none !important;
+    padding: 0;
+
+    &:hover {
+        background-color: $pillBackgroundColorHover;
+    }
+    &:focus {
+        background-color: $pillBackgroundColorFocus;
+        outline: none;
+        @mixin focus-element-inset;
+    }
 }
 
 .form-section.inline {

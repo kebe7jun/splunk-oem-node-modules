@@ -1,9 +1,10 @@
 <%!
     title = 'App Install'
-    %>
-    <%namespace name="lib" file="//lib.html" import="*"/>
-    <%inherit file="//layout/admin.html" />
-    <%
+%>
+<%namespace name="lib" file="//lib.html" import="*"/>
+<%namespace name="helpers" file="//admin/_helpers.html"/>
+<%inherit file="//layout/admin.html" />
+<%
     import splunk
     from splunk.appserver.mrsparkle.lib import util, i18n
 %>

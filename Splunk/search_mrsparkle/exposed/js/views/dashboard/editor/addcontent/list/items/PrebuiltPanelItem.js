@@ -63,7 +63,9 @@ define(
                         <i class="<%- icon %>"></i>\
                         <% if (hasPlusIcon) { %><i class="icon-plus"/><% } %>\
                     </div>\
-                    <%- name %>\
+                    <span>\
+                        <%- name %>\
+                    </span>\
                 </a>\
             '
         });

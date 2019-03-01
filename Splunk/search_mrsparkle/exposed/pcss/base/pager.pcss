@@ -1,43 +1,48 @@
-
-/*  Pager pagination */
-/*  -------------------------------------------------- */
-
-
+/*===============================================================================================*/
+/*  SPLUNK: PAGER PAGINATION                                                                     */
+/*===============================================================================================*/
 .pager {
-  margin: $baseLineHeight 0;
-  list-style: none;
-  text-align: center;
-  @mixin clearfix;
-}
-.pager li {
-  display: inline;
-}
-.pager li > a,
-.pager li > span {
-  display: inline-block;
-  padding: 5px 14px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 15px;
-}
-.pager li > a:hover,
-.pager li > a:focus {
-  text-decoration: none;
-  background-color: #f5f5f5;
-}
-.pager .next > a,
-.pager .next > span {
-  float: right;
-}
-.pager .previous > a,
-.pager .previous > span {
-  float: left;
-}
-.pager .disabled > a,
-.pager .disabled > a:hover,
-.pager .disabled > a:focus,
-.pager .disabled > span {
-  color: $grayLight;
-  background-color: #fff;
-  cursor: default;
+    margin: $lineHeight 0;
+    list-style: none;
+    text-align: center;
+    @mixin clearfix;
+
+    li {
+        display: inline;
+
+        > a,
+        > span {
+            display: inline-block;
+            padding: 5px 14px;
+            background-color: $white;
+            border: $borderDefault;
+            border-radius: 15px;
+        }
+        > a:hover,
+        > a:focus {
+            text-decoration: none;
+            background-color: $gray98;
+        }
+    }
+    .next {
+        > a,
+        > span {
+            float: right;
+        }
+    }
+    .previous {
+        > a,
+        > span {
+            float: left;
+        }
+    }
+    .disabled {
+        > a,
+        > a:hover,
+        > a:focus,
+        > span {
+            text-decoration: none;
+            background-color: $gray98;
+        }
+    }
 }

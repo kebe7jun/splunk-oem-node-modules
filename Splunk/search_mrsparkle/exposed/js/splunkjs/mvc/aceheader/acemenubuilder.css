@@ -2,7 +2,7 @@
 ---------------------------------*/
 
 .splunk-splMenu {
-    font-size: 11px;
+    font-size: $fontSizeS;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -27,7 +27,7 @@
 
 /* secondary menu - black */
 .splunk-splMenu-secondary, .splunk-splMenu-secondary a {
-    color: #CCC;
+    color: #c3cbd4;
 }
 .splunk-splMenu-secondary li.disabled a {
     color:#999;
@@ -65,7 +65,7 @@
     position: absolute;
     display: none;
     text-align: left;
-    border-color: #ccc;
+    border-color: #c3cbd4;
 }
 
 .splunk-splMenu, .splunk-splMenu * {
@@ -91,7 +91,7 @@
    _text-decoration: none;
 }
 .splunk-splMenu ul {
-    border: 1px solid #ccc;
+    border: 1px solid #c3cbd4;
 }
 .splunk-splMenu ul div.splunk-innerMenuWrapper {
     padding: 5px 0px;
@@ -145,6 +145,5 @@
     border-bottom-width: 1px;
     border-bottom-style: solid;
     margin: 3px 0px;
-    border-color: #ccc;
+    border-color: #c3cbd4;
 }
-

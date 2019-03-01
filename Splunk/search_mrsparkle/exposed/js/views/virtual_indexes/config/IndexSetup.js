@@ -186,7 +186,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'index-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'name',
                         model: this.model.index.entry,
@@ -201,12 +200,11 @@ define(
                 this.children.provider = new ControlGroup({
                     className: 'index-provider control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.provider',
                         model: this.model.index.entry.content,
                         items: this.providerNames,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'wide',
                         maxLabelLength: 80,
                         toggleClassName: 'btn'
@@ -217,7 +215,6 @@ define(
                 this.children.description = new ControlGroup({
                     className: 'index-description control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.description',
                         model: this.model.index.entry.content,
@@ -245,7 +242,6 @@ define(
                 this.children.pathHdfs = new ControlGroup({
                     className: 'index-path-hdfs control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.input.1.path',
                         model: this.model.index.entry.content,
@@ -259,7 +255,6 @@ define(
                 this.children.recursiveProcess = new ControlGroup({
                     className: 'index-recursive control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'recursiveProcess',
                         model: this.formModel,
@@ -271,7 +266,6 @@ define(
                 this.children.whitelist = new ControlGroup({
                     className: 'index-whitelist control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.input.1.accept',
                         model: this.model.index.entry.content,
@@ -286,7 +280,6 @@ define(
                 this.children.customizeTimestamp = new ControlGroup({
                     className: 'index-whitelist control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'customizeTimestamp',
                         model: this.formModel,
@@ -298,7 +291,6 @@ define(
                 this.children.timeRegex = new ControlGroup({
                     className: 'index-time-regex control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.input.1.et.regex',
                         model: this.model.index.entry.content,
@@ -312,7 +304,6 @@ define(
                 this.children.timeFormat = new ControlGroup({
                     className: 'index-time-format control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'vix.input.1.et.format',
                         model: this.model.index.entry.content,
@@ -325,7 +316,6 @@ define(
 
                 this.children.timeOffset = new ControlGroup({
                     className: 'control-group',
-                    controlClass: 'controls-block',
                     controlType: 'TimeSecondsControl',
                     controlTypes: {'TimeSecondsControl': TimeSecondsControl},
                     controlOptions: {
@@ -339,7 +329,6 @@ define(
 
                 this.children.timeRange = new ControlGroup({
                     className: 'control-group',
-                    controlClass: 'controls-block',
                     controlType: 'TimeSecondsControl',
                     controlTypes: {'TimeSecondsControl': TimeSecondsControl},
                     controlOptions: {
@@ -353,7 +342,6 @@ define(
 
                 this.children.timeZone = new ControlGroup({
                     className: 'index-time-offset control-group',
-                    controlClass: 'controls-block',
                     controlType: 'TimeZone',
                     controlTypes: {'TimeZone': TimeZoneControl},
                     controlOptions: {
@@ -502,7 +490,7 @@ define(
 
                     label: _('Settings').t(),
                     id: 'additional-settings',
-                    description: _('').t(),
+                    description: '',
                     children: this.children,
                     model: {
                         data: this.model.index

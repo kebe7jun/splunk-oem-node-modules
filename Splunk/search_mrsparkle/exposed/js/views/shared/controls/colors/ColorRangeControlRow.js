@@ -23,6 +23,7 @@ define([
 
         return Control.extend({
             moduleId: module.id,
+            className: 'color-range-control-row',
 
             initialize: function() {
                 Control.prototype.initialize.apply(this, arguments);
@@ -41,31 +42,31 @@ define([
             initRowComponents: function() {
                 var i = this.collection.indexOf(this.model.to);
                 if (this.model.to.get('value') === 'max') {
-                    this.createLabelControl(this.model.from, 'maxFrom', 'from');
                     // Set row's right control to label 'max'
-                    this.createLabelControl(this.model.to, 'max', 'to', 'color-control-right-col');
-                    this.createColorControl(this.model.to, 'max');
+                    this.createLabelControl(this.model.from, 'min', 'from');
+                    this.createLabelControl(this.model.to, 'max', 'to');
+                    this.createColorControl(this.model.to);
                 } else {
                     if (i === 0) {
                         // Set row's left control to label 'min'
                         this.createLabelControl(this.model.from, 'min', 'from');
-                        this.createInputControl(this.model.to, this.model.to.cid, 'to');
+                        this.createInputControl(this.model.to, 'max', 'to');
                     } else if (i === 1 && !this.displayMinMaxLabels) {
                         // Left control should be an input instead of a label
-                        this.createInputControl(this.model.from, this.model.from.cid, 'from', 'color-control-left-col');
-                        this.createInputControl(this.model.to, this.model.to.cid, 'to');
+                        this.createInputControl(this.model.from, 'min', 'from');
+                        this.createInputControl(this.model.to, 'max', 'to');
                     } else {
                         // Most range values get both label and input controls.
                         // Use previous range value to power label.
-                        this.createLabelControl(this.model.from, this.model.from.cid, 'from');
-                        this.createInputControl(this.model.to, this.model.to.cid, 'to', '');
+                        this.createLabelControl(this.model.from, 'min', 'from');
+                        this.createInputControl(this.model.to, 'max', 'to', '');
                     }
-                    this.createColorControl(this.model.to, this.model.to.cid);
+                    this.createColorControl(this.model.to);
                 }
             },
 
             createInputControl: function(model, id, label, customClass) {
-                var inputView = this.children['inputView_' + id] = new InputControl({
+                var inputView = this.children[id + 'View'] = new InputControl({
                     model: model,
                     label: _(label).t(),
                     customClass: customClass
@@ -73,18 +74,19 @@ define([
             },
 
             createLabelControl: function(model, id, label, customClass) {
-                this.children['labelView_' + id] = new LabelControl({
+                this.children[id + 'View'] = new LabelControl({
                     model: model,
                     label: _(label).t(),
                     customClass: customClass
                 });
             },
 
-            createColorControl: function(model, id) {
+            createColorControl: function(model) {
                 if (model.get('color') && model.get('color').length > 0) {
-                    this.children['colorView_' + id] = new ColorControl({
+                    this.children.colorView = new ColorControl({
                         model: model,
-                        paletteColors: this.options.paletteColors
+                        paletteColors: this.options.paletteColors,
+                        className: 'color-range-color-control'
                     });
                 }
             },
@@ -94,27 +96,26 @@ define([
                     this.el.innerHTML = this.compiledTemplate({
                         hideRemoveButton: this.options.hideRemoveButton
                     });
+
+                    this.children.colorView.render().prependTo(this.$el);
+                    this.children.maxView.render().prependTo(this.$el);
+                    // minView requires an extra check, because the implementation of initRowCompoents in
+                    // splunk monitoring console overview preferences' ColorRangeControlRow has a scenario where only 
+                    // colorView and maxView are created; whereas in other cases, all 3 views are created. 
+                    if (!_.isUndefined(this.children.minView)) {
+                        this.children.minView.render().prependTo(this.$el);
+                    }
+                } else {
+                    _(this.children).invoke('render');
                 }
-                var $colorControlsPlaceholder = this.$('.color-controls-placeholder');
-                // Detach all children so that their listeners are preserved when we empty their container.
-                _(this.children).invoke('detach');
-                $colorControlsPlaceholder.empty();
-                _.each(this.children, function(childControl) {
-                    childControl.render().appendTo($colorControlsPlaceholder);
-                }, this);
                 return this;
             },
             template: '\
-                <div class="color-range-control-row">\
-                    <div class="color-controls-placeholder"></div>\
-                    <% if (!hideRemoveButton) { %>\
-                        <div class="remove-range-container">\
-                            <a class="remove-range btn-link" href="#">\
-                                <i class="icon-x-circle"></i>\
-                            </a>\
-                        </div>\
-                    <% } %>\
-                </div>\
+                <% if (!hideRemoveButton) { %>\
+                    <a class="remove-range btn-pill btn-square" href="#">\
+                        <i class="icon-x"></i>\
+                    </a>\
+                <% } %>\
             '
 
     });

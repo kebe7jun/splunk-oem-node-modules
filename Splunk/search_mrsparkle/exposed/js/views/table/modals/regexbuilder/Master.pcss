@@ -1,6 +1,6 @@
 $modalMargin: 0;
 $extractLeftBarWidth: 260px;
-$extractFormBarHeight: 47px;
+$extractFormBarHeight: 62px;
 
 .extract-table-wrapper {
     position: absolute;
@@ -16,22 +16,22 @@ $extractFormBarHeight: 47px;
     .table-results {
         width: 100%
     }
-    
+
     td.field-value {
         font-family: $monoFontFamily;
         whitespace: pre-wrap;
     }
 
     td.field-value span.starting {
-        background-color: color($orange a(50%));
+        background-color: $alertColorL30;
     }
 
     td.field-value span.match {
-        background-color: color($green a(50%));
+        background-color: $successColorL30;
     }
 
     td.field-value span.stopping {
-        background-color: color($red a(50%));
+        background-color: $errorColorL30;
     }
 
     .table-loading-message {
@@ -51,6 +51,7 @@ $extractFormBarHeight: 47px;
     left: $modalMargin;
     right: $modalMargin;
     height: $extractFormBarHeight;
+    width: 100%;
     border-top: 1px solid $borderColor;
 
     background-color: $white;
@@ -82,7 +83,7 @@ $extractFormBarHeight: 47px;
         }
 
         &.disabled {
-            background: $grayLightMedium;
+            background: $gray80;
             cursor: not-allowed;
         }
     }
@@ -156,15 +157,15 @@ $extractFormBarHeight: 47px;
     }
 
     .menu-starting {
-        border-left: 5px solid $orange;
+        border-left: 5px solid $alertColor;
     }
 
     .menu-extraction {
-        border-left: 5px solid $green;
+        border-left: 5px solid $successColor;
     }
 
     .menu-stopping {
-        border-left: 5px solid $red;
+        border-left: 5px solid $errorColor;
     }
 
     .sidebar-loading-message {

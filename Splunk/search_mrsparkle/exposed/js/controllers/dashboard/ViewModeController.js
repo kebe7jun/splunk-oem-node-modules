@@ -390,13 +390,15 @@ define([
             }
         },
         parseDashboardXML: function() {
+            var parserOutput = null;
             try {
                 var newXml = this.model.renderState.get('xml');
                 if (newXml && newXml != this.model.committedState.get('xml')) {
                     this.showLoadingStatus();
                     console.debug('Parsing dashboard XML', {xml: newXml});
                     this.model.committedState.set('xml', newXml);
-                    this.model.renderState.set('structure', this.dashboardParser.parseDashboard(newXml, {retainRawXML: true}));
+                    parserOutput = this.dashboardParser.parseDashboard(newXml, {retainRawXML: true});
+                    this.model.renderState.set('structure', parserOutput);
                 } else {
                     console.debug('XML did not change');
                 }
@@ -405,6 +407,11 @@ define([
                 console.error('Error parsing XML', e);
                 this.showErrorStatus(_("Error parsing dashboard XML: ").t() + e.message);
                 return $.Deferred().resolve();
+            } finally {
+                if (parserOutput) {
+                    this.model.page.setFromDashboardXML(parserOutput.settings);
+                }
+                this.deferreds.xmlParsed.resolve();
             }
         },
         readyForDashboardBody: function() {
@@ -436,6 +443,7 @@ define([
             newStructure.settings.refresh && (this.refreshInterval = newStructure.settings.refresh);
 
             if (!_.isEqual(newStructure, this.model.committedState.get('structure'))) {
+                this.model.page.set('theme', newStructure.settings.theme);
                 this.model.page.setFromDashboardXML(newStructure.settings);
                 this.deferreds.componentReady = $.Deferred();
                 this.tearDownDashboardBody();

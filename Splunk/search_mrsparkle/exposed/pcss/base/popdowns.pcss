@@ -1,9 +1,9 @@
-/*  Splunk: Popdown */
-/*  ================ */
+/*===============================================================================================*/
+/*  SPLUNK: POPDOWN                                                                              */
+/*===============================================================================================*/
 /*  TODO: review how this works with dropdown */
 
 /* popdown for variable content
-
 	<div class="popdown">
 		<div class="popdown-dialog open">
 			<div class="arrow"></div>
@@ -12,7 +12,6 @@
 			</div>
 		</div>
 	</div>
-
 */
 
 /*  Popdown wrapper */
@@ -67,19 +66,4 @@
 	padding: 10px;
 }
 
-/*  Lite UI */
 
-@if $theme == lite {
-	.popdown-dialog {
-		.field-info-header {
-			border: 1px solid $splunkLiteBlack;
-			border-bottom-color: $borderColor;
-			background: $offWhite;
-		}
-	}
-
-	/*  popdown body */
-	.popdown-dialog-footer {
-		background: $offWhite;
-	}
-}

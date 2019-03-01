@@ -1,5 +1,0 @@
-{
-    "name": "Filter Utility",
-    "private": true,
-    "main": "./filter.js"
-}

@@ -45,6 +45,7 @@ View = element view {
 
 A = element a {
     attribute href { text }
+    & attribute target { text }?
     & text
 }
 

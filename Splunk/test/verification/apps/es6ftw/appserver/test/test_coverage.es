@@ -52,7 +52,7 @@ suite('Coverage support for ES6 tests and ES5/ES6 modules', function () {
     });
 
     test('ES6 coverage (core)', function () {
-        assert.deepEqual(envUtil, { DEBUG: true });
+        assert.deepEqual(envUtil, { DEBUG: true, PRODUCTION: false });
     });
 
     test('ES5 coverage (core)', function () {

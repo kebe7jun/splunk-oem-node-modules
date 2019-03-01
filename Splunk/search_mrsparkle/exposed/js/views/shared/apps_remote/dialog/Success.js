@@ -57,7 +57,7 @@ define([
                 this.$(Modal.HEADER_TITLE_SELECTOR).html(_("Complete").t());
                 this.$(Modal.BODY_SELECTOR).append(Modal.FORM_HORIZONTAL);
 
-                var customBody = this.options.customBody || splunkUtils.sprintf('%s ' + _("was successfully installed.").t(), this.model.appRemote.get('title'));
+                var customBody = this.options.customBody || splunkUtils.sprintf(_("%s was successfully installed.").t(), this.model.appRemote.get('title'));
                 var template = this.compiledTemplate({
                     msg: customBody
                 });

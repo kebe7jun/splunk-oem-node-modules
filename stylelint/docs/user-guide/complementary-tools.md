@@ -4,11 +4,12 @@ A list of complementary tools built and maintained by the community.
 
 ## Analysis platform engines
 
+-   [codacy-stylelint](https://github.com/codacy/codacy-stylelint): [Codacy](https://www.codacy.com/) engine for stylelint
 -   [codeclimate-stylelint](https://github.com/gilbarbara/codeclimate-stylelint): Code Climate engine for stylelint
 
-## Autocorrect
+## Command Line Tools
 
--   [stylefmt](https://github.com/morishitter/stylefmt): Automatically formats CSS and SCSS source code based on your stylelint configuration.
+-   [stylelint-find-rules](https://github.com/alexilyaev/stylelint-find-rules): Find Stylelint rules that you don't have in your config.
 
 ## Build tool plugins
 
@@ -20,9 +21,11 @@ A list of complementary tools built and maintained by the community.
 
 ## Editor plugins
 
+-   [Ale](https://github.com/w0rp/ale): A Vim plugin that supports stylelint.
 -   [Flycheck](https://github.com/flycheck/flycheck): An Emacs extension that supports stylelint.
 -   [linter-stylelint](https://github.com/AtomLinter/linter-stylelint): An Atom plugin for stylelint.
--   [SublimeLinter-contrib-stylelint](https://github.com/kungfusheep/SublimeLinter-contrib-stylelint): A Sublime Text plugin for stylelint.
+-   [SublimeLinter-stylelint](https://github.com/SublimeLinter/SublimeLinter-stylelint): A Sublime Text plugin for stylelint.
+-   [SublimeLinter-contrib-stylelint_d](https://github.com/jo-sm/SublimeLinter-contrib-stylelint_d): A Sublime Text plugin for stylelint that run's on deamon.
 -   [vscode-stylelint](https://github.com/shinnn/vscode-stylelint): A Visual Studio Code extension for stylelint.
 
 ## Editors

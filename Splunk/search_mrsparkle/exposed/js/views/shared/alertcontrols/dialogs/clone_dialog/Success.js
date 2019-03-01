@@ -63,7 +63,7 @@ define([
             }));
 
             this.children.flashMessage.render().appendTo(this.$(Modal.BODY_SELECTOR));
-            this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn openInSearch pull-left">' + _("Open in Search").t() + '</a>');
+            this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn openInSearch">' + _("Open in Search").t() + '</a>');
             this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn btn-primary routeToAlert">' + _("View").t() + '</a>');
 
             return this;

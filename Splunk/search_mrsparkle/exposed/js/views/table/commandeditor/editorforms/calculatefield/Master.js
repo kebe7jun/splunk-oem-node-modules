@@ -35,7 +35,7 @@ define(
                     controlType: 'Text',
                     size: 'small',
                     label: _('New field name').t(),
-                    controlClass: 'controls-fill',
+
                     controlOptions: {
                         model: this.model.command,
                         modelAttribute: 'newFieldName',

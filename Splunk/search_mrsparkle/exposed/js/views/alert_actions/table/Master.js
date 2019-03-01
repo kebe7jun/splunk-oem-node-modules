@@ -17,6 +17,7 @@ define([
     ){
         return BaseView.extend({
             moduleId: module.id,
+            className: 'table-padded',
             /**
              * @param {Object} options {
              *     model:
@@ -51,7 +52,7 @@ define([
                 });
                 this.children.rows = this.rowsFromCollection();
                 this.activate();
-                this.children.tableDock = new TableDock({ el: this.el, offset: 36, dockScrollBar: false, defaultLayout: 'fixed', flexWidthColumn: 1 });
+                this.children.tableDock = new TableDock({ el: this.el, offset: 44, dockScrollBar: false, defaultLayout: 'fixed', flexWidthColumn: 1 });
             },
             startListening: function() {
                 this.listenTo(this.collection.alertActions, 'reset', this.renderRows);

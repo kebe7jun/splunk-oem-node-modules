@@ -5,6 +5,7 @@ define(
         'routers/BaseListings',
         'collections/search/Jobs',
         'collections/services/authentication/Users',
+        'collections/services/admin/workload_management/Status',
         'models/shared/EAIFilterFetchData',
         'views/jobmanager/Master'
     ],
@@ -14,6 +15,7 @@ define(
         BaseListingsRouter,
         JobsCollection,
         UsersCollection,
+        WorkloadManagementStatus,
         EAIFilterFetchData,
         JobManagerView
     ){
@@ -24,7 +26,8 @@ define(
                 this.loadingMessage = _('Loading...').t();
                 this.enableAppBar = false;
                 this.deferreds.stateModelSet = $.Deferred();
-                
+                this.deferreds.workloadManagementStatus = $.Deferred();
+
                 this.urlFilter = [
                    "^countPerPage$",
                    "^owner$",
@@ -62,11 +65,27 @@ define(
                 //collections
                 this.jobsCollection = new JobsCollection();
                 this.usersCollection = new UsersCollection();
+                this.workloadManagementStatus = new WorkloadManagementStatus();
             },
             initializeAndRenderViews: function() {
                 var usersCollectionDeferred = this.usersCollection.fetch();
-                
-                $.when(usersCollectionDeferred).then(function() {            
+
+                if (this.deferreds.workloadManagementStatus.state() !== 'resolved') {
+                    if (this.model.user.hasCapability('list_workload_pools')) {
+                        this.workloadManagementStatus.fetch({
+                            success: function () {
+                                this.deferreds.workloadManagementStatus.resolve();
+                            }.bind(this),
+                            error: function () {
+                                this.deferreds.workloadManagementStatus.resolve();
+                            }.bind(this)
+                        });
+                    } else {
+                        this.deferreds.workloadManagementStatus.resolve();
+                    }
+                }
+
+                $.when(usersCollectionDeferred, this.deferreds.workloadManagementStatus).then(function(users) {
                     this.jobMangerView = new JobManagerView({
                         model: {
                             application: this.model.application,
@@ -78,7 +97,8 @@ define(
                         collection: {
                             jobs: this.jobsCollection,
                             apps: this.collection.appLocals,
-                            users: this.usersCollection
+                            users: this.usersCollection,
+                            workloadManagementStatus: this.workloadManagementStatus
                         }
                     });
 

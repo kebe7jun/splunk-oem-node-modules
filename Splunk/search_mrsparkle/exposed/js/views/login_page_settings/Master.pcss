@@ -1,51 +1,38 @@
 .login-background {
     .editFormWrapper {
-        padding: 0px;
+        @mixin create-card;
+
         position: relative;
-        padding-top: 10px;
-        min-width: 500px;
-        max-width: 940px;
-        background: #ffffff;
-        border: 1px solid #cccccc;
-        margin: 20px auto 20px auto;
-        border-radius: 2px;
+        width: $bodyMinWidth;
+        margin: 0 auto $spacing;
+
         .formWrapper {
-            padding-bottom: 5px;
-            padding-left: 10px;
-            padding-right: 10px;
-            .splBorder.splBorder-nsew.splBackground-primary.btn {
-                border-radius: 4px;
+            padding: $spacing;
+
+            .help-block {
+                margin-top: $spacingHalf;
             }
-            .preview-tip {
-                padding-top: 10px;
+            .control-group:last-child {
+                margin-bottom: 0;
             }
-            .img-requirements {
-                padding-top: 5px;
+            .control-label {
+                padding-top: 0;
             }
             .preview-container {
-                border: 1px solid #333;
-                border-radius: 10px;
+                border: $border $gray30;
                 overflow: hidden;
+                cursor: pointer;
                 height: 200px;
                 width: 300px;
                 position: relative;
-                background: #444;
-                -webkit-transition: all 0.3s ease;
-                -moz-transition: all 0.3s ease;
-                -o-transition: all 0.3s ease;
-                -ms-transition: all 0.3s ease;
+                background: $gray45;
                 transition: all 0.3s ease;
-                z-index:1;
-
-                &:hover {
-                    cursor: pointer;
-                }
+                z-index: calc($zindexFocus + 1);
             }
             .preview-tile {
-                background-image: none;
                 background-size: cover;
                 background-position: 50% 50%;
-                background-color: #222;
+                background-color: $gray30;
                 background-repeat: no-repeat;
                 position: relative;
                 height: 100%;
@@ -70,19 +57,23 @@
             .login-form-img-sc {
                 background-image: url("../account/login-form-cloud.png");
             }
-            .bg-radio-btn {
-                margin-top: 0;
-            }
-            .bg-label {
-                display: inline-block;
-                margin: 4px 15px 10px 10px;
+            .radio-controls {
+                input[type=radio] {
+                    @mixin radio-button-overlay;
+                    &:not(:last-child) {
+                        margin-bottom: $spacingHalf;
+                    }
+                }
+                .bg-label {
+                    display: inline;
+                    margin-top: $spacingQuarter;
+                }
             }
             .upload-file-btn {
-                display: inline;
-                margin: 0 10px;
+                margin: 0 $spacingHalf;
             }
             .upload-message{
-                padding:10px 0;
+                margin: $spacingHalf 0;
             }
             .login-form-preview {
                 position: absolute;
@@ -100,8 +91,8 @@
             .preview-close {
                 color: white;
                 position: absolute;
-                top: 20px;
-                right: 45px;
+                top: 30px;
+                right: 30px;
                 font-size: 60px;
             }
             .preview-close:hover {
@@ -110,15 +101,16 @@
             }
         }
         .jmFormActions {
-            border-top: 1px solid #cccccc;
-            height: 35px;
-            padding: 10px 10px 0 10px;
+            border-top: $borderLight;
+            height: $inputHeight;
+            padding: $spacing;
+            text-align: right;
 
-            .cancel-button{
-                float: left;
+            .cancel-button {
+                margin-right: $spacingHalf;
             }
-            .save-button {
-                float: right;
+            .btn {
+                min-width: 100px;
             }
         }
     }

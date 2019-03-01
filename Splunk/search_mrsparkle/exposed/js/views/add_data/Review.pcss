@@ -1,6 +1,10 @@
 .review-main {
-  padding: 30px;
+  padding: $spacing;
   min-height: 200px;
+  @mixin create-card;
+  @mixin clearfix;
+  width: $bodyMinWidth;
+  margin: $spacing auto;
 }
 
 .review-title {
@@ -19,22 +23,6 @@
   min-width: 540px;
 }
 
-.review-row dt {
-  float: left;
-  text-align: right;
-  margin-right: 40px;
-  width:200px;
-  text-overflow:ellipsis;
-  font-weight: normal;
-}
-
-.review-row dd {
-  margin-left: 240px;
-  width: 300px;
-  text-overflow: ellipsis;
-  font-weight: bold;
-}
-
 .review-label {
   text-align: right;
 }
@@ -49,7 +37,11 @@
 }
 
 .icon-alert {
-  color: #D85D3C;
+  color: $errorColor;
   font-size: 150%;
   margin-right: 10px;
+}
+
+.list-dotted dt {
+  width: 170px;
 }

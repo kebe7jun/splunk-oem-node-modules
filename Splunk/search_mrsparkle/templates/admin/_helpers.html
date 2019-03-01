@@ -325,16 +325,17 @@ year = time.strftime('%Y')
         if len(nameParts) == 2:
             return {'host' : nameParts[0], 'port' : nameParts[1]}
     endif
-    
+
     return {'host' : None, 'port' : name}
     %>
 </%def>
 
-<%def name="genListRows(namespace, uiHelper, entities, endpoint_path, showAdvancedEdit=False, kwargs=None)">
-    <% 
-      global countCols 
+<%def name="genListRows(namespace, uiHelper, entities, endpoint_path, showAdvancedEdit=False, kwargs=None, newLabel=_('New'))">
+    <%
+      global countCols
       global countRows
-      isAppList = True if endpoint_path == 'apps/local' else False                
+      isAppList = True if endpoint_path == 'apps/local' else False
+      isRolesList = True if endpoint_path == 'authorization/roles' else False
       isForwardingServer = True if endpoint_path == 'data/outputs/tcp/server' else False
       isDeploymentserverclass = True if endpoint_path == 'deployment/serverclass' else False
       isDistributedSearchPeers = True if endpoint_path == 'search/distributed/peers' else False
@@ -465,7 +466,7 @@ year = time.strftime('%Y')
                                                                     
                                 % if list_links and not isAppList and not isForwardingServer:
                                     % if isForwardedInput and entity['eai:acl']['app']:
-                                        <% qs = {'uri': '/services/' + entity_endpoint_path + '/' + urllib.quote(entity.name).replace('\\','%5C').replace('/','%2F'), 'action': 'edit', 'app_name': entity['eai:acl']['app']} %>
+                                        <% qs = {'uri': '/services/' + entity_endpoint_path + '/' + urllib.quote(entity.name.encode('utf8')).replace('\\','%5C').replace('/','%2F'), 'action': 'edit', 'app_name': entity['eai:acl']['app']} %>
                                     % elif entity_endpoint_path == 'saved/searches':
                                         <% qs = {'app': entity['eai:acl'].get('app'), 'owner': entity.owner, 'search': '"' + cpQuoteEntity(entity.name, urlquote=False) + '"', 'uri':list_links[0][1], 'action':'edit'} %>
                                     % else:
@@ -549,13 +550,19 @@ year = time.strftime('%Y')
             % endif
         % endfor
     </%def>
-        
+
     % if len(entities) == 0:
         <%
+        try:
+           hasCreateLink = filter((lambda x: x[0] == 'create'), entities.links)
+        except:
+           hasCreateLink = False
+        %>
+        <%
             if endpoint_path=='authentication/users':
-                no_entities_msg = _('User "%s" was not found. Click the "New" button to create a new user.') % kwargs.get("search")
+                no_entities_msg = _('User "%s" was not found. Click the "New User" button to create a new user.') % kwargs.get("search")
             else:
-                no_entities_msg = _('There are no configurations of this type. ') + (showNewButton and _('Click the "New" button to create a new configuration.') or "")
+                no_entities_msg = _('There are no configurations of this type. ') + (showNewButton and hasCreateLink and _('Click the "%s" button to create a new configuration.') % newLabel or "")
         %>
         <tr>
             <td class="empty_results"><%doc>TRANS: Displayed if no admin entities exist to list</%doc>${no_entities_msg |h}</td>
@@ -616,7 +623,7 @@ year = time.strftime('%Y')
                         % if showPermissionsColumn:
                           % if isModifiable:
                           <% countCols += 1 %>
-                              <td class="col-share col-${countCols} row-${countRows}" style="white-space:nowrap;">
+                              <td class="col-share col-${countCols} row-${countRows}">
                                   <% list_links = filter((lambda x: x[0] == 'list'), entity.links) %>
                                   ${sharing_names.get(entity['eai:acl']['sharing'], "")}
                                   % if list_links and (entity['eai:acl'].get('sharing', None) != 'user' or entity['eai:acl'].get('can_share_app', None) == '1'):
@@ -648,7 +655,7 @@ year = time.strftime('%Y')
 					    ctrlEntity = entityDisplayName.replace("\\","\\\\").replace("'","\\'")
 					    if endpoint_path.startswith('deployment/server/setup/data/inputs/'):
 						ctrlEntitySpecial = entityDisplayName  ## deployment endpoint doesnt require extra backslash or apostrophe escaping
-						ctrlUrl = '/services/%s/%s/%s?app_name=%s' % (endpoint_path, urllib.quote(ctrlEntitySpecial).replace('/','%2F'), ctrl, urllib.quote(entity['eai:acl']['app']))
+						ctrlUrl = '/services/%s/%s/%s?app_name=%s' % (endpoint_path, urllib.quote(ctrlEntitySpecial.encode('utf8')).replace('/','%2F'), ctrl, urllib.quote(entity['eai:acl']['app'].encode('utf8')))
 					    endif
 					    %>
 					    <% jscall = "doObjectAction('%s', '%s', '%s'); return false;" % ( ctrl.replace("'","\\'"), ctrlUrl, ctrlEntity ) %>
@@ -664,9 +671,9 @@ year = time.strftime('%Y')
                         % endif
                         % if showActionsColumn:
                         <% countCols += 1 %>
-                        <td class="col-actions col-${countCols} row-${countRows}" style="white-space:nowrap;">
+                        <td class="col-actions col-${countCols} row-${countRows}">
                             <% needs_sep = False %>
-                            
+
                             % if (isSavedsearches and isScheduled):
                                 % if needs_sep:
                                     <span class="splPipe">|</span>
@@ -706,7 +713,7 @@ year = time.strftime('%Y')
                               <a href="${make_url(['manager', namespace, entity_endpoint_path, 'advancededit'], _qs=qs)}">${_("Advanced edit")}</a>
                               <% needs_sep = True %>
                             % endif
-                            
+
                             % if isLDAP and ('disabled' not in entity or entity['disabled'] == '0'):
                                 % if needs_sep:
                                     <span class="splPipe">|</span>
@@ -716,7 +723,7 @@ year = time.strftime('%Y')
                               <a href="${make_url(['manager', namespace, 'admin', 'LDAP-groups'], _qs=qs)}">${_("Map groups")}</a>
                               <% needs_sep = True %>
                             % endif
-                            
+
                             % if isViews and (entity['eai:acl']['app'] in visibleApps) and ('disabled' not in entity or entity['disabled'] == '0'):
                                 % if needs_sep:
                                     <span class="splPipe">|</span>
@@ -827,7 +834,7 @@ year = time.strftime('%Y')
                                         <span class="splPipe">|</span>
                                         <% needs_sep = False %>
                                     % endif
-                                    <a href="${entity['details']}" class="splunk-components" target="_blank"><span class="icon-external external"></span>${_("View details on SplunkApps")}</a>
+                                    <a href="${entity['details']}" class="splunk-components" target="_blank"><span class="icon-external external"></span>${_("View details on Splunkbase")}</a>
                                     <% needs_sep = True %>
 
                                 % endif
@@ -887,10 +894,19 @@ year = time.strftime('%Y')
 				    ctrlEntity = entityDisplayName.replace("\\","\\\\").replace("'","\\'")
 				    if endpoint_path.startswith('deployment/server/setup/data/inputs/'):
 					ctrlEntitySpecial = entityDisplayName  ## deployment endpoint doesnt require extra backslash or apostrophe escaping
-					ctrlUrl = '/services/%s/%s?app_name=%s' % (endpoint_path, urllib.quote(ctrlEntitySpecial).replace('/','%2F'), urllib.quote(entity['eai:acl']['app']))
+					ctrlUrl = '/services/%s/%s?app_name=%s' % (endpoint_path, urllib.quote(ctrlEntitySpecial.encode('utf8')).replace('/','%2F'), urllib.quote(entity['eai:acl']['app'].encode('utf8')))
 				    endif
 				    %>
 				    <% jscall = "doObjectAction('remove', '%s', '%s'); return false;" % ( ctrlUrl, ctrlEntity ) %>
+
+                    % if isRolesList:
+                        % if needs_sep:
+                            <span class="splPipe">|</span>
+                        % endif
+
+                        <a href="${make_url(['manager', namespace, 'auth', 'view_capabilities'], _qs=dict(roles=ctrlEntity))}">${_('View Capabilities')}</a>
+                        <span class="splPipe">|</span>
+                    % endif
 
 				    <a href="#" onclick=${quoteattr(jscall)}>${_(action_names['remove'])}</a>
 				% endif

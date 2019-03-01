@@ -22,7 +22,7 @@
 
 .backdrop {
     composes: backdrop from '../../ModalLocalClassNames.pcssm';
-    background-color: $grayDark;
+    background-color: $gray30;
 
     &[data-modal-state=open] {
         opacity: 1;

@@ -1,3 +1,5 @@
+/* Has manually patched fix for: CVE-2010-5312 */
+
 /*! jQuery UI - v1.8.24 - 2012-09-28
 * https://github.com/jquery/jquery-ui
 * Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js, jquery.effects.blind.js, jquery.effects.bounce.js, jquery.effects.clip.js, jquery.effects.drop.js, jquery.effects.explode.js, jquery.effects.fade.js, jquery.effects.fold.js, jquery.effects.highlight.js, jquery.effects.pulsate.js, jquery.effects.scale.js, jquery.effects.shake.js, jquery.effects.slide.js, jquery.effects.transfer.js, jquery.ui.accordion.js, jquery.ui.autocomplete.js, jquery.ui.button.js, jquery.ui.datepicker.js, jquery.ui.dialog.js, jquery.ui.position.js, jquery.ui.progressbar.js, jquery.ui.slider.js, jquery.ui.tabs.js
@@ -8887,9 +8889,10 @@ $.widget("ui.dialog", {
 			uiDialogTitle = $('<span></span>')
 				.addClass('ui-dialog-title')
 				.attr('id', titleId)
-				.html(title)
 				.prependTo(uiDialogTitlebar);
-
+        
+        self._title( uiDialogTitle );
+            
 		//handling of deprecated beforeclose (vs beforeClose) option
 		//Ticket #4669 http://dev.jqueryui.com/ticket/4669
 		//TODO: remove in 1.9pre
@@ -8912,7 +8915,14 @@ $.widget("ui.dialog", {
 		if ($.fn.bgiframe) {
 			uiDialog.bgiframe();
 		}
-	},
+    },
+    
+    _title: function( title ) {
+        if ( !this.options.title ) {
+            title.html( "&#160;" );
+        }
+        title.text( this.options.title );
+    },
 
 	_init: function() {
 		if ( this.options.autoOpen ) {
@@ -9348,7 +9358,7 @@ $.widget("ui.dialog", {
 				break;
 			case "title":
 				// convert whatever was passed in o a string, for html() to not throw up
-				$(".ui-dialog-title", self.uiDialogTitlebar).html("" + (value || '&#160;'));
+                self._title( self.uiDialogTitlebar.find( ".ui-dialog-title" ) );
 				break;
 		}
 

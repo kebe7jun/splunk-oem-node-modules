@@ -17,24 +17,27 @@ define(
             },
             toggleRow: function($row, collapseOthers) {
                     var $cell = $row.find('td.expands'),
+                        $link = $cell.find('a'),
                         $arrow = $cell.find('i'),
                         $nextrow = $row.next('tr.field-row'),
                         rowunselected = $arrow.hasClass('icon-triangle-right-small'),
                         $moreInfo = $row.next('tr.more-info');
-                   
+
                     (rowunselected) ? $row.trigger('expand'): $row.trigger('collapse');
                     (rowunselected) ? $nextrow.trigger('expand'): $nextrow.trigger('collapse');
 
-                    if ($row.hasClass('expanded')) {  
+                    if ($row.hasClass('expanded')) {
                         $arrow.addClass('icon-triangle-right-small').removeClass('icon-triangle-down-small');
                         $row.removeClass('expanded');
                         $cell.attr('rowspan', '1');
+                        $link.attr('aria-label', _('Expand Table Row').t());
                         $moreInfo.hide().trigger('collapse');
                     } else {
                         collapseOthers && this.toggleRow($row.siblings('.expanded'), false);
                         $arrow.removeClass('icon-triangle-right-small').addClass('icon-triangle-down-small');
                         $row.addClass('expanded');
                         $moreInfo.length && $cell.attr('rowspan', '2');
+                        $link.attr('aria-label', _('Collapse Table Row').t());
                         $moreInfo.show().trigger('expand');
                     }
             },
@@ -43,7 +46,7 @@ define(
                this.$top = $('<div/>');
                this.$bottom = $('<div/>');
                $row.parent().parent().after(this.$top).after(this.$bottom);
-               
+
                $row.prevAll(':visible').each(function(index, el) {
 	               //correct height!!
                    topRowHeight += $(el).outerHeight(true);
@@ -84,8 +87,8 @@ define(
                         return false;
                     }
                     this.toggleRow($row, this.options.collapseOthers);
-                    
-                    //modalize logic goes here!!                   
+
+                    //modalize logic goes here!!
                     //this.options.modalize && this.modalize($row);
                 },
                 'keydown td.expands': function(e) {

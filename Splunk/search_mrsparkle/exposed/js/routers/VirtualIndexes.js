@@ -96,7 +96,7 @@ define(
 
                 this.archives.fetchData.set({count: 10}, {silent:true});
                 this.deferreds.archives = this.archives.fetch();
-                
+
                 this.limits.fetch().done(function () {
                     this.deferreds.limitsDfd.resolve();
                 }.bind(this));
@@ -196,6 +196,9 @@ define(
                 }).bind(this));
 
                 $.when(this.deferreds.pageViewRendered, this.deferreds.indexesConfCollection).done(_(function() {
+                    if (this.masterView) {
+                        this.masterView.remove();
+                    }
                     if (this.indexesConfCollection.length > 0) {
                         this.loadMainPage();
                     } else {

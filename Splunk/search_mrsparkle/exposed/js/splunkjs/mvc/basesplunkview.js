@@ -69,6 +69,9 @@ define(function(require, exports, module) {
             this.name = this.id = options.name = options.id = id;
 
             this.options = _.extend({}, this.options, options);
+            this.registry = this.options.settingsOptions.registry
+                || this.options.settingsOptions._tokenRegistry
+                || mvc.Components;
 
             // Delegate to Backbone.View's constructor.
             // NOTE: This will call initialize() as a side effect.
@@ -79,9 +82,7 @@ define(function(require, exports, module) {
                 this.configure();
             }
 
-            // Register self in the global registry
-            mvc.Components.registerInstance(this.id, this, { replace: settingsOptions.replace });
-
+            this.registry.registerInstance(this.id, this, { replace: settingsOptions.replace });
             return returned;
         },
 
@@ -113,7 +114,9 @@ define(function(require, exports, module) {
             var settingsOptions = this.options.settingsOptions;
 
             // Now, we create our default settings model.
-            this.settings = new Settings(settingsAttributes, settingsOptions);
+            this.settings = new Settings(settingsAttributes, _.extend({}, settingsOptions, {
+                _tokenRegistry: this.registry
+            }));
 
             return this;
         },
@@ -142,8 +145,8 @@ define(function(require, exports, module) {
             Backbone.View.prototype.remove.apply(this, arguments);
 
             // Remove it from the registry
-            if (mvc.Components.getInstance(this.id) === this) {
-                mvc.Components.revokeInstance(this.id);
+            if (this.registry.getInstance(this.id) === this) {
+                this.registry.revokeInstance(this.id);
             }
 
             return this;
@@ -172,6 +175,12 @@ define(function(require, exports, module) {
 
             if (!this.$el.attr('id')) {
                 this.$el.attr('id', this.id);
+            }
+
+            // This is for QA engineers to easily grab DOM element by "data-view" attribute.
+            // This approach has been used in core views/Base.js for a long long time.
+            if (this.moduleId) {
+                this.$el.attr('data-view', this.moduleId);
             }
 
             return this;

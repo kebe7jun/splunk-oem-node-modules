@@ -33,7 +33,7 @@ define([
                         modelAttribute: 'text',
                         model: this.state
                     },
-                    controlClass: 'controls-block',
+
                     label: _('Source').t(),
                     tooltip:  _("Edit the path to the data source. Note that if you change the path, you cannot go back in the wizard.").t(),
                     help:_("Example: /home/data/apache/.../logs/...").t()

@@ -2,6 +2,11 @@
 /*  ======================== */
 /*  dashboard listing page */
 
+.dashboards-table > .table {
+    @mixin create-card-table;
+    margin-bottom: $spacing;
+}
+
 /*  TODO: make this common */
 .section-description {
 	margin-bottom: 0;
@@ -70,110 +75,104 @@ input.search-query {
   float: right;
 }
 
-/*  TODO: cleanup this selector */
-.dashboards-table-controls-convertdashboard .shared-controls-controlgroup .controls-halfblock .help-block {
-	width: 50%;
-	text-align: center;
+.dashboards-table-tablerow > .expands > {
+	&:focus {
+		@mixin focus-element-inset;
+	}
 }
 
 
-/*  Lite */
+/*  Tiles */
 /*  ------------------------------- */
-@if $theme == lite {
-	.dashboards-table {
-		border-top: 1px solid $borderColor;
+.dashboards-tiles {
+	color: $textColor;
+}
+
+.dashboards-tiles-dashboardtilelist {
+	padding: 0px 40px;
+}
+
+.dashboards-tiles-dashboardtile {
+	display: inline-block;
+	vertical-align: top;
+	margin: 6px;
+
+	.tile-shape {
+		position: relative;
+		width: 230px;
+		height: 280px;
+		border-radius: 2px;
+		background-color: $gray30;
+		color: $white;
 	}
 
-	.dashboards-tiles {
-		color: $textColor;
+	.tile-name {
+		position: absolute;
+		top: 40px;
+		left: 20px;
+		right: 20px;
+		max-height: 80px;
+		overflow: hidden;
+		font-size: 14px;
+		text-align: center;
 	}
 
-	.dashboards-tiles-dashboardtilelist {
-		padding: 0px 40px;
-	}
+	.tile-actions {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
 
-	.dashboards-tiles-dashboardtile {
-		display: inline-block;
-		vertical-align: top;
-		margin: 6px;
+		.action-edit {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			color: $textTileColor;
+			text-decoration: none;
 
-		.tile-shape {
-			position: relative;
-			width: 230px;
-			height: 280px;
-			border-radius: 2px;
-			background-color: $grayDark;
+			.caret {
+				font-size: 8px;
+			}
+		}
+
+		.action-edit:hover {
 			color: $white;
 		}
 
-		.tile-name {
+		.action-buttons {
 			position: absolute;
-			top: 40px;
-			left: 20px;
-			right: 20px;
-			max-height: 80px;
-			overflow: hidden;
-			font-size: 14px;
-			text-align: center;
-		}
+			bottom: 14px;
+			right: 10px;
 
-		.tile-actions {
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			bottom: 0px;
-			right: 0px;
-
-			.action-edit {
-				position: absolute;
-				top: 10px;
-				right: 10px;
+			.btn {
+				margin: 3px;
+				border-color: $borderColor !important;
+				background-color: $gray30;
 				color: $textTileColor;
-				text-decoration: none;
-
-				.caret {
-					font-size: 8px;
-				}
+				box-shadow: none;
+				text-shadow: none;
 			}
 
-			.action-edit:hover {
+			.btn:hover {
+				border-color: $white !important;
 				color: $white;
-			}
-
-			.action-buttons {
-				position: absolute;
-				bottom: 14px;
-				right: 10px;
-
-				.btn {
-					margin: 3px;
-					border-color: $borderColor !important;
-					background-color: $grayDark;
-					color: $textTileColor;
-					box-shadow: none;
-					text-shadow: none;
-				}
-
-				.btn:hover {
-					border-color: $white !important;
-					color: $white;
-				}
 			}
 		}
 	}
+}
 
-	.dashboards-tiles-emptytile {
-		display: inline-block;
-		vertical-align: top;
-		margin: 6px;
-		cursor: pointer;
+.dashboards-tiles-emptytile {
+	display: inline-block;
+	vertical-align: top;
+	margin: 6px;
+	cursor: pointer;
 
-		.tile-shape {
-			width: 230px;
-			height: 280px;
-			background-image: url("./empty_tile_bg.png");
-			background-position: center center;
-			background-repeat: no-repeat;
-		}
+	.tile-shape {
+		width: 230px;
+		height: 280px;
+		background-image: url("./empty_tile_bg.png");
+		background-position: center center;
+		background-repeat: no-repeat;
 	}
 }

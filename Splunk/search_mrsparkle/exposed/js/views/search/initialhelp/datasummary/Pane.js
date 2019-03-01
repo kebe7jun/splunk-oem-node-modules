@@ -48,6 +48,11 @@ define(
                 });
                 
             },
+
+            focus: function() {
+                this.children.filter.focus();
+            },
+
             render: function() {
                 this.children.filter.render().appendTo(this.$el);
                 this.children.searchResultsPaginator.render().appendTo(this.$el);

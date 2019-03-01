@@ -4,7 +4,8 @@ define([
     'backbone',
     'module',
     'views/shared/add_data/input_forms/sourceselector/Master',
-    'views/shared/Modal'
+    'views/shared/Modal',
+    './SourceSelectorDialog.pcss'
 ],
 function(
     $,
@@ -12,7 +13,8 @@ function(
     Backbone,
     module,
     SourceSelector,
-    Modal
+    Modal,
+    css
 ){
     return Modal.extend({
         moduleId: module.id,
@@ -27,7 +29,7 @@ function(
                 browserType: this.options.browserType,
                 urlArgsOverride: this.options.urlArgsOverride
             });
-            
+
             this.$el.removeClass('fade');
         },
         events: $.extend({}, Modal.prototype.events, {
@@ -43,7 +45,7 @@ function(
         render: function() {
             this.$el.html(Modal.TEMPLATE);
             this.$(Modal.BODY_SELECTOR).show();
-            this.$(Modal.BODY_SELECTOR).removeClass('modal-body-scrolling').append(this.children.sourceSelector.render().el);
+            this.$(Modal.BODY_SELECTOR).append(this.children.sourceSelector.render().el);
             this.$(Modal.HEADER_TITLE_SELECTOR).html(_("Select source").t());
             this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL);
             this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn btn-primary modal-btn-primary">'+_('Select').t()+'</a>');

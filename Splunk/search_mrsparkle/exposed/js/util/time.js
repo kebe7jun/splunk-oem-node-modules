@@ -514,10 +514,9 @@ define(
                         timesConfLatest = model.entry.content.get("latest_time"),
                         noEarliests = (isEmpty(timesConfEarliest) && isEmpty(earliest)),
                         noLatests = (isEmpty(timesConfLatest) && isEmpty(latest)),
-                        isDisabled = model.isDisabled(),
-                        isSubMenu = model.isSubMenu();
+                        isDisabled = model.isDisabled();
                     
-                    return ((!isDisabled && !isSubMenu) && (noEarliests || (timesConfEarliest == earliest)) && (noLatests || (timesConfLatest == latest)));
+                    return (!isDisabled && (noEarliests || (timesConfEarliest == earliest)) && (noLatests || (timesConfLatest == latest)));
                 });
                 
                 if (presetModel) {
@@ -535,19 +534,19 @@ define(
                 latestIsNow = isNow(latest);
                 
                 var labelTemplates = {
-                    s:_("%t second window").t(),
-                    m: _("%t minute window").t(),
-                    h: _("%t hour window").t(),
-                    d: _("%t day window").t(),
-                    w: _("%t week window").t(),
-                    mon: _("%t month window").t(),
-                    q: _("%t quarter window").t(),
-                    y: _("%t year window").t()
+                    s: _("%s second window").t(),
+                    m: _("%s minute window").t(),
+                    h: _("%s hour window").t(),
+                    d: _("%s day window").t(),
+                    w: _("%s week window").t(),
+                    mon: _("%s month window").t(),
+                    q: _("%s quarter window").t(),
+                    y: _("%s year window").t()
                 };
             
                 //A windowed time with a latest time of now.
                 if (earliestParse && earliestParse.amount && latestIsNow && labelTemplates.hasOwnProperty(earliestParse.unit)) {
-                    return labelTemplates[earliestParse.unit].replace(/%t/, earliestParse.amount);
+                    return splunkUtils.sprintf(labelTemplates[earliestParse.unit], earliestParse.amount);
                 } 
                 
                 //Other Real-Time.
@@ -569,10 +568,8 @@ define(
                     && (!earliestParse.snapUnit || earliestParse.unit === earliestParse.snapUnit)
                     && (latestParse.isNow || (latestParse.snapUnit && !latestParse.amount))
                     && (!latestParse.snapUnit || earliestParse.unit === latestParse.snapUnit)) {
-                var relativeLabel = _("Last %amount %unit").t();
-                relativeLabel = relativeLabel.replace(/%amount/, earliestParse.amount);
-                relativeLabel = relativeLabel.replace(/%unit/, TIME_UNITS[earliestParse.unit][earliestParse.amount > 1? 'plural' : 'singular']);
-                return relativeLabel;
+                return splunkUtils.sprintf(_("Last %s %s").t(), earliestParse.amount,
+                    TIME_UNITS[earliestParse.unit][earliestParse.amount > 1? 'plural' : 'singular']);
             }
             
             return false;
@@ -586,10 +583,9 @@ define(
                 if (language == 'en') {
                     return i18n.format_datetime_range(null, earliestJSDate, latestJSDate, true);
                 } else {
-                    var dateLabel = _("%1 through %2").t();
                     var labelDate = new Date(latestJSDate.getTime());
                     labelDate.setDate(labelDate.getDate() -1);
-                    return dateLabel.replace('%1', i18n.format_date(earliestJSDate, 'short')).replace('%2', i18n.format_date(labelDate, 'short'));
+                    return splunkUtils.sprintf(_("%s through %s").t(), i18n.format_date(earliestJSDate, 'short'), i18n.format_date(labelDate, 'short'));
                 }
             }
             
@@ -601,8 +597,7 @@ define(
                 latestIsNow = isNow(latest);
             
             if (earliestIsWholeDay && latestIsNow) {
-                var dateLabel = _("Since %1").t();
-                return dateLabel.replace('%1', i18n.format_date(earliestJSDate, 'short'));
+                return splunkUtils.sprintf(_("Since %s").t(), i18n.format_date(earliestJSDate, 'short'));
             }
             
             return false;
@@ -610,8 +605,7 @@ define(
         
         var generateBeforeDateLabel = function(earliest, latest, latestJSDate) {            
             if (isEmpty(earliest) && timeAndJsDateIsWholeDay(latest, latestJSDate)) {
-                var dateLabel = _("Before %1").t();
-                return dateLabel.replace('%1', i18n.format_date(latestJSDate, 'short'));
+                return splunkUtils.sprintf(_("Before %s").t(), i18n.format_date(latestJSDate, 'short'));
             }
             
             return false;

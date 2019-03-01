@@ -7,6 +7,7 @@ import './VizPicker.pcss';
 
 
 const VizPicker = BaseView.extend({
+    moduleId: module.id,
     className: 'viz-picker-container',
     /**
      * @constructor
@@ -178,8 +179,10 @@ const VizPicker = BaseView.extend({
                 <p> <%- sectionHeader %> </p>
                 <div class="list-item-container">
                     <% _.each(listItems, function(listItem) { %>
-                        <a href="#" class="viz-picker-list-item" data-viz-id="<%- listItem.id %>">
-                            <img class="viz-picker-img" src="<%- listItem.thumbnailPath %>"/>
+                        <a href="#" class="viz-picker-list-item" data-viz-id="<%- listItem.id %>"
+                            aria-label="<%- listItem.label %>">
+                            <img class="viz-picker-img" src="<%- listItem.thumbnailPath %>"
+                                alt="<%- _('Preview of').t() %> <%- listItem.label %>" />
                         </a>
                     <% }); %>
                 </div>

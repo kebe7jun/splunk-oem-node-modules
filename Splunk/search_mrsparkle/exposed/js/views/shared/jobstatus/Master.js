@@ -10,6 +10,7 @@ define(
         'views/shared/jobstatus/SearchMode',
         'views/shared/jobstatus/AutoPause',
         'views/shared/jobstatus/samplingmode/Master',
+        'views/shared/jobstatus/WorkloadPoolSelect',
         'views/shared/ProgressBar',
         'uri/route',
         'splunk.window',
@@ -17,7 +18,7 @@ define(
         'util/splunkd_utils',
         './Master.pcss'
     ],
-    function(_, module, classicurlModel, Base, Count, Controls, Buttons, SearchMode, AutoPause, SamplingMode, ProgressBar, route, splunkwindow, splunkUtil, splunkd_utils, css) {
+    function(_, module, classicurlModel, Base, Count, Controls, Buttons, SearchMode, AutoPause, SamplingMode, WorkloadPoolSelect, ProgressBar, route, splunkwindow, splunkUtil, splunkd_utils, css) {
         return Base.extend({
             moduleId: module.id,
             /**
@@ -31,9 +32,13 @@ define(
              *         report: <models.Report> (Optional.),
              *         user: <models.shared.User> (Optional - only needed if showJobButtons is true)
              *     },
+             *     collection: {
+             *         workloadManagementStatus: <collections.services.admin.workload_management> (Optional - only needed if enableWorkloadPool is true)
+             *     },
              *     showControlsAndJobInfo: <Boolean> Controls the display of controls and job info, defaults to true
              *     enableSearchMode: <Boolean> Controls the display of adhoc search mode via bunny button.
              *     enableSamplingMode: <Boolean> Controls the display of sampling editor.
+             *     enableWorkloadPool: <Boolean> Controls the display of workload pool select, defaults to false.
              *     enableReload: <Boolean> Controls if the reload button will be shown when the job is done, defaults to false
              *     allowDelete: <Boolean> Controls if delete job link is displayed.
              * }
@@ -51,10 +56,23 @@ define(
                     showControls: true,
                     allowSendBackground: true,
                     allowTouch: false,
+                    enableWorkloadPool: false,
                     externalJobLinkPage: (this.model.application && this.model.application.get('page')) || 'search'
                 };
 
                 _.defaults(this.options, defaults);
+
+                //Workload Pool
+                if (this.options.enableWorkloadPool
+                    && !_.isUndefined(this.collection.workloadManagementStatus)
+                    && this.model.user.canListAndSelectWorkloadPools(this.collection.workloadManagementStatus)) {
+                    this.children.workloadPoolSelect = new WorkloadPoolSelect({
+                        model: this.model.state,
+                        workloadManagementStatus: this.collection.workloadManagementStatus,
+                        rightAlign: true
+                    });
+                }
+
                 // searchMode
                 if (this.options.enableSearchMode) {
                     this.children.searchMode = new SearchMode({
@@ -224,6 +242,10 @@ define(
 
                     if(this.options.showJobButtons !== false) {
                         this.children.buttons.render().appendTo(this.$('.jobstatus-control-grouping'));
+                    }
+
+                    if (this.children.workloadPoolSelect) {
+                        this.children.workloadPoolSelect.render().appendTo(this.$('.jobstatus-control-grouping'));
                     }
 
                     if (this.options.enableSearchMode) {

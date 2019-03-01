@@ -21,8 +21,6 @@ define(function(require, exports, module) {
     require('util/moment/relative'); // This must be loaded, but will be used as a momentjs plugin
 
     var sdk = require('splunkjs/splunk');
-
-    var registry = mvc.Components;
     var PROPERTIES_IGNORED_BY_CACHE = [
         // Doesn't affect results. Could be randomly generated which would
         // unintentionally bust the cache.
@@ -173,7 +171,9 @@ define(function(require, exports, module) {
                 // Support deprecated internal option 'searchModel'
                 attributes.searchModel ||
                 // Create standard settings model if no custom one provided
-                new SearchModels.SearchSettingsModel({}, options);
+                new SearchModels.SearchSettingsModel({}, _.extend({}, options, {
+                    _tokenRegistry: options.registry || options._tokenRegistry || mvc.Components
+                }));
 
             // Alias deprecated public field 'query' to the combined settings model
             this.query = this.settings;
@@ -235,12 +235,12 @@ define(function(require, exports, module) {
             this.handleAutostart();
 
             var tokenDependencies = this.settings.get('tokenDependencies', { tokens: true });
-            TokenUtils.listenToTokenDependencyChange(tokenDependencies, registry, this._start, this);
+            TokenUtils.listenToTokenDependencyChange(tokenDependencies, this.registry, this._start, this);
 
             this.listenTo(this.settings, 'change:tokenDependencies', function(settings, newTokenDependencies) {
                 var oldTokenDependencies = settings.previous('tokenDependencies');
-                TokenUtils.stopListeningToTokenDependencyChange(oldTokenDependencies, registry);
-                TokenUtils.listenToTokenDependencyChange(newTokenDependencies, registry, this._start, this);
+                TokenUtils.stopListeningToTokenDependencyChange(oldTokenDependencies, this.registry);
+                TokenUtils.listenToTokenDependencyChange(newTokenDependencies, this.registry, this._start, this);
             });
 
             this._start();
@@ -513,7 +513,7 @@ define(function(require, exports, module) {
             }
 
             var tokenDependencies = this.settings.get('tokenDependencies', { tokens: true });
-            if (!TokenUtils.tokenDependenciesMet(tokenDependencies, registry)) {
+            if (!TokenUtils.tokenDependenciesMet(tokenDependencies, this.registry)) {
                 this.trigger("search:error", Messages.resolve("unresolved-tokens").message);
                 return;
             }
@@ -739,7 +739,7 @@ define(function(require, exports, module) {
                      * have their accepts/rejects token dependencies met.
                      */
                     var tokenDependencies = that.settings.get('tokenDependencies', { tokens: true });
-                    if (!TokenUtils.tokenDependenciesMet(tokenDependencies, registry)) {
+                    if (!TokenUtils.tokenDependenciesMet(tokenDependencies, that.registry)) {
                         that.trigger("search:error", Messages.resolve("unresolved-tokens").message);
                         job.cancel();
                         return;
@@ -903,7 +903,7 @@ define(function(require, exports, module) {
 
         dispose: function() {
             var tokenDependencies = this.settings.get('tokenDependencies', { tokens: true });
-            TokenUtils.stopListeningToTokenDependencyChange(tokenDependencies, registry);
+            TokenUtils.stopListeningToTokenDependencyChange(tokenDependencies, this.registry);
 
             this.cancel();
             if (_.isFunction(this.settings.dispose)) {

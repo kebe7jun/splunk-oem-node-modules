@@ -36,10 +36,12 @@ define(function(require, exports, module) {
 
             // Store it on the instance/options
             this.id = this.name = options.name = options.id = id;
-            var returned = Backbone.Model.prototype.constructor.apply(this, arguments);
 
             // Register it on the global registry
-            mvc.Components.registerInstance(this.id, this, { replace: options.replace });
+            this.registry = options.registry || options._tokenRegistry || mvc.Components;
+
+            var returned = Backbone.Model.prototype.constructor.apply(this, arguments);
+            this.registry.registerInstance(this.id, this, { replace: options.replace });
 
             return returned;
         },
@@ -50,8 +52,8 @@ define(function(require, exports, module) {
             this.stopListeningDOM();
             this.stopListening();
 
-            if (mvc.Components.getInstance(this.id) === this) {
-                mvc.Components.revokeInstance(this.id);
+            if (this.registry.getInstance(this.id) === this) {
+                this.registry.revokeInstance(this.id);
             }
         },
 

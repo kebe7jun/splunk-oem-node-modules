@@ -10,11 +10,11 @@
   bottom: 0;
   left: 0;
   z-index: $zindexModalBackdrop;
-  background-color: $black;
+  background-color: $popupBackdropColor;
   opacity: 0;
 
   &[data-modal-state=open] {
-      opacity: 0.40;
+      opacity: 0.80;
   }
 }
 
@@ -25,25 +25,17 @@
     position: fixed;
     top: 0;
     left: 50%;
-    width: 450px;
+    @mixin modal-width;
     margin-left: -225px;
     z-index: $zindexModal;
-    background-color: $white;
+    background-color: $popupBackgroundColor;
     border: none;
-    border-radius: 6px;
     box-shadow: 0 3px 7px rgba(0,0,0,0.3);
-    background-clip: padding-box;
     outline: none;
-    transition: opacity .2s linear, top .2s ease-out;
+    transition: $transitionOpacityFast, $transitionTopFast ease;
     opacity: 0;
-    font-size: $baseFontSize;
-    font-family: $baseFontFamily;
-
-
-    @if $theme == lite {
-        border: 1px solid $splunkLiteBlack;
-        border-radius: 0;
-    }
+    font-size: $fontSize;
+    font-family: $fontFamily;
 
     /*  SPL-68751 - IE10 box shadow animation artifacts fix */
     &:after {
@@ -54,8 +46,12 @@
     }
 
     &[data-modal-state=open] {
-        top: 40px;
+        top: $spacingDouble;
         opacity: 1;
+    }
+
+    [data-icon=splunk] {
+        color: $modalIconColor;
     }
 
 }/*  modal */
@@ -64,10 +60,7 @@
 /*  =============== */
 
 .headerWrapper {
-    border-bottom: 1px solid $borderColor;
-    background: $formActionsBackground;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    background: $popupHeaderBackgroundColor;
 
     &:empty {
         display: none;
@@ -77,20 +70,22 @@
 .header {
     composes: headerWrapper;
     position: relative;
-    padding: 15px 0 15px 20px;
+    padding: $spacing;
 }
 
 .title {
-    font-size: $baseFontSizeLarge;
+    font-size: $fontSizeXLarge;
+    font-weight: $fontWeightSemiBold;
     line-height: 22px;
     margin: 0;
     overflow-wrap: break-word;
-    padding-right: 40px;
+    padding-right: $spacingDouble;
+    color: $modalTitleColor;
 }
 
 .closeWrapper {
-    top: 13px;
-    right: 15px;
+    top: calc($spacingHalf + $spacingQuarter);
+    right: calc($spacingHalf + $spacingQuarter);
     position: absolute;
 }
 
@@ -99,29 +94,35 @@
 
 .body {
     max-height: calc(100vh - 200px);
+
+    &:last-child {
+        border-bottom: none;
+    }
 }
 .bodyPadded {
     composes: body;
-    padding: 20px;
+    padding: $spacing;
 }
 .bodyScrolling {
     composes: body;
     overflow-y: auto;
+    border-top: $borderDefault;
+    border-bottom: $borderDefault;
 }
 .bodyScrollingPadded {
-    composes: bodyPadded;
-    overflow-y: auto;
+    composes: bodyScrolling;
+    padding: $spacing;
+    color: $modalTextColor;
 }
 
 /*  Footer
 /*  =============== */
 
 .footer {
-    padding: 10px;
+    padding: $spacing;
     margin-bottom: 0;
     text-align: right; /*  right align buttons */
-    background: $formActionsBackground;
-    border-top: 1px solid $borderColor;
+    background: $popupFooterBackgroundColor;
     border-radius: 0 0 8px 8px;
     @mixin clearfix;
 }

@@ -119,10 +119,11 @@ define(
 
                 // Calculate scroll offset on Y axis.
                 var titleHeight = parseInt($header.find('.section-title').css('height'),10),
+                    titleMargin = parseInt($header.find('.section-title').css('margin-bottom'),10),
                     breadcrumbHeight = parseInt($header.find('.breadcrumb').css('height'),10),
                     headerTopPadding = parseInt($header.css('padding-top'), 10);
 
-                offset = headerTopPadding + titleHeight + breadcrumbHeight;
+                offset = headerTopPadding + titleHeight + titleMargin+ breadcrumbHeight;
 
                 this.children.dock = new Dock({
                     el: this.el,

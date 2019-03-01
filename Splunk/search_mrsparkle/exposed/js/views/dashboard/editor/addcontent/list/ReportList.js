@@ -14,7 +14,6 @@ define(
 
         return BaseList.extend({
             moduleId: module.id,
-            className: 'report-list',
             initialize: function(options) {
                 BaseList.prototype.initialize.apply(this, arguments);
             },

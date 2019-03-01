@@ -32,7 +32,7 @@ function ($, _, Backbone, module, Modal, ControlGroup, FlashMessage){
                  * @event TitleDescriptionDialog#action:saveModel
                  * @param {string} data model name
                  */
-                this.trigger("action:saveModel", this.model.entry.content.get("id"));
+                this.trigger("action:saveModel");
                 this.hide();
             }
         }),
@@ -46,7 +46,6 @@ function ($, _, Backbone, module, Modal, ControlGroup, FlashMessage){
                     modelAttribute: 'displayName',
                     model: this.model.entry.content
                 },
-                controlClass: 'controls-block',
                 label: _('Title').t()
             });
             this.children.descriptionField = new ControlGroup({
@@ -55,12 +54,11 @@ function ($, _, Backbone, module, Modal, ControlGroup, FlashMessage){
                     modelAttribute: 'description',
                     model: this.model.entry.content
                 },
-                controlClass: 'controls-block',
                 label: _('Description').t()
             });
 
         },
- 
+
         render: function() {
             this.$el.html(Modal.TEMPLATE);
 
@@ -79,7 +77,7 @@ function ($, _, Backbone, module, Modal, ControlGroup, FlashMessage){
             return this;
         }
 
-    
+
 /* end of return */
 });
 

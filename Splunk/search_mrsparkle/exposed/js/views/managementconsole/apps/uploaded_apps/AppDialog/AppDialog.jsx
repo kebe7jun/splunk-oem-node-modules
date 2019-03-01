@@ -1,6 +1,6 @@
-import { createTestHook } from 'util/test_support';
-import React, { PropTypes } from 'react';
-import Modal from 'splunk-ui/components/Modal';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Modal from '@splunk/react-ui/Modal';
 import Body from './Body';
 import Footer from './Footer';
 
@@ -11,7 +11,7 @@ const AppDialog = props =>
         open={props.open}
         onRequestClose={props.onRequestClose}
         style={{ width: '500px' }}
-        {...createTestHook(module.id, props.dialogType)}
+        data-test="UploadedApps-AppDialog"
     >
         <Modal.Header
             title={props.title}
@@ -28,14 +28,12 @@ AppDialog.propTypes = {
     title: PropTypes.string,
     children: PropTypes.node,
     onRequestClose: PropTypes.func,
-    dialogType: PropTypes.string,
 };
 
 AppDialog.defaultProps = {
     title: undefined,
     children: undefined,
     onRequestClose: undefined,
-    dialogType: undefined,
 };
 
 export default AppDialog;

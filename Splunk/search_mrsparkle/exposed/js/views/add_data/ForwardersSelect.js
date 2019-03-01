@@ -87,13 +87,15 @@ define(
                     this.children.groups = new ControlGroup({
                         className: 'fwders-groups control-group',
                         controlType: 'SyntheticSelect',
-                        controlClass: 'controls-quarterblock',
                         controlOptions: {
                             modelAttribute: 'group',
                             model: this.model.deploymentClass,
                             items: groupsList,
-                            className: 'btn-group view-count',
-                            toggleClassName: 'btn'
+                            additionalClassNames: 'view-count',
+                            toggleClassName: 'btn',
+                            popdownOptions: {
+                                detachDialog: true
+                            }
                         },
                         label: _('Server Class').t()
                     });
@@ -105,7 +107,6 @@ define(
                 this.children.viewBy = new ControlGroup({
                     className: 'fwders-viewby control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-quarterblock',
                     controlOptions: {
                         modelAttribute: 'viewBy',
                         model: this.model.deploymentClass,
@@ -118,7 +119,6 @@ define(
                 this.children.newGroup = new ControlGroup({
                     className: 'fwdr-group control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-quarterblock',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.deploymentClass,
@@ -269,7 +269,7 @@ define(
                     this.children.forwarderList = new ControlGroup({
                         className: 'fwders control-group',
                         controlType: 'Accumulator',
-                        controlClass: 'controls-block',
+
                         controlOptions: {
                             modelAttribute: 'fwders',
                             model: this.model.deploymentClass,
@@ -317,15 +317,15 @@ define(
                  return [
                 {
                     question: _('How do I create source types for data originating from Forwarders?').t(),
-                    answer: _('Splunk does not support data preview through universal forwarders. Use a full Splunk instance to upload and preview a sample of the data that you want to index. After confirming proper data indexing with the selected source type, use that source type for the objects that you want to monitor with the universal forwarder.').t()
+                    answer: _('The Splunk platform does not support data preview through universal forwarders. Use a full Splunk platform instance to upload and preview a sample of the data that you want to index. After confirming proper data indexing with the selected source type, use that source type for the objects that you want to monitor with the universal forwarder.').t()
                 },
                 {
                     question: _('What is a deployment server?').t(),
-                    answer: _('A deployment server is a Splunk instance that manages configurations for any number of Splunk instances. These remotely-configured instances are known as deployment clients. Deployment clients download content - known as deployment apps - from deployment servers.').t()
+                    answer: _('A deployment server is a Splunk platform instance that manages configurations for any number of Splunk platform instances. These remotely-configured instances are known as deployment clients. Deployment clients download content - known as deployment apps - from deployment servers.').t()
                 },
                 {
                     question: _('What are deployment clients?').t(),
-                    answer: _('Deployment clients are Splunk instances that a deployment server manages and configures. You can group deployment clients into one or more server classes. Deployment clients poll deployment servers for new or updated content, then download the content and use it according to the instructions specified by their server class. Content can range from apps and system configurations to scripts, images, and supporting material. ').t()
+                    answer: _('Deployment clients are Splunk platform instances that a deployment server manages and configures. You can group deployment clients into one or more server classes. Deployment clients poll deployment servers for new or updated content, then download the content and use it according to the instructions specified by their server class. Content can range from apps and system configurations to scripts, images, and supporting material. ').t()
                 },
                 {
                     question: _('What are server classes?').t(),
@@ -333,15 +333,15 @@ define(
                 },
                 {
                     question: _('How do I make changes to the deployment server configuration?').t(),
-                    answer: _('You can use Splunk Web or edit configuration files to change the deployment server configuration. ').t() + '<a href="' + arguments[0] + '" class="external" target="_blank">' + _("Learn More.").t() + '</a>'
+                    answer: _('You can use the Splunk Web platform or edit configuration files to change the deployment server configuration. ').t() + '<a href="' + arguments[0] + '" class="external learn-more-link" target="_blank">' + _("Learn More.").t() + '</a>'
                 },
                 {
                     question: _('How do I manage deployment clients?').t(),
-                    answer: _('Use forwarder management to manage deployment clients. ').t() + '<a href="' + arguments[1] + '" class="external" target="_blank">' + _("Learn More").t() + '</a>'
+                    answer: _('Use forwarder management to manage deployment clients. ').t() + '<a href="' + arguments[1] + '" class="external learn-more-link" target="_blank">' + _("Learn More").t() + '</a>'
                 },
                 {
                     question: _('How many deployment clients are supported by this instance?').t(),
-                    answer: _('This instance supports up to 300 deployment clients provided it has the hardware configuration recommended by Splunk. ').t() + '<a href="' + arguments[2] + '" class="external" target="_blank">' + _("Learn More").t() + '</a>'
+                    answer: _('This instance supports up to 300 deployment clients provided it has the hardware configuration recommended by Splunk. ').t() + '<a href="' + arguments[2] + '" class="external learn-more-link" target="_blank">' + _("Learn More").t() + '</a>'
                 },
                 {
                     question: _('How do I add data from forwarders in distributed Splunk environments?').t(),

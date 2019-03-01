@@ -146,8 +146,7 @@ define(
                             idx: idx,
                             allowRowExpand: this.options.allowRowExpand,
                             isPreviewEvent: isPreviewEvent,
-                            showWarnings: this.options.showWarnings,
-                            clickFocus: 'tr.tabbable-table-primary-row'
+                            showWarnings: this.options.showWarnings
                         });
                         this.children['masterRow_' + idx].render().appendTo(fragment);
                         this.children['masterRow_' + idx].activate({deep: true});
@@ -168,8 +167,7 @@ define(
                                     selectedFields: this.collection.selectedFields
                                 },
                                 idx: idx,
-                                selectableFields: this.options.selectableFields,
-                                clickFocus: 'tr.tabbable-table-secondary-row'
+                                selectableFields: this.options.selectableFields
                             });
                             this.children['fieldRow_' + idx].render().appendTo(fragment).$el.hide();
                         }

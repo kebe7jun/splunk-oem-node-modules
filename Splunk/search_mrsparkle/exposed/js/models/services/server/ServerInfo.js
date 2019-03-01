@@ -72,7 +72,9 @@ function(
         getInstanceType: function(){
             return this.getAttr('instance_type');
         },
-
+        getServerRoles: function(){
+            return this.getAttr('server_roles') || [];
+        },
         isProductType: function(productName){
             return this.getProductType() === productName;
         },
@@ -161,6 +163,9 @@ function(
         },
         isLicenseStateExpired: function() {
             return this.getAttr('licenseState') === 'EXPIRED';
+        },
+        isClusterSearchHead: function() {
+            return this.getServerRoles().indexOf('cluster_search_head') >= 0;
         }
     },
     {

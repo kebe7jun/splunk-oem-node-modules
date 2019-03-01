@@ -17,17 +17,15 @@ define(function(require, exports, module){
                 label: _("Content Title").t(),
                 controlType: 'Text',
                 className: 'content-title-control control-group',
-                controlClass: 'controls-block',
                 controlOptions: {
                     model: this.model.report,
                     modelAttribute: 'title',
                     placeholder: _("optional").t()
                 }
             });
-            
+
             this.children.searchField = new ControlGroup({
                 controlType: 'Textarea',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'search',
                     model: this.model.report
@@ -35,7 +33,7 @@ define(function(require, exports, module){
                 label: _("Search String").t(),
                 help: '<a href="#" class="run-search">'+_("Run Search").t()+' <i class="icon-external"></i></a>'
             });
-            
+
             this.listenTo(this.model.report, 'change:elementCreateType', this.onModeChange, this);
 
             this.children.panelTimeRangePicker = new PanelTimeRangePicker({

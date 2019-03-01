@@ -101,7 +101,7 @@ define(
                 };
             },
             TABLE_COLUMN_LABELS: {
-                SELECT_ALL: {label: _('').t()},
+                SELECT_ALL: {label: ''},
                 HOST_NAME: {label: _('Host Name').t()},
                 EDIT_ACTIONS: {label: _('Actions').t()},
                 DNS_NAME: {label: _('DNS Name').t()},

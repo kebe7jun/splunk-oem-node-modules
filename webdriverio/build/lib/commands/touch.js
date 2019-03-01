@@ -3,19 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-/**
- * Put finger on an element (only in mobile context).
- *
- * @alias browser.touch
- * @param {String}  selector  element to put finger on
- * @param {Boolean} longClick if true touch click will be long (default: false)
- * @uses property/getLocation, protocol/touchClick
- * @type mobile
- * @uses android
- *
- */
+exports.default = touch;
 
-var touch = function touch(selector, longClick) {
+var _ErrorHandler = require('../utils/ErrorHandler');
+
+function touch(selector, longClick) {
   var _this = this;
 
   /**
@@ -26,10 +18,26 @@ var touch = function touch(selector, longClick) {
 
   var touchCommand = longClick ? 'touchLongClick' : 'touchClick';
 
-  return this.getLocation(selector).then(function (val) {
-    return _this[touchCommand](val.x, val.y);
-  });
-};
+  return this.element(selector).then(function (elem) {
+    /**
+     * check if element was found and throw error if not
+     */
+    if (!elem.value) {
+      throw new _ErrorHandler.RuntimeError(7);
+    }
 
-exports.default = touch;
+    return _this[touchCommand](elem.value.ELEMENT);
+  });
+} /**
+   * Put finger on an element (only in mobile context).
+   *
+   * @alias browser.touch
+   * @param {String}  selector  element to put finger on
+   * @param {Boolean} longClick if true touch click will be long (default: false)
+   * @uses protocol/element, protocol/touchClick, protocol/touchLongClick
+   * @type mobile
+   * @uses android
+   *
+   */
+
 module.exports = exports['default'];

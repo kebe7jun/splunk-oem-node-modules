@@ -13,32 +13,32 @@ hasProductMenu = splunk.util.normalizeBoolean(cherrypy.config.get('showProductMe
 ssoUrlPrefix = cherrypy.config.get('productMenuUriPrefix')
 %>
 
-<div class="dataInputsWrapper">
-    <div class="dataInputsDesc">${_('Specify authentication method, manage user settings, and manage roles.')}</div>
+<div class="dataInputsWrapper settingsIndex">
+    <div class="settingsIndexDesc">${_('Specify authentication method, manage user settings, and manage roles.')}</div>
 
     <table class="splTable">
             <tr>
-                <th>${_('')}</th>
+                <th>${''}</th>
                 <th>${_('Actions')}</th>
             </tr>
             % if not isLite and can_authoverview:
             <tr>
                 <td class="input_name"><a href="${make_url(['manager', namespace, 'authoverview'])}">${_('Authentication method')}</a></td>
-                <td></td>
+                <td class="actions"></td>
             </tr>
             % endif
 
             % if can_users:
             <tr>
                 <td class="input_name"><a href="${make_url(['manager', namespace, 'authentication', 'users'])}">${_('Users')}</a></td>
-                <td><a href="${make_url(['manager', namespace, 'authentication', 'users', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
+                <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'authentication', 'users', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
             </tr>
             % endif
 
             % if not isLite and can_roles:
             <tr>
                 <td class="input_name"><a href="${make_url(['manager', namespace, 'authorization', 'roles'])}">${_('Roles')}</a></td>
-                <td><a href="${make_url(['manager', namespace, 'authorization', 'roles', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
+                <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'authorization', 'roles', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a></td>
             </tr>
             % endif
 
@@ -49,6 +49,13 @@ ssoUrlPrefix = cherrypy.config.get('productMenuUriPrefix')
                         ${_('Invite Users')}<span class="splunk-components"><i class="icon-external"></i></span>
                     </a>
                 </td>
+                <td class="actions"></td>
+            </tr>
+            % endif
+
+            % if can_password_management: 
+            <tr>
+                <td class="input_name"><a href="${make_url(['manager', namespace, 'password', 'management'])}">${_('Password Policy Management')}</a></td>
                 <td></td>
             </tr>
             % endif

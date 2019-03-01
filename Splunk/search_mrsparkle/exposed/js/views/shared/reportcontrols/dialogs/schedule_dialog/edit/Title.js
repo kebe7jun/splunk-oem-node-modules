@@ -35,7 +35,6 @@ define(
                     this.$el.addClass('form-complex');
                     this.children.nameInput = new ControlGroup({
                         controlType: 'Text',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: 'name',
                             model: this.model.inmem.entry.content
@@ -73,7 +72,7 @@ define(
                         help: '<a href="' + configScheduleHelpLink + '" target="_blank">' + _("Learn More").t() + ' <i class="icon-external"></i></a>'
                     });
                 }
-                    
+
             },
             render: function() {
                 if (this.model.report.isNew()) {

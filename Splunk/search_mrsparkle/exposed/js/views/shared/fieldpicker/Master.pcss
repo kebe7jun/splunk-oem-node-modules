@@ -11,26 +11,27 @@
     bottom: 40px;
     left: 40px;
 
-
-    .modal-body {
-        padding: 0;
-        max-height:none;
-    }
     .modal-footer {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
+        &:empty {
+            padding: 0;
+        }
     }
     .modal-body {
+        padding: 0;
         position: absolute;
         top: 47px;
-        bottom: 21px;
+        bottom: 0;
         left: 0;
         right: 0;
         height: auto;
+        max-height:none;
+        overflow: auto;
     }
-    
+
     .scroll-table-wrapper {
         position: absolute;
         top: 47px;
@@ -39,15 +40,15 @@
         right: 0;
         height: auto;
     }
-    
-    
+
+
     .header-table-static {
         position: absolute;
         top: 47px;
         left: 0;
         right: 0;
     }
-    
+
     .select,
     .deselect
     {
@@ -82,13 +83,7 @@
         position: relative;
         margin-left: 20px;
         margin-bottom: 0;
-        input {
-            border-radius: 10px;
-            margin-bottom: 0;
-            height: 20px;
-            line-height: 20px;
-            padding: 0 10px;
-        }
+
         .clear {
             position: absolute;
             right: 7px;
@@ -102,28 +97,22 @@
         overflow: hidden;
         overflow-y: scroll;
     }
-    .table-row-expanding {
-        border-top: 1px solid $tableBorder;
-        margin-bottom: -1px;
-        border-bottom: 1px solid $tableBorder;
-    }
-    
     table {
         width: 100%;
-        
+
         td.col-fields {
             word-break: break-all;
         }
-        td.col-coverage, 
+        td.col-coverage,
         td.col-select,
         td.col-type,
         {
-            border-left: 1px solid $tableBorderVertical;
+            border-left: $tableBorderVertical;
         }
-        
+
         tr.hide-contents > td {
             color: transparent !important;
-            
+
             > a,
             > label,
             > .heatmap-cell,
@@ -136,35 +125,39 @@
             > .table-embed td {
                 border-color: transparent !important;
                 color: transparent !important;
-                
+
                 .graph-bar {
                     display: none;
                 }
             }
         }
-        
+
         &.table-field-moving {
             box-shadow: 0 0 5px rgba(0,0,0,0.4);
             opacity: 0.80;
-            
+
             td.expands {
                 width: 36px;
             }
         }
-        
+
         .selected td {
             border-top: none;
         }
         .checkbox {
             padding: 0;
-            margin: 0;
         }
-        
+
         label:hover > .icon-hidden, label:hover > .icon-visible {
             color: $linkColorHover;
         }
         /*  cols */
-        .col-select {width:22px; padding-top:3px; padding-left:8px;}
+        .col-select {
+            width:22px;
+            &.sorts .icon-check {
+                margin-left: 4px;
+            }
+        }
         .col-values {width: 100px;}
         .col-coverage {width: 120px;}
         .col-type {width: 120px;}
@@ -172,16 +165,16 @@
         .col-top {width: 100px;}
         .numeric {text-align:right;}
         .heatmap-cell {
-            height: 24px;
+            height: 31px;
             width: 14px;
             float: right;
-            background-color: $containerBackgroundColor;
-            margin: -4px -8px -4px 5px;
+            background-color: $white;
+            margin: -6px -12px -6px 5px;
         }
         .heatmap-cell-value {
-            height: 24px;
+            height: 31px;
             width: 14px;
-            background-color: $splunkGreen;
+            background-color: $accentColor;
         }
         /*  TODO: this might be redudent now ... need to remove after review */
         /*  sorting */
@@ -200,7 +193,7 @@
             color: $black;
         }
         .sorts th.active {
-            @mixin gradient-vertical $interactiveGradientEndColor,$interactiveGradientStartColor;
+            background-color: $interactiveBackgroundColor;
             box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
         .sorts th.active:hover {
@@ -213,7 +206,7 @@
         }
         /*  gradient borders - FF doesn't like this */
         .Xend-group {
-            border-right-color: $tableBorderVertical;
+            border-right-color: $tableBorderVerticalColor;
             position: relative; /*  need a wrapper for this to work, can't be on a td */
         }
         .Xend-group:after {
@@ -224,14 +217,14 @@
             width: 1px;
             right: -1px;
             bottom: 0;
-            @mixin gradient-vertical $grayLightMedium, $interactiveGradientStartColor;
+            background-color: $interactiveBackgroundColor;
         }
 
         /*  embeded tables */
         .table-embed {
             background-color: transparent !important;
             margin-bottom: 10px;
-            
+
             .col-label {}
             .col-value {
                 word-break: break-all;
@@ -241,11 +234,10 @@
             .col-graph {width:90px;}
             .graph-bar {
                 margin: 0;
-                height: $baseLineHeight;
-                background-color: $grayLight;
-                @mixin gradient-vertical $grayLightMedium,$grayLight;
+                height: $lineHeight;
+                background-color: $gray60;
             }
-            
+
             td {
                 background-color: transparent !important;
                 padding: 2px 8px 2px 0;
@@ -274,13 +266,10 @@
 
     .extract-fields-button {
         margin-right: 15px;
-        font-size: 12px;
     }
-}
 
-/*  Lite */
-@if $theme == lite {
-    .shared-fieldpicker table .heatmap-cell-value {
-        background-color: $splunkLiteOrange;
+    .shared-controls-textcontrol {
+        display: inline-block;
+        margin-left: $spacing;
     }
 }

@@ -33,7 +33,7 @@
 
 .greater {
     composes: greater from '../splunkbar/messages/Message.pcssm';
-    color: $splunkLiteOrange;
+    color: $splunkLiteColor;
     top: 3px;
 }
 

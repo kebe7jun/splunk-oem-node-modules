@@ -1,220 +1,266 @@
-
-
 /* Alerts manager styles */
 
 
 /* reset elements */
 body, html {
-	padding:0;
-	margin:0;
-	height:100%;
-	overflow:hidden;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 input, textarea, select {
-	margin: 0;
+  margin: 0;
 }
 
-.alerts-page-wrapper li {
-	list-style:none;
-	float:left;
-}
-.alerts-page-wrapper ul, .alerts-page-wrapper li {
-	margin: 0;
-	padding: 0;
-}
-.alerts-page-wrapper table {
-	width:100%;
-	margin: 0 10px;
-}
-.alerts-page-wrapper th, .alerts-page-wrapper td {
-	text-align:left;
-	vertical-align:top;
-	padding:3px 5px;
-}
-.alerts-page-wrapper th {
-	border-bottom:1px solid	$borderDarkColor;
-}
-.alerts-page-wrapper td {
-	vertical-align:top;
-	padding: 5px 3px;
-}
-.alerts-page-wrapper tr:last-child td {
-	border-bottom:none;
-}
-.alerts-page-wrapper td input {
-	margin: 0;
-	border: none;
-	vertical-align: middle;
-}
-/* shared */
-.alerts-page-wrapper .formelement1,
-.alerts-page-wrapper #app,
-.alerts-page-wrapper #owner
-{
+.alerts-page-wrapper {
+  li {
+    list-style:none;
+    float:left;
+  }
+  ul, li {
+    margin: 0;
+    padding: 0;
+  }
+  table {
+    width: 100%;
+  }
+  th, td {
+    text-align: left;
+    vertical-align: top;
+    padding: $tableCellPadding;
+    line-height: $lineHeight;
+
+    td:focus {
+        @mixin focus-element-inset;
+    }
+  }
+  th {
+    font-weight: normal;
+    background-color: $tableHeaderBackground;
+    border-right: $tableBorderVertical;
+    border-bottom: none;
+    box-shadow: none;
+    &:last-child {
+        border-right: none;
+    }
+  }
+  td {
+    input {
+      margin: 0;
+      vertical-align: middle;
+    }
+  }
+
+
+  /* shared */
+  .formelement1, #owner, #app, #alerts_id, #severity {
     white-space: nowrap;
-    width: 100px;
-}
-.alerts-page-wrapper #app {
-    width:250px;
-}
-.alerts-page-wrapper #alerts_id, .alerts-page-wrapper #severity {
-	white-space:nowrap;
-	width:60px;
-}
-input#search {
-	width: 180px;
-}
-/* filters */
-.alerts-page-wrapper #filters {
-	position:relative;
-	background: #EDEDED;
-	border-bottom:1px solid $borderColor;
-	border-top:1px solid $borderColor;
-	display:block;
-	padding:10px 20px;
-	zoom:1;
-}
-.alerts-page-wrapper #filters table {
-	margin:  0;
-}
-.alerts-page-wrapper #filters table td {
-	margin:  0;
-	padding:  0;
-	vertical-align: middle;
-}
-.alerts-page-wrapper #filters .col2 {
-	text-align: right;
-}
-.alerts-page-wrapper #filters li {
-	padding-right: 10px;
-}
-.alerts-page-wrapper #filters label {
-	padding-right:5px;
-}
-.alerts-page-wrapper #filters #search {
-	border: 1px solid $borderColor;
-}
-/* pagination */
-#Pagination {
-	position: relative;
-	padding: 5px 10px;
-	background: #ededed;
-}
+  }
+  .formelement1, #owner {
+    max-width: 200px;
+  }
+  #app {
+    white-space: nowrap;
+    width: 250px;
+  }
+  #alerts_id, #severity {
+    max-width: 100px;
+  }
+  input#search {
+  	width: 180px;
+  }
 
-#Pagination ul {
-	float: left;
-}
 
-#Pagination li {
-	margin-right: 2px;
-	display: block;
-}
+  /* filters */
+  #filters {
+    position: relative;
+    background: $gray96;
+    border-bottom: $borderDefault;
+    border-top: $borderDefault;
+    display: block;
+    padding: 10px 20px;
+    zoom: 1;
 
-#Pagination a {
-	color: #5379AF;
-	background-color: transparent;
-	display: block;
-	padding: 3px 6px;
-	border: 1px solid transparent;	        border-radius: 3px;
-}
+    table {
+      margin: 0;
+      padding: 0;
 
-#Pagination a:hover{
-	background-color: $offWhite;
-	color: #32496A;
-	text-decoration: none;
-}
+      td {
+        margin: 0;
+        padding: 0;
+        vertical-align: middle;
+      }
+    }
 
-#Pagination a.active, #Pagination a.active:hover {
-	background-color: $offWhite;
-	color: #32496A;
-}
+    .col2 {
+      text-align: right;
 
-#Pagination a.disabled, #Pagination a.disabled:hover {
-	color: $textGray;
-	background-color: transparent;
-	cursor: text;
-	visibility: visible;
-}
+      .input-append {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        margin-right: -1px;
 
-#Pagination .count {
-	float: right;
-	margin:  0;
-	padding: 5px;
-}
+        &:focus {
+          z-index: $zindexFocus;
+          position: relative;
+        }
+      }
+    }
+    li {
+      padding-right: $spacing;
+    }
+    label {
+      padding-right: 5px;
+    }
+  }
 
-/* results */
-.alerts-page-wrapper #results {
-	overflow:auto;
-	position: relative;
-}
-.alerts-page-wrapper #results table {
-	margin-top:15px;
-	margin-bottom: 15px;
-	width:98%;
-}
-.alerts-page-wrapper #results td {
-	border-bottom:1px solid	$borderColor;
-}
-.alerts-page-wrapper #results .none {
-	text-align:center;
-	font-weight:bold;
-}
-.alerts-page-wrapper #results .sortable {
-	position:relative;
-	padding-right:3px;
-}
-.alerts-page-wrapper #results .sortable span {
-	color:$black;
-}
-.alerts-page-wrapper #results .bulk {
-	text-indent:-5000px;
-    direction:ltr;
-}
-.alerts-page-wrapper #results .severity {
-	background:url(/static/img/skins/default/icon_alerts.png) no-repeat 0 -32px;
-	padding-left:20px;
-	padding-top:2px;
-}
-.alerts-page-wrapper #results .severitylow {
-	background-position:0 -16px;
-}
-.alerts-page-wrapper #results .severityhigh {
-	background-position:0 -48px;
-}
-.alerts-page-wrapper #results .severitycritical {
-	background-position:0 -64px;
-}
-.alerts-page-wrapper #results .severityinfo {
-	background-position:0 0;
-}
-.alerts-page-wrapper #results .severitymedium {
-	background-position:0 -32px;
-}
-/* actions */
-.alerts-page-wrapper #actions {
-	position:absolute;
-	bottom: 0;
-	background: #EDEDED;
-	font-size: $baseFontSize;
-	border-top:1px solid $borderColor;
-	height:44px;
-	width:100%;
-}
-.alerts-page-wrapper #actionsSelection {
-	position:absolute;
-	top:10px;
-	left:10px;
-}
-.alerts-page-wrapper #actionsSelection span {
-	padding-right:5px;
-}
-.alerts-page-wrapper #actionsSelection a {
-	margin-right:5px;
-}
-.alerts-page-wrapper #actionsSelection .selected {
-	padding-left:5px;
-}
-.alerts-page-wrapper #actionsSelection button {
-	margin: 0;
+
+  /* results */
+  #results {
+    overflow:auto;
+    position: relative;
+
+    > form {
+      padding: $spacing;
+    }
+    table {
+      @mixin create-card-table;
+      background: transparent;
+
+      tr {
+        &:nth-child(odd) {
+          background-color: $white;
+        }
+        &:hover {
+          background-color: $tableRowHoverColor !important;
+        }
+      }
+    }
+    .none {
+      text-align: center;
+      font-weight: bold;
+    }
+    .none, .empty_results {
+      background-color: transparent;
+      line-height: 20px;
+    }
+    .sortable {
+      position: relative;
+      display: block;
+      margin: -6px -12px;
+      padding: $tableCellPadding;
+
+      span {
+        color: $black;
+        text-decoration: none;
+      }
+      &:hover span {
+        color: $linkColor;
+        text-decoration: none;
+      }
+    }
+    .bulk {
+      text-indent:-5000px;
+      direction:ltr;
+    }
+    .severity:before {
+      content: '';
+      height: 16px;
+      width: 16px;
+      border-radius: 100%;
+      vertical-align: top;
+      display: inline-block;
+      margin-right: 5px;
+      position: relative;
+      top: 2px;
+    }
+    .severitylow:before {
+      background-color: $successColor;
+    }
+    .severityhigh:before {
+      background-color: $alertColor;
+    }
+    .severitycritical:before {
+      background-color: $errorColor;
+    }
+    .severityinfo:before {
+      background-color: $infoColor;
+    }
+    .severitymedium:before {
+      background-color: $warningColor;
+    }
+  }
+
+
+  /* pagination */
+  #Pagination {
+    position: relative;
+    padding: 5px 10px;
+    background: $gray96;
+    border-bottom: $borderDefault;
+
+    ul {
+      float: left;
+    }
+    li {
+      margin-right: 2px;
+      display: block;
+    }
+    a {
+      @mixin button-padding calc($buttonPaddingVertical + 1px);
+      float: left;
+      line-height: $lineHeight;
+      border: $border transparent;
+      border-radius: $interactiveBorderRadius;
+
+      @mixin interactive none, transparent, none, $pillTextColor;
+      @mixin button-states pill-hover, pill-active, pill-disabled, pill-style $linkColor;
+
+      &.active, &.active:hover {
+        cursor: default;
+        border: $border $accentColor;
+        background: transparent;
+      }
+      &.disabled, &.disabled:hover {
+        color: $textGray;
+        background-color: transparent;
+        cursor: text;
+        visibility: visible;
+      }
+    }
+    .count {
+      float: right;
+      margin: 0;
+      padding: $spacingHalf;
+    }
+  }
+
+
+  /* actions */
+  #actions {
+    position: absolute;
+    bottom: 0;
+    background: $gray96;
+    font-size: $fontSize;
+    border-top: 1px solid $borderColor;
+    height: 55px;
+    width: 100%;
+    padding: $spacingHalf $spacing;
+    box-sizing: border-box;
+  }
+  #actionsSelection {
+    span:not(.button-text) {
+      padding-right: 5px;
+    }
+    a {
+      margin-right: 5px;
+    }
+    .selected {
+      padding-left: 5px;
+    }
+    button {
+      margin: 0;
+    }
+  }
 }

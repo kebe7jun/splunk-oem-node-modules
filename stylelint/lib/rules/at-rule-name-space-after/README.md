@@ -8,6 +8,10 @@ Require a single space after at-rule names.
  * The space after at-rule names */
 ```
 
+This rule ignores `@import` in Less.
+
+The `--fix` option on the [command line](../../../docs/user-guide/cli.md#autofixing-errors) can automatically fix all of the problems reported by this rule.
+
 ## Options
 
 `string`: `"always"|"always-single-line"`
@@ -31,7 +35,7 @@ The following patterns are considered violations:
 ```
 
 ```css
-@media 
+@media
 (min-width: 700px) {}
 ```
 
@@ -82,7 +86,7 @@ The following patterns are *not* considered violations:
 ```
 
 ```css
-@media 
+@media
 (min-width: 700px) {}
 ```
 

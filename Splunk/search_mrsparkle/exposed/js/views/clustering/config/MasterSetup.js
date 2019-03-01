@@ -32,7 +32,6 @@ define([
                 this.children.repFactor = new ControlGroup({
                     className: 'cluster-rep-factor control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.replication_factor',
                         model: this.model.clusterConfig,
@@ -46,7 +45,6 @@ define([
                 this.children.searchFactor = new ControlGroup({
                     className: 'cluster-search-factor control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.search_factor',
                         model: this.model.clusterConfig,
@@ -60,7 +58,6 @@ define([
                 this.children.secret = new ControlGroup({
                     className: 'cluster-secret control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         placeholder: 'Optional',
                         modelAttribute: 'ui.secret',
@@ -72,11 +69,10 @@ define([
                     help: _('This key authenticates communication between the master and the peers and search heads.').t(),
                     helpClass: 'hint'
                 });
-                
+
                 this.children.clusterLabel = new ControlGroup({
                     className: 'cluster-label control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         placeholder: 'Optional',
                         modelAttribute: 'ui.cluster_label',
@@ -86,7 +82,7 @@ define([
                     label: _('Cluster Label').t(),
                     help: _('Name your cluster using this field.  This label is also used to identify this cluster in the Monitoring Console.').t(),
                     helpClass: 'hint'
-                });                
+                });
             },
             events: {
                 'click .back': function(e) {

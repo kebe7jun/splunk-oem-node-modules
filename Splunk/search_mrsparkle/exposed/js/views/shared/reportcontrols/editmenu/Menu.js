@@ -259,7 +259,9 @@ define(
                     } else {
                         data = {s: this.model.report.id};
                     }
-                    var routeString = route.search(
+                    var openInView = this.model.report.openInView(this.model.user);
+                    var view = route.getView(openInView);
+                    var routeString = view.route(
                             this.model.application.get('root'),
                             this.model.application.get('locale'),
                             this.model.application.get('app'),
@@ -307,12 +309,7 @@ define(
                 }
             },
             render: function() {
-                var openInPivot = route.pivot(
-                        this.model.application.get("root"),
-                        this.model.application.get("locale"),
-                        this.model.application.get("app"),
-                        {data: {s: this.model.report.id}}
-                     ),
+                var openInView = this.model.report.openInView(this.model.user),
                     canWrite = this.model.report.canWrite(this.model.user.canScheduleSearch(), this.model.user.canRTSearch()),
                     canClone = this.model.report.canClone(this.model.user.canScheduleSearch(), this.model.user.canRTSearch()),
                     canEmbed = this.model.report.canEmbed(this.model.user.canScheduleSearch(), this.model.user.canEmbed()),
@@ -321,16 +318,25 @@ define(
                     canAdvancedEdit = this.model.report.canAdvancedEdit(),
                     isEmbedded = util.normalizeBoolean(this.model.report.entry.content.get('embed.enabled')),
                     isDisabled = this.model.report.entry.content.get('disabled');
+                var view = route.getView(openInView);
+                var openInUrl = view.route(
+                        this.model.application.get("root"),
+                        this.model.application.get("locale"),
+                        this.model.application.get("app"),
+                        {data: {s: this.model.report.id}}
+                    );
                 var html = this.compiledTemplate({
                     _: _,
                     button: this.options.button,
                     report: this.model.report,
                     user: this.model.user,
-                    openInPivot: openInPivot
+                    openInView: openInView,
+                    openInUrl: openInUrl,
+                    openInText: view.openLabel
                 });
                 this.$el.html(PopTartView.prototype.template_menu);
                 this.$el.append(html);
-                
+
                 if (isEmbedded) {
                     this.$('.edit_messages').append('<li class="message">' + _("Disable embedding to edit report.").t() + '</li>');
                     if (this.options.showDisable && isDisabled) {
@@ -349,7 +355,7 @@ define(
                 if (canWrite && !isEmbedded) {
                     var editDescriptionText = this.options.showSearchField ? _("Edit Search").t() : _("Edit Description").t();
                     this.$('.edit_actions').append('<li><a class="edit-description" href="#">' + editDescriptionText + '</a></li>');
-                    
+
                     // Only show if user has perm to change perms
                     if (this.model.report.entry.acl.get('can_change_perms')) {
                         this.$('.edit_actions').append('<li><a class="edit-permissions" href="#">' + _("Edit Permissions").t() + '</a></li>');
@@ -367,13 +373,13 @@ define(
 
                     if (this.options.showDisable) {
                         var enableText = isDisabled ? _('Enable').t() : _('Disable').t();
-                        this.$('.edit_actions').append('<li><a class="enable-disable" href="#">' + enableText  + '</a></li>'); 
-                    } 
-                    
+                        this.$('.edit_actions').append('<li><a class="enable-disable" href="#">' + enableText  + '</a></li>');
+                    }
+
                     if (this.options.showAdvancedEdit && canAdvancedEdit) {
                         this.$('.edit_actions').append('<li><a href="#" class="advanced-edit">' + _("Advanced Edit").t() + ' <i class="icon-external"></i></a></li>');
                     }
-                        
+
                 } else {
                     this.$('.edit_actions').remove();
                 }
@@ -404,11 +410,7 @@ define(
                 <ul class="edit_messages ">\
                 </ul>\
                 <ul class="open_actions">\
-                    <% if (report.openInView(user) === "pivot") { %>\
-                        <li><a href="<%- openInPivot %>"><%- _("Open in Pivot").t() %></a></li>\
-                    <% } else { %>\
-                        <li><a class="open-in-search" href="#"><%- _("Open in Search").t() %></a></li>\
-                    <% } %>\
+                    <li><a class="open-in-<%- openInView %>" href="<%- openInUrl %>"><%- openInText %></a></li>\
                 </ul>\
                 <ul class="edit_actions">\
                 </ul>\

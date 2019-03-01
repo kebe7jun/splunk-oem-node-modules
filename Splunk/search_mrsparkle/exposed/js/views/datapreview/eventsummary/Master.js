@@ -79,6 +79,13 @@ define(
             createChart: function(timeline_dates, max_count, timeline_data){
                 var chartColors = (this.model.serverInfo.isLite()) ?
                     [[0, '#F58220'],[1, '#D66700']] : [[0, '#6FAA1A'],[1, '#447800']];
+                Highcharts.setOptions({
+                    chart: {
+                        style: {
+                            fontFamily: "Splunk Platform Sans, Proxima Nova, Roboto, Droid, Helvetica Neue, Helvetica, Arial, sans-serif"
+                        }
+                    }
+                });
                 this.chart = new Highcharts.Chart({
                     chart: {
                         renderTo: this.$('.chartPlaceholder')[0],

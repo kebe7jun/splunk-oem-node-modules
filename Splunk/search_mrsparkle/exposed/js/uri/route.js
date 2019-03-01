@@ -10,8 +10,6 @@ define(
         }
         return version;
     };
-
-
     exports.encodeRoot = function(path, locale) {
         if (splunkConfig.INDEPENDENT_MODE) {
             console.warn('route: Trying to generate URL in independent mode when URL structure is unknown');
@@ -226,6 +224,10 @@ define(
     exports.table = function(root, locale, app, options) {
         return exports.page(root, locale, app, 'table', options);
     };
+    exports.dynamic_data = function(root, locale, app, options) {
+        options = options || {};
+        return exports.page(root, locale, 'dynamic-data-self-storage-app', "self-storage-locations", options);
+    };
     exports.dataset = function(root, locale, app, options) {
         return exports.page(root, locale, app, 'dataset', options);
     };
@@ -247,19 +249,23 @@ define(
         }
         return exports.page(root, locale, app, 'search', options);
     };
+    exports.analysis_workspace = function(root, locale, app, options) {
+        if (app === splunkdUtils.SYSTEM) {
+            app = 'search';
+        }
+        return exports.page(root, locale, app, 'analysis_workspace', options);
+    };
     exports.report = function(root, locale, app, options) {
         return exports.page(root, locale, app, 'report', options);
     };
-    // DCE-OEM-CHANGE
     exports.reports = function(root, locale, app, options) {
-        return exports.page(root, locale, app, 'dce_reports', options);
+        return exports.page(root, locale, app, 'reports', options);
     };
     exports.alert = function(root, locale, app, options) {
         return exports.page(root, locale, app, 'alert', options);
     };
-    // DCE-OEM-CHANGE
     exports.alerts = function(root, locale, app, options) {
-        return exports.page(root, locale, app, 'alert_definitions', options);
+        return exports.page(root, locale, app, 'alerts', options);
     };
     exports.job_manager = function(root, locale, app, options) {
         return exports.page(root, locale, app, 'job_manager', options);
@@ -269,7 +275,7 @@ define(
     };
     exports.addData = function(root, locale, app, step, options) {
         // if app is not provided, default to search
-        var page = step ? ["adddata", step] : 'adddata';
+        var page = step ? ["adddatamethods", step] : 'adddata';
         return exports.manager(root, locale, app || "search", page, options);
     };
     exports.editDashboard = function(root, locale, app, name, options) {
@@ -568,5 +574,17 @@ define(
     exports.spmetadata = function(root, locale) {
         return exports.encodeRoot(root, locale) + '/saml/spmetadata';
     };
+
+    exports.getView = function(view) {
+        switch (view) {
+            case 'analysis_workspace':
+                return {openLabel: _('Open in Metrics Workspace').t(), route: exports.analysis_workspace};
+            case 'pivot':
+                return {openLabel: _('Open in Pivot').t(), route: exports.pivot};
+            default:
+                return {openLabel: _('Open in Search').t(), route: exports.search};
+        }
+    };
+
     return exports;
 });

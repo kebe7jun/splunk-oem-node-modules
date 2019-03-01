@@ -41,6 +41,7 @@ define(function(require, exports, module) {
 
             this.children.title = new TitleView({
                 model: {
+                    application: this.model.application,
                     user: this.model.user,
                     serverInfo: this.model.serverInfo
                 },
@@ -106,11 +107,15 @@ define(function(require, exports, module) {
                     .filter('[data-username="'+ username +'"]')
                     .addClass('active');
             }
+            else {
+                $('.tile-list-container div.authenticationusers-tiles-emptytile').not('.highlighter').addClass('active');
+            }
 
             this._userFormFirstShow = true;
 
             this.children.userForm = new UserFormView({
                 model: {
+                    splunkAuth: this.model.splunkAuth,
                     user: this.model.user,
                     userEdit: userEdit
                 },

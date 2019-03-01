@@ -5,14 +5,14 @@ define(
         'views/Base',
         'views/shared/controls/SyntheticSelectControl',
         'views/shared/fieldpicker/controls/Extract',
-        'views/shared/fieldpicker/controls/Search',
+        'views/shared/controls/TextControl',
         'views/shared/fieldpicker/controls/SelectionToggle',
         'uri/route'
     ],
-    function(_, module, Base, SyntheticSelectControl, Extract, Search, SelectionToggle, route) {
+    function(_, module, Base, SyntheticSelectControl, Extract, TextControlView, SelectionToggle, route) {
         return Base.extend({
             moduleId: module.id,
-            className: 'controls btn-toolbar',
+            className: 'controls',
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
                 this.enableExtract = _.has(this.options, 'enableExtract') ? this.options.enableExtract : true;
@@ -37,8 +37,13 @@ define(
                 });
 
                 //search
-                this.children.search = new Search({
-                    model: this.model.report
+                this.children.search = new TextControlView({
+                    model: this.model.report.entry.content,
+                    modelAttribute: 'display.prefs.fieldFilter',
+                    placeholder:  _("Filter").t(),
+                    updateOnKeyUp: true,
+                    canClear: true,
+                    style: 'search'
                 });
 
                 //extract

@@ -23,6 +23,7 @@ define(
     ){
         return BaseView.extend({
             moduleId: module.id,
+            className: 'table-padded',
             /**
              * @param {Object} options {
              *     model:
@@ -44,9 +45,9 @@ define(
                 this.children.tableRowToggle = new TableRowToggleView({el: this.el, collapseOthers: true });
 
                 this.tableHeaders = [];
-                this.tableHeaders.push({ label: _('i').t(), className: 'col-info', html: '<i class="icon-info"></i>' });
+                this.tableHeaders.push({ label: _('i').t(), ariaLabel: _('More Info').t(), className: 'col-info', html: '<i class="icon-info"></i>' });
                 this.tableHeaders.push({ label: _('Title').t(), sortKey: 'name' });
-                this.tableHeaders.push({ label: _('Actions').t(), className: 'col-actions', colSpan: 2 });
+                this.tableHeaders.push({ label: _('Actions').t(), className: 'col-actions' });
                 this.tableHeaders.push({ label: _('Next Scheduled Time').t(), sortKey: 'next_scheduled_time', className: 'col-next-scheduled-time'});
                 this.tableHeaders.push({ label: _('Owner').t(), sortKey: 'eai:acl.owner,name', className: 'col-owner' });
                 if (this.model.user.canUseApps()) {
@@ -61,7 +62,7 @@ define(
                 this.children.rows = this.rowsFromCollection();
                 this.activate();
 
-                this.children.tableDock = new TableDock({ el: this.el, offset: 36, dockScrollBar: false, defaultLayout: 'fixed', flexWidthColumn: 1 });
+                this.children.tableDock = new TableDock({ el: this.el, offset: 42, dockScrollBar: false, defaultLayout: 'fixed', flexWidthColumn: 1 });
             },
             startListening: function() {
                 this.listenTo(this.collection.reports, 'reset', this.renderRows);
@@ -76,6 +77,14 @@ define(
                     this.collection.apps.sortWithString(this.model.userPref.entry.content.get('appOrder'));
                     alternateApp = this.collection.apps.models[0].entry.get('name');
                 }
+
+                // SPL-151852: Count columns of the table, MoreInfo row
+                // will span numOfCols - 1 columns.
+                var numOfCols = this.tableHeaders.reduce(function(accum, item) {
+                    accum += item.colSpan ? item.colSpan : 1;
+                    return accum;
+                }, 0);
+
                 return _.flatten(
                     this.collection.reports.map(function(model, i) {
                         return [
@@ -111,7 +120,7 @@ define(
                                 },
                                 index: i,
                                 alternateApp: alternateApp,
-                                colSpan: this.tableHeaders.length
+                                colSpan: numOfCols - 1
                             })
                         ];
                     }, this)

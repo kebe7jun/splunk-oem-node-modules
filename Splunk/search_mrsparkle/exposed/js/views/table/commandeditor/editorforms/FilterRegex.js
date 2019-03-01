@@ -46,7 +46,7 @@ define(
                     model: this.model.command,
                     modelAttribute: 'regex',
                     size: 'small',
-                    className: 'regex-box',
+                    additionalClassNames: 'regex-box',
                     placeholder: _('enter regular expression...').t()
                 });
 

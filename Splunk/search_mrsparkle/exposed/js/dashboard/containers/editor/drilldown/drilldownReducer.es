@@ -10,6 +10,9 @@ import {
 } from 'dashboard/containers/editor/drilldown/drilldownNames';
 import {
     UPDATE_ACTIVE_ACTION,
+    FETCH_TIME_RANGE_PRESETS_REQUEST,
+    FETCH_TIME_RANGE_PRESETS_SUCCESS,
+    FETCH_TIME_RANGE_PRESETS_FAILURE,
     FETCH_APPS_REQUEST,
     FETCH_APPS_SUCCESS,
     FETCH_APPS_FAILURE,
@@ -138,6 +141,39 @@ const reports = (state = {
     }
 };
 
+const timeRangePresets = (state = {
+    isFetching: false,
+    fetchOptions: {},
+    items: [],
+    error: '',
+}, action) => {
+    switch (action.type) {
+        case FETCH_TIME_RANGE_PRESETS_REQUEST:
+            return {
+                isFetching: true,
+                fetchOptions: action.fetchOptions,
+                items: [],
+                error: '',
+            };
+        case FETCH_TIME_RANGE_PRESETS_SUCCESS:
+            return {
+                isFetching: false,
+                fetchOptions: action.fetchOptions,
+                items: action.timeRangePresets,
+                error: '',
+            };
+        case FETCH_TIME_RANGE_PRESETS_FAILURE:
+            return {
+                isFetching: false,
+                fetchOptions: action.fetchOptions,
+                items: [],
+                error: action.error,
+            };
+        default:
+            return state;
+    }
+};
+
 const splunkEnv = (state = {}) => state;
 const elementEnv = (state = {}) => state;
 
@@ -155,6 +191,7 @@ const reducers = combineReducers({
         [LINK_TO_CUSTOM_URL]: linkToURL,
         [EDIT_TOKENS]: tokens,
     }),
+    timeRangePresets,
     elementEnv,
     splunkEnv,
 });

@@ -93,7 +93,7 @@ define([
             this.model.target.set(modelUpdate);
         },
         normalizeContentHtml: function(htmlCode) {
-            var raw = _(htmlCode || '').t();
+            var raw = htmlCode ? _(htmlCode).t() : '';
 
             // Replace {{SPLUNKWEB_URL_PREFIX}} with actual URL prefix
             var splunkwebBaseUrl = route.encodeRoot(this.model.application.get('root'), this.model.application.get('locale'));

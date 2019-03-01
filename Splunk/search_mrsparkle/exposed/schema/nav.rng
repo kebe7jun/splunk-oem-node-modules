@@ -102,6 +102,9 @@ Splunk app view navgation RelaxNG schema
     <element name="a">
       <interleave>
         <attribute name="href"/>
+        <optional>
+          <attribute name="target"/>
+        </optional>
         <text/>
       </interleave>
     </element>

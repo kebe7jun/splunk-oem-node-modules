@@ -6,7 +6,7 @@ define(
         'views/shared/controls/ControlGroup',
         'views/shared/controls/SyntheticSelectControl',
         'views/shared/controls/TextControl'
-    ], 
+    ],
     function(
         _,
         BaseView,
@@ -23,7 +23,6 @@ define(
             this.children.executeActions = new ControlGroup({
                 className: 'alert-type control-group',
                 controlType: 'SyntheticRadio',
-                controlClass: 'controls-halfblock',
                 controlOptions: {
                     modelAttribute: 'ui.executeactions',
                     model: this.model.alert.entry.content,
@@ -49,7 +48,6 @@ define(
             this.children.fieldValue = new ControlGroup({
                 className: 'alert-name control-group',
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'alert.suppress.fields',
                     model: this.model.alert.entry.content
@@ -62,10 +60,12 @@ define(
                 controlClass: 'controls-split input-append',
                 controls: [
                     new TextControl({
+                        ariaLabel: _('Suppress triggering time ').t(),
                         modelAttribute: 'ui.supresstime',
                         model: this.model.alert.entry.content
                     }),
                     new SyntheticSelectControl({
+                        ariaLabel: _('Suppress triggering time unit').t(),
                         modelAttribute: 'ui.supresstimeunit',
                         model: this.model.alert.entry.content,
                         items: [
@@ -118,7 +118,10 @@ define(
         },
         render: function() {
             this.children.executeActions.render().appendTo(this.$el);
-            this.$el.append('<fieldset class="throttle-options"></fieldset>');
+            var template = this.compiledTemplate({
+                _: _
+            });
+            this.$el.append(template);
             var $throttleOptions = this.$el.find('.throttle-options');
             this.children.throttle.render().appendTo($throttleOptions);
             this.children.fieldValue.render().appendTo($throttleOptions);
@@ -126,7 +129,11 @@ define(
             this.toggleThrottle();
             this.toggleThrottleOptions();
             return this;
-        }
+        },
+        template: '\
+            <fieldset class="throttle-options">\
+                <legend class="visuallyhidden"><%-_("Throttle Options").t() %></legend>\
+            </fieldset>\
+        '
     });
 });
-

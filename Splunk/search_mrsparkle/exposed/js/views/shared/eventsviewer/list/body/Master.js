@@ -112,8 +112,7 @@ define(
                             selectableFields: this.options.selectableFields,
                             allowRowExpand: this.options.allowRowExpand,
                             showWarnings: this.options.showWarnings,
-                            highlightExtractedTime: this.options.highlightExtractedTime,
-                            clickFocus: this.options.clickFocus
+                            highlightExtractedTime: this.options.highlightExtractedTime
                         });
                         this.children[id].render().appendTo(fragment);
                         this.children[id].activate({deep:true});

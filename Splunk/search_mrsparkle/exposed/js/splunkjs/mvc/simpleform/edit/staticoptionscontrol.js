@@ -176,7 +176,7 @@ define(function(require, exports, module) {
             <div class="drag-handle"></div>\
             <div class="static-option-label"></div>\
             <div class="static-option-value"></div>\
-            <a class="static-option-remove btn-link" href="#"><i class="icon-x-circle"></i></a>\
+            <a class="static-option-remove btn-pill btn-square" href="#"><i class="icon-x"></i></a>\
         '
 
     });

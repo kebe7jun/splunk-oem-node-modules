@@ -19,6 +19,7 @@ define(
         'controllers/dashboard/helpers/ModelHelper',
         'views/dashboard/editor/addcontent/Utils',
         'splunk.util',
+        './Master.pcssm',
         'bootstrap.collapse'
     ],
     function(module,
@@ -65,8 +66,9 @@ define(
             },
             _initFilter: function() {
                 this.children.filter = new TextControl({
-                    placeholder: _('find...').t(),
+                    placeholder: _('Find').t(),
                     updateOnKeyUp: true,
+                    style: 'search',
                     canClear: true,
                     model: this.model.sidebarState,
                     modelAttribute: 'filter'

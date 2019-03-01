@@ -1221,7 +1221,7 @@ Splunk.Module.FlashTimeline = $.klass(Splunk.Module.DispatchingModule, {
              *
              * Example CSS:
              * .YOURCONTAINER {
-             *    background-color:#CCC; -> backgroundColor
+             *    background-color:#c3cbd4; -> backgroundColor
              *    border-left-color:#000; -> foregroundColor
              *    color:#FFF; -> fontColor
              *    border-right-color:#FFF; -> seriesColor

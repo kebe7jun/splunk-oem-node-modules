@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     var splunkUtil = require('splunk.util');
     var route = require('uri/route');
     var Modal = require('views/shared/Modal');
+    var theme_utils = require('util/theme_utils');
 
     return Base.extend({
         moduleId: module.id,
@@ -37,7 +38,7 @@ define(function(require, exports, module) {
                         label: "",
                         controlType: 'SyntheticSelect',
                         controlOptions: {
-                            className: 'btn-group add-panel-report',
+                            additionalClassNames: 'add-panel-report',
                             toggleClassName: 'btn',
                             model: this.model.report,
                             modelAttribute: 'savedSearchName',
@@ -54,7 +55,7 @@ define(function(require, exports, module) {
                         label: "",
                         controlType: 'SyntheticSelect',
                         controlOptions: {
-                            className: 'btn-group add-panel-report',
+                            additionalClassNames: 'add-panel-report',
                             toggleClassName: 'btn',
                             model: this.model.report,
                             modelAttribute: 'savedSearchName',
@@ -71,7 +72,7 @@ define(function(require, exports, module) {
                     this.model.report.set('savedSearchName', items[0].value);
                 }
             }, this));
-            
+
             this.children.searchField = new SearchTextareaControl({
                 model: {
                     content: this.model.report,
@@ -82,6 +83,7 @@ define(function(require, exports, module) {
                     searchBNFs: this.collection.searchBNFs
                 },
                 searchAttribute: 'savedSearchString',
+                syntaxHighlighting: theme_utils.getSearchEditorTheme(),
                 readOnly: true
             });
 

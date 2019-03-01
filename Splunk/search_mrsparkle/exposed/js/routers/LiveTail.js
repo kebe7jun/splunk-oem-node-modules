@@ -34,7 +34,6 @@ define(
             initialize: function() {
                 BootstrapSearchRouter.prototype.initialize.apply(this, arguments);
                 this.enableAppBar = false;
-                this.enableFooter = false;
                 this.showAppsList = false;
                 this.fetchManagers = false;
                 this.fetchUserPref = true;

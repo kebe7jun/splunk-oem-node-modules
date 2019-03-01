@@ -32,7 +32,7 @@ define(
                         "settings": {},
                         "children": [
                             {
-                                "type": this.model.report.entry.content.get('dashboard.element.viz.type'),
+                                "type": this._getType(),
                                 "settings": {},
                                 "children": [
                                     {
@@ -46,12 +46,30 @@ define(
                                 ],
                                 "reportContent": _.extend(
                                     { "dashboard.element.title": this.model.report.entry.get('name') },
+                                    this.getCustomVizNameAttribute(),
                                     ReportModelHelper.getDisabledDrilldownAttribute(this.model.report.entry.content.toJSON({tokens: true}))
                                 )
                             }
                         ]
                     }
                 };
+            },
+            _getType: function() {
+                return this.model.report.entry.content.get('dashboard.element.viz.type');
+            },
+            _isCustomViz: function() {
+                return this._getType() === 'viz';
+            },
+            getCustomVizNameAttribute: function() {
+                // this is only useful for custom viz, it will do nothing for other viz types.
+                var attr = 'display.visualizations.custom.type';
+                var pair = {};
+
+                if (this._isCustomViz()) {
+                    pair[attr] = this.model.report.entry.content.get(attr, { token: true });
+                }
+
+                return pair;
             },
             _getTitle: function() {
                 return _("Preview").t();

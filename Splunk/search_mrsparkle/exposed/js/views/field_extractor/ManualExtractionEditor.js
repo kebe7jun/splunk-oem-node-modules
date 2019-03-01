@@ -86,7 +86,8 @@ define([
                         modelAttribute: 'regex',
                         textareaClassName: 'regex-text-area'
                     }
-                }
+                },
+                controlsLayout: 'block'
             });
             this.listenTo(this.model.state, 'change:interactiveMode', this.render);
             this.listenTo(this.model.state, 'change:regex', function() {

@@ -30,7 +30,7 @@ define(
             className: 'dropdown-menu dropdown-menu-wide dropdown-menu-width-auto add-alert-action-dropdown',
             initialize: function() {
                 PopTartView.prototype.initialize.apply(this, arguments);
-                
+
                 var defaults = {
                     canViewAlertActionsManager: false
                 };
@@ -49,7 +49,7 @@ define(
                         this.trigger('itemClicked', selectedAlertAction);
                     }
                     this.hide();
-                } 
+                }
             },
             render: function() {
                 var html = this.compiledTemplate({
@@ -69,10 +69,15 @@ define(
                 <ul>\
                     <% _(unSelectedAlertActions.models).each(function(alertAction) { %>\
                         <li>\
-                            <a href="#" class="unselected-action" data-name="<%- alertAction.entry.get("name") %>" >\
+                            <% var label = _(alertAction.entry.content.get("label")).t() || _(alertAction.entry.get("name")).t();\
+                               var description = alertAction.entry.content.get("description") || "";\
+                            %>\
+                            <a href="#" class="unselected-action" data-name="<%- alertAction.entry.get("name") %>"\
+                            aria-label="<%- label %> : <%- description %>"\
+                             >\
                                 <img src="<%= route.alertActionIconFile(applicationModel.get("root"), applicationModel.get("locale"), alertAction.entry.acl.get("app"), {file: alertAction.entry.content.get("icon_path")}) %>">\
-                                <span><%- _(alertAction.entry.content.get("label")).t() || _(alertAction.entry.get("name")).t() %></span>\
-                                <span class="link-description"><%- _(alertAction.entry.content.get("description") || "").t() %></span>\
+                                <span><%- label %></span>\
+                                <span class="link-description"><%- description %></span>\
                             </a>\
                         </li>\
                     <% }) %>\

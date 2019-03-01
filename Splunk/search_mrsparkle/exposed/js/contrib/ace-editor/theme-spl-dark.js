@@ -7,7 +7,7 @@ exports.cssText =".ace-spl-dark .ace_gutter {\
     color: #999999;\
 }\
 .ace-spl-dark {\
-    background-color: #222222;\
+    background-color: #2b3033;\
     color: #CCCCCC;\
 }\
 .ace-spl-dark .ace_cursor {\
@@ -41,11 +41,14 @@ exports.cssText =".ace-spl-dark .ace_gutter {\
 .ace-spl-dark .ace_marker-layer .ace_selected-word {\
     border: 1px solid #CCCCCC;\
 }\
+.ace-spl-dark.ace_editor {\
+    border: 1px solid #000000;\
+}\
 .ace-spl-dark.ace_editor.ace_autocomplete .ace_rightAlignedText{\
     color:#999999;\
 }\
 .ace-spl-dark.ace_editor.ace_autocomplete {\
-    background: #222222;\
+    background: #31373E;\
     color: #CCCCCC;\
 }\
 .ace-spl-dark.ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line {\

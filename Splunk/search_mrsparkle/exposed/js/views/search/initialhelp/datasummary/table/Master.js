@@ -36,7 +36,7 @@ define(
                 
                 var columns = [
                    {
-                      html: '<i class="icon-chart-column"></i>'
+                      html: '<i class="icon-chart-column" tabindex="0"></i>'
                    },
                    {
                       label: _("Count").t(),
@@ -127,7 +127,7 @@ define(
                 <div class="scroll-table-wrapper">\
                     <table class="table table-chrome table-striped table-hover">\
                         <tbody class="data-summary-rows">\
-                            <tr class="waiting"><td colspan="4"><%- _("Waiting for results...").t() %></td></tr>\
+                            <tr class="waiting"><td colspan="4" tabindex="0"><%- _("Waiting for results...").t() %></td></tr>\
                         </tbody>\
                     </table>\
                 </div>\

@@ -1,11 +1,10 @@
 import _ from 'underscore';
-import { createTestHook } from 'util/test_support';
-import React, { Component, PropTypes } from 'react';
-import File from 'splunk-ui/components/File';
-import Button from 'splunk-ui/components/Button';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import File from '@splunk/react-ui/File';
+import Button from '@splunk/react-ui/Button';
 import AppDialog from './AppDialog/AppDialog';
 import LoginDialog from './LoginDialog';
-import './UploadedApps.pcss';
 
 const STRINGS = {
     UPLOAD_APP: _('Upload App').t(),
@@ -75,8 +74,11 @@ class UploadAppButton extends Component {
         };
 
         return (
-            <div {...createTestHook(module.id)}>
-                <Button onClick={this.handleUploadButtonClick} label={STRINGS.UPLOAD_APP} appearance="primary" />
+            <div data-test="UploadedApps-UploadAppButton">
+                <div>
+                    <Button onClick={this.handleUploadButtonClick} label={STRINGS.UPLOAD_APP} appearance="primary" />
+                    &nbsp;
+                </div>
                 <AppDialog {...appDialogProps}>
                     <AppDialog.Body {...appDialogBodyProps}>
                         {
@@ -97,10 +99,13 @@ class UploadAppButton extends Component {
                         }
                     </AppDialog.Body>
                     <AppDialog.Footer>
-                        <Button
-                            {...uploadButtonProps}
-                            {...createTestHook(null, 'upload-close')}
-                        />
+                        <div>
+                            <Button
+                                {...uploadButtonProps}
+                                data-test="UploadedApps-UploadCloseButton"
+                            />
+                            &nbsp;
+                        </div>
                     </AppDialog.Footer>
                 </AppDialog>
                 <LoginDialog {...loginDialogProps} />

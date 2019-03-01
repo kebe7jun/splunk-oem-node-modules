@@ -18,27 +18,25 @@ msg_obj = MsgPoolMgr.get_poolmgr_instance()[UI_MSG_POOL].pop(msgid)
 % endif
 
 
-<div class="dataInputsWrapper">
-    <br>
-    <h1>${_('Distributed search')}</h1>
-    <div class="dataInputsDesc">${_('Perform a search across multiple Splunk indexers.')}</div>
+<div class="dataInputsWrapper settingsIndex">
+    <div class="settingsIndexDesc">${_('Perform a search across multiple Splunk indexers.')}</div>
 
     <table class="splTable">
 		<tr>
-            <th>${_('')}</th>
+            <th>${''}</th>
             <th>${_('Actions')}</th>
         </tr>
         <tr>
             <td class="input_name"><a href="${make_url(['manager', namespace, 'search', 'distributed', 'config', 'distributedSearch'], dict(action='edit'))}">${_('Distributed search setup')}</a></td>
-            <td></td>
+            <td class="actions"></td>
         </tr>
         % if not distSearchDisabled:
         <tr>
             <td class="input_name"><a href="${make_url(['manager', namespace, 'search', 'distributed', 'peers'])}">${_('Search peers')}</a></td>
             % if not isClusteringEnabled:
-                 <td><a href="${make_url(['manager', namespace, 'search', 'distributed', 'peers', '_new'], dict(action='edit'))}">${_('Add new')}</a></td>
+                 <td class="actions"><a class="add-new" href="${make_url(['manager', namespace, 'search', 'distributed', 'peers', '_new'], dict(action='edit'))}">${_('Add new')}</a></td>
             % else: 
-                 <td></td>
+                 <td class="actions"></td>
             % endif
         </tr>
         % endif

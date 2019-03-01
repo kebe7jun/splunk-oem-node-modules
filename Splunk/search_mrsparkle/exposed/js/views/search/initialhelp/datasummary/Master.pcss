@@ -8,12 +8,12 @@
         border-bottom: 0;
     }
     .modal-body {
-        padding: 0;
+        padding-top: 0;
         max-height: 450px;
     }
 
 	.main-tabs {
-		margin-bottom: 0;
+		margin: 0 -$spacing;
 	}
 
 	.search-query-control {
@@ -29,8 +29,8 @@
 	}
 
 	.pagination {
-		margin-right: 20px;
-		margin-top: 20px;
+		margin-top: $spacingHalf;
+		padding-top: 3px;
 	}
 
 	.header-table-static {
@@ -44,12 +44,19 @@
 
 	.shared-findinput {
 		float: left;
-		margin: 10px 20px;
+		margin: $spacingHalf $spacing $spacingHalf 0;
 	}
 
-    
     .table {
         margin-bottom: 0;
+    }
+
+    .table-chrome {
+        border-bottom: none;
+    }
+
+    .header-table-wrapper {
+        border-bottom: none;
     }
 
     td.host, td.source, td.sourceType {

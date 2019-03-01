@@ -1,46 +1,67 @@
-"use strict"
+"use strict";
 
-const isAutoprefixable = require("../../utils/isAutoprefixable")
-const report = require("../../utils/report")
-const ruleMessages = require("../../utils/ruleMessages")
-const validateOptions = require("../../utils/validateOptions")
+const _ = require("lodash");
+const isAutoprefixable = require("../../utils/isAutoprefixable");
+const optionsMatches = require("../../utils/optionsMatches");
+const postcss = require("postcss");
+const report = require("../../utils/report");
+const ruleMessages = require("../../utils/ruleMessages");
+const validateOptions = require("../../utils/validateOptions");
 
-const ruleName = "property-no-vendor-prefix"
+const ruleName = "property-no-vendor-prefix";
 
 const messages = ruleMessages(ruleName, {
-  rejected: property => `Unexpected vendor-prefix "${property}"`,
-})
+  rejected: property => `Unexpected vendor-prefix "${property}"`
+});
 
-const rule = function (actual) {
+const rule = function(actual, options) {
   return (root, result) => {
-    const validOptions = validateOptions(result, ruleName, { actual })
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      { actual },
+      {
+        optional: true,
+        actual: options,
+        possible: {
+          ignoreProperties: [_.isString]
+        }
+      }
+    );
+
     if (!validOptions) {
-      return
+      return;
     }
 
     root.walkDecls(decl => {
-      const prop = decl.prop
+      const prop = decl.prop;
+      const unprefixedProp = postcss.vendor.unprefixed(prop);
+
+      //return early if property is to be ignored
+      if (optionsMatches(options, "ignoreProperties", unprefixedProp)) {
+        return;
+      }
 
       // Make sure there's a vendor prefix,
       // but this isn't a custom property
 
       if (prop[0] !== "-" || prop[1] === "-") {
-        return
+        return;
       }
 
       if (!isAutoprefixable.property(prop)) {
-        return
+        return;
       }
       report({
         message: messages.rejected(prop),
         node: decl,
         result,
-        ruleName,
-      })
-    })
-  }
-}
+        ruleName
+      });
+    });
+  };
+};
 
-rule.ruleName = ruleName
-rule.messages = messages
-module.exports = rule
+rule.ruleName = ruleName;
+rule.messages = messages;
+module.exports = rule;

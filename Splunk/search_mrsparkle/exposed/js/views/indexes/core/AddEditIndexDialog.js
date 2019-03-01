@@ -44,6 +44,7 @@ define([
 
         events: $.extend({}, Modal.prototype.events, {
             'click .btn-primary': function(e) {
+                e.preventDefault();
                 if (this.addEditIndexModel.set({}, {validate:true})) {
                     // Copy addEditIndexModel attributes to this.model
                     var name = this.addEditIndexModel.get("name"),
@@ -131,7 +132,6 @@ define([
                     isNew: true,
                     app: applicationApp
                 });
-                this.model.entity = new this.options.entityModelClass();
             }
             else {
                 var name = this.model.entity.entry.get("name"),
@@ -206,7 +206,8 @@ define([
             this.children.flashMessagesView = new FlashMessages({
                 model: [this.addEditIndexModel, this.model.entity],
                 helperOptions: {
-                    removeServerPrefix: true
+                    removeServerPrefix: true,
+                    postProcess: this.postProcess
                 }
             });
 
@@ -217,7 +218,6 @@ define([
                     modelAttribute: 'name',
                     model: this.addEditIndexModel
                 },
-                controlClass: 'controls-block',
                 label: _('Index Name').t(),
                 help:_("Set index name (e.g., INDEX_NAME). Search using index=INDEX_NAME.").t()
             });
@@ -228,7 +228,6 @@ define([
                     model: this.addEditIndexModel,
                     placeholder: 'optional'
                 },
-                controlClass: 'controls-block',
                 label: _('Home Path').t(),
                 help:_("Hot/warm db path. Leave blank for default ($SPLUNK_DB/INDEX_NAME/db).").t(),
                 enabled: options.isNew
@@ -240,7 +239,6 @@ define([
                     model: this.addEditIndexModel,
                     placeholder: 'optional'
                 },
-                controlClass: 'controls-block',
                 label: _('Cold Path').t(),
                 help:_("Cold db path. Leave blank for default ($SPLUNK_DB/INDEX_NAME/colddb).").t(),
                 enabled: options.isNew
@@ -252,7 +250,6 @@ define([
                     model: this.addEditIndexModel,
                     placeholder: 'optional'
                 },
-                controlClass: 'controls-block',
                 label: _('Thawed Path').t(),
                 help:_("Thawed/resurrected db path. Leave blank for default ($SPLUNK_DB/INDEX_NAME/thaweddb).").t(),
                 enabled: options.isNew
@@ -273,13 +270,13 @@ define([
                         }
                     ]
                 },
-                controlClass: 'controls-halfblock',
                 label: _('Data Integrity Check').t(),
                 help: _("Enable this if you want Splunk to compute hashes on every slice of your data for the purpose of data integrity.").t()
             });
             this.children.inputMaxIndexSize = new ControlGroup({
                 label: _('Max Size of Entire Index').t(),
                 help:_("Maximum target size of entire index.").t(),
+                controlClass: 'input-append',
                 controls: [{
                     type: 'Text',
                     options: {
@@ -300,6 +297,7 @@ define([
             this.children.inputMaxBucketSize = new ControlGroup({
                 label: _('Max Size of Hot/Warm/Cold Bucket').t(),
                 help:_("Maximum target size of buckets. Enter 'auto_high_volume' for high-volume indexes.").t(),
+                controlClass: 'input-append',
                 controls: [{
                     type: 'Text',
                     options: {
@@ -324,7 +322,6 @@ define([
                     model: this.addEditIndexModel,
                     placeholder: 'optional'
                 },
-                controlClass: 'controls-block',
                 label: _('Frozen Path').t(),
                 help:_("Frozen bucket archive path. Set this if you want Splunk to automatically archive frozen buckets.").t()
             });
@@ -333,7 +330,6 @@ define([
                 this.children.selectApp = options.isNew ? new ControlGroup({
                     label: _("App").t(),
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: "app",
                         model: this.addEditIndexModel,
@@ -351,7 +347,6 @@ define([
                         modelAttribute: 'app',
                         model: this.addEditIndexModel
                     },
-                    controlClass: 'controls-block',
                     label: _('App').t(),
                     enabled: false
                 });
@@ -376,7 +371,6 @@ define([
                     ],
                     save: false
                 },
-                controlClass: 'controls-halfblock',
                 label: _('Tsidx Retention Policy').t(),
                 help:_('<b>Warning</b>: Do not enable reduction without understanding the full implications. It is extremely difficult to rebuild reduced buckets. <a href="'+ docRoute +'" class="external" target="_blank" + title="' + _("Splunk help").t() + '">Learn More</a>').t()
             });
@@ -400,7 +394,6 @@ define([
                     ],
                     save: false
                 },
-                controlClass: 'controls-halfblock',
                 label: _('Index Data Type').t(),
                 help:_('The type of data to store (event-based or metrics).').t()
             });
@@ -408,6 +401,7 @@ define([
             this.children.inputTSDIXReductionAge = new ControlGroup({
                 label: _('Reduce tsidx files older than').t(),
                 help:_("Age is determined by the latest event in a bucket.").t(),
+                controlClass: 'input-append',
                 controls: [{
                     type: 'Text',
                     options: {
@@ -430,6 +424,13 @@ define([
 
             this.addEditIndexModel.on('change:enableTsidxReduction', this.toggleMiniTsidxSettings, this);
             this.addEditIndexModel.on('change:dataType', this.toggleVisibility, this);
+        },
+
+        postProcess: function(messages) {
+            if (messages.length) {
+                messages[0].set({'html': _.unescape(messages[0].get('html'))});
+            }
+            return messages;
         },
 
         // Toggles display of mini-tsidx configuration

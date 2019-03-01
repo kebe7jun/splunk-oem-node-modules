@@ -123,7 +123,7 @@ define([
             },
 
             template: '\
-            <table class="table table-chrome table-striped table-row-expanding">\
+            <table class="table table-chrome table-hover table-striped table-row-expanding">\
                 <thead class="data-model-table-head-placeholder"></thead>\
                 <tbody class="data-model-table-body"></tbody>\
             </table>\

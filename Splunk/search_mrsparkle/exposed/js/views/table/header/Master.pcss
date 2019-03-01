@@ -1,7 +1,7 @@
 @import '../variables.pcss';
 
 .table-header {
-    background-color: $grayLighter;
+    background-color: $gray92;
     display: flex;
     flex: 0 0 calc($titleBarHeight - 1px);
     justify-content: space-between;
@@ -33,40 +33,20 @@
     }
 
     .save, .save-as, .pivot-btn {
-        font-size: 12px;
         user-select: none;
+    }
+
+    .nav-tabs {
+        background: transparent;
+        margin-bottom: -1px;
+        font-size: $fontSize;
+
+         > li:not(.active) > a:before {
+            background-color: $gray80;
+         }
     }
 }
 
 .modal-btn-cancel.pull-right {
     margin-right: 10px;
-}
-
-.btn-group-tabs  {
-    align-self: flex-end;
-    @mixin display-flex;
-    flex: 1;
-    justify-content: center;
-    .btn {
-        border: none;
-        border-bottom: transparent 4px solid;
-        background: none;
-        line-height: 16px;
-        box-shadow: none;
-        position: relative;
-        &.active, &.active:focus, &.active:hover, &:hover {
-            box-shadow: none;
-            background: none;
-            border-top-left-radius: 0px;
-            border-top-right-radius: 0px;
-            border-bottom-left-radius: 0px;
-            border-bottom-right-radius: 0px;
-        }
-        &:hover {
-            border-bottom: $grayLight 4px solid;
-        }
-        &.active {
-            border-bottom: $blue 4px solid;
-        }
-    }
 }

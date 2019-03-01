@@ -36,6 +36,7 @@ define(
                     label: _("Earliest").t(),
                     blankValue: '0',
                     modelAttribute: "earliest",
+                    additionalClass: "col-1",
                     isLatest: false
                 });
 
@@ -47,6 +48,7 @@ define(
                     label: _("Latest").t(),
                     blankValue: '',
                     modelAttribute: "latest",
+                    additionalClass: "col-2",
                     isLatest: true
                 });
 
@@ -200,15 +202,18 @@ define(
                     docRoute: docRoute
                 });
                 this.$el.html(template);
-                this.children.flashMessages.render().insertBefore(this.$(".apply"));
-                this.children.earliestTimeInput.render().insertBefore(this.$(".apply"));
-                this.children.latestTimeInput.render().insertBefore(this.$(".apply"));
+                this.children.flashMessages.render().insertBefore(this.$(".control-group-container"));
+                this.children.earliestTimeInput.render().appendTo(this.$(".control-group-container"));
+                this.children.latestTimeInput.render().appendTo(this.$(".control-group-container"));
 
                 return this;
             },
             template: '\
-                    <button class="apply btn" id="apply_<%- cid %>"><%- _("Apply").t() %></button>\
-                    <a href="<%- docRoute %>" target="_blank" title="<%- _("Splunk help").t() %>" class="btn-documentation"><%- _("Documentation").t() %> <i class="icon-external"></i></a>\
+                    <div class="control-group-container"></div>\
+                    <div class="apply-button-wrapper">\
+                        <a href="<%- docRoute %>" target="_blank" title="<%- _("Splunk help").t() %>" class="btn-documentation"><%- _("Documentation").t() %> <i class="icon-external"></i></a>\
+                        <button class="apply btn" id="apply_<%- cid %>"><%- _("Apply").t() %></button>\
+                    </div>\
             '
     });
 }

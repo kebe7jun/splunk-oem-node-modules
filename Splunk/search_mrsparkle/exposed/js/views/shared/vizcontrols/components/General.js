@@ -18,10 +18,10 @@ define(
         'views/shared/vizcontrols/custom_controls/MinMaxDataLabelsControlGroup'
     ],
     function(
-        _, 
+        _,
         $,
-        module, 
-        Base, 
+        module,
+        Base,
         ControlGroup,
         DrilldownRadioGroup,
         StackModeControlGroup,
@@ -44,7 +44,7 @@ define(
                 column: ['stack', 'multiseries', 'drilldown', 'showDataLabels'],
                 bar: ['stack','multiseries', 'drilldown', 'showDataLabels'],
                 pie: ['drilldown'],
-                scatter: ['drilldown'], 
+                scatter: ['drilldown'],
                 bubble: ['drilldown'],
                 radialGauge: ['style'],
                 fillerGauge: ['style'],
@@ -58,45 +58,37 @@ define(
                 var controls = this.vizToGeneralComponents[this.model.get('viz_type')];
                 if(_.indexOf(controls, 'stack')>-1)
                     this.children.stackMode = new StackModeControlGroup({
-                        model: this.model,
-                        controlClass: 'controls-thirdblock'
+                        model: this.model
                     });
                 if(_.indexOf(controls, 'nullValue')>-1)
                     this.children.nullValueMode = new NullValueModeControlGroup({
-                        model: this.model,
-                        controlClass: 'controls-thirdblock'
+                        model: this.model
                     });
                 if(_.indexOf(controls, 'multiseries')>-1)
                     this.children.multiSeries = new MultiSeriesRadio({ model: this.model });
                 if(_.indexOf(controls, 'drilldown')>-1)
                     this.children.drilldown = new DrilldownRadioGroup({
-                        model: this.model,
-                        controlClass: 'controls-halfblock'
+                        model: this.model
                     });
                 if(_.indexOf(controls, 'style')>-1)
                     this.children.gaugeStyle = new GaugeStyleControlGroup({
-                        model: this.model,
-                        controlClass: 'controls-halfblock'
+                        model: this.model
                     });
                 if(_.indexOf(controls, 'before')>-1)
                     this.children.beforeLabel = new SingleValueBeforeLabelControlGroup({
-                        model: this.model,
-                        controlClass: 'controls-block'
+                        model: this.model
                     });
                 if(_.indexOf(controls, 'after')>-1)
                     this.children.afterLabel = new SingleValueAfterLabelControlGroup({
-                        model: this.model,
-                        controlClass: 'controls-block'
+                        model: this.model
                     });
                 if(_.indexOf(controls, 'under')>-1)
                     this.children.underLabel = new SingleValueUnderLabelControlGroup({
-                        model: this.model,
-                        controlClass: 'controls-block'
+                        model: this.model
                     });
                 if(_.indexOf(controls, 'background')>-1)
                     this.children.background = new SingleValueBackgroundControlGroup({
-                        model: this.model,
-                        controlClass: 'controls-thirdblock'
+                        model: this.model
                     });
                 if(_.indexOf(controls, 'mapDrilldown')>-1)
                     this.children.mapDrilldown = new MapDrilldownControlGroup({
@@ -104,8 +96,7 @@ define(
                     });
                 if(_.indexOf(controls, 'showDataLabels') > -1) {
                     this.children.showMinMaxValues = new MinMaxDataLabelsControlGroup({
-                        model: this.model,
-                        controlClass: 'controls-thirdblock'
+                        model: this.model
                     });
                 }
             },

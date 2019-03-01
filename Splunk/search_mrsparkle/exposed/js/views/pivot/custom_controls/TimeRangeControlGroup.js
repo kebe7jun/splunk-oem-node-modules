@@ -18,7 +18,7 @@ define([
         ) {
 
     var TimeRangeControl = Control.extend({
-
+        moduleId: module.id,
         initialize: function() {
             this.options.modelAttribute = 'label';
             Control.prototype.initialize.call(this, this.options);
@@ -62,7 +62,7 @@ define([
                 this.$popdownWrapper = this.$('.popdown-dialog');
                 this.$popdownWrapper.append(this.children.timeRangeDialog.render().el);
                 // TODO [sff]: try to avoid hard-coding this
-                this.$popdownWrapper.width(640);
+                this.$popdownWrapper.width(650);
             }
         },
 
@@ -96,7 +96,7 @@ define([
                 application: this.options.application,
                 appLocal: this.options.appLocal,
                 user: this.options.user,
-                toggleClassName: 'btn'
+                toggleClassName: 'btn btn-block'
             });
             this.options.controls = [control];
             this.options.label = _('Range').t();

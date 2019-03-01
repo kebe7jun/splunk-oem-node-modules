@@ -10,7 +10,10 @@ a {}
  *   This line */
 ```
 
-If the at-rule is the very first node in a stylesheet then it is ignored.
+This rule ignores:
+
+-   at-rules that are the very first node in the source
+-   `@import` in Less.
 
 The `--fix` option on the [command line](../../../docs/user-guide/cli.md#autofixing-errors) can automatically fix all of the problems reported by this rule. We recommend to enable [`indentation`](../indentation/README.md) rule for better autofixing results with this rule.
 
@@ -101,8 +104,6 @@ a {
 
 #### `"inside-block"`
 
-***Note: This option was previously called `all-nested`.***
-
 Reverse the primary option for at-rules that are nested.
 
 For example, with `"always"`:
@@ -143,6 +144,8 @@ Reverse the primary option for blockless at-rules that follow another blockless 
 
 This means that you can group your blockless at-rules by name.
 
+Shared-line comments do not affect this option.
+
 For example, with `"always"`:
 
 The following patterns are *not* considered violations:
@@ -151,6 +154,13 @@ The following patterns are *not* considered violations:
 @charset "UTF-8";
 
 @import url(x.css);
+@import url(y.css);
+```
+
+```css
+@charset "UTF-8";
+
+@import url(x.css); /* comment */
 @import url(y.css);
 ```
 
@@ -167,9 +177,9 @@ a {
 
 #### `"blockless-after-blockless"`
 
-***Note: This option was previously called `blockless-group`.***
-
 Reverse the primary option for at-rules within a blockless group.
+
+Shared-line comments do not affect this option.
 
 For example, with `"always"`:
 
@@ -187,6 +197,13 @@ The following patterns are *not* considered violations:
 
 ```css
 @import url(x.css);
+@import url(y.css);
+
+@media print {}
+```
+
+```css
+@import url(x.css); /* comment */
 @import url(y.css);
 
 @media print {}
@@ -228,11 +245,13 @@ b {
 }
 ```
 
-### `ignore: ["after-comment", "inside-block", "blockless-after-same-name-blockless", "blockless-after-blockless"]`
+### `ignore: ["after-comment", "first-nested", "inside-block", "blockless-after-same-name-blockless", "blockless-after-blockless"]`
 
 #### `"after-comment"`
 
 Ignore at-rules that come after a comment.
+
+Shared-line comments do not trigger this option.
 
 The following patterns are *not* considered violations:
 
@@ -247,9 +266,29 @@ The following patterns are *not* considered violations:
 @media {}
 ```
 
-#### `"inside-block"`
+```css
+@media {} /* comment */
 
-***Note: This option was previously called `all-nested`.***
+@media {}
+```
+
+#### `"first-nested"`
+
+Ignore at-rules that are nested and the first child of their parent node.
+
+For example, with `"always"`:
+
+The following patterns are *not* considered violations:
+
+```css
+@supports {
+  @media {}
+
+  @media {}
+}
+```
+
+#### `"inside-block"`
 
 Ignore at-rules that are inside a declaration block.
 
@@ -311,8 +350,6 @@ a {
 ```
 
 #### `"blockless-after-blockless"`
-
-***Note: This option was previously called `blockless-group`.***
 
 Ignore blockless at-rules that follow another blockless at-rule.
 

@@ -88,9 +88,8 @@ define([
             var sharedLabel = this.model.user.canUseApps() ? _('Shared in App').t() : _('Shared').t();
             this.children.permissions = new ControlGroup({
                 controlType: 'SyntheticRadio',
-                controlClass: 'controls-halfblock',
                 controlOptions: {
-                    className: "btn-group btn-group-2",
+                    additionalClassNames: "btn-group-2",
                     modelAttribute: 'perms',
                     model: this.model.perms,
                     items: [

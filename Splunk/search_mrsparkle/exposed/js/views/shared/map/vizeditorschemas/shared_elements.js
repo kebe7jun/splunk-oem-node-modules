@@ -37,9 +37,6 @@ define([
             name: 'display.visualizations.mapping.drilldown',
             label: _('Drilldown').t(),
             defaultValue: 'all',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: SyntheticRadioControl,
             controlOptions: {
                 items: [
@@ -108,9 +105,6 @@ define([
             name: 'display.visualizations.mapping.map.scrollZoom',
             label: _('Zoom on Scroll').t(),
             defaultValue: '0',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: BooleanRadioControl
         },
 
@@ -118,9 +112,6 @@ define([
             name: 'display.visualizations.mapping.showTiles',
             label: _('Show Tiles').t(),
             defaultValue: '1',
-            groupOptions: {
-                controlClass: 'controls-halfblock'
-            },
             control: BooleanRadioControl
         },
 
@@ -142,7 +133,7 @@ define([
             },
             control: TextareaControl,
             controlOptions: {
-                className: 'control controls-block'
+                additionalClassNames: 'url'
             },
             enabledWhen: function(reportModel) {
                 return splunkUtils.normalizeBoolean(reportModel.get('display.visualizations.mapping.showTiles'));
@@ -154,9 +145,6 @@ define([
             label: _('Min Zoom').t(),
             defaultValue: '0',
             control: TextControl,
-            controlOptions: {
-                className: 'control controls-block'
-            },
             validation: [
                 {
                     pattern: 'digits',
@@ -178,9 +166,6 @@ define([
             label: _('Max Zoom').t(),
             defaultValue: '7',
             control: TextControl,
-            controlOptions: {
-                className: 'control controls-block'
-            },
             validation: [
                 {
                     pattern: 'digits',

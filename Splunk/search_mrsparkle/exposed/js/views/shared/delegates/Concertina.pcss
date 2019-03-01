@@ -45,7 +45,12 @@ $zindexConcertinaDocked: $zindexHeaderTable;
 	.concertina-heading  {
         .concertina-toggle {
     		border-top: none;
+
+
     	}
+		&:last-child .concertina-toggle {
+			border-bottom: none;
+		}
 
         &:last-child:after {
     		content: '';
@@ -55,7 +60,7 @@ $zindexConcertinaDocked: $zindexHeaderTable;
             bottom: -15px;
             left:0;
             right:0;
-    		@mixin gradient-vertical color($black a(0.15)),  color($black a(0));
+    		background-image: linear-gradient(to bottom, color($black a(0.15)),  color($black a(0)));
     		background-color: transparent;
             pointer-events:none;
         }
@@ -89,10 +94,15 @@ $zindexConcertinaDocked: $zindexHeaderTable;
             left:0;
             right:0;
     		height: 15px;
-    		@mixin gradient-vertical color($black a(0)),  color($black a(0.15));
+    		background-image: linear-gradient(to bottom, color($black a(0)),  color($black a(0.15)));
     		background-color: transparent;
             pointer-events:none;
     	}
+
+
+		&:first-child .concertina-toggle {
+			border-top: none;
+		}
 
     	 + .concertina-heading .concertina-toggle {
     		border-top: none;
@@ -107,42 +117,39 @@ $zindexConcertinaDocked: $zindexHeaderTable;
 
 	.heading-message {
 		float: right;
-		opacity: 0.65;
+		font-size: $fontSizeSmall;
 	}
 }
 
 .concertina-toggle {
 	padding: 6px 15px 6px 20px;
-	line-height: $baseLineHeight;
-	color: $textColor;
-	border-top: 1px solid $interactiveBorderTopColor;
-	border-bottom: 1px solid $interactiveBorderTopColor;
-
-	@mixin gradient-vertical $interactiveGradientStartColor,  $interactiveGradientEndColor;
+	line-height: $lineHeight;
+	color: $interactiveTextColor;
+	border-top: $borderDefault;
+	border-bottom: $borderDefault;
+    background-color: $concertinaToggleBackgroundColor;
 	display: block;
 	text-align: left;
 
 	&:hover {
-		color: $textColor;
 		text-decoration: none;
-		@mixin gradient-vertical $interactiveGradientStartColorHover,  $interactiveGradientEndColorHover;
+		background-color: $concertinaToggleBackgroundColorHover;
+		color: $interactiveTextColorHover;
 	}
 
 	&:focus {
-		@mixin focus-pill;
-		@mixin reset-filter;
+		@mixin focus-element-inset $concertinaToggleBackgroundColorHover;
 	}
 }
 
 
 .warning {
     > .concertina-toggle {
-        @mixin gradient-vertical color($warningBackground blend($yellow 30%)),  color($errorBackground blend($yellow 35%));
-        border-bottom-color: color($warningBackground blend($yellow 80%) s(-30%));
+        background-color: $warningColor;
+		color: $white;
 
         &:hover {
-            @mixin gradient-vertical color($warningBackground blend($yellow 20%)),  color($warningBackground blend($yellow 25%));
-            border-bottom-color: color($warningBackground blend($yellow 80%) s(-30%));
+            background-color: $warningColorD10;
         }
 
         &:focus {
@@ -151,19 +158,18 @@ $zindexConcertinaDocked: $zindexHeaderTable;
     }
 
     + .concertina-group-body {
-        background: $warningBackground;
+        background: $warningColorL50;
     }
 
 }
 
 .error {
     > .concertina-toggle {
-        @mixin gradient-vertical color($errorBackground blend($red 30%)),  color($errorBackground blend($red 35%));
-        border-bottom-color: color($errorBackground blend($red 20%) s(-30%));
+        background-color: $errorColor;
+		color: $white;
 
         &:hover {
-            @mixin gradient-vertical color($errorBackground blend($red 20%)),  color($errorBackground blend($red 25%));
-            border-bottom-color: color($errorBackground blend($red 20%) s(-30%));
+            background-color: $errorColorD10;
         }
 
         &:focus {
@@ -172,7 +178,7 @@ $zindexConcertinaDocked: $zindexHeaderTable;
     }
 
     + .concertina-group-body {
-        background: $errorBackground;
+        background: $errorColorL50;
     }
 
 }
@@ -183,34 +189,11 @@ $zindexConcertinaDocked: $zindexHeaderTable;
 }
 
 .concertina-group-body {
-	background: $offWhite;
+	background: $concertinaBackgroundColor;
 	padding-top: 10px;
 	@mixin clearfix;
 }
 
 .concertina-group:first-child  .concertina-toggle {
 	border-top:none;
-}
-
-/*  Lite UI */
-
-@if $theme == lite {
-	.concertina .concertina-heading .concertina-toggle {
-		border-color: $borderColor;
-		font-weight: bold;
-	}
-
-	.concertina .concertina-group:not(.active) .concertina-toggle {
-		background-color: $offWhite;
-
-		&:hover {
-			background-color: $pillBackgroundColorHover;
-			border-color: $borderColor;
-		}
-
-	}
-
-	.concertina-group-body {
-		background-color: $white;
-	}
 }

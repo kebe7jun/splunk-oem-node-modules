@@ -1,3 +1,49 @@
+3.15.3 / 2018-09-18
+===================
+
+* fix: Greek should be `el`, not `gr`
+
+3.15.2 / 2018-09-12
+===================
+
+* fix: corrections for Arabic
+
+3.15.1 / 2018-07-15
+===================
+
+* fix: corrections for Croatian
+
+3.15.0 / 2018-06-12
+===================
+
+* new: Croatian support
+* new: Lao support
+
+3.14.0 / 2018-03-23
+===================
+
+* new: Urdu support
+
+3.13.0 / 2018-03-19
+===================
+
+* new: Slovak support
+
+3.12.1 / 2018-01-03
+===================
+
+* fix: Ukranian translation for weeks was incorrect
+
+3.12.0 / 2017-11-07
+===================
+
+* new: Bulgarian support
+
+3.11.0 / 2017-10-25
+===================
+
+* new: Persian/Farsi support
+
 3.10.1 / 2017-07-21
 ===================
 

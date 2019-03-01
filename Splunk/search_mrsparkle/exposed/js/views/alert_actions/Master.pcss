@@ -1,9 +1,12 @@
 .alertactions-caption {
-  padding: 3px 0 4px 0;
-  border-top: 1px solid $grayLightMedium;
+  padding: 0 0 $spacingQuarter 0;
+
   .table-caption-inner {
     text-align: left;
     padding-left: 20px;
+    &.affix-top {
+      padding-bottom: $spacingQuarter;
+    }
   }
   .msg {
     display: inline-block;
@@ -64,10 +67,11 @@
 .alertactions-table {
   table {
     width: 100%;
+    @mixin create-card-table;
   }
   .col-app { width: 157px; }
   .app { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .col-sharing { width: 115px; }
+  .col-sharing { width: 180px; }
   .col-status { width: 115px; }
   .col-usage { width: 110px; }
   .col-log { width: 110px; }

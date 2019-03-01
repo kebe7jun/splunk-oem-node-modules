@@ -185,17 +185,18 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 /*  added by splunk */
 .CodeMirror {
     font-family: monospace;
-    font-size: $baseFontSize;
-    height: 410px;
+    font-size: $fontSize;
     line-height: 13px;
-    height:410px;
+    height: 410px;
+    border-radius: $borderRadius;
 }
-.entityEditForm .CodeMirror div{padding:0;}
+.entityEditForm .CodeMirror div{padding:0; }
+.entityEditForm .codeMirrorTextAreaWrapper textarea, .entityEditForm .CodeMirror { border-top-right-radius: 0; }
 .codeMirrorTopMenu{padding:0px !important;}
-.codeMirrorToggleButton{border:1px solid $borderColor;border-bottom:none;padding:3px;float:right;}
+.codeMirrorToggleButton{border:1px solid $borderColor;border-bottom:none;padding:6px 10px;float:right;margin-right: 2px; border-top-right-radius: $borderRadius; border-top-left-radius: $borderRadius;}
 .CodeMirrorLoading {padding-top:10px;color:$textGrayDark;}
 .CodeMirror-scroll{
-    height:410px;
+    height: 398px;
 }
 
 

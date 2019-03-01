@@ -10,6 +10,8 @@ a { width: calc(5% - 10em); }
 
 Camel case function names, e.g. `translateX`, are accounted for when the `lower` option is used.
 
+The `--fix` option on the [command line](../../../docs/user-guide/cli.md#autofixing-errors) can automatically fix all of the problems reported by this rule.
+
 ## Options
 
 `string`: `"lower"|"upper"`
@@ -109,66 +111,6 @@ For example, with `"lower"`.
 Given:
 
 ```js
-["SOME-FUNCTION", "/^get.*$/"]
-```
-
-The following patterns are considered violations:
-
-```css
-a {
-  color: sOmE-FuNcTiOn();
-}
-```
-
-```css
-a {
-  color: OTHER-SOME-FUNCTION();
-}
-```
-
-```css
-a {
-  color: GetColor();
-}
-```
-
-```css
-a {
-  color: GET_COLOR();
-}
-```
-
-The following patterns are *not* considered violations:
-
-```css
-a {
-  display: some-function();
-}
-```
-
-```css
-a {
-  display: SOME-FUNCTION();
-}
-```
-
-```css
-a {
-  display: getColor();
-}
-```
-
-```css
-a {
-  display: get_color();
-}
-```
-
-For example, with `"upper"`.
-
-Given:
-
-```js
 ["some-function", "/^get.*$/"]
 ```
 
@@ -182,7 +124,7 @@ a {
 
 ```css
 a {
-  color: other-some-function();
+  color: some-other-function();
 }
 ```
 
@@ -206,11 +148,6 @@ a {
 }
 ```
 
-```css
-a {
-  display: SOME-FUNCTION();
-}
-```
 
 ```css
 a {
@@ -223,3 +160,4 @@ a {
   display: get_color();
 }
 ```
+

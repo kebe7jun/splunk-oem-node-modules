@@ -1,0 +1,338 @@
+{
+  "dependencies": {
+    "chai": {
+      "version": "3.5.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/chaijs/chai",
+      "vendorUrl": "http://chaijs.com/",
+      "vendorName": "Jake Luer",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "chai-as-promised": {
+      "version": "6.0.0",
+      "license": "WTFPL",
+      "repoUrl": "https://github.com/domenic/chai-as-promised.git",
+      "vendorUrl": "https://domenic.me",
+      "vendorName": "Domenic Denicola",
+      "licenseLink": "https://spdx.org/licenses/WTFPL.html"
+    },
+    "cli-table": {
+      "version": "0.3.1",
+      "license": "MIT",
+      "repoUrl": "https://github.com/Automattic/cli-table.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Guillermo Rauch",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "colors": {
+      "version": "1.1.2",
+      "license": "MIT",
+      "repoUrl": "http://github.com/Marak/colors.js.git",
+      "vendorUrl": "https://github.com/Marak/colors.js",
+      "vendorName": "Marak Squires",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "diff": {
+      "version": "3.4.0",
+      "license": "BSD-3-Clause",
+      "repoUrl": "git://github.com/kpdecker/jsdiff.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Unknown",
+      "licenseLink": "https://spdx.org/licenses/BSD-3-Clause.html"
+    },
+    "es6-promise": {
+      "version": "4.1.1",
+      "license": "MIT",
+      "repoUrl": "git://github.com/stefanpenner/es6-promise.git",
+      "vendorUrl": "Conversion to ES6 API by Jake Archibald",
+      "vendorName": "Yehuda Katz, Tom Dale, Stefan Penner and contributors",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "fs-extra": {
+      "version": "2.1.2",
+      "license": "MIT",
+      "repoUrl": "https://github.com/jprichardson/node-fs-extra",
+      "vendorUrl": "https://github.com/jprichardson/node-fs-extra",
+      "vendorName": "JP Richardson",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "istanbul": {
+      "version": "0.4.5",
+      "license": "BSD-3-Clause",
+      "repoUrl": "git://github.com/gotwarlost/istanbul.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Krishnan Anantheswaran",
+      "licenseLink": "https://spdx.org/licenses/BSD-3-Clause.html"
+    },
+    "istanbul-lib-instrument": {
+      "version": "1.9.1",
+      "license": "BSD-3-Clause",
+      "repoUrl": "git@github.com:istanbuljs/istanbuljs.git",
+      "vendorUrl": "https://github.com/istanbuljs/istanbuljs",
+      "vendorName": "Krishnan Anantheswaran",
+      "licenseLink": "https://spdx.org/licenses/BSD-3-Clause.html"
+    },
+    "jsdom": {
+      "version": "11.2.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/tmpvar/jsdom.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Unknown",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma": {
+      "version": "1.7.1",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma.git",
+      "vendorUrl": "http://karma-runner.github.io/",
+      "vendorName": "Vojta Jína",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-chai": {
+      "version": "0.1.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/xdissent/karma-chai.git",
+      "vendorUrl": "http://xdissent.github.io/karma-chai",
+      "vendorName": "Greg Thornton",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-chrome-launcher": {
+      "version": "2.2.0",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma-chrome-launcher.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Vojta Jina",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-coverage": {
+      "version": "1.1.1",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma-coverage.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "SATO taichi",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-firefox-launcher": {
+      "version": "1.0.1",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma-firefox-launcher.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Vojta Jina",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-jsdom-launcher": {
+      "version": "6.1.2",
+      "license": "MIT",
+      "repoUrl": "git://github.com/badeball/karma-jsdom-launcher.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Jonas Amundsen",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-junit-reporter": {
+      "version": "1.2.0",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma-junit-reporter.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Vojta Jina",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-mocha": {
+      "version": "1.3.0",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma-mocha.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Vojta Jina",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-mocha-reporter": {
+      "version": "2.2.5",
+      "license": "MIT",
+      "repoUrl": "https://github.com/litixsoft/karma-mocha-reporter.git",
+      "vendorUrl": "http://www.litixsoft.de/index.php?lang=en#modules",
+      "vendorName": "Litixsoft GmbH",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-nyan-reporter": {
+      "version": "0.2.5",
+      "license": "The MIT License (MIT)",
+      "repoUrl": "https://github.com/dgarlitt/karma-nyan-reporter.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Daniel Arlitt"
+    },
+    "karma-phantomjs-launcher": {
+      "version": "1.0.4",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma-phantomjs-launcher.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Vojta Jina",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-safari-launcher": {
+      "version": "1.0.0",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma-safari-launcher.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Vojta Jina",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-sauce-launcher": {
+      "version": "1.2.0",
+      "license": "MIT",
+      "repoUrl": "git://github.com/karma-runner/karma-sauce-launcher.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Vojta Jina",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "karma-sinon": {
+      "version": "1.0.5",
+      "license": "MIT",
+      "repoUrl": "git://github.com/yanoosh/karma-sinon.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Janusz Jablonski",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "lodash": {
+      "version": "4.17.4",
+      "license": "MIT",
+      "repoUrl": "https://github.com/lodash/lodash.git",
+      "vendorUrl": "https://lodash.com/",
+      "vendorName": "John-David Dalton",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "memory-fs": {
+      "version": "0.4.1",
+      "license": "MIT",
+      "repoUrl": "https://github.com/webpack/memory-fs.git",
+      "vendorUrl": "https://github.com/webpack/memory-fs",
+      "vendorName": "Tobias Koppers @sokra",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "mocha": {
+      "version": "3.5.3",
+      "license": "MIT",
+      "repoUrl": "https://github.com/mochajs/mocha.git",
+      "vendorUrl": "https://mochajs.org/",
+      "vendorName": "TJ Holowaychuk",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "resolve": {
+      "version": "1.4.0",
+      "license": "MIT",
+      "repoUrl": "git://github.com/substack/node-resolve.git",
+      "vendorUrl": "http://substack.net",
+      "vendorName": "James Halliday",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "sinon": {
+      "version": "1.17.7",
+      "license": "BSD-3-Clause",
+      "repoUrl": "http://github.com/cjohansen/Sinon.JS.git",
+      "vendorUrl": "http://sinonjs.org/",
+      "vendorName": "Christian Johansen",
+      "licenseLink": "https://spdx.org/licenses/BSD-3-Clause.html"
+    }
+  },
+  "devDependencies": {
+    "@splunk/babel-preset": {
+      "version": "0.5.0",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "@splunk/eslint-config": {
+      "version": "0.4.0",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "@splunk/webpack-configs": {
+      "version": "0.4.0",
+      "license": "UNLICENSED",
+      "repoUrl": "https://git.splunk.com/scm/ui/splunk-ui.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Splunk"
+    },
+    "babel-cli": {
+      "version": "6.26.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/babel/babel/tree/master/packages/babel-cli",
+      "vendorUrl": "https://babeljs.io/",
+      "vendorName": "Sebastian McKenzie",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "babel-eslint": {
+      "version": "7.2.3",
+      "license": "MIT",
+      "repoUrl": "https://github.com/babel/babel-eslint.git",
+      "vendorUrl": "https://github.com/babel/babel-eslint",
+      "vendorName": "Sebastian McKenzie",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "babel-loader": {
+      "version": "7.1.2",
+      "license": "MIT",
+      "repoUrl": "https://github.com/babel/babel-loader.git",
+      "vendorUrl": "https://github.com/babel/babel-loader",
+      "vendorName": "Luis Couto",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint": {
+      "version": "4.7.2",
+      "license": "MIT",
+      "repoUrl": "https://github.com/eslint/eslint.git",
+      "vendorUrl": "http://eslint.org/",
+      "vendorName": "Nicholas C. Zakas",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-config-airbnb": {
+      "version": "15.1.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/airbnb/javascript",
+      "vendorUrl": "https://github.com/airbnb/javascript",
+      "vendorName": "Jake Teton-Landis",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-config-prettier": {
+      "version": "2.6.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/prettier/eslint-config-prettier.git",
+      "vendorUrl": "Unknown",
+      "vendorName": "Simon Lydell",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-plugin-import": {
+      "version": "2.7.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/benmosher/eslint-plugin-import",
+      "vendorUrl": "https://github.com/benmosher/eslint-plugin-import",
+      "vendorName": "Ben Mosher",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-plugin-jsx-a11y": {
+      "version": "5.1.1",
+      "license": "MIT",
+      "repoUrl": "https://github.com/evcohen/eslint-plugin-jsx-a11y",
+      "vendorUrl": "Unknown",
+      "vendorName": "Ethan Cohen",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "eslint-plugin-react": {
+      "version": "7.4.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/yannickcr/eslint-plugin-react",
+      "vendorUrl": "https://github.com/yannickcr/eslint-plugin-react",
+      "vendorName": "Yannick Croissant",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    },
+    "webpack": {
+      "version": "3.6.0",
+      "license": "MIT",
+      "repoUrl": "https://github.com/webpack/webpack.git",
+      "vendorUrl": "https://github.com/webpack/webpack",
+      "vendorName": "Tobias Koppers @sokra",
+      "licenseLink": "https://spdx.org/licenses/MIT.html"
+    }
+  }
+}

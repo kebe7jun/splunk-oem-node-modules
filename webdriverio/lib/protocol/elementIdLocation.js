@@ -4,7 +4,9 @@
  * upper-left corner of the page. The element's coordinates are returned as a
  * JSON object with x and y properties.
  *
- * Depcrecated command, please use [`elementIdRect`](http://webdriver.io/api/protocol/elementIdRect.html).
+ * This command is deprecated and will be removed soon. Make sure you don't use it in your
+ * automation/test scripts anymore to avoid errors. Please use the
+ * [`elementIdRect`](http://webdriver.io/api/protocol/elementIdRect.html) command instead.
  *
  * @param {String} ID ID of a WebElement JSON object to route the command to
  * @return {Object} The X and Y coordinates for the element on the page (`{x:number, y:number}`)
@@ -16,6 +18,7 @@
  */
 
 import { ProtocolError } from '../utils/ErrorHandler'
+import { isUnknownCommand } from '../helpers/utilities'
 
 export default function elementIdLocation (id) {
     if (typeof id !== 'string' && typeof id !== 'number') {
@@ -26,7 +29,7 @@ export default function elementIdLocation (id) {
         /**
          * jsonwire command not supported try webdriver endpoint
          */
-        if (err.message.match(/did not match a known command/)) {
+        if (isUnknownCommand(err)) {
             return this.elementIdRect(id).then((result) => {
                 const { x, y } = result.value
                 result.value = { x, y }

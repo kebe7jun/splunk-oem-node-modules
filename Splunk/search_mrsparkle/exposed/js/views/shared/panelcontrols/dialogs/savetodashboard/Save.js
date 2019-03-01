@@ -3,7 +3,7 @@
  * @date 3/29/15
  *
  * Modal step saving the prebuilt panel to a new or existing dashboard.
- * 
+ *
  * Inspired from views/shared/reportcontrols/dialogs/dashboardpanel/Create.js
  */
 define(
@@ -56,9 +56,8 @@ define(
                 this.children.dashCreateType = new ControlGroup({
                     label: _("Dashboard").t(),
                     controlType:'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             {value:"new", label:_("New").t()},
                             {value:"existing", label:_("Existing").t()}
@@ -87,13 +86,11 @@ define(
 
                 this.children.dashTitle = new ControlGroup({
                     label: _("Dashboard title").t(),
-                    controlClass: 'controls-block',
                     controls: this.children.dashTitleTextControl
                 });
 
                 this.children.dashName = new ControlGroup({
                     label: _("Dashboard ID").t(),
-                    controlClass: 'controls-block',
                     controls: this.children.dashNameTextControl,
                     tooltip: _('The ID is used as the filename on disk. Cannot be changed later.').t(),
                     help: _('Can only contain letters, numbers and underscores.').t()
@@ -101,7 +98,6 @@ define(
 
                 this.children.dashDesc = new ControlGroup({
                     label: _("Dashboard description").t(),
-                    controlClass: 'controls-block',
                     controlType:'Textarea',
                     controlOptions: {
                         model: this.model.inmem,
@@ -114,9 +110,8 @@ define(
                 this.children.dashPerm = new ControlGroup({
                     label: _("Dashboard permissions").t(),
                     controlType:'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group btn-group-2 locale-responsive-layout",
+                        additionalClassNames: "btn-group-2 locale-responsive-layout",
                         items: [
                             {value:"private", label:_("Private").t()},
                             {value:"shared", label:sharedLabel}
@@ -141,7 +136,7 @@ define(
                         label: "",
                         controlType:'SyntheticSelect',
                         controlOptions: {
-                            className: 'btn-group view-count',
+                            additionalClassNames: 'view-count',
                             toggleClassName: 'btn',
                             model: this.model.inmem,
                             modelAttribute: 'existingDash',

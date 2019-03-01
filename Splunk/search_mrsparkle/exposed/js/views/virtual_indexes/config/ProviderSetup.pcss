@@ -71,6 +71,11 @@
 
   .select-time-unit {
     display: inline-block;
+
+    &.shared-controls-syntheticselectcontrol {
+      width: auto;
+      float: right;
+    }
   }
 
   .control {
@@ -81,7 +86,7 @@
 .virtualindexes-config-forms-provideradditionalsettings {
   .shared-controls-textcontrol {
     .control-clear {
-      right: 60px;
+      right: $spacingHalf;
     }
   }
 }
@@ -91,10 +96,18 @@
 
   .key-text-control-placeholder {
     width: 310px;
+
+    .shared-controls-textcontrol {
+        width: 270px;
+    }
   }
 
   .key-value-control-placeholder {
     float: left;
+  }
+
+  .value-text-control-placeholder {
+    width: 470px;
   }
 
   .close-row {

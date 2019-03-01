@@ -6,7 +6,7 @@ define(
         'views/shared/CollectionCount',
         'views/shared/FindInput',
         'views/shared/CollectionPaginator',
-        'views/shared/controls/ControlGroup',
+        'views/shared/controls/SyntheticRadioControl',
         'views/shared/delegates/Dock'
     ],
     function(
@@ -16,7 +16,7 @@ define(
         CountView,
         InputView,
         PaginatorView,
-        ControlGroup,
+        SyntheticRadioControl,
         Dock
     ) {
         return BaseView.extend({
@@ -66,14 +66,10 @@ define(
                         ];
                     }
 
-                    this.children.filterButtons = new ControlGroup({
-                        controlType: 'SyntheticRadio',
-                        className: 'acl-filter-controls',
-                        controlOptions: {
-                            modelAttribute: 'display.prefs.aclFilter',
-                            model: this.model.uiPrefs.entry.content,
-                            items: filterButtons
-                        }
+                    this.children.filterButtons = new SyntheticRadioControl({
+                        modelAttribute: 'display.prefs.aclFilter',
+                        model: this.model.uiPrefs.entry.content,
+                        items: filterButtons
                     });
                 }
 

@@ -7,9 +7,9 @@ exports.default = imeActivate;
 
 var _ErrorHandler = require('../utils/ErrorHandler');
 
-var _depcrecationWarning = require('../helpers/depcrecationWarning');
+var _deprecationWarning = require('../helpers/deprecationWarning');
 
-var _depcrecationWarning2 = _interopRequireDefault(_depcrecationWarning);
+var _deprecationWarning2 = _interopRequireDefault(_deprecationWarning);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19,12 +19,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * After this call, the engine will be added to the list of engines loaded in the IME daemon and the
  * input sent using sendKeys will be converted by the active engine. Note that this is a
  * platform-independent method of activating IME (the platform-specific way being using keyboard shortcuts.
- * (Not part of the official Webdriver specification)
+ *
+ * This command is deprecated and will be removed soon. Make sure you don't use it in your
+ * automation/test scripts anymore to avoid errors.
  *
  * @param {String} engine   Name of the engine to activate.
  *
  * @see  https://github.com/SeleniumHQ/selenium/wiki/JsonWireProtocol#sessionsessionidimeactive_engine
  * @type protocol
+ * @deprecated
  *
  */
 
@@ -33,7 +36,7 @@ function imeActivate(engine) {
         throw new _ErrorHandler.ProtocolError('number or type of arguments don\'t agree with imeActivate protocol command');
     }
 
-    (0, _depcrecationWarning2.default)('imeActivate');
-    return this.requestHandler.create('/session/:sessionId/ime/activate', { engine: engine });
+    (0, _deprecationWarning2.default)('imeActivate', this.options.deprecationWarnings, 'This command is not part of the W3C WebDriver spec and won\'t be supported in ' + 'future versions of the driver. There is currently no known replacement for this ' + 'action.');
+    return this.requestHandler.create('/session/:sessionId/ime/activate', { engine });
 }
 module.exports = exports['default'];

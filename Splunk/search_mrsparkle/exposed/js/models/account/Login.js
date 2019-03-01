@@ -60,6 +60,21 @@ function(
             $.extend(true, defaults, options);
             return Backbone.sync.call(this, method, model, defaults);
         },
+        _onsync: function(model, response, options) {
+            var text,
+                message;
+            if (response.code === 'expire_password_alert') {
+                text = (response.message) ? gettext(response.message) : _('Password is expiring. Please change password.').t();
+                message = splunkdutils.createMessageObject('pass_expire', text);
+            }
+
+            if (message) {
+               this.trigger('serverValidated', false, this, [message]);
+               model.error.set('messages', [message]);
+            } else {
+               BaseModel.prototype._onsync.call(this, model, response, options);
+            }
+        },
         _onerror: function(model, response, options) {
             var responseData,
                 status,
@@ -72,9 +87,24 @@ function(
                 if (responseData) {
                     status = responseData.status;
                     if (status==1) {
-                        message = splunkdutils.createMessageObject('auth_fail', _('Invalid username or password.').t());
+                        text = (responseData.message) ? gettext(responseData.message) : _('Login failed').t();
+                        message = splunkdutils.createMessageObject('auth_fail', text);
                     } else if (status==3) {
-                        text = (responseData.message) ? gettext(responseData.message) : _('Your password must be changed.').t();
+                        if (responseData.code === 'forced_password_change') {
+                            model.set('minPasswordLength', responseData.minPasswordLength);
+                            model.set('minPasswordDigit', responseData.minPasswordDigit);
+                            model.set('minPasswordLowercase', responseData.minPasswordLowercase);
+                            model.set('minPasswordUppercase', responseData.minPasswordUppercase);
+                            model.set('minPasswordSpecial', responseData.minPasswordSpecial);
+                            text = (responseData.message) ? gettext(responseData.message) : _('Your password must be changed.').t();
+                        } else if (responseData.code === 'inval_pass_complexity') {
+                            text = _('For security reasons, the new password must meet the following complexity requirements:').t();
+                        } else if (responseData.code === 'inval_pass_is_same') {
+                            text = (responseData.message) ? gettext(responseData.message) : _('Your password must be changed.').t();
+                        } else if (responseData.code === 'old_password_used') {
+                            text = (responseData.message) ? gettext(responseData.message) :
+                                _('This password has been used previously. Please select a different password.').t();
+                        }
                         message = splunkdutils.createMessageObject('auth_force_change_pass', text);
                     } else if (status==4) {
                         text = _('You must accept terms of service.').t();
@@ -89,6 +119,7 @@ function(
             if (message) {
                 this.trigger('serverValidated', false, this, [message]);
                 model.error.set('messages', [message]);
+                model.error.set('status', status);
             //classic error response parser
             } else {
                 BaseModel.prototype._onerror.call(this, model, response, options);
@@ -108,6 +139,9 @@ function(
         },
         isPasswordChangeRequired: function() {
             return this.hasErrorMessageType('auth_force_change_pass');
+        },
+        isPasswordExpiring: function() {
+            return this.hasErrorMessageType('pass_expire');
         },
         isTOSAcceptRequired: function() {
             return this.hasErrorMessageType('auth_accept_tos');

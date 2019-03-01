@@ -1,44 +1,27 @@
-
 .view {
-	display: inline-block;
-	width: 155px;
-	position: relative;
-	padding: 2px 20px 0 30px;
-	margin-bottom: 20px;
-	color: $textColor;
-	vertical-align: top;
+    width: 200px;
+    padding: $spacingHalf;
+    color: $textColor;
+    vertical-align: top;
+    display: inline-block;
 }
 
 .heading {
-	color: $textGray;
-	font-size: $fontSizeSmall;
-	text-transform: uppercase;
-	font-weight: normal;
-	margin: 0;
-    line-height: 16px;
+    @mixin create-section-heading-small;
+    margin: 0 0 2px;
 }
 
 .list {
-	margin: 0;
-}
-
-.icon {
-	font-size: 25px;
-	position: absolute;
-	left: 2px;
-	top: 2px;
-	height: 25px;
-	width: 22px;
-	color: $textGray;
-	opacity: 0.8;
-	text-align: center;
+    margin: 0;
 }
 
 .link {
-	@mixin link;
-	line-height: 20px;
-	text-indent: -10px;
-	padding-left: 10px;
-    display: block;
-
+    @mixin link;
+    display: inline-block;
+    margin-left: -2px;
+    padding: $linkPadding $linkPadding $linkPadding calc($spacingHalf + $linkPadding);
+    line-height: calc($lineHeight - $linkPadding);
+    text-indent: -$spacingHalf;
+    border-radius: $borderRadius;
+    box-shadow: none;
 }

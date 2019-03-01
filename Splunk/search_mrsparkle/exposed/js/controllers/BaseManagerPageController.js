@@ -198,8 +198,8 @@ define([
                 this.listenTo(this.model.controller, "moveEntity", this.onMoveEntity);
                 this.listenTo(this.model.controller, "refreshEntities", this.fetchEntitiesCollection);
                 if (this.options.enableNavigationFromUrl) {
-                    this.listenTo(this.model.controller, "createEntityFromURL", this.onCreateEntity);
-                    this.listenTo(this.model.controller, "editEntityFromURL", this.onEditEntity);
+                    this.listenTo(this.model.controller, "createEntityFromURL", this.onCreateEntityFromURL);
+                    this.listenTo(this.model.controller, "editEntityFromURL", this.onEditEntityFromURL);
                 }
 
                 // enable/disable loading sign for the collectionCount control
@@ -299,7 +299,9 @@ define([
                         this._uncheckEntity(entity);
                     }
                 }, this);
-
+                
+                // Force change event to update the selectAllCheckbox state.
+                this.model.selectAllCheckbox.unset('selectedCount', {silent: true});
                 this.model.selectAllCheckbox.set('selectedCount', selectedCount);
             },
 
@@ -338,7 +340,7 @@ define([
             resetBulkSelection: function () {
                 this.collection.selectedEntities.reset();
                 this.model.entitySelectCheckbox.clear();
-                this._uncheckSelectAll();
+                this.model.selectAllCheckbox.set('selectedCount', 0);
             },
 
             onClearSelectedClick: function () {
@@ -367,7 +369,7 @@ define([
                         this.model.application.get('app'),
                         page ? this.options.fragments.concat(page) : this.options.fragments,
                         $.extend(true, this.getPageOptions(), pageOptions));
-                    this.options.router.navigate(nextUrl, {trigger: true, replace: true});
+                    this.options.router.navigate(nextUrl, {replace: true});
                 }
             },
 
@@ -403,8 +405,8 @@ define([
              * Default behavior for onCreateEntity event.
              * Can override this method.
              */
-            onCreateEntity: function() {
-                $.when(this.deferreds.entities).then(_(function() {
+            onCreateEntityFromURL: function() {
+                $.when.apply($, _.values(this.deferreds)).then(_(function() {
                     if (this.collection.entities.links.has('create')){
                         this.showAddEditDialog();
                     }
@@ -424,39 +426,39 @@ define([
              * @param entityModel
              */
             onEditEntity: function(entityModel) {
+                this.showAddEditDialog(entityModel);
+            },
+
+            /**
+             * Callback for standard entity Edit action
+             * @param entityModel
+             */
+            onEditEntityFromURL: function(entityModel) {
                 if (entityModel) {
-                    if (this.options.enableNavigationFromUrl) {
-                        this.navigateToEdit(entityModel);
-                    } else {
-                        this.showAddEditDialog(entityModel);
-                    }
+                    this.navigateToEdit(entityModel);
                 } else {
-                    if (this.options.enableNavigationFromUrl) {
-                        classicurl.fetch().done(function() {
-                            $.when(this.deferreds.entities).then(_(function() {
-                                var uri = classicurl.get('uri');
-                                // Check collection if entity model exists
-                                entityModel = this.collection.entities._byId[uri];
-                                if (!entityModel) { // If entity model doesn't exist in collection, fetch entity.
-                                    var entity = new this.options.entityModelClass({id: uri});
-                                    entity.binaryPromiseFetch().then(function(success) {
-                                        // If fetch is unsuccessful or entity has no edit link, create new instead.
-                                        if (!success || (entity && entity.entry && entity.entry.links && !entity.entry.links.get('edit'))) {
-                                            this.navigateToNew();
-                                        }
-                                        else {
-                                            this.showAddEditDialog(entity);
-                                        }
-                                    }.bind(this));
-                                }
-                                else {
-                                    this.showAddEditDialog(entityModel);
-                                }
-                            }).bind(this));
-                        }.bind(this));
-                    } else {
-                        this.showAddEditDialog(entityModel);
-                    }
+                    classicurl.fetch().done(function() {
+                        $.when(this.deferreds.entities).then(_(function() {
+                            var uri = classicurl.get('uri');
+                            // Check collection if entity model exists
+                            entityModel = this.collection.entities._byId[uri];
+                            if (!entityModel) { // If entity model doesn't exist in collection, fetch entity.
+                                var entity = new this.options.entityModelClass({id: uri});
+                                entity.binaryPromiseFetch().then(function(success) {
+                                    // If fetch is unsuccessful or entity has no edit link, create new instead.
+                                    if (!success || (entity && entity.entry && entity.entry.links && !entity.entry.links.get('edit'))) {
+                                        this.navigateToNew();
+                                    }
+                                    else {
+                                        this.showAddEditDialog(entity);
+                                    }
+                                }.bind(this));
+                            }
+                            else {
+                                this.showAddEditDialog(entityModel);
+                            }
+                        }).bind(this));
+                    }.bind(this));
                 }
             },
 

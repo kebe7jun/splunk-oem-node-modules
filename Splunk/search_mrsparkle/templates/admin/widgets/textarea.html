@@ -24,7 +24,8 @@
                 </div>
             % endif
             <div class="splTextArea ${'codeMirrorTextAreaWrapper' if isXmlEditor else 'splTextAreaStd'}">
-                <textarea id="${element['elementName'] | h}_id" class="regular ${element['class'] if 'class' in element else '' | h}" name="${element["elementName"] | h}" ${'disabled="disabled"' if element.get('disabled') else ''} ${'spellcheck="false"' if not splunk.util.normalizeBoolean(element.get('spellcheck')) else ''} ${'style="display:block;"' if isXmlEditor else ''}></textarea>
+                <textarea id="${element['elementName'] | h}_id" class="regular ${element['class'] if 'class' in element else '' | h}" name="${element["elementName"] | h}" ${'disabled="disabled"' if element.get('disabled') else ''} ${'spellcheck="false"' if not splunk.util.normalizeBoolean(element.get('spellcheck')) else ''} ${'style="display:block;"' if isXmlEditor else ''}
+                ${'readonly="readonly"' if element.get('readonly') else ''}></textarea>
             </div>
             <div class="widgeterror"><form:error name="${element["elementName"] | h}"/></div>
         </div>

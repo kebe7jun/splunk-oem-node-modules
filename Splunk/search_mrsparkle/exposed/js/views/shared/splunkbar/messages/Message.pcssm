@@ -5,8 +5,10 @@
 .view {
     color: $textColor;
     position: relative;
-    background-color: $white;
+    background-color: $popupBackgroundColor;
     padding: 5px 30px 5px 35px;
+    word-wrap: break-word;
+
     & + .view {
         border-top: 1px dotted $borderColor;
     }
@@ -14,7 +16,7 @@
 
 .time {
     color: $textGray;
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
     display: block;
 }
 
@@ -31,15 +33,15 @@
 .info,
 .debug {
     composes: icon;
-    color: $splunkGreen;
+    color: $infoColor;
 }
 .warn {
     composes: icon;
-    color: $yellow;
+    color: $warningColor;
 }
 .greater {
     composes: icon;
-    color: $splunkGreen;
+    color: $brandColor;
     font-size: 1.5em;
     top: 0;
 }
@@ -48,7 +50,7 @@
 .critical
 {
     composes: icon;
-    color: $red;
+    color: $errorColor;
 }
 
 .delete {
@@ -66,6 +68,6 @@
         color: $linkColor;
     }
     &:focus {
-        @mixin focus-pill;
+        @mixin focus-element-inset;
     }
 }

@@ -23,7 +23,10 @@ define([
         attachedCallback: {
             value: function() {
                 InputBase.attachedCallback.apply(this, arguments);
-                $(this).empty();
+
+                var $el = $(this);
+                $el.empty();
+
                 this.view = new SyntheticSelectControl({
                     el: this,
                     model: this.model,
@@ -32,6 +35,8 @@ define([
                     toggleClassName: 'btn'
                 });
                 this.view.render();
+
+                $el.addClass('control');
             }
         },
 

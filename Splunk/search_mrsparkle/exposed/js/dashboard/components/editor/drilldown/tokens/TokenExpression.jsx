@@ -1,10 +1,11 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
-import Select from 'splunk-ui/components/Select';
-import Text from 'splunk-ui/components/Text';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Select from '@splunk/react-ui/Select';
+import Text from '@splunk/react-ui/Text';
 import DeleteButton from 'dashboard/components/shared/DeleteButton';
-import Box from 'splunk-ui/components/Box';
-import ComboBox from 'splunk-ui/components/ComboBox';
+import Box from '@splunk/react-ui/Box';
+import ComboBox from '@splunk/react-ui/ComboBox';
 import { createTestHook } from 'util/test_support';
 
 const SetEvalUnsetDropdown = ({
@@ -31,7 +32,7 @@ SetEvalUnsetDropdown.propTypes = {
 };
 
 const delimiterStyles = {
-    lineHeight: '26px',
+    lineHeight: '32px',
     paddingLeft: '5px',
     paddingRight: '5px',
 };

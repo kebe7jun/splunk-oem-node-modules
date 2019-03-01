@@ -26,20 +26,22 @@ BaseViewAttributes = (
     & attribute script { text }?
     # Comma separated lists of custom stylesheets to load
     & attribute stylesheet { text }?
-    # when truthy the header and footer won't show up.
+    # when truthy the header won't show up.
     & attribute hideChrome { Boolean }?
     # when truthy the splunk bar won't show up.
     & attribute hideSplunkBar { Boolean }?
     # when truthy the app bar (nav) won't show up.
     & attribute hideAppBar { Boolean }?
-    # when truthy the footer won't show up.
-    & attribute hideFooter { Boolean }?
     # when truthy the title and descript won't show up.
     & attribute hideTitle { Boolean }?
     # when truthy the edit won't show up.
     & attribute hideEdit { Boolean }?
+    # when truthy the export won't show up.
+    & attribute hideExport { Boolean }?
     # when truthy the global fieldset will be hidden.
     & attribute hideFilters { Boolean }?
+    # dashboard theme, defaults to light
+    & attribute theme ( "dark" | "light" )
 )
 
 TokenDependencies = (
@@ -50,7 +52,7 @@ TokenDependencies = (
 Row = (
     element row {
         attribute id { Identifier }?
-        # Depricated. Use Panel instead.
+        # Deprecated. Use Panel instead.
         & attribute grouping { text }?
         & TokenDependencies
         & ( Element* | Panel* )
@@ -128,7 +130,7 @@ SavedSearch = (
 SearchNodeInline = element search {
     attribute id { Identifier }?
     # attribute type is required for the secondary search
-    attribute type { "primary" | "annotation" }?
+    & attribute type { "primary" | "annotation" }?
     # SPL search query
     & element query {text}
     # earliest time of search
@@ -148,7 +150,7 @@ SearchNodeInline = element search {
 SearchNodeSaved = element search {
     attribute id { Identifier }?
     # attribute type is required for the secondary search
-    attribute type { "primary" | "annotation" }?
+    & attribute type { "primary" | "annotation" }?
     # the name of a saved search to load
     & attribute ref { text }
     # optional app namespace to find the search
@@ -172,7 +174,7 @@ SearchNodePostProcess = element search {
     # the id of another search to post process
     & attribute base { Identifier }
     # attribute type is required for the secondary search
-    attribute type { "primary" | "annotation" }?
+    & attribute type { "primary" | "annotation" }?
     # the query to alter the original search
     & element query {text}
     # event handlers
@@ -277,7 +279,7 @@ Condition = (
 
 LinkAction = (
     element link {
-        # DEPRECTATED: the link and the series attribute, which wrap the link action into an implicit <condition>
+        # DEPRECATED: the link and the series attribute, which wrap the link action into an implicit <condition>
         # are deprecated
         ( attribute field { text } | attribute series { text } )?
         # 'target' determines where drilldown results will open (set target to '_blank' to open in new window).
@@ -332,7 +334,7 @@ InitEventHandler = (
 ##
 TrellisOption = (
     # Enable or disable the trellis feature.  Defaults to false.
-    | element option {
+    element option {
         attribute name { "trellis.enabled" },
         Boolean
     }
@@ -396,11 +398,13 @@ ChartOption = (
         text
     }
     # Specifies the title of the Y-Axis
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.axisTitleY.text" },
         text
     }
     # Specifies the title of the second Y-Axis
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.axisTitleY2.text" },
         text
@@ -457,7 +461,7 @@ ChartOption = (
     }
     # This is a special switch that splits a multi-series chart into separate charts
     # that are stacked from top to bottom, one for each series.
-    # It is most applicable to area, bar, column, and line charts
+    # It applies to Area, Bar, Column, and Line charts
     # (it may produce confusing results with other chart types). Defaults to false.
     | element option {
         attribute name { "charting.layout.splitSeries" },
@@ -466,6 +470,7 @@ ChartOption = (
     # Specifies whether to allow split series charts to have independent y-ranges. Defaults to false.
     # By default y-ranges are clamped to the same global min and max;
     # setting this option to true gives each series it's own y-range.
+    # It applies to Area, Bar, Column, and Line charts
     | element option {
         attribute name { "charting.layout.splitSeries.allowIndependentYRanges" },
         Boolean
@@ -473,7 +478,7 @@ ChartOption = (
     # A list of hexadecimal color values from which the range band colors are generated.
     # Colors display in the order indicated in the array.
     # For example, you can reverse the default green-yellow-red sequence by changing the
-    # gaugeColors value to [0xBF3030,0xFFE800,0x84E900].
+    # gaugeColors value to [0x53A051,0xF8BE34,0xDC4E41].
     # You can specify any number of colors.
     # If your gauge has more or less range intervals
     # (either specified via the search language or the rangeValues parameter)
@@ -518,16 +523,19 @@ Charting.Data = (
         xsd:integer
     }
     # The order in which to apply the fieldShowList and fieldHideList filters. Defaults to hide_show.
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.data.fieldListMode" },
         ( "show_hide" | "hide_show" )
     }
     # The list of fields to explicitly show in the results. JSON array format
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.data.fieldShowList" },
         text
     }
     # The list of fields to explicitly hide from the results
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.data.fieldHideList" },
         text
@@ -552,6 +560,7 @@ Charting.Axis = (
         ( "none" | "auto" )
     }
     # Enables the abbreviations of large Y2 with the closest SI prefix.
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.axisY2.abbreviation" },
         ( "none" | "auto" )
@@ -665,6 +674,7 @@ Charting.AxisLabels = (
         attribute name { "charting.axisLabelsY.majorLabelVisibility" },
         ( "auto" | "show" | "hide" )
     }
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.axisLabelsY2.majorLabelVisibility" },
         ( "auto" | "show" | "hide" )
@@ -676,6 +686,7 @@ Charting.AxisLabels = (
         attribute name { "charting.axisLabelsY.majorUnit" },
         ( xsd:integer | "auto" )
     }
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.axisLabelsY2.majorUnit" },
         ( xsd:integer | "auto" )
@@ -700,6 +711,7 @@ Charting.AxisLabels = (
         ( "show" | "hide" )
     }
     # Determines whether or not Y2-Axis line is visible.
+    # It applies to Area, Bar, Column, and Line charts
     # Defaults to hide for numeric axes and show for all other axes.
     | element option {
         attribute name { "charting.axisLabelsY2.axisVisibility" },
@@ -722,6 +734,7 @@ Charting.AxisLabels = (
     # Determines whether major tick marks on the Y2-axis are visible.
     # Auto hides labels for numeric axes and only shows a major tick if the corresponding label is visible for all other axes.
     # Show always shows all major ticks and hide hides all major ticks. Defaults to auto.
+    # It applies to Area, Bar, Column, and Line charts
     | element option {
         attribute name { "charting.axisLabelsY2.majorTickVisibility" },
         ( "auto" | "show" | "hide" )
@@ -738,6 +751,10 @@ Charting.AxisLabels = (
         attribute name { "charting.axisLabelsY.minorTickVisibility" },
         ( "auto" | "show" | "hide" )
     }
+    # Determines whether minor tick marks on the Y2-axis are visible.
+    # Auto hides labels for numeric axes and only shows a major tick if the corresponding label is visible for all other axes.
+    # Show always shows all major ticks and hide hides all major ticks. Defaults to auto.
+    # It applies to Area, Bar, Column, and Line charts
     | element option {
         attribute name { "charting.axisLabelsY2.minorTickVisibility" },
         ( "auto" | "show" | "hide" )
@@ -754,11 +771,13 @@ Charting.AxisLabels = (
         xsd:integer
     }
     # Determines the size in pixels of major tick marks on the second Y-Axis. Defaults to 6.
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.axisLabelsY2.majorTickSize" },
         xsd:integer
     }
     # Determines the size in pixels of minor tick marks on the X-Axis. Defaults to 6.
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.axisLabelsX.minorTickSize" },
         xsd:integer
@@ -769,6 +788,7 @@ Charting.AxisLabels = (
         xsd:integer
     }
     # Determines the size in pixels of minor tick marks on the second Y-Axis. Defaults to 6.
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.axisLabelsY2.minorTickSize" },
         xsd:integer
@@ -778,6 +798,7 @@ Charting.AxisLabels = (
         attribute name { "charting.axisLabelsX.majorLabelVisibility" },
         ( "auto" | "show" | "hide" )
     }
+    # Deprecated.
     # Determines the visibility of major tick mark labels on the Y-axis. Defaults to auto.
     | element option {
         attribute name { "charting.axisLabelsY.majorLabelVisibility" },
@@ -799,6 +820,7 @@ Charting.AxisLabels = (
         Boolean
     }
     # Determines whether the major unit of second Y-Axis is rounded to the nearest integer. Defaults to false.
+    # It applies to Bar and Line charts
     | element option {
         attribute name { "charting.axisLabelsY2.integerUnits" },
         Boolean
@@ -813,6 +835,7 @@ Charting.AxisLabels = (
 
 Charting.GridLines = (
     # Determines whether major grid lines on X-Axis are visible. Defaults to false.
+    # It is not supported for bubble and scatter charts.
     element option {
         attribute name { "charting.gridLinesX.showMajorLines" },
         Boolean
@@ -823,11 +846,13 @@ Charting.GridLines = (
         Boolean
     }
     # Determines whether major grid lines on the second Y-Axis are visible. Defaults to false.
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.gridLinesY2.showMajorLines" },
         Boolean
     }
     # Determines whether minor grid lines are visible on the X-axis. Defaults to false.
+    # It is not supported for bubble and scatter charts.
     | element option {
         attribute name { "charting.gridLinesX.showMinorLines" },
         Boolean
@@ -846,12 +871,12 @@ Charting.GridLines = (
 
 Charting.Legend = (
     # Determine the visual and behavior of the chart
-    | element option {
+    element option {
         attribute name { "charting.legend.mode" },
         ("standard" | "seriesCompare")
     }
     # A list of labels with which to pre-populate the legend.
-    element option {
+    | element option {
         attribute name { "charting.legend.labels" },
         text
     }
@@ -940,7 +965,7 @@ Charting.Chart = (
         attribute name { "charting.chart.showDataLabels" },
         ("all" | "none" | "minmax")
     }
-    # Determines whether the gauge should show its value. Defaults to true.
+    # Determines whether the gauge should show its value. Defaults to true for radialGauge and fillerGauge, defaults to false for markerGauge.
     | element option {
         attribute name { "charting.chart.showValue" },
         Boolean
@@ -1384,13 +1409,13 @@ SparklineFormatOptions = (
         attribute name { "height" },
         xsd:integer
     }
-    # Used by line and discrete charts to specify the colour of the line drawn as a CSS values string.
+    # Used by line and discrete charts to specify the color of the line drawn as a CSS values string.
     # Applies for line and discrete.
     | element option {
         attribute name { "lineColor" },
         text
     }
-    # Specify the colour used to fill the area under the graph as a CSS value.
+    # Specify the color used to fill the area under the graph as a CSS value.
     # Applies for line, bar, tristate and discrete.
     | element option {
         attribute name { "fillColor" },
@@ -1441,17 +1466,17 @@ SparklineFormatOptions = (
         attribute name { "defaultPixelsPerValue" },
         text
     }
-    # The CSS colour of the final value marker. Set to false or an empty string to hide it.
+    # The CSS color of the final value marker. Set to false or an empty string to hide it.
     | element option {
         attribute name { "spotColor" },
         text
     }
-    # The CSS colour of the marker displayed for the mimum value.
+    # The CSS color of the marker displayed for the mimum value.
     | element option {
         attribute name { "minSpotColor" },
         text
     }
-    # The CSS colour of the marker displayed for the maximum value.
+    # The CSS color of the marker displayed for the maximum value.
     | element option {
         attribute name { "maxSpotColor" },
         text
@@ -1461,18 +1486,18 @@ SparklineFormatOptions = (
         attribute name { "spotRadius" },
         text
     }
-    # Specifies which points to draw spots on, and with which colour. Accepts a range.
+    # Specifies which points to draw spots on, and with which color. Accepts a range.
     # For example, to render green spots on all values less than 50 and red on values higher use {':49': 'green, '50:': 'red'}.
     | element option {
         attribute name { "valueSpots" },
         AnyOption*
     }
-    # Specifies a colour for the spot that appears on a value when moused over.
+    # Specifies a color for the spot that appears on a value when moused over.
     | element option {
         attribute name { "highlightSpotColor" },
         text
     }
-    # Specifies a colour for the vertical line that appears through a value when moused over.
+    # Specifies a color for the vertical line that appears through a value when moused over.
     | element option {
         attribute name { "highlightLineColor" },
         text
@@ -1515,22 +1540,22 @@ SparklineFormatOptions = (
         text
     }
     # === Bar Charts ===
-    # CSS colour used for postive values.
+    # CSS color used for positive values.
     | element option {
         attribute name { "barColor" },
         text
     }
-    # CSS colour used for negative values.
+    # CSS color used for negative values.
     | element option {
         attribute name { "negBarColor" },
         text
     }
-    # CSS colour used for values equal to zero.
+    # CSS color used for values equal to zero.
     | element option {
         attribute name { "zeroColor" },
         text
     }
-    # CSS colour used for values equal to null.
+    # CSS color used for values equal to null.
     # By default null values are omitted entirely, but setting this adds a thin marker for the entry.
     # This can be useful if your chart is pretty sparse; perhaps try setting it to a light grey or something equally unobtrusive.
     | element option {
@@ -1552,30 +1577,30 @@ SparklineFormatOptions = (
         attribute name { "zeroAxis" },
         text
     }
-    # A range map to map specific values to selected colours.
+    # A range map to map specific values to selected colors.
     # For example if you want all values of -2 to appear yellow, use colorMap: { '-2': '# ff0' }.
     | element option {
         attribute name { "colorMap" },
         AnyOption*
     }
-    # An array of colours to use for stacked bar charts.
+    # An array of colors to use for stacked bar charts.
     # The first series will use the first value in the array, the second series will use the second, etc.
     | element option {
         attribute name { "stackedBarColor" },
         text
     }
     # === Tristate Charts ===
-    # CSS colour for positive (win) values.
+    # CSS color for positive (win) values.
     | element option {
         attribute name { "posBarColor" },
         text
     }
-    # CSS colour for negative (lose) values.
+    # CSS color for negative (lose) values.
     | element option {
         attribute name { "negBarColor" },
         text
     }
-    # CSS colour for zero (draw) values.
+    # CSS color for zero (draw) values.
     | element option {
         attribute name { "zeroBarColor" },
         text
@@ -1590,9 +1615,9 @@ SparklineFormatOptions = (
         attribute name { "barSpacing" },
         text
     }
-    # A range map to map specific values to selected colours.
+    # A range map to map specific values to selected colors.
     # For example if you want all values of -2 to appear yellow, use colorMap: { '-2': '# ff0' }.
-    # As of version 1.5 you may also pass an array of values here instead of a mapping to specifiy a color for each individual bar.
+    # As of version 1.5 you may also pass an array of values here instead of a mapping to specify a color for each individual bar.
     # For example if your chart has three values 1,3,1 you can set colorMap=["red", "green", "blue"].
     | element option {
         attribute name { "colorMap" },
@@ -1615,7 +1640,7 @@ SparklineFormatOptions = (
         text
     }
     # === Bullet Graphs ===
-    # The CSS colour of the vertical target marker.
+    # The CSS color of the vertical target marker.
     | element option {
         attribute name { "targetColor" },
         text
@@ -1658,7 +1683,7 @@ SparklineFormatOptions = (
         text
     }
     # === Box Plots ===
-    # If set to false (default) then the values supplied are used to caculate the box data points for you.
+    # If set to false (default) then the values supplied are used to calculate the box data points for you.
     # If true then you must pre-calculate the points (see below).
     | element option {
         attribute name { "raw" },
@@ -1675,27 +1700,27 @@ SparklineFormatOptions = (
         attribute name { "outlierIQR" },
         text
     }
-    # CSS line colour used to outline the box.
+    # CSS line color used to outline the box.
     | element option {
         attribute name { "boxLineColor" },
         text
     }
-    # CSS fill colour used for the box.
+    # CSS fill color used for the box.
     | element option {
         attribute name { "boxFillColor" },
         text
     }
-    # CSS colour used to draw the whiskers.
+    # CSS color used to draw the whiskers.
     | element option {
         attribute name { "whiskerColor" },
         text
     }
-    # CSS colour used to draw the outlier circles.
+    # CSS color used to draw the outlier circles.
     | element option {
         attribute name { "outlierLineColor" },
         text
     }
-    # CSS colour used to fill the outlier circles.
+    # CSS color used to fill the outlier circles.
     | element option {
         attribute name { "outlierFillColor" },
         text
@@ -1705,7 +1730,7 @@ SparklineFormatOptions = (
         attribute name { "spotRadius" },
         text
     }
-    # CSS colour used to draw the median line.
+    # CSS color used to draw the median line.
     | element option {
         attribute name { "medianColor" },
         text
@@ -1715,7 +1740,7 @@ SparklineFormatOptions = (
         attribute name { "target" },
         text
     }
-    # CSS colour used to draw the target crosshair, if set.
+    # CSS color used to draw the target crosshair, if set.
     | element option {
         attribute name { "targetColor" },
         text
@@ -1751,7 +1776,7 @@ SparklineFormatOptions = (
         attribute name { "highlightLighten" },
         text
     }
-    # If specified, then values that are moused over will be changed to this colour instead of being lightend.
+    # If specified, then values that are moused over will be changed to this color instead of being lightened.
     | element option {
         attribute name { "highlightColor" },
         text
@@ -1832,7 +1857,7 @@ SparklineFormatOptions = (
     }
     # Pass a javascript function to control how numbers are formatted in tooltips.
     # The callback will be passwd a number to format and must return a string.
-    # Default behaviour is to format numbers to western conventions.
+    # Default behavior is to format numbers to western conventions.
     | element option {
         attribute name { "numberFormatter" },
         text
@@ -1847,7 +1872,7 @@ SparklineFormatOptions = (
         attribute name { "numberDecimalMark" },
         text
     }
-    # Number of digits between the group seperator in numbers for l10n purposes. Defaults to 3.
+    # Number of digits between the group separator in numbers for l10n purposes. Defaults to 3.
     | element option {
         attribute name { "numberDigitGroupCount" },
         text
@@ -2006,7 +2031,7 @@ SingleOption = (
         attribute name { "useColors" },
         Boolean
     }
-    # Specify how many decimal places to displaydefaults to 0.
+    # Specify how many decimal places to display. Defaults to 0.
     | element option {
         attribute name { "numberPrecision" },
         ("0" | "0.0" | "0.00" | "0.000" | "0.0000")

@@ -1,55 +1,65 @@
 /*  Splunk: Component: Mega-Menu */
 /*  ============================ */
 
+$megaMenuSidebarWidth: 150px;
+
 .view {
+	background-color: $navBarSettingSidebarColor;
 }
 
 .body {
-	padding: 18px 0 10px 20px;
-	width: 430px;
-	columns: 2;
-	column-gap:0;
-	background-color: $white;
-}
+    padding: $spacingHalf;
+    columns: 2;
+    column-gap: 0;
+    width: 440px;
+    background-color: $navBarSettingBackgroundColor;
 
-.bodyNarrow {
-	composes: view;
-	width: 220px;
-	columns: 1;
+    .sidebar + & {
+        margin-left: $megaMenuSidebarWidth;
+    }
+
+    [data-menu-sections="1"] > &, [data-menu-sections="2"] > & {
+        width: 220px;
+        columns: 1;
+    }
 }
 
 .sidebar {
-	width: 150px;
-	padding: 20px 0;
-	float: left;
+    width: $megaMenuSidebarWidth;
+    padding: 0;
+    float: left;
 
-	> a {
-		color: $splunkGreen;
-		text-align: center;
-		display: block;
-		text-decoration: none;
-		padding: 20px;
+    > a {
+		color: $interactiveTextColor;
+        text-align: center;
+        display: block;
+        text-decoration: none;
+        padding: $spacingThreeQuarters;
 
-		&:focus {
-			@mixin focus-pill;
-		}
-		&:hover {
-			background:color($splunkGreen l(+50%));
-		}
-	}
+        &:focus {
+            @mixin focus-element-inset $navBarSettingSidebarColorHover;
+        }
+        &:hover {
+            background: $navBarSettingSidebarColorHover;
+        }
+    }
 
-	svg {
-		margin: 0 auto 10px auto;
-		display: block;
-
-	}
+    svg {
+        margin: $spacingHalf auto $spacingThreeQuarters auto;
+        display: block;
+        width: 60px;
+    }
 }
 
-.sidebar + .body {
-	margin-left: 152px;
+.fill {
+	fill: $navBarSettingSVGFillColor;
+}
+
+.stroke {
+	stroke: $navBarSettingSVGFillColor;
 }
 
 .footer {
-	composes: footer from '../../MenuDialog.pcssm';
-	text-align: right;
+    composes: footer from '../../MenuDialog.pcssm';
+    text-align: right;
 }

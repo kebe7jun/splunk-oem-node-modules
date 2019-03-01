@@ -13,7 +13,7 @@
       }
 
       .filter-container {
-        border-top: 1px solid $grayLightMedium;
+        border-top: 1px solid $gray80;
         padding-top: 10px;
 
         .collection-count {
@@ -24,7 +24,7 @@
           }
 
           h3 {
-            font-size: $baseFontSize;
+            font-size: $fontSize;
             font-weight: normal;
             /* float: left; */
             /* padding-left: 20px; */
@@ -81,7 +81,7 @@
           transition: background, 0.2s;
         }
         &:hover td {
-          background-color: $tableBackgroundHover;
+          background-color: $tableRowHoverColor;
           transition: background, 0.02s;
         }
         i {
@@ -91,10 +91,10 @@
 
 
           &.enable-icon {
-            color: $green;
+            color: $successColor;
           }
           &.disable-icon {
-            color: $red;
+            color: $errorColor;
           }
         }
       }
@@ -121,7 +121,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: $grayLightMedium;
+        background-color: $gray80;
         opacity: 0.50;
       }
       .archives-grid {
@@ -208,7 +208,7 @@
   .create-new-message {
     margin: -5px -20px 20px;
     padding: 0 20px 15px;
-    border-bottom: 1px solid $grayLightMedium;
+    border-bottom: 1px solid $gray80;
   }
 
   &.modal-wide {

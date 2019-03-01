@@ -85,7 +85,9 @@ var debug = function debug() {
         }, function (e) {
             commandIsRunning = false;
             clearTimeout(timeout);
-            return callback(e);
+            var commandError = new Error(e.message);
+            delete commandError.stack;
+            return callback(commandError);
         });
     };
 

@@ -2,18 +2,13 @@ define(function() {
     var _ = function(str) { return { t: function() { return str; } }; };
 
     var GAUGE_COLORS = [
-        "#7e9f44",
-        "#ebe42d",
-        "#d13b3b",
-        "#6cb8ca",
-        "#f7912c",
-        "#956e96",
-        "#c2da8a",
-        "#fac61d",
-        "#ebb7d0",
-        "#324969",
-        "#d85e3d",
-        "#a04558"
+        "#53a051",
+        "#006d9c",
+        "#f8be34",
+        "#f1813f",
+        "#dc4e41",
+        "#ffffff",
+        "#3c444d"
     ];
 
     var EXPECTED_SCHEMA = {
@@ -216,26 +211,31 @@ define(function() {
                                     {
                                         value: '-90',
                                         icon: 'label-rotation--90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-90&deg;'
                                     },
                                     {
                                         value: '-45',
                                         icon: 'label-rotation--45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-45&deg;'
                                     },
                                     {
                                         value: '0',
                                         icon: 'label-rotation-0',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '0&deg;'
                                     },
                                     {
                                         value: '45',
                                         icon: 'label-rotation-45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '45&deg;'
                                     },
                                     {
                                         value: '90',
                                         icon: 'label-rotation-90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '90&deg;'
                                     }
                                 ]
@@ -301,12 +301,9 @@ define(function() {
                             name: 'display.visualizations.charting.axisY.scale',
                             label: _('Scale').t(),
                             defaultValue: 'linear',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Linear").t(),
@@ -323,14 +320,11 @@ define(function() {
                             name: 'display.visualizations.charting.layout.splitSeries.allowIndependentYRanges',
                             label: _('Axis range').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl',
                             controlOptions: {
                                 trueLabel: _("Independent").t(),
                                 falseLabel: _("Uniform").t(),
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 reversed: true
                             }
                         },
@@ -342,7 +336,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.minimumNumber',
@@ -352,7 +347,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.maximumNumber',
@@ -362,18 +358,16 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.abbreviation',
                             label: _('Number Abbreviations').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _('Off').t(),
@@ -488,9 +482,6 @@ define(function() {
                             name: 'display.visualizations.charting.legend.placement',
                             label: _('Legend Position').t(),
                             defaultValue: 'right',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/SyntheticSelectControl',
                             controlOptions: {
                                 items: [
@@ -515,16 +506,15 @@ define(function() {
                                         value: 'none'
                                     }
                                 ],
-                                toggleClassName: 'btn'
-                            }
+                                toggleClassName: 'btn',
+                                menuWidth: 'narrow'
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.legend.labelStyle.overflowMode',
                             label: _('Legend Truncation').t(),
                             defaultValue: 'ellipsisMiddle',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -556,9 +546,6 @@ define(function() {
                             name: 'display.visualizations.charting.chart.stackMode',
                             label: _('Stack Mode').t(),
                             defaultValue: 'default',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -584,18 +571,12 @@ define(function() {
                             name: 'display.visualizations.charting.layout.splitSeries',
                             label: _('Multi-series Mode').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl'
                         },
                         {
                             name: 'display.visualizations.charting.chart.showDataLabels',
                             label: _('Show Data Values').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-fill'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -842,12 +823,9 @@ define(function() {
                             name: 'display.visualizations.charting.axisY.scale',
                             label: _('Scale').t(),
                             defaultValue: 'linear',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Linear").t(),
@@ -864,14 +842,11 @@ define(function() {
                             name: 'display.visualizations.charting.layout.splitSeries.allowIndependentYRanges',
                             label: _('Axis range').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl',
                             controlOptions: {
                                 trueLabel: _("Independent").t(),
                                 falseLabel: _("Uniform").t(),
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 reversed: true
                             }
                         },
@@ -883,7 +858,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.minimumNumber',
@@ -893,7 +869,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.maximumNumber',
@@ -903,18 +880,16 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.abbreviation',
                             label: _('Number Abbreviations').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _('Off').t(),
@@ -1029,9 +1004,6 @@ define(function() {
                             name: 'display.visualizations.charting.legend.placement',
                             label: _('Legend Position').t(),
                             defaultValue: 'right',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/SyntheticSelectControl',
                             controlOptions: {
                                 items: [
@@ -1056,16 +1028,15 @@ define(function() {
                                         value: 'none'
                                     }
                                 ],
-                                toggleClassName: 'btn'
-                            }
+                                toggleClassName: 'btn',
+                                menuWidth: 'narrow'
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.legend.labelStyle.overflowMode',
                             label: _('Legend Truncation').t(),
                             defaultValue: 'ellipsisMiddle',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -1097,9 +1068,6 @@ define(function() {
                             name: 'display.visualizations.charting.chart.stackMode',
                             label: _('Stack Mode').t(),
                             defaultValue: 'default',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -1125,18 +1093,12 @@ define(function() {
                             name: 'display.visualizations.charting.layout.splitSeries',
                             label: _('Multi-series Mode').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl'
                         },
                         {
                             name: 'display.visualizations.charting.chart.showDataLabels',
                             label: _('Show Data Values').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-fill'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -1346,26 +1308,31 @@ define(function() {
                                     {
                                         value: '-90',
                                         icon: 'label-rotation--90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-90&deg;'
                                     },
                                     {
                                         value: '-45',
                                         icon: 'label-rotation--45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-45&deg;'
                                     },
                                     {
                                         value: '0',
                                         icon: 'label-rotation-0',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '0&deg;'
                                     },
                                     {
                                         value: '45',
                                         icon: 'label-rotation-45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '45&deg;'
                                     },
                                     {
                                         value: '90',
                                         icon: 'label-rotation-90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '90&deg;'
                                     }
                                 ]
@@ -1431,12 +1398,9 @@ define(function() {
                             name: 'display.visualizations.charting.axisY.scale',
                             label: _('Scale').t(),
                             defaultValue: 'linear',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Linear").t(),
@@ -1453,14 +1417,11 @@ define(function() {
                             name: 'display.visualizations.charting.layout.splitSeries.allowIndependentYRanges',
                             label: _('Axis range').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl',
                             controlOptions: {
                                 trueLabel: _("Independent").t(),
                                 falseLabel: _("Uniform").t(),
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 reversed: true
                             }
                         },
@@ -1472,7 +1433,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.minimumNumber',
@@ -1482,7 +1444,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.maximumNumber',
@@ -1492,18 +1455,16 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.abbreviation',
                             label: _('Number Abbreviations').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _('Off').t(),
@@ -1619,9 +1580,6 @@ define(function() {
                             name: 'display.visualizations.charting.legend.placement',
                             label: _('Legend Position').t(),
                             defaultValue: 'right',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/SyntheticSelectControl',
                             controlOptions: {
                                 items: [
@@ -1646,26 +1604,23 @@ define(function() {
                                         value: 'none'
                                     }
                                 ],
-                                toggleClassName: 'btn'
-                            }
+                                toggleClassName: 'btn',
+                                menuWidth: 'narrow'
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'static-legend-placement',
                             label: _('Legend Position').t(),
                             defaultValue: _('Right').t(),
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/LabelControl',
-                            controlOptions: {}
+                            controlOptions: {},
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.legend.labelStyle.overflowMode',
                             label: _('Legend Truncation').t(),
                             defaultValue: 'ellipsisMiddle',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -1691,12 +1646,9 @@ define(function() {
                             name: 'display.visualizations.charting.legend.mode',
                             label: _('Compare Series').t(),
                             defaultValue: 'standard',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Off").t(),
@@ -1719,9 +1671,6 @@ define(function() {
                             name: 'display.visualizations.charting.chart.stackMode',
                             label: _('Stack Mode').t(),
                             defaultValue: 'default',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -1747,9 +1696,6 @@ define(function() {
                             name: 'display.visualizations.charting.chart.nullValueMode',
                             label: _('Null Values').t(),
                             defaultValue: 'gaps',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -1775,18 +1721,12 @@ define(function() {
                             name: 'display.visualizations.charting.layout.splitSeries',
                             label: _('Multi-series Mode').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl'
                         },
                         {
                             name: 'display.visualizations.charting.chart.showDataLabels',
                             label: _('Show Data Values').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-fill'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -1996,26 +1936,31 @@ define(function() {
                                     {
                                         value: '-90',
                                         icon: 'label-rotation--90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-90&deg;'
                                     },
                                     {
                                         value: '-45',
                                         icon: 'label-rotation--45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-45&deg;'
                                     },
                                     {
                                         value: '0',
                                         icon: 'label-rotation-0',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '0&deg;'
                                     },
                                     {
                                         value: '45',
                                         icon: 'label-rotation-45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '45&deg;'
                                     },
                                     {
                                         value: '90',
                                         icon: 'label-rotation-90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '90&deg;'
                                     }
                                 ]
@@ -2081,12 +2026,9 @@ define(function() {
                             name: 'display.visualizations.charting.axisY.scale',
                             label: _('Scale').t(),
                             defaultValue: 'linear',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Linear").t(),
@@ -2103,14 +2045,11 @@ define(function() {
                             name: 'display.visualizations.charting.layout.splitSeries.allowIndependentYRanges',
                             label: _('Axis range').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl',
                             controlOptions: {
                                 trueLabel: _("Independent").t(),
                                 falseLabel: _("Uniform").t(),
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 reversed: true
                             }
                         },
@@ -2122,7 +2061,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.minimumNumber',
@@ -2132,7 +2072,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.maximumNumber',
@@ -2142,18 +2083,16 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.abbreviation',
                             label: _('Number Abbreviations').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _('Off').t(),
@@ -2269,9 +2208,6 @@ define(function() {
                             name: 'display.visualizations.charting.legend.placement',
                             label: _('Legend Position').t(),
                             defaultValue: 'right',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/SyntheticSelectControl',
                             controlOptions: {
                                 items: [
@@ -2296,26 +2232,23 @@ define(function() {
                                         value: 'none'
                                     }
                                 ],
-                                toggleClassName: 'btn'
-                            }
+                                toggleClassName: 'btn',
+                                menuWidth: 'narrow'
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'static-legend-placement',
                             label: _('Legend Position').t(),
                             defaultValue: _('Right').t(),
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/LabelControl',
-                            controlOptions: {}
+                            controlOptions: {},
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.legend.labelStyle.overflowMode',
                             label: _('Legend Truncation').t(),
                             defaultValue: 'ellipsisMiddle',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -2341,12 +2274,9 @@ define(function() {
                             name: 'display.visualizations.charting.legend.mode',
                             label: _('Compare Series').t(),
                             defaultValue: 'standard',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Off").t(),
@@ -2369,9 +2299,6 @@ define(function() {
                             name: 'display.visualizations.charting.chart.nullValueMode',
                             label: _('Null Values').t(),
                             defaultValue: 'gaps',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -2397,18 +2324,12 @@ define(function() {
                             name: 'display.visualizations.charting.layout.splitSeries',
                             label: _('Multi-series Mode').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl'
                         },
                         {
                             name: 'display.visualizations.charting.chart.showDataLabels',
                             label: _('Show Data Values').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-fill'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -2900,26 +2821,31 @@ define(function() {
                                     {
                                         value: '-90',
                                         icon: 'label-rotation--90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-90&deg;'
                                     },
                                     {
                                         value: '-45',
                                         icon: 'label-rotation--45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-45&deg;'
                                     },
                                     {
                                         value: '0',
                                         icon: 'label-rotation-0',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '0&deg;'
                                     },
                                     {
                                         value: '45',
                                         icon: 'label-rotation-45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '45&deg;'
                                     },
                                     {
                                         value: '90',
                                         icon: 'label-rotation-90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '90&deg;'
                                     }
                                 ]
@@ -2947,12 +2873,9 @@ define(function() {
                             name: 'display.visualizations.charting.axisX.scale',
                             label: _('Scale').t(),
                             defaultValue: 'linear',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Linear").t(),
@@ -2973,7 +2896,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisX.minimumNumber',
@@ -2983,7 +2907,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisX.maximumNumber',
@@ -2993,18 +2918,16 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisX.abbreviation',
                             label: _('Number Abbreviations').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _('Off').t(),
@@ -3061,12 +2984,9 @@ define(function() {
                             name: 'display.visualizations.charting.axisY.scale',
                             label: _('Scale').t(),
                             defaultValue: 'linear',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Linear").t(),
@@ -3087,7 +3007,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.minimumNumber',
@@ -3097,7 +3018,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.maximumNumber',
@@ -3107,18 +3029,16 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.abbreviation',
                             label: _('Number Abbreviations').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _('Off').t(),
@@ -3219,9 +3139,6 @@ define(function() {
                             name: 'display.visualizations.charting.legend.placement',
                             label: _('Legend Position').t(),
                             defaultValue: 'right',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/SyntheticSelectControl',
                             controlOptions: {
                                 items: [
@@ -3246,16 +3163,15 @@ define(function() {
                                         value: 'none'
                                     }
                                 ],
-                                toggleClassName: 'btn'
-                            }
+                                toggleClassName: 'btn',
+                                menuWidth: 'narrow'
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.legend.labelStyle.overflowMode',
                             label: _('Legend Truncation').t(),
                             defaultValue: 'ellipsisMiddle',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -3518,26 +3434,31 @@ define(function() {
                                     {
                                         value: '-90',
                                         icon: 'label-rotation--90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-90&deg;'
                                     },
                                     {
                                         value: '-45',
                                         icon: 'label-rotation--45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '-45&deg;'
                                     },
                                     {
                                         value: '0',
                                         icon: 'label-rotation-0',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '0&deg;'
                                     },
                                     {
                                         value: '45',
                                         icon: 'label-rotation-45',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '45&deg;'
                                     },
                                     {
                                         value: '90',
                                         icon: 'label-rotation-90',
+                                        iconSize: 'icon-large label-rotation-alignment',
                                         tooltip: '90&deg;'
                                     }
                                 ]
@@ -3565,12 +3486,9 @@ define(function() {
                             name: 'display.visualizations.charting.axisX.scale',
                             label: _('Scale').t(),
                             defaultValue: 'linear',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Linear").t(),
@@ -3591,7 +3509,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisX.minimumNumber',
@@ -3601,7 +3520,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisX.maximumNumber',
@@ -3611,18 +3531,16 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisX.abbreviation',
                             label: _('Number Abbreviations').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _('Off').t(),
@@ -3679,12 +3597,9 @@ define(function() {
                             name: 'display.visualizations.charting.axisY.scale',
                             label: _('Scale').t(),
                             defaultValue: 'linear',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _("Linear").t(),
@@ -3705,7 +3620,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.minimumNumber',
@@ -3715,7 +3631,8 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.maximumNumber',
@@ -3725,18 +3642,16 @@ define(function() {
                             controlOptions: {
                                 placeholder: _('optional').t(),
                                 inputClassName: 'input-medium'
-                            }
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.axisY.abbreviation',
                             label: _('Number Abbreviations').t(),
                             defaultValue: 'none',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group locale-responsive-layout',
+                                additionalClassNames: 'locale-responsive-layout',
                                 items: [
                                     {
                                         label: _('Off').t(),
@@ -3892,9 +3807,6 @@ define(function() {
                             name: 'display.visualizations.charting.legend.placement',
                             label: _('Legend Position').t(),
                             defaultValue: 'right',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/SyntheticSelectControl',
                             controlOptions: {
                                 items: [
@@ -3919,16 +3831,15 @@ define(function() {
                                         value: 'none'
                                     }
                                 ],
-                                toggleClassName: 'btn'
-                            }
+                                toggleClassName: 'btn',
+                                menuWidth: 'narrow'
+                            },
+                            groupOptions: {}
                         },
                         {
                             name: 'display.visualizations.charting.legend.labelStyle.overflowMode',
                             label: _('Legend Truncation').t(),
                             defaultValue: 'ellipsisMiddle',
-                            groupOptions: {
-                                controlClass: 'controls-thirdblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -4052,7 +3963,6 @@ define(function() {
                     "formElements": [
                         {
                             groupOptions: {
-                                controlClass: "controls-block",
                                 displayMinMaxLabels: false,
                                 paletteColors: GAUGE_COLORS,
                                 rangeColorsName: "display.visualizations.charting.gaugeColors"
@@ -4071,9 +3981,6 @@ define(function() {
                             name: 'display.visualizations.charting.chart.style',
                             label: _('Style').t(),
                             defaultValue: 'shiny',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -4190,7 +4097,6 @@ define(function() {
                     "formElements": [
                         {
                             groupOptions: {
-                                controlClass: "controls-block",
                                 displayMinMaxLabels: false,
                                 paletteColors: GAUGE_COLORS,
                                 rangeColorsName: "display.visualizations.charting.gaugeColors"
@@ -4209,9 +4115,6 @@ define(function() {
                             name: 'display.visualizations.charting.chart.style',
                             label: _('Style').t(),
                             defaultValue: 'shiny',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -4328,7 +4231,6 @@ define(function() {
                     "formElements": [
                         {
                             groupOptions: {
-                                controlClass: "controls-block",
                                 displayMinMaxLabels: false,
                                 paletteColors: GAUGE_COLORS,
                                 rangeColorsName: "display.visualizations.charting.gaugeColors"
@@ -4347,9 +4249,6 @@ define(function() {
                             name: 'display.visualizations.charting.chart.style',
                             label: _('Style').t(),
                             defaultValue: 'shiny',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -4467,21 +4366,14 @@ define(function() {
                             name: 'display.visualizations.singlevalue.showTrendIndicator',
                             label: _('Show trend indicator').t(),
                             defaultValue: '1',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl'
                         },
                         {
                             name: 'display.visualizations.singlevalue.trendDisplayMode',
                             label: _('Show trend in').t(),
                             defaultValue: 'count',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group',
                                 items: [
                                     {
                                         label: _('Absolute').t(),
@@ -4500,19 +4392,13 @@ define(function() {
                             name: 'display.visualizations.singlevalue.trendInterval',
                             label: _('Compared to').t(),
                             defaultValue: 'auto',
-                            group: 'views/shared/vizcontrols/custom_controls/SingleValueDeltaTimeRangeControlGroup',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            }
+                            group: 'views/shared/vizcontrols/custom_controls/SingleValueDeltaTimeRangeControlGroup'
                         },
                         'static HTML',
                         {
                             name: 'display.visualizations.singlevalue.beforeLabel',
                             label: _('Before Label').t(),
                             defaultValue: '',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/TextControl',
                             controlOptions: {
                                 placeholder: _('optional').t(),
@@ -4523,9 +4409,6 @@ define(function() {
                             name: 'display.visualizations.singlevalue.afterLabel',
                             label: _('After Label').t(),
                             defaultValue: '',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/TextControl',
                             controlOptions: {
                                 placeholder: _('optional').t(),
@@ -4537,9 +4420,6 @@ define(function() {
                             name: 'display.visualizations.singlevalue.underLabel',
                             label: _('Caption').t(),
                             defaultValue: '',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/TextControl',
                             controlOptions: {
                                 placeholder: _('optional').t(),
@@ -4551,9 +4431,6 @@ define(function() {
                             name: 'display.visualizations.singlevalue.showSparkline',
                             label: _('Show Sparkline').t(),
                             defaultValue: '1',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl'
                         }
                     ]
@@ -4679,18 +4556,12 @@ define(function() {
                             name: 'display.visualizations.singlevalue.useColors',
                             label: _('Use colors').t(),
                             defaultValue: '1',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl'
                         },
                         {
                             name: 'display.visualizations.singlevalue.colorBy',
                             label: _('Color by').t(),
                             defaultValue: 'value',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
                                 items: [
@@ -4712,24 +4583,22 @@ define(function() {
                             label: _('Color interpretation').t(),
                             defaultValue: 'standard',
                             groupOptions: {
-                                className: 'control-group single-value-radio-icon-group',
-                                controlClass: 'controls-halfblock'
+                                className: 'control-group single-value-radio-icon-group'
                             },
                             control: 'views/shared/singlevalue/ColorModeRadioControl',
                             controlOptions: {
-                                className: "btn-group",
                                 items: [
                                     {
                                         iconSettings: [
                                             {
                                                 backgroundColor: "transparent",
-                                                fontColor: "#65a637",
+                                                fontColor: "#53a051",
                                                 indicatorMode: "increase",
                                                 type: "indicator"
                                             },
                                             {
                                                 backgroundColor: "transparent",
-                                                fontColor: "#d93f3c",
+                                                fontColor: "#dc4e41",
                                                 indicatorMode: "decrease",
                                                 type: "indicator"
                                             }
@@ -4741,12 +4610,12 @@ define(function() {
                                         iconSettings: [
                                             {
                                                 backgroundColor: "transparent",
-                                                fontColor: "#d93f3c",
+                                                fontColor: "#dc4e41",
                                                 indicatorMode: "increase",
                                                 type: "indicator"                                        },
                                             {
                                                 backgroundColor: "transparent",
-                                                fontColor: "#65a637",
+                                                fontColor: "#53a051",
                                                 indicatorMode: "decrease",
                                                 type: "indicator"                                        }
                                         ],
@@ -4760,10 +4629,9 @@ define(function() {
                             name: 'display.visualizations.singlevalue.rangeValues',
                             group: 'views/shared/vizcontrols/custom_controls/ColorRangesControlGroup',
                             groupOptions: {
-                                controlClass: 'controls-block',
                                 rangeColorsName: 'display.visualizations.singlevalue.rangeColors',
-                                defaultColors: ['0x65a637', '0x6db7c6', '0xf7bc38', '0xf58f39', '0xd93f3c'],
-                                paletteColors: ['#65a637', '#6db7c6', '#f7bc38', '#f58f39', '#d93f3c', '#555'],
+                                defaultColors: ['0x53a051', '0x006d9c', '0xf8be34', '0xf1813f', '0xdc4e41'],
+                                paletteColors: ['#53a051', '#006d9c', '#f8be34', '#f1813f', '#dc4e41', '#555'],
                                 defaultRangeValues: [0, 30, 70, 100],
                                 displayMinMaxLabels: true
                             }
@@ -4773,8 +4641,7 @@ define(function() {
                             label: _('Color Mode').t(),
                             defaultValue: 'none',
                             groupOptions: {
-                                className: 'control-group single-value-radio-icon-group',
-                                controlClass: 'controls-halfblock'
+                                className: 'control-group single-value-radio-icon-group'
                             },
                             control: 'views/shared/singlevalue/ColorModeRadioControl',
                             controlOptions: {
@@ -4783,7 +4650,7 @@ define(function() {
                                         iconSettings: [
                                             {
                                                 "backgroundColor": "transparent",
-                                                "fontColor": "#65a637",
+                                                "fontColor": "#53a051",
                                                 "type": "colorMode"
                                             }
                                         ],
@@ -4793,7 +4660,7 @@ define(function() {
                                     {
                                         iconSettings: [
                                             {
-                                                "backgroundColor": "#65a637",
+                                                "backgroundColor": "#53a051",
                                                 "fontColor": "#FFFFFF",
                                                 "type": "colorMode"
                                             }
@@ -4814,9 +4681,6 @@ define(function() {
                             name: 'display.visualizations.singlevalue.numberPrecision',
                             label: _('Precision').t(),
                             defaultValue: '0',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/SyntheticSelectControl',
                             controlOptions: {
                                 items: [
@@ -4841,25 +4705,20 @@ define(function() {
                                         value: '0.0000'
                                     }
                                 ],
-                                toggleClassName: 'btn'
+                                toggleClassName: 'btn',
+                                menuWidth: 'narrow'
                             }
                         },
                         {
                             name: 'display.visualizations.singlevalue.useThousandSeparators',
                             label: _('Use Thousand Separators').t(),
                             defaultValue: '1',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/BooleanRadioControl'
                         },
                         {
                             name: 'display.visualizations.singlevalue.unit',
                             label: _('Unit').t(),
                             defaultValue: '',
-                            groupOptions: {
-                                controlClass: 'controls-block'
-                            },
                             control: 'views/shared/controls/TextControl',
                             controlOptions: {
                                 placeholder: _('optional').t(),
@@ -4871,12 +4730,8 @@ define(function() {
                             name: 'display.visualizations.singlevalue.unitPosition',
                             label: _('Unit Position').t(),
                             defaultValue: 'after',
-                            groupOptions: {
-                                controlClass: 'controls-halfblock'
-                            },
                             control: 'views/shared/controls/SyntheticRadioControl',
                             controlOptions: {
-                                className: 'btn-group',
                                 items: [
                                     {
                                         label: _('Before').t(),

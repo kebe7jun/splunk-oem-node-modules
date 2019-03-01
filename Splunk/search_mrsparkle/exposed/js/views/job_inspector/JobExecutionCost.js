@@ -150,12 +150,12 @@ define(
                         <table>\
                             <thead>\
                                 <tr>\
-                                    <th><%- _("Duration (seconds)").t() %></th>\
+                                    <th tabindex="0"><%- _("Duration (seconds)").t() %></th>\
                                     <th></th>\
-                                    <th><%- _("Component").t() %></th>\
-                                    <th><%- _("Invocations").t() %></th>\
-                                    <th><%- _("Input count").t() %></th>\
-                                    <th><%- _("Output count").t() %></th>\
+                                    <th tabindex="0"><%- _("Component").t() %></th>\
+                                    <th tabindex="0"><%- _("Invocations").t() %></th>\
+                                    <th tabindex="0"><%- _("Input count").t() %></th>\
+                                    <th tabindex="0"><%- _("Output count").t() %></th>\
                                 </tr>\
                             </thead>\
                             <tbody>\
@@ -166,26 +166,26 @@ define(
                                             <img src="/static/img/skins/default/a.gif" class="durationBar" \
                                                 width=<%- Math.max(1, parseInt(component.displayDuration * 150)) %>px /> \
                                         </td>\
-                                        <td class="numeric"><%- i18n.format_number(component.duration, "#,###,###.00") %></td>\
+                                        <td class="numeric" tabindex="0"><%- i18n.format_number(component.duration, "#,###,###.00") %></td>\
                                         <td>\
                                             <img src="/static/img/skins/default/a.gif" width=<%- component.displayLevel * 15 %>px /> \
-                                            <%-component.component %>\
+                                            <span tabindex="0"><%-component.component %></span>\
                                         </td>\
-                                        <td class="numeric">\
+                                        <td class="numeric" tabindex="0">\
                                             <% if(component.invocationCount) { %>\
                                                 <%- i18n.format_number(component.invocationCount) %>\
                                             <% } else { %>\
                                                 - \
                                             <% } %>\
                                         </td>\
-                                        <td class="numeric">\
+                                        <td class="numeric" tabindex="0">\
                                             <% if(component.inputCount) { %>\
                                                 <%- i18n.format_number(component.inputCount) %>\
                                             <% } else { %>\
                                                 - \
                                             <% } %>\
                                         </td>\
-                                        <td class="numeric">\
+                                        <td class="numeric" tabindex="0">\
                                             <% if(component.outputCount) { %>\
                                                 <%- i18n.format_number(component.outputCount) %>\
                                             <% } else { %>\

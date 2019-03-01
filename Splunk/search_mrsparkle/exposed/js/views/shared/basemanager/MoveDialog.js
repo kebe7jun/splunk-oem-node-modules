@@ -65,6 +65,10 @@ define([
                     };
                 });
 
+                // Since the list doesn't contain the current app, set the initial value 
+                // to be the first item in the list
+                this.model.inmem.entry.acl.set('app', items[0].value);
+
                 this.children.appsSelector = new ControlGroup({
                     label: _('Destination app').t(),
                     controlType:'SyntheticSelect',
@@ -73,7 +77,7 @@ define([
                         modelAttribute: 'app',
                         updateModel: false,
                         items: items,
-                        className: 'fieldAppSelect',
+                        additionalClassNames: 'fieldAppSelect',
                         toggleClassName: 'btn',
                         popdownOptions: {
                             detachDialog: true

@@ -1,15 +1,16 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
-import ControlGroup from 'splunk-ui/components/ControlGroup';
-import Text from 'splunk-ui/components/Text';
-import Box from 'splunk-ui/components/Box';
-import ComboBox from 'splunk-ui/components/ComboBox';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
+import Text from '@splunk/react-ui/Text';
+import ComboBox from '@splunk/react-ui/ComboBox';
 import AddNewButton from 'dashboard/components/shared/AddNewButton';
 import DeleteButton from 'dashboard/components/shared/DeleteButton';
 import { createTestHook } from 'util/test_support';
 
 const boxStyles = {
     marginBottom: '10px',
+    display: 'flex',
 };
 
 const controlTextStyles = {
@@ -30,7 +31,7 @@ const KeyInput = ({
     onChange,
     onClickDelete,
 }) =>
-    <Box flex style={boxStyles}>
+    <div style={boxStyles}>
         <Text
             value={item}
             onChange={(e, data) => onChange(data.value)}
@@ -38,7 +39,7 @@ const KeyInput = ({
             placeholder={placeholder}
         />
         <DeleteButton onClick={onClickDelete} />
-    </Box>;
+    </div>;
 
 KeyInput.propTypes = {
     item: PropTypes.string.isRequired,
@@ -62,7 +63,7 @@ const KeyValueInput = ({
 }) => {
     const noOptionsMessage = <div>{_('Enter value').t()}</div>;
     return (
-        <Box flex style={boxStyles} {...createTestHook(module.id, 'DashboardParameters')}>
+        <div style={boxStyles} data-test="parameter">
             <Text
                 value={item.key}
                 onChange={(e, data) => onChange({
@@ -71,7 +72,7 @@ const KeyValueInput = ({
                 })}
                 placeholder={keyPlaceholder}
                 style={controlTextStyles}
-                {...createTestHook(null, 'ParameterKey')}
+                {...createTestHook(null, 'parameterKey')}
             />
             <div style={delimiterStyles}>{delimiter}</div>
             <ComboBox
@@ -83,7 +84,7 @@ const KeyValueInput = ({
                 placeholder={valuePlaceholder}
                 noOptionsMessage={noOptionsMessage}
                 style={controlTextStyles}
-                {...createTestHook(null, 'ParameterValue')}
+                {...createTestHook(null, 'parameterValue')}
             >
                 {_.map(candidateTokens, ({ token, description }) => (
                     <ComboBox.Option
@@ -94,7 +95,7 @@ const KeyValueInput = ({
                 ))}
             </ComboBox>
             <DeleteButton onClick={onClickDelete} />
-        </Box>
+        </div>
     );
 };
 
@@ -139,6 +140,7 @@ const Parameters = ({
         label={label}
         controlsLayout="none"
         tooltip={tooltip}
+        {...createTestHook(module.id, 'parameters')}
     >
         {items.map((item, index) => {
             const updateItem = newItem => onChange([

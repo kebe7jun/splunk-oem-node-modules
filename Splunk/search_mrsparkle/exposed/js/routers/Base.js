@@ -97,7 +97,6 @@ define([
             this.enableSplunkBar = true;
             this.enableAppBar = true;
             this.enablePageView = true;
-            this.enableFooter = true;
             this.showAppsList = true;
 
             this.fetchUser = true;
@@ -211,7 +210,6 @@ define([
                     this.pageView = new PageView({
                         splunkBar: this.enableSplunkBar,
                         showAppsList: this.showAppsList,
-                        footer: this.enableFooter,
                         showAppNav: this.enableAppBar,
                         section: this.model.application.get('page'),
                         loadingMessage: this.loadingMessage,
@@ -231,6 +229,7 @@ define([
                             apps: this.collection.appLocals,
                             tours: this.collection.tours,
                             managers: this.collection.managers,
+                            appsVisible: this.collection.appLocalsUnfiltered,
                             appsAll: this.collection.appLocalsUnfilteredAll
                         },
                         deferreds: {
@@ -650,7 +649,9 @@ define([
         // as browser compatibility issues arise, they can be encapsulated here
         setPageTitle: function(title) {
             this.deferreds.serverInfo.done(function(){
-                document.title = splunkUtils.sprintf(_('%s | DCE Monitor').t(), title);
+                var version = this.model.serverInfo.getVersion() || _('N/A').t();
+                var isLite = this.model.serverInfo.isLite();
+                document.title = splunkUtils.sprintf(_('%s | Splunk %s %s').t(), title, isLite ? 'Light' : '', version);
             }.bind(this));
         },
         applyPageUrlOptions: function() {
@@ -661,7 +662,6 @@ define([
                     var availablePageOptions = [
                         'hideSplunkBar',
                         'hideAppBar',
-                        'hideFooter',
                         'hideAppsList',
                         'hideChrome'
                     ];
@@ -677,16 +677,12 @@ define([
                     if (pageOptions.hideAppBar) {
                         that.enableAppBar = false;
                     }
-                    if (pageOptions.hideFooter) {
-                        that.enableFooter = false;
-                    }
                     if (pageOptions.hideAppsList) {
                         that.showAppsList = false;
                     }
                     if (pageOptions.hideChrome) {
                         that.enableSplunkBar = false;
                         that.enableAppBar = false;
-                        that.enableFooter = false;
                     }
                 }
             });

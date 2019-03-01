@@ -5,6 +5,8 @@ define(
         'views/Base',
         'models/shared/Error',
         'uri/route',
+        'splunk.util',
+        'contrib/text!./Master.html',
         './Master.pcss'
     ],
     function(
@@ -13,41 +15,34 @@ define(
         Base,
         ErrorModel,
         route,
+        splunkUtils,
+        template,
         css
     ) {
         return Base.extend({
             render: function() {
                 var root = this.model.application.get("root"),
                     locale = this.model.application.get("locale"),
-                    home = route.page(root, locale, "search"),
-                    back = document.referrer;
+                    home = route.home(root, locale),
+                    back = document.referrer,
+                    isLight = this.model.serverInfo && this.model.serverInfo.isLite(),
+                    returnLink = back || home,
+                    returnMessage = back ? _("go back.").t() : _("go to Splunk Homepage.").t();
+
                 this.$el.html(this.compiledTemplate({
                     _:_,
+                    splunkUtils: splunkUtils,
                     status: (this.model.error.get("status")) ? _(this.model.error.get("status")).t() : "",
                     message: (this.model.error.get("message")) ? _(this.model.error.get("message")).t() : "",
-                    returnMsg: (back) ? _("Back").t() : _("Go to Home").t(),
-                    returnRoute: back || home
+                    brandClass: isLight ? 'brand-light' : 'brand-enterprise'
                 }));
 
-                if (back) {
-                    this.$(".return-link a").prepend('<i class="icon-chevron-left"/>');
-                }
+                this.$(".error-message > p").append(
+                    splunkUtils.sprintf(_('Click <a class="return-to-splunk-home" href="' + returnLink + '">here</a> to %s').t(), returnMessage)
+                );
                 return this;
             },
-            template: '\
-                <div class="error-page-container"> \
-                    <div class="error-header section-header"> \
-                        <h1 class="error-title">Oops!</h1> \
-                        <h2 class="error-description"><%= status %></h2> \
-                    </div> \
-                    <div class="error-body"> \
-                        <h3><%= message %></h3> \
-                        <h3 class="return-link"> \
-                            <a href="<%= returnRoute %>"> <%= returnMsg %> </a> \
-                        </h3> \
-                    </div> \
-                </div> \
-            '
+            template: template
         });
     }
 );

@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
     var $ = require('jquery');
     var _ = require('underscore');
-    var mvc = require('./mvc');
     var BaseSplunkView = require('./basesplunkview');
     var TokenAwareModel = require('./tokenawaremodel');
     var SharedModels = require('./sharedmodels');
@@ -47,7 +46,9 @@ define(function(require, exports, module) {
         initialize: function() {
             BaseSplunkView.prototype.initialize.apply(this, arguments);
             this.configure();
-            this.model = this.options.reportModel || TokenAwareModel._createReportModel();
+            this.model = this.options.reportModel || TokenAwareModel._createReportModel({}, {
+                _tokenRegistry: this.options.settingsOptions.registry
+            });
             this.syncSettingsAndReportModel(this.settings, this.model);
             this.syncGenericVizSettings(this.settings, this.model);
             if (!this.options.reportModel || this.options.forceNormalizeSettings) {
@@ -190,11 +191,10 @@ define(function(require, exports, module) {
                 prefix: 'display.visualizations.custom.',
                 include: ['type', 'height']
             });
-            // No need to exclude any options for this sync, the external viz wrapper will filter the
-            // properties as they are passed to the viz code and allow only options in the correct namespace.
             this._settingsSync = Utils.syncModels(settings, report, {
                 auto: true,
-                prefix: 'display.visualizations.custom.'
+                prefix: 'display.visualizations.custom.',
+                exclude: ['managerid', 'id', 'name', 'data', 'type', 'drilldownRedirect', 'pagerPosition', 'refreshDisplay']
             });
         },
 
@@ -404,7 +404,9 @@ define(function(require, exports, module) {
         },
 
         _clearPrimaryResults: function() {
-            this.viz.getPrimaryDataSource().clearSearchResults();
+            if (this.viz.getPrimaryDataSource()) {
+                this.viz.getPrimaryDataSource().clearSearchResults();
+            }
             if(this.paginator) {
                 this.paginator.settings.set('itemCount', 0);
             }

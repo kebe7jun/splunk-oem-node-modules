@@ -31,7 +31,7 @@ ${csrf_hidden_input()}
                             <option value="cron" ${'selected="selected"' if saved_search.ui_schedule == 'cron' else ''}>${_('Run on custom schedule (cron schedule)')}</option>
                         </select>
                         <div class="cron" style="padding-top:6px">
-                            <input type="text" name="ui_cron" value="${saved_search.schedule.cron_schedule or ''}"/>
+                            <input type="text" name="ui_cron" value="${saved_search.schedule.cron_schedule or '' |h}"/>
                             <p class="note">
                                 ${_('00 18 * * * (every day at 6 PM) <a href="%s" class="spl-icon-external-link-xsm" target="_blank">Learn more</a>') % generateSelfHelpLink('learnmore.alert.schedsearch') | n }
                             </p>

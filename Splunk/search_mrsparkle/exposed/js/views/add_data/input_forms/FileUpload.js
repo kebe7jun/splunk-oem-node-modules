@@ -119,6 +119,7 @@ define(
                 var that = this;
                 var dropzone = this.$('.dropzone');
                 var inputReference = this.$('#inputReference');
+                var dragOverClass = 'drop-zone-drag-over';
                 var file;
                 this.updateSelectedFileLabel();
 
@@ -136,6 +137,7 @@ define(
                     .on('drop', function(e){
                         e.stopPropagation();
                         e.preventDefault();
+                        $(this).removeClass(dragOverClass);
                         var files = e.originalEvent.dataTransfer.files;
                         if(files.length > 1){
                             that.collection.flashMessages.reset([{
@@ -143,7 +145,7 @@ define(
                                 type: 'error',
                                 html: _('Multiple files selected. Try again, with only one file selected.').t()
                             }]);
-                        }else{
+                        } else {
                             var file = files[0];
                             that.model.input.set('ui.name', file.name);
                             that.updateSelectedFileLabel();
@@ -152,6 +154,11 @@ define(
                     })
                     .on('dragover', function (e) {
                         e.preventDefault();
+                        $(this).addClass(dragOverClass);
+                    })
+                    .on('dragleave', function (e) {
+                        e.preventDefault();
+                        $(this).removeClass(dragOverClass);
                     });
             },
             isInputValid: function(file){
@@ -311,21 +318,21 @@ define(
             },
             faqListUpload: [
                 {
-                    question: _('What kinds of files can Splunk index?').t(),
-                    answer: _('Many kinds. Splunk recognizes many different file formats, and you can \
-                    configure it to recognize many more.').t()
+                    question: _('What kinds of files can the Splunk platform index?').t(),
+                    answer: _('Many kinds. The Splunk platform recognizes many different file formats, and you can ' +
+                    'configure it to recognize many more.').t()
                 },
                 {
                     question: _('What is a source?').t(),
-                    answer: _('A source is a file, a network stream, or a specialized output such as a Windows Event Log \
-                    channel. Splunk uses the "source" field of an indexed event to identify the event\’s \
-                    original location or method of input.').t()
+                    answer: _('A source is a file, a network stream, or a specialized output such as a Windows Event Log ' +
+                    'channel. The Splunk platform uses the "source" field of an indexed event to identify the event\'s ' +
+                    'original location or method of input.').t()
                 },
                 {
-                    question: _('How do I get remote data onto my Splunk instance?').t(),
-                    answer: _('If the data is on a machine on the same network, you can map or mount a drive to access \
-                    the data. The most popular option is to forward the data by installing a universal forwarder on \
-                    the machine that contains the data.').t()
+                    question: _('How do I get remote data onto my Splunk platform instance?').t(),
+                    answer: _('If the data is on a machine on the same network, you can map or mount a drive to access ' +
+                    'the data. The most popular option is to forward the data by installing a universal forwarder on ' +
+                    'the machine that contains the data.').t()
                 }
             ]
 

@@ -1,6 +1,6 @@
 {
   "name": "rxjs",
-  "version": "5.5.0",
+  "version": "5.5.12",
   "description": "Reactive Extensions for modern JavaScript",
   "main": "./Rx.js",
   "config": {
@@ -165,8 +165,6 @@
   },
   "typings": "./Rx.d.ts",
   "dependencies": {
-    "symbol-observable": "^1.0.1"
-  },
-  "module": "./_esm5/Rx.js",
-  "es2015": "./_esm2015/Rx.js"
+    "symbol-observable": "1.0.1"
+  }
 }

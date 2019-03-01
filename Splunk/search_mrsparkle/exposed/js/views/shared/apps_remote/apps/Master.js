@@ -37,7 +37,8 @@ define(
                     this.collection.appsRemote.each(function(model, index) {
                         var appView = new _AppView({
                             model: $.extend(true, {appRemote: model}, this.model),
-                            collection: this.collection
+                            collection: this.collection,
+                            isSHC: this.options.isSHC
                         });
                         this.children['app' + index] = appView;
                         this.$el.append(appView.render().el); 

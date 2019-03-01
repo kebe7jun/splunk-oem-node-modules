@@ -40,7 +40,7 @@ define([
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
             this.listenTo(this.model.state, 'change:masterEvent', this.debouncedRender);
-            this.listenTo(this.model.state, 'change:delimitedBounds change:regex change:delimFieldNames', function() {
+            this.listenTo(this.model.state, 'change:delimItems change:regex change:delimFieldNames', function() {
                 this.trigger('action:hideMasterEventViewer');
                 this.updateEventTable();
             });
@@ -104,12 +104,12 @@ define([
         },
 
         updateEventTable: function() {
-            var bounds = this.model.state.get('delimitedBounds') || [];
+            var items = this.model.state.get('delimItems') || [];
             var masterEvent = this.model.state.get('masterEvent');
             var fieldNames = this.model.state.get('delimFieldNames');
-            if (_.isUndefined(fieldNames) || fieldNames.length < bounds.length) {
+            if (_.isUndefined(fieldNames) || fieldNames.length < items.length) {
                 fieldNames = [];
-                for (var i=1; i<=bounds.length; i++) {
+                for (var i=1; i<=items.length; i++) {
                     fieldNames.push('field' + i);
                 }
                 this.model.state.set({'delimFieldNames': fieldNames}, {silent: true});
@@ -118,12 +118,12 @@ define([
             var $header = $('<tr>');
             var $row = $('<tr>');
 
-            _(bounds).each(function(val, i) {
+            _(items).each(function(val, i) {
                 var hdrName = (!_.isUndefined(fieldNames[i])) ? fieldNames[i] : ('field' + (i+1));
                 var color = fieldExtractorUtils.getFieldColorWithIndex(i);
                 var hdrVal= '<span>' + _.escape(hdrName) + '<i class="icon-pencil"></i></span>';
                 var colValue = '<span class="highlighted-match highlighted-' + color + '">' +
-                    _.escape(masterEvent.substring(val['start'], val['end'])) + '</span>';
+                    _.escape(val) + '</span>';
                 var th = $('<td>').addClass('masterevt-hdr').data('fieldnum', i).append(hdrVal);
                 var td = $('<td>').addClass('masterevt-col').data('fieldnum', i).data('fieldname', hdrName).append(colValue);
                 $header.append(th);

@@ -31,7 +31,7 @@ isCloud = util.isCloud()
     }
 </script>
 
-<div class="dataInputsWrapper forwardReceive">
+<div class="dataInputsWrapper forwardReceive settingsIndex noSettingsIndexDesc">
 <!--     <div class="forwardReceiveHelp">${_('Set up forwarding and receiving between two or more Splunk instances.')}</div> -->
     % if (not isLite) and (can_edit_tcp_defaults or can_edit_tcp_server):
     <div class="fieldsetWrapper">
@@ -48,7 +48,7 @@ isCloud = util.isCloud()
                 <td class="input_name">
                     <a href="${make_url(['manager', namespace, 'data', 'outputs', 'tcp', 'default', 'tcpout'], _qs=dict(action='edit'))}">${_('Forwarding defaults')}</a>
                 </td>
-                <td></td>
+                <td class="actions"></td>
             </tr>
             % endif
             % if can_edit_tcp_server:
@@ -56,8 +56,8 @@ isCloud = util.isCloud()
                 <td class="input_name">
                     <a href="${make_url(['manager', namespace, 'data', 'outputs', 'tcp', 'server'])}">${_('Configure forwarding')}</a>
                 </td>
-                <td>
-                    <a href="${make_url(['manager', namespace, 'data', 'outputs', 'tcp', 'server', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a>
+                <td class="actions">
+                    <a class="add-new" href="${make_url(['manager', namespace, 'data', 'outputs', 'tcp', 'server', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a>
                 </td>
             </tr>
             % endif
@@ -84,8 +84,8 @@ isCloud = util.isCloud()
                 <td class="input_name">
                     <a href="${make_url(['manager', namespace, 'data', 'inputs', 'tcp', 'cooked'])}">${_('Configure receiving')}</a>
                 </td>
-                <td>
-                    <a href="${make_url(['manager', namespace, 'data', 'inputs', 'tcp', 'cooked', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a>
+                <td class="actions">
+                    <a class="add-new" href="${make_url(['manager', namespace, 'data', 'inputs', 'tcp', 'cooked', '_new'], _qs=dict(action='edit'))}">${_('Add new')}</a>
                 </td>
             </tr>
         </table>

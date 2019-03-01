@@ -9,7 +9,7 @@ define([
             'splunk.util',
             'splunk.legend',
             'uri/route',
-            'splunk-charting'
+            '@splunk/charting'
         ],
         function(
             $,
@@ -58,7 +58,8 @@ define([
 
             this.listenTo(this.getPrimaryDataSource(), 'destroy', this.empty);
             this.onExternalPaletteChange = _(this.onExternalPaletteChange).bind(this);
-            SplunkLegend.register(this.cid);
+            this.legendId = (this.options.parentCid || '') + this.cid;
+            SplunkLegend.register(this.legendId);
             SplunkLegend.addEventListener('labelIndexMapChanged', this.onExternalPaletteChange);
         },
         empty:  function() {
@@ -70,7 +71,7 @@ define([
         remove: function() {
             this.removed = true;
             this.destroyChart();
-            SplunkLegend.unregister(this.cid);
+            SplunkLegend.unregister(this.legendId);
             SplunkLegend.removeEventListener('labelIndexMapChanged', this.onExternalPaletteChange);
             return VisualizationBase.prototype.remove.apply(this, arguments);
         },
@@ -304,7 +305,7 @@ define([
             this.chart.prepare(dataSet, {});
             var fieldList = this.chart.getFieldList();
             if(this.chart.requiresExternalColorPalette()) {
-                SplunkLegend.setLabels(this.cid, fieldList);
+                SplunkLegend.setLabels(this.legendId, fieldList);
                 this.externalPalette = this.getExternalColorPalette();
                 this.chart.setExternalColorPalette(this.externalPalette.fieldIndexMap, this.externalPalette.numLabels);
             }

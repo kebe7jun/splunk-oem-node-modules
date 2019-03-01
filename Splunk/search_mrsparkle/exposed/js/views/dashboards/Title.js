@@ -42,7 +42,7 @@ define(['module', 'underscore', 'views/Base', 'views/dashboards/AddDashboard'], 
                     <button class="btn btn-primary add-dashboard"><%- _("Create New Dashboard").t() %></button>\
                 </div>\
             <% } %>\
-            <h2 class="section-title"><i class="icon-dashboard"></i> <%- _("Dashboards").t() %></h2>\
+            <h2 class="section-title"><%- _("Dashboards").t() %></h2>\
             <p class="section-description">\
             <%- _("Dashboards include searches, visualizations, and input controls that capture and present available data.").t() %>\
             </p>\

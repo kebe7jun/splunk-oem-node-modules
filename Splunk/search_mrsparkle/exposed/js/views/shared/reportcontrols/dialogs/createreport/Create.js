@@ -49,7 +49,6 @@ define(
                 this.children.title = new ControlGroup({
                     label: _("Title").t(),
                     controlType:'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.inmem.entry.content,
                         modelAttribute: 'name'
@@ -60,7 +59,6 @@ define(
                 this.children.description = new ControlGroup({
                     label: _("Description").t(),
                     controlType:'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.inmem.entry.content,
                         modelAttribute: 'description',
@@ -126,9 +124,8 @@ define(
                 this.children.timeRangePickerToggle = new ControlGroup({
                     label: _("Time Range Picker").t(),
                     controlType:'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             { value: '1', label: _('Yes').t() },
                             { value: '0', label: _('No').t() }
@@ -143,7 +140,6 @@ define(
                     this.children.selectApp = new ControlGroup({
                         label: _("App").t(),
                         controlType: 'SyntheticSelect',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             modelAttribute: "app",
                             model: this.model.inmem.entry.acl,
@@ -232,7 +228,7 @@ define(
                             this.model.inmem.entry.content.set({'display.statistics.show': '0'});
                             this.model.inmem.entry.content.set({'display.visualizations.show': '1'});
                         }
-                        
+
                     } else {
                         this.model.inmem.entry.content.set({'display.statistics.show': '1'});
                         this.model.inmem.entry.content.set({'display.visualizations.show': '0'});

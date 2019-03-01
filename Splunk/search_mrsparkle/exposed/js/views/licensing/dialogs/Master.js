@@ -102,40 +102,47 @@ define(
                 var dropzone = this.$(Modal.BODY_SELECTOR).find('.dropzone');
                 var licenseFileInput = this.$(Modal.BODY_SELECTOR).find('.license-file-input');
                 var licenseTextArea = this.$(Modal.BODY_SELECTOR).find('.license-pastebin-textarea');
+                var dragOverClass = 'drop-zone-drag-over';
+                var self = this;
 
                 licenseFileInput
                     .on('change', function(e){
+                      $(this).removeClass(dragOverClass);
                         if (e.target.files) {
                             if (e.target.files.length > 1) {
                                 this.showMultipleFilesError();
                             }
                             else {
-                                this.file = e.target.files[0];
-                                this.licenseText = '';
-                                this.showLicenseFileReady();
-                                this.updateFileLabel(this.file.name);
+                                self.file = e.target.files[0];
+                                self.licenseText = '';
+                                self.showLicenseFileReady();
+                                self.updateFileLabel(self.file.name);
                             }
                         }
-                    }.bind(this));
+                    });
 
                 dropzone
                     .on('drop', function(e){
                         e.stopPropagation();
                         e.preventDefault();
+                        $(this).removeClass(dragOverClass);
                         var files = e.originalEvent.dataTransfer.files;
                         if(files.length > 1){
-                            this.showMultipleFilesError();
+                            self.showMultipleFilesError();
                         }
                         else {
-                            this.file = files[0];
-                            this.renderValidation();
+                            self.file = files[0];
+                            self.renderValidation();
                         }
-                    }.bind(this));
-
-                dropzone
+                    })
                     .on('dragover', function (e) {
                         e.preventDefault();
-                    }.bind(this));
+                        $(this).addClass(dragOverClass);
+                    })
+                    .on('dragleave', function (e) {
+                        e.preventDefault();
+                        $(this).removeClass(dragOverClass);
+                    });
 
                 licenseTextArea
                     .on('input', function(e) {
@@ -266,7 +273,7 @@ define(
                         return _('You are about to upgrade to Splunk Enterprise. This upgrade cannot be reversed. Learn more about the difference between Splunk Enterprise and Splunk Light: ').t();
                     }
                 }
-                return _('').t();
+                return '';
             },
 
             renderResults: function(fileName, stringBuffer) {

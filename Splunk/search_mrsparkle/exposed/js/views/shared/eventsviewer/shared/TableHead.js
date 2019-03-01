@@ -57,7 +57,7 @@ define(
             template: '\
                 <tr>\
                     <% if (allowRowExpand) { %>\
-                        <th class="col-info"><i class="icon-info"></i></th>\
+                        <th class="col-info" aria-label="info" tabindex="0"><i class="icon-info"></i></th>\
                     <% } %>\
                     <% if (allowLineNum) { %>\
                         <th class="line-num <%- is_ie7 %> <%- showWarnings ? "merge-right": "" %>">&nbsp;</th>\
@@ -67,9 +67,9 @@ define(
                     <% } %>\
                     <% _.each(labels, function(label, index) { %>\
                         <% if (index == labels.length-1) { %>\
-                            <th class="col-<%- index %> <%- is_ie7 %> <%- is_ie8 %>"><%- _(label).t() %></th>\
+                            <th class="col-<%- index %> <%- is_ie7 %> <%- is_ie8 %>" tabindex="0"><%- _(label).t() %></th>\
                         <% } else { %>\
-                            <th class="col-<%- index %> <%- is_ie7 %>"><%- _(label).t() %></th>\
+                            <th class="col-<%- index %> <%- is_ie7 %>" tabindex="0"><%- _(label).t() %></th>\
                         <% } %>\
                     <% }) %>\
                 </tr>\

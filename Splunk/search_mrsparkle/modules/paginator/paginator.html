@@ -5,9 +5,9 @@
     <ul>
          <li class="previous">
            {{ if (it.p.previous_exists()) { }}
-               <a href="#offset={{= it.p.previous_offset()}} ">&laquo; ${_('prev')}</a>
+               <a href="#offset={{= it.p.previous_offset()}} ">&laquo; ${_('Prev')}</a>
            {{ } else { }}
-               <a href="#" class="disabled">&laquo; ${_('prev')}</a>
+               <a href="#" class="disabled">&laquo; ${_('Prev')}</a>
            {{ } }}
         </li>
         {{ for (var i=0; i<it.p.page_range.length; i++) { }}
@@ -16,9 +16,9 @@
         {{ } }}
         <li class="next">
             {{ if (it.p.next_exists()) { }}
-                <a href="#offset={{= it.p.next_offset() }}">${_('next')} &raquo;</a>
+                <a href="#offset={{= it.p.next_offset() }}">${_('Next')} &raquo;</a>
             {{ } else { }}
-                <a href="#" class="disabled">${_('next')} &raquo;</a>
+                <a href="#" class="disabled">${_('Next')} &raquo;</a>
             {{ } }}
         </li>
     </ul>

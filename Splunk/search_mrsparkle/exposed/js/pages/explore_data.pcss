@@ -130,7 +130,7 @@
 .dataexplorer-components-directoryitemstable {
 
   .table-striped .dataexplorer-components-directoryitemrow.active > td {
-    background-color: $blueDark;
+    background-color: $accentColorD20;
     &, > a {
       color: $white;
     }
@@ -183,7 +183,7 @@ header {
   position: absolute;
   left: 0;
   right: 0;
-  top: 25px;
+  top: calc($navbarHeight + $appBarHeight);
   bottom: 0px;
 }
 
@@ -281,6 +281,7 @@ header {
 
   .sharing-section {
     padding-left: 20px;
+    clear: both;
   }
 
   @media all {
@@ -416,13 +417,13 @@ header {
   .success-container {
     width: 700px;
     margin: 0 auto;
-    margin-top: 70px;
+    padding-top: $spacing;
   }
 
   .icon-check-circle {
     float: left;
     font-size: 50px;
-    color: $splunkGreen;
+    color: $successColor;
     margin-right: 15px;
     line-height: 33px;
 
@@ -434,7 +435,7 @@ header {
   }
 
   .success-header {
-    font-family: Roboto;
+    font-family: $sansFontFamily;
     font-weight: 200px;
     font-size: 24px;
     margin-bottom: 5px;
@@ -445,7 +446,7 @@ header {
   }
 
   .btn-success {
-    width: 120px;
+    width: 150px;
     margin-right: 15px;
   }
 

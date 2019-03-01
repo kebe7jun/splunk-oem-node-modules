@@ -10,7 +10,7 @@ isLite = util.isLite()
 %>
 <style type="text/css">
 #permissions table {
-    width:318px;    
+    width:318px;
 }
 #permissions table td {
     padding:5px;
@@ -29,46 +29,41 @@ isLite = util.isLite()
     margin: 0;
 }
 #permissions table {
-    border-bottom:1px solid #CCC;
-}
-#permissions table thead td {
-    font-size:12px;
-    padding-top:20px;
-    vertical-align:top;
+    border-bottom:1px solid #c3cbd4;
 }
 #permissions table thead td.col2, #permissions table thead td.col3 {
     text-align:center;
 }
 #permissions table tbody tr.world td {
     font-weight:bold;
-    border-bottom:1px solid #CCC;
+    border-bottom:1px solid #c3cbd4;
 }
 #permissions table tbody tr.world td.col1 {
-    border-left:1px solid #CCC;
-    border-top:1px solid #CCC;
+    border-left:1px solid #c3cbd4;
+    border-top:1px solid #c3cbd4;
 }
 #permissions table tbody tr.world td.col2 {
-    border-top:1px solid #CCC;
-    text-align:center;    
+    border-top:1px solid #c3cbd4;
+    text-align:center;
 }
 #permissions table tbody tr.world td.col3 {
-    border-right:1px solid #CCC;
-    border-top:1px solid #CCC;
-    text-align:center;    
+    border-right:1px solid #c3cbd4;
+    border-top:1px solid #c3cbd4;
+    text-align:center;
 }
 #permissions table tbody tr.roles td.col1 {
-    border-left:1px solid #CCC;;
+    border-left:1px solid #c3cbd4;;
 }
 #permissions table tbody tr.roles td.col2 {
-    text-align:center; 
+    text-align:center;
 }
 #permissions table tbody tr.roles td.col3 {
-    border-right:1px solid #CCC;
-    text-align:center;  
+    border-right:1px solid #c3cbd4;
+    text-align:center;
 }
 #permissions .sharingRadios {
     margin-top:5px;
-    margin-bottom:10px;   
+    margin-bottom:10px;
 }
 </style>
 % if error:
@@ -79,9 +74,9 @@ isLite = util.isLite()
 % endif
 <div id="permissions" class="editFormWrapper">
     % if entity:
-        <% sharing_option_values = [x[0] for x in sharing_options] %> 
+        <% sharing_option_values = [x[0] for x in sharing_options] %>
         <form action="${action_path | h}" method="post" class="entityEditForm">
-            <!--  
+            <!--
                 entity data:
                 ${entity | h}
             -->
@@ -92,12 +87,12 @@ isLite = util.isLite()
                 % if sharing != 'system' and endpoint_base != 'apps/local' and len(sharing_options) > 1:
                     <div class="fieldsetWrapper">
                         <fieldset>
-                            <legend class="labelLegend">${_('%s%s should appear in') % (object_label[:1].upper(), object_label[1:]) | h}</legend>
+                            <legend class="labelLegend topLegendLabel">${_('%s%s should appear in') % (object_label[:1].upper(), object_label[1:]) | h}</legend>
                             <div class="sharingRadios">
                                 % for i, sharing_option in enumerate(sharing_options):
-                                   <input type="radio" id="sharing_${sharing_option[0] | h}" name="sharing" value="${sharing_option[0] | h}" class="radio"${' checked="checked"' if sharing_option[0]==sharing else ''}${'' if modifiable and sharing in sharing_option_values else ' disabled="disabled"'}/> <label for="sharing_${sharing_option[0] | h}">${sharing_option[1] | h}</label>
+                                   <input type="radio" id="sharing_${sharing_option[0] | h}" name="sharing" value="${sharing_option[0] | h}" class="radio"${' checked="checked"' if sharing_option[0]==sharing else ''}${'' if modifiable and sharing in sharing_option_values else ' disabled="disabled"'}/> <label for="sharing_${sharing_option[0] | h}">${sharing_option[1] | h}</label><br />
                                 % endfor
-                            </div>          
+                            </div>
                         </fieldset>
                     </div>
                 % endif
@@ -127,7 +122,7 @@ isLite = util.isLite()
                                 % for i, sharing_option in enumerate(sharing_options):
                                    <input type="radio" id="sharing_${sharing_option[0] | h}" name="sharing" value="${sharing_option[0] | h}" class="radio"${' checked="checked"' if sharing_option[0]==sharing_lite else ''}${'' if modifiable and sharing_lite in sharing_option_values else ' disabled="disabled"'}/> <label for="sharing_${sharing_option[0] | h}">${sharing_option[1] | h}</label>
                                 % endfor
-                            </div>          
+                            </div>
                         </fieldset>
                     % elif len(sharing_options) > 0:
                         <input type="hidden" name="sharing" value="${sharing_options[0][0] | h}" />
@@ -139,7 +134,7 @@ isLite = util.isLite()
                 <table>
                     <thead><!-- no header fixed header not support x-platform -->
                         <tr>
-                            <td class="col1">${_('Roles')}</td>                
+                            <td class="col1">${_('Roles')}</td>
                             <td class="col2">${_('Read')}</td>
                             <td class="col3">${_('Write')}</td>
                         </tr>
@@ -174,12 +169,12 @@ isLite = util.isLite()
                         % for i, sharing_option in enumerate(sharing_options):
                             <input type="radio" id="sharing_${sharing_option[0] | h}" name="sharing" value="${sharing_option[0] | h}" class="radio"${' checked="checked"' if sharing_option[0]==sharing else ''}${'' if modifiable and sharing in sharing_option_values else ' disabled="disabled"'}/><label for="sharing_${sharing_option[0] | h}">${sharing_option[1] | h}</label>
                         % endfor
-                    </div>          
+                    </div>
                 </fieldset>
             </div>
-            % endif    
+            % endif
             <div class="jmFormActions">
-                <button type="button" class="splButton-secondary" onclick="window.location='${cancel_url.replace("'", "%27")}';"><span>${_('Cancel')}</span></button>
+                <button type="button" class="splButton-secondary" onclick="window.location='${splunk.util.sanitizeUrl(cancel_url.replace("'", "%27")) | h}';"><span>${_('Cancel')}</span></button>
                 % if perms_modifiable:
                     <button type="submit" class="splButton-primary"><span>${_('Save')}</span></button>
                 % endif
@@ -189,7 +184,7 @@ isLite = util.isLite()
         <p>
             ${_('Sorry, the permissions for this object are unavailable.')}
         </p>
-        <button type="button" class="splButton-primary" onclick="window.location='${cancel_url.replace("'", "%27")}';"><span>${_('Go back')}</span></button>
+        <button type="button" class="splButton-primary" onclick="window.location='${splunk.util.sanitizeUrl(cancel_url.replace("'", "%27")) | h}';"><span>${_('Go back')}</span></button>
     % endif
 </div>
 <script type="text/javascript">
@@ -289,7 +284,7 @@ isLite = util.isLite()
         }else{
             //enable all roles write checkboxes
             disableElements(roleWriteElements, false);
-        }            
+        }
     }
     /**
      * Handle check action on non-world checkbox. Check adjacent read if this element is checked do nothing or check it.
@@ -307,7 +302,7 @@ isLite = util.isLite()
      * Set the disabled value for an array of elements.
      *
      * @param {Array} elements An array of elements.
-     * @param {Boolean} bool The desired disable value. 
+     * @param {Boolean} bool The desired disable value.
      */
     function disableElements(elements, bool){
          for(var i=0; i<elements.length; i++){
@@ -316,4 +311,4 @@ isLite = util.isLite()
     }
     $(PARENT_SELECTOR).bind("click keydown", onUIEvent);
 })();
-</script> 
+</script>

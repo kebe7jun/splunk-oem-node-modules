@@ -58,7 +58,7 @@ isLite = util.isLite()
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="${make_url('/static/img/bookmark/apple-icon-72x72-precomposed.png')}" />
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="${make_url('/static/img/bookmark/apple-icon-114x114-precomposed.png')}" />
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="${make_url('/static/img/bookmark/apple-icon-144x144-precomposed.png')}" />
-        <meta name="msapplication-TileColor" content="#65A637">
+        <meta name="msapplication-TileColor" content="#5CC05C">
         <meta name="msapplication-TileImage" content="${make_url('/static/img/bookmark/ms-tileicon-144x144.png')}">
 
         <title><%self:title/></title>
@@ -80,7 +80,7 @@ isLite = util.isLite()
             window.$C = ${json_decode(config.getConfig(cherrypy.session.get('sessionKey')))}
         % endif
         </script>
-        <%lib:script_tags files="${['/static/js/contrib/deprecated/jquery-1.8.3.js', '/static/js/i18n.js', '/static/js/splunk.js', '/static/js/util.js']}" />
+        <%lib:script_tags files="${['/static/js/contrib/jquery/jquery.js', '/static/js/i18n.js', '/static/js/splunk.js', '/static/js/util.js']}" />
         <script type="text/javascript" src="${make_url('/i18ncatalog?autoload=1')}"></script>
         <%self:css/>
         <%self:custom_css/>

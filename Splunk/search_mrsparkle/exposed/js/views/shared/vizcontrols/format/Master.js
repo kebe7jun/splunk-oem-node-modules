@@ -94,17 +94,26 @@ define([
         },
 
         render: function() {
+            var self = this;
             this.$el.html(this.compiledTemplate());
 
             this.tooltip({
-                title: _('Format visualization').t()
+                title: _('Format visualization').t(),
+                placement: function() {
+                    if (this.$element &&
+                        this.$element[0] &&
+                        this.$element[0].getBoundingClientRect().top < 30) {
+                        return 'bottom';
+                    }
+                    return 'top';
+                }
             });
 
             return this;
         },
 
         template: '\
-            <a class="btn-pill popdown-toggle format" href="#">\
+            <a class="btn-pill popdown-toggle format" href="#" aria-label="<%- _("Format visualization").t() %>">\
                 <i class="icon-paintbrush"/><span class="link-label"><%- _("Format").t() %></span>\
             </a>\
         '

@@ -89,8 +89,7 @@ function (
             this.$('.label-closed').hide();
             if (animate) {
                 $header.slideDown({
-                    duration: '200',
-                    easing: 'linear'
+                    duration: 225
                 });
             } else {
                 $header.show();
@@ -100,10 +99,9 @@ function (
             var $header = this.$('.header');
             this.$('.label-closed').show();
             this.$('.label-open').hide();
-            if(animate) {
+            if (animate) {
                 $header.slideUp({
-                    duration: '200',
-                    easing: 'linear'
+                    duration: 225
                 });
             } else {
                 $header.hide();
@@ -120,7 +118,7 @@ function (
         },
         template: '\
             <div class="header">\
-                <h3><%= exploreString %></h3><a href="#" class="close" title="<%- _("Close").t() %>"><span class="icon-x"></span></a>\
+                <h1><%= exploreString %></h1><a href="#" class="close" title="<%- _("Close").t() %>"><span class="icon-x"></span></a>\
             </div>\
             <a href="#" class="toggle"><span class="label-closed"><%= exploreString %></span><span class="label-open"><%- _("Close").t() %></span></a>\
         '

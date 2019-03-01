@@ -1,5 +1,9 @@
-WDIO Sauce Labs Service [![Code Climate](https://codeclimate.com/github/webdriverio/wdio-sauce-service/badges/gpa.svg)](https://codeclimate.com/github/webdriverio/wdio-sauce-service)
-==========
+WDIO Sauce Labs Service
+=======================
+
+[![Code Climate](https://codeclimate.com/github/webdriverio/wdio-sauce-service/badges/gpa.svg)](https://codeclimate.com/github/webdriverio/wdio-sauce-service) [![dependencies Status](https://david-dm.org/webdriverio/wdio-sauce-service/status.svg)](https://david-dm.org/webdriverio/wdio-sauce-service)
+
+***
 
 > A WebdriverIO service. It updates the job metadata ('name', 'passed', 'tags', 'public', 'build', 'custom-data') and runs Sauce Connect if desired.
 
@@ -10,7 +14,7 @@ The easiest way is to keep `wdio-sauce-service` as a devDependency in your `pack
 ```json
 {
   "devDependencies": {
-    "wdio-sauce-service": "~0.1"
+    "wdio-sauce-service": "~0.4.4"
   }
 }
 ```
@@ -26,7 +30,7 @@ Instructions on how to install `WebdriverIO` can be found [here.](http://webdriv
 ## Configuration
 
 In order to use the service you need to set `user` and `key` in your `wdio.conf.js` file. It will automatically
-use Sauce Labs to run your integration tests. If you want to use [Sauce Connect](https://wiki.saucelabs.com/display/DOCS/Using+Sauce+Connect+for+Testing+Behind+the+Firewall+or+on+Localhost)
+use Sauce Labs to run your integration tests. If you want to use [Sauce Connect](https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy)
 you just need to set `sauceConnect: true`.
 
 ```js
@@ -64,6 +68,28 @@ Apply Sauce Connect options (e.g. to change port number or logFile settings). Se
 
 Type: `Object`<br>
 Default: `{}`
+
+## Development
+
+All commands can be found in the package.json. The most important are:
+
+Watch changes:
+
+```sh
+$ npm run watch
+```
+
+Run tests (there are non yet, please help to get unit test - see [here](https://github.com/webdriverio/wdio-sauce-service/issues/1)):
+
+```sh
+$ npm test
+```
+
+Build package:
+
+```sh
+$ npm build
+```
 
 ----
 

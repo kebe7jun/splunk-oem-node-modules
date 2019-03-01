@@ -46,8 +46,9 @@ define([
                     isExternal: this.model.entity.isExternal(),
                     canDelete: this.model.entity.canDelete(),
                     downloadLink: this.model.entity.getExportUrl(),
-                    canLaunch: this.model.appLocal && this.model.appLocal.canLaunch(),
-                    launchUrl: this.model.entity.getLaunchUrl()
+                    canSetup: this.model.appLocal && this.model.appLocal.canSetup(),
+                    setupUrl: this.model.entity.getSetupUrl(),
+                    appTemplate: this.model.entity.getTemplate()
                 });
 
                 this.$el.html(html);
@@ -58,13 +59,14 @@ define([
             },
 
             template: '\
-            <% if (canLaunch) { %>\
-                <a href="<%- launchUrl %>" class="launch-app"><%- _("Launch").t() %></a>\
+            <% if (canSetup) { %>\
+                <a href="<%- setupUrl %>" class="setup-app"><%- _("Set up").t() %></a>\
             <% } if (!isExternal) { %>\
                 <% if (canDelete) { %>\
                     <a href="#" class="uninstall-app"><%- _("Uninstall").t() %></a>\
-                <% } %>\
+                <% } if (!appTemplate) { %>\
                     <a href="<%- downloadLink %>" class="entity-action export-action"><%- _("Download").t() %></a>\
+                <% } %>\
             <% } %>\
              '
         });

@@ -12,11 +12,11 @@
 
 .noMessages {
     composes: body from '../../MenuDialog.pcssm';
-    padding: 10px;
+    padding: $spacingDouble;
     color: $textColor;
     text-align: center;
     min-width: 200px;
-    background: $white;
+    background: $popupBackgroundColor;
 }
 
 .messageList {
@@ -24,10 +24,11 @@
     overflow-y: auto;
     width: 360px;
     margin: 0;
+    border-radius: $containerInnerBorderRadius $containerInnerBorderRadius 0 0;
 }
 
 .splunkMessagesDivider {
-    border-top: 1px solid $borderColor;
+    border-top: $borderDefault;
     height: 0px;
 }
 

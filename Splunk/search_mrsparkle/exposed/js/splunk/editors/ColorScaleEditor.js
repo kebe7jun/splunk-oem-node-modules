@@ -191,7 +191,7 @@ define(function(require, exports, module) {
                         scale = new MinMidMaxScale();
                         colorPalette = new MinMidMaxColorPalette()
                             .set("minColor", Color.fromString("#FFFFFF"))
-                            .set("maxColor", Color.fromString("#31A35F"));
+                            .set("maxColor", Color.fromString("#53A051"));
                         break;
                     case "threshold":
                         scale = new ThresholdScale()

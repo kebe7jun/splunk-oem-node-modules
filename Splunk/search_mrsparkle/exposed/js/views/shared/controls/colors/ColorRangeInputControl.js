@@ -22,7 +22,7 @@ define([
             },
 
             events: {
-                'keyup .input-value': function(e) {
+                'keyup .color-range-label-control-value': function(e) {
                     e.preventDefault();
                     if (!this._handleInputChange) {
                         this._handleInputChange = _.debounce(function(e) {
@@ -41,23 +41,18 @@ define([
             render: function() {
                 if (!this.$el.html()) {
                     this.$el.html(this.compiledTemplate({
-                        label: this.options.label,
-                        customClass: this.options.customClass || 'color-control-right-col'
+                        label: this.options.label
                     }));
                 }
-                this.$('.input-value').val(this.model.get('value'));
+                this.$('.color-range-label-control-value').val(this.model.get('value'));
                 return this;
             },
 
             template: '\
-                <div class="control-group <%- customClass %>">\
-                    <label class="control-label input-label">\
-                        <span><%- label %></span>\
-                    </label>\
-                    <div class="controls input-value-container">\
-                        <input class="input-value" type="text">\
-                    </div>\
-                </div>\
+                <label class="color-range-label-control-label">\
+                    <%- label %>\
+                </label>\
+                <input class="color-range-label-control-value" type="text">\
             '
         });
 

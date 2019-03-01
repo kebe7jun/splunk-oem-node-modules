@@ -88,8 +88,7 @@ define(
                     borderRadius: 0
                 },
                 sliderNotch: {
-                    height: 0,
-                    marginLeftRight: 0
+                    height: 0
                 }
             },
             setSyntheticSteps: function() {
@@ -128,14 +127,13 @@ define(
                 this.styles.sliderBar.top = (this.styles.slider.height - this.styles.sliderBar.height) / 2;
                 this.styles.sliderBar.borderRadius = this.styles.sliderBar.height / 2;
                 // Set handle styles
-                this.styles.sliderHandle.width = this.styles.sliderBar.width / 20;
-                this.styles.sliderHandle.height = this.styles.sliderHandle.width;
+                this.styles.sliderHandle.width = 18;
+                this.styles.sliderHandle.height = 18;
                 this.styles.sliderHandle.top = (this.styles.slider.height - this.styles.sliderHandle.height) / 2 - 1;
                 this.styles.sliderHandle.borderRadius = this.styles.sliderHandle.width / 2 + 1;
                 // Set notch styles
-                this.notches = Math.round((this.options.max - this.options.min) / this.options.step) + 1;
-                this.styles.sliderNotch.height = this.styles.sliderBar.height * 1.5;
-                this.styles.sliderNotch.marginLeftRight = (this.styles.sliderBar.width - 2 * this.styles.sliderHandle.width) / (this.notches - 1);
+                this.notches = Math.round((this.options.max - this.options.min) / this.options.step);
+                this.styles.sliderNotch.height = this.styles.sliderBar.height;
             },
             activate: function() {
                 Control.prototype.activate.apply(this, arguments);
@@ -157,6 +155,7 @@ define(
 
                     $(window).on('mousemove.slider', function(e) {
                         this.update(e);
+                        this.$el.find('.slider-handle').focus();
                     }.bind(this));
 
                     $(window).on('mouseup.slider', function() {
@@ -164,6 +163,7 @@ define(
                         $('body').removeClass('text-highlight-disabled');
                         $(window).off('.slider');
                     }.bind(this));
+                    this.$el.find('.slider-handle').focus();
                 },
                 'mousemove .slider': function(e) {
                     this.update(e);
@@ -203,18 +203,25 @@ define(
             },
             syncToModel: function() {
                 var modelValue = this.options.model.get(this.options.modelAttribute),
-                    newModelValue;
+                    newModelValue = this.getFormattedValue(this.value);
                 if (this.syntheticStepsMode) {
-                    newModelValue = this.syntheticValueAt(this.value);
                     if (modelValue === undefined || modelValue != newModelValue) {
                         this.setValue(newModelValue);
                     }
                 } else {
-                    newModelValue = this.value.toFixed(3);
                     if (modelValue === undefined || this.snapToValue(parseFloat(modelValue)).toFixed(3) != newModelValue) {
                         this.setValue(newModelValue);
                     }
                 }
+            },
+            getFormattedValue: function(value) {
+                var modelValue;
+                if (this.syntheticStepsMode) {
+                    modelValue = this.syntheticValueAt(value);
+                } else {
+                    modelValue = value.toFixed(3);
+                }
+                return modelValue;
             },
             select: function() {
                 this.selected = true;
@@ -230,41 +237,51 @@ define(
                 return Math.round(exactValue / this.options.step) * this.options.step;
             },
             offsetToValue: function(offset) {
-                var padding = this.styles.sliderHandle.width / 2;
-                var range = this.styles.sliderBar.width - 4 * padding;
-                var offsetInRange = offset - padding;
-                var valueInRange = offsetInRange / range;
+                var position = offset / this.styles.sliderBar.width;
                 var trueRange = this.options.max - this.options.min;
-                var desiredValue = this.options.min + valueInRange * trueRange;
+                var desiredValue = this.options.min + position * trueRange;
                 return this.snapToValue(desiredValue);
             },
             valueToOffset: function(value) {
-                var padding = this.styles.sliderHandle.width / 2;
-                var range = this.styles.sliderBar.width - 4 * padding;
-                var trueRange = this.options.max - this.options.min;
-                var valueInRange = (value - this.options.min) / trueRange;
-                return padding + valueInRange * range - 1;
+                var position = this.valueToPosition(value);
+                return (position * this.styles.sliderBar.width);
             },
             update: function(e) {
                 if (this.selected) {
-                    var padding = this.styles.sliderHandle.width / 2;
-                    var offset = e.clientX - this.$el.find('.slider-bar').offset().left - padding;
-                    this.value = this.offsetToValue(offset);
-                    this.render();
+                    var offset = e.clientX - this.$el.find('.slider-bar').offset().left;
+                    var newValue = this.offsetToValue(offset);
+                    if (newValue !== this.value) {
+                        this.value = newValue;
+                        this.render();
+                    }
                 }
+            },
+            valueToPosition: function(value) {
+                return (value - this.options.min) / (this.options.max - this.options.min);
             },
             render: function() {
                 var currentLabel = this.syntheticStepsMode && this.options.enableStepLabels ? this.syntheticLabelAt(this.value) : undefined;
-                this.styles.sliderHandle.left = this.valueToOffset(this.value);
+                var position = this.valueToPosition(this.value);
+                this.styles.sliderHandle.left = this.valueToOffset(this.value) - 9;
+                var modelValue = this.getFormattedValue(this.value);
+                
                 this.$el.html(_.template(this.template, {
                     currentLabel: currentLabel,
                     width: this.options.width,
                     notches: this.notches,
+                    notchWidth: this.options.width / this.notches,
                     styles: this.styles,
+                    position: position,
+                    selected: this.selected,
                     sliderHandleClass: this.selected ? 'slider-handle-moving' : '',
                     sliderHandleTooltipClass: this.selected && currentLabel ? 'slider-handle-tooltip' : '',
                     minLabel: this.options.minLabel,
-                    maxLabel: this.options.maxLabel
+                    maxLabel: this.options.maxLabel,
+                    ariaLabel: this.options.ariaLabel,
+                    ariaValueMin: this.options.min,
+                    ariaValueMax: this.options.max,
+                    ariaValueNow: this.value,
+                    ariaValueText: modelValue
                 }));
                 return this;
             },
@@ -274,12 +291,14 @@ define(
                         <div class="slider-min-label"><%= minLabel %></div>\
                     <% } %>\
                     <div class="slider" style="width:<%= styles.sliderBar.width %>px;height:<%= styles.slider.height %>px;">\
-                        <div class="slider-bar" style="width:<%= styles.sliderBar.width %>px;height:<%= styles.sliderBar.height %>px;top:<%= styles.sliderBar.top %>px;border-radius:<%= styles.sliderBar.borderRadius %>px;">\
-                            <% for (var i = 0; i < notches; i++) { %>\
-                                <div class="slider-notch" style="height:<%= styles.sliderNotch.height %>px;left:<%= styles.sliderHandle.width + i * styles.sliderNotch.marginLeftRight %>px;"></div>\
+                        <div class="slider-bar" style="width:<%= styles.sliderBar.width %>px;height:<%= styles.sliderBar.height %>px;top:<%= styles.sliderBar.top %>px;border-radius:<%= styles.sliderBar.borderRadius %>px; background: linear-gradient(to right, #5c6773, #5c6773 <%= position * 100 %>%, #c3cbd4 <%= position * 100 %>%, #c3cbd4)">\
+                            <% if (selected) { %>\
+                                <% for (var i = 0; i < notches; i++) { %>\
+                                    <div class="slider-notch <%= i <= position * notches ? "left-of-handle" : "right-of-handle" %>" style="height:<%= styles.sliderNotch.height %>px;left:<%= i * notchWidth %>px;"></div>\
+                                <% } %>\
                             <% } %>\
                         </div>\
-                        <div class="slider-handle <%= sliderHandleTooltipClass %> <%= sliderHandleClass %>" tabindex="0" style="width:<%= styles.sliderHandle.width %>px;height:<%= styles.sliderHandle.height %>px;top:<%= styles.sliderHandle.top %>px;left:<%= styles.sliderHandle.left %>px;border-radius:<%= styles.sliderHandle.borderRadius %>px" data-label="<%- currentLabel %>"></div>\
+                        <button aria-label="<%= ariaLabel %>" aria-valuetext="<%= ariaValueText %>"aria-valuenow="<%= ariaValueNow %>" aria-valuemin="<%= ariaValueMin %>"  aria-valuemax="<%= ariaValueMax %>" role="slider" class="slider-handle <%= sliderHandleTooltipClass %> <%= sliderHandleClass %>" tabindex="0" style="width:<%= styles.sliderHandle.width %>px;height:<%= styles.sliderHandle.height %>px;top:<%= styles.sliderHandle.top %>px;left:<%= styles.sliderHandle.left %>px;border-radius:<%= styles.sliderHandle.borderRadius %>px" data-label="<%- currentLabel %>"></button>\
                     </div>\
                     <% if (maxLabel) { %>\
                         <div class="slider-max-label"><%= maxLabel %></div>\

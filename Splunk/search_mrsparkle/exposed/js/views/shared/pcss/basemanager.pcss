@@ -7,8 +7,6 @@
   padding-top: 8px;
 
   .table-toolbar {
-    padding: 0px 8px;
-
     > * {
       min-height: 28px;
       padding: 0 0 4px;
@@ -17,19 +15,24 @@
         display: inline-block;
       }
     }
+    .collection-count {
+      height: $inputHeight;
+      line-height: $inputHeight;
+      vertical-align: top;
+      margin-right: $spacingQuarter;
+    }
     .filter-container {
-      border-top: 1px solid $grayLightMedium;
+      border-top: 1px solid $gray80;
       padding-top: 10px;
 
       .collection-count {
-        margin-left: 13px;
         min-width: 170px;
 
         .shared-waitspinner {
           float: left;
           width: 14px;
           height: 14px;
-          margin: 2px 3px 2px 2px;
+          margin: 8px 3px 2px 2px;
         }
       }
 
@@ -44,12 +47,36 @@
       }
 
     }
+
+    .text-name-filter-placeholder {
+        width: 200px;
+        vertical-align: top;
+    }
   }
   .entities-grid {
     clear: both;
+    background-color: $white;
+    @mixin create-card-table;
+
     .col-entity-select {
       width: 50px;
     }
+
+    > thead > tr > .sorts {
+      padding: 0;
+
+      > a {
+        width: 100%;
+        display: inline-block;
+        padding: $tableCellPadding;
+        box-sizing: border-box;
+
+        &:focus {
+          @mixin focus-element-inset $tableHeaderBackground;
+        }
+      }
+    }
+
     .col-actions {
       white-space: nowrap;
       width: 150px;
@@ -69,9 +96,10 @@
         transition: background, 0.2s;
       }
       &:hover td {
-        background-color: $tableBackgroundHover;
+        background-color: $tableRowHoverColor;
         transition: background, 0.02s;
       }
+
       .cell-name {
         word-break: break-all;
       }
@@ -83,7 +111,7 @@
       white-space: nowrap;
     }
     td.cell-actions, td.actions, td.cell-name {
-      a {
+      a:not(:last-child) {
         margin-right: 1em;
       }
       .disabled-action {
@@ -101,12 +129,12 @@
     }
     i.icon-check, i.desc, i.asc, i.icon-lock {
       width: 14px;
-      color: $green;
+      color: $successColor;
       font-size: 1.2em;
       display: inline-block;
 
       &.disable-icon {
-        color: $red;
+        color: $errorColor;
       }
     }
     .list-dotted dt {
@@ -142,7 +170,7 @@
 
 .splPipe {
   margin: 0 5px 0 0;
-  color: $grayLight;
+  color: $textGray;
 }
 
 .sharing-info {
@@ -164,7 +192,7 @@
   margin-top: 15px;
   .icon-alert {
     font-size: 25px;
-    color: $yellow;
+    color: $warningColor;
     margin-right: 5px;
   }
 }

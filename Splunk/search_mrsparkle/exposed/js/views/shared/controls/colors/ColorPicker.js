@@ -64,7 +64,7 @@ define(
                 },
                 'keyup .hex-input': function(e) {
                     var hexColor = colorUtil.replaceSymbols(e.target.value, '0x');
-                    var $miniSwatch = this.$('.mini-swatch');
+                    var $miniSwatch = this.$('.hex-input-submit');
                     if (VALID_COLOR_REGEX.test(hexColor)) {
                         $miniSwatch.removeClass('disabled');
                         $miniSwatch.css({
@@ -75,7 +75,7 @@ define(
                         $miniSwatch.css({ 'background-color': '' });
                     }
                 },
-                'click .mini-swatch': function(e) {
+                'click .hex-input-submit': function(e) {
                     e.preventDefault();
                     this.applyInputIfValid();
                 }
@@ -114,12 +114,10 @@ define(
                         <% }) %>\
                     </ul>\
                 </div>\
-                <div class="input-prepend input-append views-shared-controls-textcontrol">\
-                    <span class="add-on">#</span>\
+                <div class="hex-input-container">\
+                    <span class="hex-input-prepend">#</span>\
                     <input type="text" class="hex-input" value="<%- currentColor %>">\
-                    <span class="add-on">\
-                        <a href="#" class="mini-swatch" style="background-color: #<%- currentColor %>;"></a>\
-                    </span>\
+                    <a href="#" class="btn hex-input-submit" style="background-color: #<%- currentColor %>;"></a>\
                 </div>\
             '
         });

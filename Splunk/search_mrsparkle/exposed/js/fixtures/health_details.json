@@ -1,0 +1,302 @@
+{  
+    "links":{  
+        "_acl":"/services/server/health/_acl"
+    },
+    "origin":"https://localhost:8000/services/server/health",
+    "updated":"2018-01-26T16:58:17-08:00",
+    "generator":{  
+        "build":"feec1a2c25ee1bb07cfdb3ceda64fa018dee639b",
+        "version":"20180126"
+    },
+    "entry":[  
+        {  
+            "name":"splunkd",
+            "id":"https://localhost:8000/services/server/health/splunkd",
+            "updated":"1969-12-31T16:00:00-08:00",
+            "links":{  
+                "alternate":"/services/server/health/splunkd",
+                "list":"/services/server/health/splunkd"
+            },
+            "author":"system",
+            "acl":{  
+                "app":"",
+                "can_list":true,
+                "can_write":true,
+                "modifiable":false,
+                "owner":"system",
+                "perms":{  
+                    "read":[  
+                        "admin",
+                        "power",
+                        "splunk-system-role"
+                    ],
+                    "write":[  
+
+                    ]
+                },
+                "removable":false,
+                "sharing":"system"
+            },
+            "content":{  
+                "eai:acl":null,
+                "features":{  
+                    "Data Forwarding":{  
+                        "features":{  
+                            "Splunk-2-Splunk Forwarding":{  
+                                "features":{  
+                                    "TCPOutAutoLB-0":{  
+                                        "health":"red",
+                                        "messages":{  
+                                            "1":{  
+                                                "message":"01-26-2018 16:58:17.332 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "10":{  
+                                                "message":"01-26-2018 16:57:17.741 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "11":{  
+                                                "message":"01-26-2018 16:57:09.026 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 230 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "12":{  
+                                                "message":"01-26-2018 16:56:59.081 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 220 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "13":{  
+                                                "message":"01-26-2018 16:56:57.830 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "14":{  
+                                                "message":"01-26-2018 16:56:49.062 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 210 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "15":{  
+                                                "message":"01-26-2018 16:56:39.022 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 200 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "16":{  
+                                                "message":"01-26-2018 16:56:37.937 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "17":{  
+                                                "message":"01-26-2018 16:56:29.080 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 190 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "18":{  
+                                                "message":"01-26-2018 16:56:19.029 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 180 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "19":{  
+                                                "message":"01-26-2018 16:56:18.055 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "2":{  
+                                                "message":"01-26-2018 16:58:09.034 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 290 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "20":{  
+                                                "message":"01-26-2018 16:56:09.053 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 170 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "21":{  
+                                                "message":"01-26-2018 16:55:59.102 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 160 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "22":{  
+                                                "message":"01-26-2018 16:55:58.125 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "23":{  
+                                                "message":"01-26-2018 16:55:49.057 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 150 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "24":{  
+                                                "message":"01-26-2018 16:55:39.037 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 140 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "25":{  
+                                                "message":"01-26-2018 16:55:38.254 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "26":{  
+                                                "message":"01-26-2018 16:55:29.045 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 130 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "27":{  
+                                                "message":"01-26-2018 16:55:19.065 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 120 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "28":{  
+                                                "message":"01-26-2018 16:55:18.405 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "29":{  
+                                                "message":"01-26-2018 16:55:09.033 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 110 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "3":{  
+                                                "message":"01-26-2018 16:57:59.098 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 280 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "30":{  
+                                                "message":"01-26-2018 16:54:59.003 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 100 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "31":{  
+                                                "message":"01-26-2018 16:54:58.519 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "32":{  
+                                                "message":"01-26-2018 16:54:49.009 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 90 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "33":{  
+                                                "message":"01-26-2018 16:54:39.097 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 80 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "34":{  
+                                                "message":"01-26-2018 16:54:38.597 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "35":{  
+                                                "message":"01-26-2018 16:54:29.044 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 70 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "36":{  
+                                                "message":"01-26-2018 16:54:19.094 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 60 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "37":{  
+                                                "message":"01-26-2018 16:54:18.688 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "38":{  
+                                                "message":"01-26-2018 16:54:09.009 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 50 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "39":{  
+                                                "message":"01-26-2018 16:53:59.051 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 40 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "4":{  
+                                                "message":"01-26-2018 16:57:57.456 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "40":{  
+                                                "message":"01-26-2018 16:53:58.846 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "41":{  
+                                                "message":"01-26-2018 16:53:49.091 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 30 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "42":{  
+                                                "message":"01-26-2018 16:53:39.099 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 20 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "43":{  
+                                                "message":"01-26-2018 16:53:38.995 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "44":{  
+                                                "message":"01-26-2018 16:53:29.069 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 10 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "45":{  
+                                                "message":"01-26-2018 16:53:18.982 -0800 INFO  TcpOutputProc - Group default-autolb-group initialized with maxQueueSize=512000 in bytes.\n"
+                                            },
+                                            "5":{  
+                                                "message":"01-26-2018 16:57:49.039 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 270 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "6":{  
+                                                "message":"01-26-2018 16:57:39.067 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 260 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "7":{  
+                                                "message":"01-26-2018 16:57:37.617 -0800 WARN  TcpOutputProc - Cooked connection to ip=10.2.23.4:23456 timed out\n"
+                                            },
+                                            "8":{  
+                                                "message":"01-26-2018 16:57:29.010 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 250 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            },
+                                            "9":{  
+                                                "message":"01-26-2018 16:57:19.078 -0800 WARN  TcpOutputProc - Tcpout Processor: The TCP output processor has paused the data flow. Forwarding to output group default-autolb-group has been blocked for 240 seconds. This will probably stall the data flow towards indexing and other network outputs. Review the receiving system's health in the Splunk Monitoring Console. It is probably not accepting data.\n"
+                                            }
+                                        },
+                                        "reasons":{  
+                                            "red":{  
+                                                "1":{  
+                                                    "doc":"TODO: doc link",
+                                                    "due_to_stanza":"feature:s2s_autolb",
+                                                    "due_to_threshold":"indicator:s2s_connections:red",
+                                                    "due_to_threshold_value":70,
+                                                    "indicator":"s2s_connections",
+                                                    "reason":"More than 70% of forwarding destinations have failed.  Ensure your hosts and ports in outputs.conf are correct.  Also ensure that the indexers are all running, and that any SSL certificates being used for forwarding are correct.",
+                                                    "tip":"TODO: quick tip"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "health":"red",
+                                "messages":null,
+                                "reasons":null
+                            }
+                        },
+                        "health":"red",
+                        "messages":null,
+                        "reasons":null
+                    },
+                    "File Monitor Input":{  
+                        "features":{  
+                            "BatchReader-0":{  
+                                "health":"green"
+                            },
+                            "TailReader-0":{  
+                                "health":"red",
+                                "messages":{  
+                                    "1":{  
+                                        "message":"01-26-2018 16:53:26.126 -0800 WARN  TailReader - Could not send data to output queue (parsingQueue), retrying...\n"
+                                    },
+                                    "2":{  
+                                        "message":"01-26-2018 16:53:19.145 -0800 INFO  TailReader - State transitioning from 1 to 0 (initOrResume).\n"
+                                    },
+                                    "3":{  
+                                        "message":"01-26-2018 16:53:19.145 -0800 INFO  TailReader - State transitioning from 1 to 0 (initOrResume).\n"
+                                    },
+                                    "4":{  
+                                        "message":"01-26-2018 16:53:19.145 -0800 INFO  TailReader - batchreader0 waiting to be un-paused\n"
+                                    },
+                                    "5":{  
+                                        "message":"01-26-2018 16:53:19.144 -0800 INFO  TailReader - Starting batchreader0 thread\n"
+                                    },
+                                    "6":{  
+                                        "message":"01-26-2018 16:53:19.144 -0800 INFO  TailReader - tailreader0 waiting to be un-paused\n"
+                                    },
+                                    "7":{  
+                                        "message":"01-26-2018 16:53:19.143 -0800 INFO  TailReader - Starting tailreader0 thread\n"
+                                    },
+                                    "8":{  
+                                        "message":"01-26-2018 16:53:19.143 -0800 INFO  TailReader - Registering metrics callback for: batchreader0\n"
+                                    },
+                                    "9":{  
+                                        "message":"01-26-2018 16:53:19.143 -0800 INFO  TailReader - Registering metrics callback for: tailreader0\n"
+                                    }
+                                },
+                                "reasons":{  
+                                    "red":{  
+                                        "1":{  
+                                            "doc":"TODO: doc link",
+                                            "due_to_stanza":"feature:tailreader",
+                                            "due_to_threshold":"indicator:data_out_rate:red",
+                                            "due_to_threshold_value":2,
+                                            "indicator":"data_out_rate",
+                                            "reason":"The monitor input cannot produce data because splunkd's processing queues are full.  This will be caused by inadequate indexing or forwarding rate, or a sudden burst of incoming data.",
+                                            "tip":"TODO: quick tip"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "health":"red",
+                        "messages":null,
+                        "reasons":null
+                    },
+                    "Indexer Clustering":{  
+                        "features":{  
+                            "Search Head Connectivity":{  
+                                "health":"red",
+                                "messages":null,
+                                "reasons":{  
+                                    "red":{  
+                                        "1":{  
+                                            "doc":"TODO: doc link",
+                                            "due_to_stanza":"feature:searchheadconnectivity",
+                                            "due_to_threshold":"indicator:master_connectivity:red",
+                                            "due_to_threshold_value":1,
+                                            "indicator":"master_connectivity",
+                                            "reason":"Cannot connect to master node (https://svdev-fedora14-01.sv.splunk.com:8089). This may be caused by network problem or master node is down.",
+                                            "tip":"TODO: quick tip"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "health":"red",
+                        "messages":null,
+                        "reasons":null
+                    }
+                },
+                "health":"red"
+            }
+        }
+    ],
+    "paging":{  
+        "total":1,
+        "perPage":30,
+        "offset":0
+    },
+    "messages":[  
+
+    ]
+}

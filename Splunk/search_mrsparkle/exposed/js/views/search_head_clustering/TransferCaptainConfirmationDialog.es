@@ -14,15 +14,15 @@ import Modal from 'views/shared/Modal';
 import WaitSpinner from 'views/shared/waitspinner/Master';
 import './TransferCaptain.pcss';
 
-
 const BUTTON_RESTART = splunkUtils.sprintf(
     '<a href="#" class="btn btn-primary modal-btn-primary pull-right transfer-captain-btn"> %s </a>',
-    _('Start Transfer').t());
+    _('Start Transfer').t(),
+);
 
 export default Modal.extend({
     moduleId: module.id,
 
-     /**
+    /**
      * Opens a Dialog to initiate search head clustering captaincy transfer
      *
      * @param {object} options
@@ -102,10 +102,13 @@ export default Modal.extend({
 
         this.$(Modal.BODY_SELECTOR).append(this.children.flashMessages.render().el);
 
-        this.$(Modal.BODY_SELECTOR).append(_(this.bodyTemplate).template({
-            learnMoreLink: this.children.learnMoreLink,
-            targetCaptainName,
-        }));
+        this.$(Modal.BODY_SELECTOR).append(
+            _(this.bodyTemplate).template({
+                learnMoreLink: this.children.learnMoreLink,
+                linkClass: 'external learn-more-link',
+                targetCaptainName,
+            }),
+        );
 
         this.$(Modal.FOOTER_SELECTOR).append(BUTTON_RESTART);
         this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL_PULL_RIGHT);
@@ -122,7 +125,7 @@ export default Modal.extend({
             <p>
                 <i class="icon-alert"></i>
                 <%= _("Here are some details about what will happen if you choose to continue.").t() %>
-                <a class="external" href="<%- learnMoreLink %>" target="_blank"><%= _("Learn More").t() %></a>
+                <a class="<%- linkClass %>" href="<%- learnMoreLink %>" target="_blank"><%= _("Learn More").t() %></a>
             </p>
             <p><%= _("Are you sure you want to transfer captain to").t() %> <b><%= targetCaptainName %>?</b></p>
         </div>

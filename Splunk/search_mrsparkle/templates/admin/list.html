@@ -55,6 +55,55 @@ newInputMap = {
     'deployment/server/setup/data/inputs/remote_script': 'scripts'
 }
 
+newInputLabel = {
+    'data/inputs/win-event-log-collections/localhost': _('New Event Log'),
+    'data/inputs/win-event-log-collections': _('New Event Log Collection'),
+    'data/inputs/monitor': _('New Local File & Directory'),
+    'data/inputs/win-perfmon': _('New Local Performance Monitoring'),
+    'data/inputs/win-wmi-collections': _('New Remote Performance Monitoring'),
+    'data/inputs/tcp/raw': _('New Local TCP'),
+    'data/inputs/udp': _('New Local UDP'),
+    'data/inputs/registry': _('New Registry Monitoring'),
+    'data/inputs/ad': _('New Active Directory Monitoring'),
+    'data/inputs/WinHostMon': _('New Local Host Monitoring'),
+    'data/inputs/WinNetMon': _('New Splunk Network Monitoring'),
+    'data/inputs/WinPrintMon': _('New Local Print Monitoring'),
+    'data/inputs/script': _('New Local Script'),
+    'deployment/server/setup/data/inputs/remote_eventlogs': _('New Remote Windows Event Log'),
+    'deployment/server/setup/data/inputs/remote_perfmon': _('New Remote Windows Performance Monitoring'),
+    'deployment/server/setup/data/inputs/remote_monitor': _('New Remote File & Directory'),
+    'deployment/server/setup/data/inputs/tcp/remote_raw': _('New Remote TCP'),
+    'deployment/server/setup/data/inputs/remote_udp': _('New Remote UDP'),
+    'deployment/server/setup/data/inputs/remote_script': ('New Remote Script'),
+    'saved/searches': _('New Search'),
+    'saved/eventtypes': _('New Event Type'),
+    'saved/fvtags': _('New Tag'),
+    'saved/ntags': _('New Tag'),
+    'admin/tags': _('New Tag'),
+    'data/props/fieldaliases': _('New Field Alias'),
+    'data/props/calcfields': _('New Calculated Field'),
+    'data/props/extractions': _('New Field Extraction'),
+    'data/transforms/extractions': _('New Field Transformation'),
+    'data/props/sourcetype-rename': _('New Sourcetype Rename'),
+    'data/ui/workflow-actions': _('New Workflow Action'),
+    'data/lookup-table-files': _('New Lookup Table File'),
+    'data/transforms/lookups': _('New Lookup Definition'),
+    'data/props/lookups': _('New Automatic Lookup'),
+    'data/ui/times': _('New Time Range'),
+    'data/ui/views': _('New View'),
+    'scheduled/views': _('New View PDF Schedule'),
+    'data/ui/nav': _('New Navigation Menu'),
+    'messages': _('New Bulletin Message'),
+    'admin/macros': _('New Search Macro'),
+    'admin/commandsconf': _('New Search Command'),
+    'data/outputs/tcp/server': _('New Forwarding Host'),
+    'data/inputs/tcp/cooked': _('New Receiving Port'),
+    'search/distributed/peers': _('New Search Peer'),
+    'authentication/users': _('New User'),
+    'authorization/roles': _('New Role'),
+    'authentication/providers/LDAP': _('New LDAP'),
+}
+
 %>
 
 <%call expr="stylesheet_tags(cssFiles)"></%call>
@@ -62,11 +111,14 @@ newInputMap = {
 h3 {
     margin-top: 0;
 }
+form[name="actionControl"] {
+    overflow-x: scroll;
+}
 div.appList {
     height: 150px;
     width: 48%;
     float: left;
-    border: 1px solid #CCC;
+    border: 1px solid #c3cbd4;
     border-top-color: #DDD;
     border-left-color: #DDD;
     margin: 15px 0 0 15px;
@@ -87,14 +139,14 @@ div.appList {
 .app-enable {
     float: right;
     background-color: #61a035;
-    background-image: -moz-linear-gradient(top, #65a637, #5c9732);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#65a637), to(#5c9732));
-    background-image: -webkit-linear-gradient(top, #65a637, #5c9732);
-    background-image: -o-linear-gradient(top, #65a637, #5c9732);
-    background-image: linear-gradient(to bottom, #65a637, #5c9732);
+    background-image: -moz-linear-gradient(top, #5cc05c, #5c9732);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5cc05c), to(#5c9732));
+    background-image: -webkit-linear-gradient(top, #5cc05c, #5c9732);
+    background-image: -o-linear-gradient(top, #5cc05c, #5c9732);
+    background-image: linear-gradient(to bottom, #5cc05c, #5c9732);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff65a637', endColorstr='#ff5c9732', GradientType=0);
-    background-color: #65a637;
+    background-color: #5cc05c;
     border: 1px solid #4e802a;
     border-bottom-color: #4e802a;
     border-top-color: #4e802a;
@@ -105,6 +157,22 @@ div.appList {
  }
 </style>
 <script type="text/javascript">
+  /**
+    * Shifting action buttons down if there is a message at the top of the page.
+    */
+  $(function() {
+      var adjustButtons = function() {
+          var top = $('.SplunkModule.Message').height();
+          if (top > 0) {
+            $('.adminContentList .actionButtons').css('top', ((40 + top) + 'px'));
+          }
+      };
+      // CHange button position when messages change.
+      $(document).bind('messageLoad', adjustButtons);
+      $(document).bind('messageUnshift', adjustButtons);
+      $(document).bind('messageClear', adjustButtons);
+      adjustButtons();
+  });
   function doObjectAction(ctrl, link, name) {
     $('#ctrl').val(ctrl);
     $('#ctrl_link').val(link);
@@ -117,7 +185,7 @@ div.appList {
                 for link in entities[e].links:
                     if link[0] == 'disable':
                         numDisable += 1
-        %>                
+        %>
         if ((ctrl == "disable" && ${numDisable}==1) || (ctrl == "enable" && ${numDisable}==0) || (ctrl == "remove" && ${len(entities)}==1 && ${numDisable}==1)) {
             okToPost = confirm("${auth_change_confirm}");
             if (!okToPost){
@@ -155,7 +223,7 @@ div.appList {
         checkboxObject.name = displacedName;
         $(sprintf('<input type="hidden" name="%s" value="%s" />', expectedName, falseValue)).appendTo(formObject);
     }
-    
+
     $(function() {
         $('#appOnlyFilterCheckbox').bind('change', function() {
             generateProxyCheckbox(this, $('.appOnlyFilter'), '0');
@@ -205,7 +273,7 @@ except Exception, e:
         % if 'redirect' in kwargs:
             <input type="hidden" name="redirect" value="${kwargs['redirect'] | h}"/>
         % endif
-        
+
         ## EAI pagination
         <%
         try:
@@ -229,8 +297,8 @@ except Exception, e:
         if (spanEnd > totalResults):
             lastPage = True
             spanEnd = totalResults
-            
-        max_pages = 10    
+
+        max_pages = 10
         pager = paginator.Google(totalResults, count, max_pages=max_pages, item_offset=offset)
         page_range = []
         for page in pager.page_range:
@@ -241,15 +309,18 @@ except Exception, e:
                     'active':pager.is_active_page(page)
                 }
             )
-    
+
         %>
         % if endpoint_path == 'apps/local' and isLite:
             <!-- no filters with lite -->
         % else:
             <div class="eaiFilterControls splClearfix">
+                % if totalResults > 0:
+                    <p class="eaiResultsCount eaiResultsPageControl eaiFilterControl">${ungettext('Showing <span>%(first)s-%(last)s</span> of %(total)s item', 'Showing <span>%(first)s-%(last)s</span> of %(total)s items', totalResults) % dict(first=spanStart, last=spanEnd, total=totalResults)}</p>
+                % endif
                 % if canShowAppContext:
                     <div class="eaiFilterControl">
-                        <label for="appContextSelect">${_('App context')}</label>
+                        <span class="eaiFilterControlLabel">${_('App')}</span>
                         <select name="ns" onchange="document.pagingControl.submit()" id="appContextSelect">
                           <option value="-">${_('All')}</option>
                           % for option in nss:
@@ -257,10 +328,10 @@ except Exception, e:
                           % endfor
                         </select>
                     </div>
-                    
+
                     % if len(pwnrs) > 0:
                     <div class="eaiFilterControl">
-                        <label for="ownerSelect">${_('Owner')}</label>
+                        <span class="eaiFilterControlLabel">${_('Owner')}</span>
                         <select name="pwnr" onchange="document.pagingControl.submit()" id="ownerSelect">
                             % if len(pwnrs) == 250:
                             <option value="maxuserlimit" ${'disabled="disabled"'}>${_('List displays up to 250 Owner values. Use the search box to find additional Owners')}</option>
@@ -271,22 +342,43 @@ except Exception, e:
                             % endfor
                         </select>
                     </div>
-                    % endif                
+                    % endif
+                % endif
+                % if canShowAppContext:
+                    <div class="appOnlyFilter eaiFilterControl">
+                        <select name="app_only" onchange="document.pagingControl.submit()" id="appOnlyFilterSelect" ${'disabled="disabled"' if (ns=="-") else ''} ${"selected='selected'" if app_only else ''}>
+                            <option value="0" ${'selected="selected"' if not app_only else ''}>${_('Visible in the App')}</option>
+                            <option value="1" ${'selected="selected"' if app_only else ''}>${_('Created in the App')}</option>
+                        </select>
+                        <!-- <a href="${generateSelfHelpLink('learnmore.manager.appcontext')}" class="spl-icon-external-link-xsm" target="_blank">${_('Learn more')}</a> -->
+                    </div>
                 % endif
                 <div class="eaiFilterControl eaiSearchControl">
-                    <input name="search" type="text" value='${search | h}' class="eaiFilter" id="searchInput"> <!-- js needs to go somewhere else-->
+                    <input name="search" type="text" value='${search | h}' class="eaiFilter" id="searchInput" placeholder=${_('filter')}> <!-- js needs to go somewhere else-->
                     <input class="searchButton" value="" type="submit">
                 </div>
+
+                    <div class="eaiResultsPerPage eaiResultsPageControl eaiFilterControl">
+                        <select name="count" onchange="document.pagingControl.submit()" id="resultsPerPageSelect" style="width: auto;">
+                            % for i in resPerPage:
+                                <%
+                                    if i == count:
+                                        sel = "selected='selected'"
+                                    else:
+                                        sel = ""
+                                    endif
+                                %>
+                                <option value="${i}" ${sel}>${i} ${_('per page')}</option>
+                            % endfor
+                            % if count not in resPerPage and count != 0:
+                                <option disabled="disabled">---</option>
+                                <option selected='selected'>${count | h}</option>
+                            % endif
+                        </select>
+                    </div>
+
             </div>
-            
-            % if canShowAppContext:
-                <div class="appOnlyFilter eaiFilterControl">
-                    <input type="checkbox" id="appOnlyFilterCheckbox" class="checkbox" name="app_only" value="1" ${'disabled="disabled"' if (ns=="-") else ''} ${app_only and "checked='checked'" or ""}/>
-                    <label for="appOnlyFilterCheckbox">${_('Show only objects created in this app context')}</label>
-                    <a href="${generateSelfHelpLink('learnmore.manager.appcontext')}" class="spl-icon-external-link-xsm" target="_blank">${_('Learn more')}</a>
-                </div>
-            % endif
-                
+
             <div class="eaiPagination">
                 <div class="eaiPaginationHeader splClearfix">
                 % if endpoint_path == 'admin/LDAP-groups':
@@ -320,16 +412,28 @@ except Exception, e:
                             % elif endpoint_path in newInputMap:
                                 <% inputMode = 2 if endpoint_path.startswith('deployment/server/setup') else 1 %>
                                 <a class="splButton-primary" href="${make_url(['manager', namespace, 'adddata', 'selectsource' if inputMode == 1 else 'selectforwarders'], _qs=dict(input_mode=inputMode, input_type=newInputMap[endpoint_path]))}">
-                                    <span><%doc>TRANS: Clicked to create a new entry</%doc>${_('New')}</span>
+                                    % if endpoint_path in newInputLabel:
+                                        <span><%doc>TRANS: Clicked to create a new entry</%doc>${newInputLabel[endpoint_path]}</span>
+                                    % else:
+                                        <span><%doc>TRANS: Clicked to create a new entry</%doc>${_('New')}</span>
+                                    % endif
                                 </a>
                             % elif endpoint_path.startswith('data/inputs/') and endpoint_path != 'data/inputs/tcp/cooked':
                                 <a class="splButton-primary" href="${make_url(['manager', namespace, 'adddata', 'selectsource'], _qs=dict(input_mode=1, input_type=endpoint_path[len('data/inputs/'):], modinput=1))}">
-                                            <span><%doc>TRANS: Clicked to create a new entry</%doc>${_('New')}</span>
+                                    % if endpoint_path in newInputLabel:
+                                        <span><%doc>TRANS: Clicked to create a new entry</%doc>${newInputLabel[endpoint_path]}</span>
+                                    % else:
+                                        <span><%doc>TRANS: Clicked to create a new entry</%doc>${_('New')}</span>
+                                    % endif
                                 </a>
                             % elif endpoint_path == 'data/props/extractions':
                                 %if not isLite:
                                 <a class="splButton-primary" href="${make_url(['manager', namespace, endpoint_path, '_new'], _qs=dict(action='edit', ns=ns))}">
-                                    <span><%doc>TRANS: Clicked to create a new entry</%doc>${_('New')}</span>
+                                    % if endpoint_path in newInputLabel:
+                                        <span><%doc>TRANS: Clicked to create a new entry</%doc>${newInputLabel[endpoint_path]}</span>
+                                    % else:
+                                        <span><%doc>TRANS: Clicked to create a new entry</%doc>${_('New')}</span>
+                                    % endif
                                 </a>
                                 %endif
                                 <% appName = namespace if namespace != 'system' else 'search' %>
@@ -338,7 +442,11 @@ except Exception, e:
                                 </a>
                             % else:
                                 <a class="splButton-primary" href="${make_url(['manager', namespace, endpoint_path, '_new'], _qs=dict(action='edit', ns=ns))}">
-                                    <span><%doc>TRANS: Clicked to create a new entry</%doc>${_('New')}</span>
+                                    % if endpoint_path in newInputLabel:
+                                        <span><%doc>TRANS: Clicked to create a new entry</%doc>${newInputLabel[endpoint_path]}</span>
+                                    % else:
+                                        <span><%doc>TRANS: Clicked to create a new entry</%doc>${_('New')}</span>
+                                    % endif
                                 </a>
                             % endif
                         % endif
@@ -353,25 +461,23 @@ except Exception, e:
                 % if len(uiHelper) == 0:
                     ${_('Click here to start over from the <a href="%(url)s">manager home page.</a>') % dict(url=make_url("/manager"))}
                 % endif
-                
+
                 % if introText != 'None':
                     <div class="listIntroText">${introText | h}</div>
                 % endif
             </div> <!-- eaiPagination -->
-            
-            <div class="eaiResultsPageControls splClearfix">
-                % if totalResults > 0:
-                <p class="eaiResultsCount eaiResultsPageControl">${ungettext('Showing <span>%(first)s-%(last)s</span> of %(total)s item', 'Showing <span>%(first)s-%(last)s</span> of %(total)s items', totalResults) % dict(first=spanStart, last=spanEnd, total=totalResults)}</p>
-                % endif
 
-                <div class="Paginator eaiResultsPageControl">
-                    <% page_opts = copy.deepcopy(kwargs) %>
+            <div class="eaiResultsPageControls splClearfix">
+                <div class="Paginator topPaginator eaiResultsPageControl">
+                   <% page_opts = copy.deepcopy(kwargs) %>
                     <div class="ResultsContainer">
                         <ul>
                             <li class="previous">
                                 % if ( (spanStart > count) or (spanStart > 1) ):
                                     <% page_opts['offset'] = prevOffset %>
-                                    <a href="${make_url('', _qs=page_opts, translate=False)}"> <%doc>TRANS: Previous page</%doc>&laquo; ${_('prev')} </a>
+                                    <a href="${make_url('', _qs=page_opts, translate=False)}"> <%doc>TRANS: Previous page</%doc>&laquo; ${_('Prev')} </a>
+                                % elif (spanEnd < totalResults):
+                                    <a class="disabled" disabled>&laquo; ${_('Prev')} </a>
                                 % endif
                             </li>
                             % for page in page_range:
@@ -387,53 +493,32 @@ except Exception, e:
                             <li class="next">
                                 % if spanEnd < totalResults:
                                     <% page_opts['offset'] = newOffset %>
-                                    <a href="${make_url('', _qs=page_opts, translate=False)}"> <%doc>TRANS:Next page</%doc>${_('next')} &raquo; </a>
+                                    <a href="${make_url('', _qs=page_opts, translate=False)}"> <%doc>TRANS:Next page</%doc>${_('Next')} &raquo;</a>
+                                % elif ( (spanStart > count) or (spanStart > 1) ):
+                                    <a class="disabled" disabled>${_('Next')} &raquo;</a>
                                 % endif
                             </li>
                         </ul>
                     </div>
                 </div>
-
-                % if totalResults > 0:
-                <div class="eaiResultsPerPage eaiResultsPageControl">
-                    <label for="resultsPerPageSelect">${_('Results per page')}</label>
-                    <select name="count" class="short" onchange="document.pagingControl.submit()" id="resultsPerPageSelect">
-                        % for i in resPerPage:
-                        <%
-                        if i == count:
-                            sel = "selected='selected'"
-                        else:
-                            sel = ""
-                        endif
-                        %>
-                        <option ${sel}>${i}</option>
-                        % endfor
-                        % if count not in resPerPage and count != 0:
-                            <option disabled="disabled">---</option>
-                            <option selected='selected'>${count | h}</option>
-                        % endif
-                    </select>
-                </div>
-                % endif
-
             </div> <!-- eaiResultsPageControls -->
-            
+
             % for arg in kwargs:
                 % if not arg.lower().startswith('api.'):
                     <% continue %>
                 % endif
-                %try: 
+                %try:
                     <input type="hidden" name="${arg | h}" value="${kwargs[arg] | h}"/>
-                %except: 
+                %except:
                     <%helpers:message content="There was an error parsing url arguments, can not process this page." level="error"/>
                     <% return %>
                 %endtry
             % endfor
         % endif
     </form>
-        
+
     <% page_class = endpoint_path.replace('/','-').lower()  %>
-    <div class="listWrapper page-${page_class | h} splClearfix"> 
+    <div class="listWrapper page-${page_class | h} splClearfix">
             % if entitiesLen >= 0:
               <form name="actionControl" action="${make_url(['manager', namespace, endpoint_path, 'multidelete'])}" method="post">
                 ${csrf_hidden_input()}
@@ -442,37 +527,45 @@ except Exception, e:
                 <input type="hidden" name="ctrl_name" id="ctrl_name" value=""/>
                 <input type="hidden" name="showAppContext" id="showAppContext" value="${util.normalizeBoolean(uiHelper.get("showAppContext", "")) | h}"/>
                 % for arg in kwargs:
-                    %try: 
+                    %try:
                         <input type="hidden" name="${arg | h}" value="${kwargs[arg] | h}"/>
-                    %except: 
+                    %except:
                         <%helpers:message content="There was an error parsing url arguments, can not process this page." level="error"/>
                         <% return %>
                     %endtry
                 % endfor
 
+                % if endpoint_path in newInputLabel:
+                    <% newLabel = newInputLabel[endpoint_path] %>
+                % else:
+                    <% newLabel = _('New') %>
+                % endif
+
                 % if endpoint_path == 'apps/local' and isLite:
-                    <%call expr="genListRows(namespace, uiHelper, entities, endpoint_path, kwargs)"/>
+                    <%call expr="genListRows(namespace, uiHelper, entities, endpoint_path, kwargs, newLabel)"/>
                 % else:
                     <table class="splTable splTable-list">
-                        <%call expr="genListRows(namespace, uiHelper, entities, endpoint_path, showAdvancedEdit, kwargs)"/>
+                        <%call expr="genListRows(namespace, uiHelper, entities, endpoint_path, showAdvancedEdit, kwargs, newLabel)"/>
                     </table>
                 % endif
               </form>
             % endif
     </div><!-- listWrapper -->
-    
+
 
     % if (totalResults > count) and not (endpoint_path == 'apps/local' and isLite):
     <div class="eaiResultsPageControls splClearfix">
         <p class="eaiResultsCount eaiResultsPageControl">${ungettext('Showing <span>%(first)s-%(last)s</span> of %(total)s item', 'Showing <span>%(first)s-%(last)s</span> of %(total)s items', totalResults) % dict(first=spanStart, last=spanEnd, total=totalResults)}</p>
-        <div class="Paginator eaiResultsPageControl">
+        <div class="Paginator bottomPaginator eaiResultsPageControl">
            <% page_opts = copy.deepcopy(kwargs) %>
             <div class="ResultsContainer">
                 <ul>
                     <li class="previous">
                         % if ( (spanStart > count) or (spanStart > 1) ):
                             <% page_opts['offset'] = prevOffset %>
-                            <a href="${make_url('', _qs=page_opts, translate=False)}"> <%doc>TRANS: Previous page</%doc>&laquo; ${_('prev')} </a>
+                            <a href="${make_url('', _qs=page_opts, translate=False)}"> <%doc>TRANS: Previous page</%doc>&laquo; ${_('Prev')} </a>
+                        % elif (spanEnd < totalResults):
+                            <a class="disabled" disabled>&laquo; ${_('Prev')} </a>
                         % endif
                     </li>
                     % for page in page_range:
@@ -488,20 +581,26 @@ except Exception, e:
                     <li class="next">
                         % if spanEnd < totalResults:
                             <% page_opts['offset'] = newOffset %>
-                            <a href="${make_url('', _qs=page_opts, translate=False)}"> <%doc>TRANS:Next page</%doc>${_('next')} &raquo; </a>
+                            <a href="${make_url('', _qs=page_opts, translate=False)}"> <%doc>TRANS:Next page</%doc>${_('Next')} &raquo;</a>
+                        % elif ( (spanStart > count) or (spanStart > 1) ):
+                            <a class="disabled" disabled>${_('Next')} &raquo;</a>
                         % endif
                     </li>
                 </ul>
             </div>
         </div>
     </div> <!-- /.eaiResultsPageControls -->
-    % endif    
+    % endif
 
     <div class="moveObjectFormContainer">
       <form action="${make_url(['manager', namespace, endpoint_path, 'move'])}" name="moveControl" id="moveControl" method="post">
         <fieldset>
           <label for="appContextSelect_New">${_('App context:')}</label>
+          % if len(nss) == 1 and nss[0].get('value') == ns:
+          <select name="newns" id="appContextSelect_New" ${'disabled="disabled"'}>
+          % else:
           <select name="newns" id="appContextSelect_New">
+          % endif
             % for option in nss:
               % if option.get('value') != ns:
                 <option value="${option.get('value', '') | h}">${option.get("label") | h}</option>
@@ -517,7 +616,7 @@ except Exception, e:
         <input type="hidden" name="search" value="${search | h}"/>
         <input type="hidden" name="count" value="${count | h}"/>
         <input type="hidden" name="offset" value="${offset | h}"/>
-      </form>      
+      </form>
     </div>
 % endif
 </div>

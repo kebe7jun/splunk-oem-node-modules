@@ -29,7 +29,7 @@ define([
 
             var state = {
                 searchType: searchType,
-                search: searchType == 'postprocess' ? manager.settings.postProcessResolve(options) : manager.settings.resolve(options),
+                search: searchType === 'postprocess' ? manager.settings.postProcessResolve(_.extend({mergeParentsSearch : false}, options)) : manager.settings.resolve(options),
                 earliest_time: manager.settings.get('earliest_time', options),
                 latest_time: manager.settings.get('latest_time', options),
                 base: manager.settings.get('managerid'),

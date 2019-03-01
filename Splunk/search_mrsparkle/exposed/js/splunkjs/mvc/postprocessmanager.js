@@ -10,8 +10,6 @@ define(function(require, exports, module) {
     var common_algorithms = require('util/common_algorithms');
     var SplunkUtil = require('splunk.util');
     var TokenUtils = require('./tokenutils');
-    
-    var registry = mvc.Components;
 
     function mergeSearch(base, sub) {
         if (!sub) {
@@ -51,21 +49,28 @@ define(function(require, exports, module) {
             // since we're about to merge it with the base search
             var thisSearch = SearchModels.SearchQuery.prototype.resolve.call(this, _.defaults({ qualified: false }, options));
 
+            if (this.get('replaceTabsInSearch')) {
+                parentSearch = parentSearch.replace(/\t/g, ' ');
+                thisSearch && (thisSearch = thisSearch.replace(/\t/g, ' '));
+            }
+
             return mergeSearch(parentSearch, thisSearch);
         },
 
-        postProcessResolve: function() {
+        postProcessResolve: function(options) {
             var thisSearch = SearchModels.SearchQuery.prototype.resolve.apply(this, arguments);
 
             if (thisSearch && this.get('replaceTabsInSearch')) {
                 thisSearch = thisSearch.replace(/\t/g, ' ');
             }
 
-            var pm = this._manager.parent;
-            if (pm instanceof PostProcessSearchManager) {
-                var ps = pm.settings;
-                var parentSearch = ps.postProcessResolve.apply(ps, arguments);
-                return mergeSearch(parentSearch, thisSearch);
+            if (!options || options.mergeParentsSearch !== false) {
+                var pm = this._manager.parent;
+                if (pm instanceof PostProcessSearchManager) {
+                    var ps = pm.settings;
+                    var parentSearch = ps.postProcessResolve.apply(ps, arguments);
+                    return mergeSearch(parentSearch, thisSearch);
+                }
             }
 
             return thisSearch;
@@ -75,9 +80,9 @@ define(function(require, exports, module) {
             var resolvedSearch = SearchModels.SearchQuery.prototype.resolve.apply(this, arguments);
             var tokens = this.get('search', {tokens: true});
             var tokenDependencies = this.get('tokenDependencies', { tokens: true });
-            
-            return (resolvedSearch !== undefined || tokens === undefined) && 
-                TokenUtils.tokenDependenciesMet(tokenDependencies, registry);
+
+            return (resolvedSearch !== undefined || tokens === undefined) &&
+                TokenUtils.tokenDependenciesMet(tokenDependencies, this._tokenRegistry);
         }
     });
 
@@ -187,7 +192,9 @@ define(function(require, exports, module) {
             // the search query to the query model.
             // We also make sure to deal with the legacy 'postProcess' attribute.
             attributes.search = attributes.postProcess || attributes.search;
-            this.settings = new PostProcessSearchSettingsModel({}, options);
+            this.settings = new PostProcessSearchSettingsModel({}, _.extend({}, options, {
+                _tokenRegistry: options.registry || mvc.Components
+            }));
             this.settings._manager = this;
 
             // Permit deprecated access via the 'query' field
@@ -218,9 +225,9 @@ define(function(require, exports, module) {
 
             // Listen to our parent manager being created
             var managerid = attrs.managerid || attrs.manager;
-            mvc.Components.bind('change:' + managerid, this.onManagerChange, this);
-            if (mvc.Components.has(managerid)) {
-                this.onManagerChange(mvc.Components, mvc.Components.get(managerid));
+            this.registry.bind('change:' + managerid, this.onManagerChange, this);
+            if (this.registry.has(managerid)) {
+                this.onManagerChange(this.registry, this.registry.get(managerid));
             }
         },
 
@@ -410,7 +417,7 @@ define(function(require, exports, module) {
             }
             else {
                 var tokenDependencies = this.settings.get('tokenDependencies', { tokens: true });
-                if (!TokenUtils.tokenDependenciesMet(tokenDependencies, registry)) {
+                if (!TokenUtils.tokenDependenciesMet(tokenDependencies, this.registry)) {
                     this.trigger("search:error", Messages.resolve("unresolved-tokens").message);
                 } else {
                     this.trigger("search:error", Messages.resolve('unresolved-search').message);

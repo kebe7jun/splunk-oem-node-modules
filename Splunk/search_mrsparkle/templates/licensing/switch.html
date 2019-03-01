@@ -4,7 +4,7 @@
 <%!
 from splunk.appserver.mrsparkle.lib import util
 isLite = util.isLite()
-if isLite: 
+if isLite:
     page_text = _('Change license')
     page_desc = _('Please update the license or switch to Light Free License.')
 else:
@@ -24,7 +24,7 @@ else:
 
 <%
 
-## in the following: 
+## in the following:
 ## Pos 0 describes the specific license group
 ## Pos 1 is the string used as the header
 ## Pos 2 is the string used if the license error occurs
@@ -47,13 +47,13 @@ if not isLite:
             'Free',
             _('Free license'),
             _('Free licenses'),
-            _('Use this group when you are running Splunk Free. This license has a 500MB/day daily indexing volume. ') + ('<a class="spl-icon-external-link-xsm" href="%s" target="_blank">' % generateSelfHelpLink('licensing.freelicense')) + _("Learn more") + '</a>'
+            _('Use this group when you are running Splunk Free. This license has no authentication or user and role management, and has a 500MB/day daily indexing volume.') + ('<a class="spl-icon-external-link-xsm" href="%s" target="_blank">' % generateSelfHelpLink('licensing.freelicense')) + _("Learn more") + '</a>'
         ],
         [
             'Trial',
             _('Enterprise Trial license'),
             _('Enterprise Trial licenses'),
-            _('This is your included download trial. IMPORTANT: If you switch to another license, you cannot return to the Trial. You must install an Enterprise license or switch to Splunk Free.')    
+            _('This is your included download trial. IMPORTANT: If you switch to another license, you cannot return to the Trial. You must install an Enterprise license or switch to Splunk Free.')
         ]
     ]
 else:
@@ -79,7 +79,7 @@ for i, row in enumerate(descriptions):
     if row[0] == license_group:
         current_title = row[1]
         break
-%> 
+%>
 
 
 % if controller_exception:
@@ -107,7 +107,7 @@ for i, row in enumerate(descriptions):
             % if row[0] in available_groups:
                 <tr>
                     <td>
-                        <input type="radio" name="license_group" value="${_('add') if row[1] == _('Add license') else row[0]|h}" id="license_type_${i}" ${'checked="checked"' if (license_group == row[0] or row[1] == _('Add license')) else ''}/>
+                        <input type="radio" class="radio-input" name="license_group" value="${_('add') if row[1] == _('Add license') else row[0]|h}" id="license_type_${i}" ${'checked="checked"' if (license_group == row[0] or row[1] == _('Add license')) else ''}/><label for="license_type_${i}"/>
                     </td>
                     <td>
                         <label class="big" for="license_type_${i}">${row[1]|h}</label>
@@ -119,7 +119,7 @@ for i, row in enumerate(descriptions):
                         % endif
                     </td>
                 </tr>
-            % endif 
+            % endif
         % endfor
 
     </table>

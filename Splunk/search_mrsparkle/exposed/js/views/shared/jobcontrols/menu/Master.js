@@ -33,6 +33,9 @@ define(
                         report: this.model.report,
                         user: this.model.user
                     },
+                    collection: {
+                        workloadManagementStatus: this.collection.workloadManagementStatus
+                    },
                     externalJobLinkPage: this.options.externalJobLinkPage
                 });
 

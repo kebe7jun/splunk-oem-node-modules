@@ -5,6 +5,8 @@ define([
     'module',
     'views/Base',
     'views/shared/appbar/AppNav',
+    'views/shared/appbar/AppLabel',
+    'views/shared/appbar/more/Master',
     'models/shared/Application',
     'models/services/data/ui/Nav',
     'models/services/AppLocal',
@@ -14,8 +16,8 @@ define([
     'helpers/AppNav',
     'uri/route',
     'util/color_utils',
-        'util/console',
-        'util/xml'
+    'util/console',
+    'util/xml'
 ],
 function(
     $,
@@ -24,6 +26,8 @@ function(
     module,
     BaseView,
     AppNavView,
+    AppLabelView,
+    MoreMenu,
     ApplicationModel,
     NavModel,
     AppModel,
@@ -49,38 +53,92 @@ function(
                     appNav: this.model.appNav,
                     application: this.model.application
                 },
-                collection: this.collection
+                collection: this.collection,
+                getAppColor: this.getAppColor
             });
 
-            this.setBannerColor();
-            this.model.appNav.on('change:color', this.setBannerColor, this);
+            this.children.appLabel = new AppLabelView({
+                model: this.model,
+                collection: this.collection,
+                getAppColor: this.getAppColor
+            });
 
             if(options.autoRender !== false) {
                 this.debouncedRender();
             }
         },
+
+        renderMoreMenu: function() {
+            this.children.moreMenu = new MoreMenu({
+                model: {
+                    serverInfo: this.model.serverInfo
+                },
+                navData: {submenu: this.model.appNav.get('nav')}
+            });
+            this.children.appNav.$el.append(this.children.moreMenu.render().el);
+        },
+
+        removeMoreMenu: function() {
+            if (this.children.moreMenu) {
+                this.children.moreMenu.remove();
+            }
+        },
+
+        collapseAppNav: function() {
+            this.removeMoreMenu();
+            this.$('[data-role=right-nav]').removeAttr('data-action');
+            var mainWidth = this.$el.outerWidth(),
+                diff = this._getNavWidthDiff(mainWidth),
+                $appNav = this.children.appNav.$el.find('[data-role=app-nav-container]'),
+                links = $appNav.children().show(),
+                offsetLinks = [];
+
+            if (diff <= 0) {return false;}
+
+            $appNav.width(diff);
+            _.each(links, function(link) {
+                if (link.offsetTop > 0) {
+                    offsetLinks.push(link);
+                }
+            });
+
+            var numOffsetLinks = offsetLinks.length;
+            if (numOffsetLinks > 0) {
+                $(offsetLinks).hide();
+                this.renderMoreMenu();
+                this.children.moreMenu.$('[data-role=slidelist-menu] > li').hide().slice(-numOffsetLinks).show();
+            }
+            $appNav.width('auto');
+        },
+
+        _getNavWidthDiff: function(mainWidth) {
+            var appLabelWidth = this.children.appLabel.$el.outerWidth();
+            return mainWidth - appLabelWidth || 0;
+        },
+
         render: function() {
             this.$el.html('');
+            this.children.appLabel.render().appendTo(this.$el);
             this.children.appNav.render().prependTo(this.$el);
 
             return this;
         },
-        setBannerColor: function(){
-            return false;
 
-            var navColor = color_utils.normalizeHexString(this.model.appNav.get('color')||'');
+        getAppColor: function() {
+            if(!this.model.appNav){return false;}
+            var navColor = color_utils.normalizeHexString(this.model.appNav.get('color')|| 'none');
             var isHexColor = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(navColor);
-            if (!isHexColor ){
-                return false;
+            if (!isHexColor){
+                return 'transparent';
             }
-            this.$el.css('background-color', navColor);
+            return navColor;
         }
     },
     {
         END_GRADIENT_LUMINOSITY: 0.90,
         createWithAppNavUrl: function(options){
             var self = this;
-            var app = options.model.application.get('app');
+            var app = self._getApp(options);
             var owner = options.model.application.get('owner');
             var applicationDfd = new $.Deferred();
 
@@ -88,8 +146,8 @@ function(
                 applicationDfd.resolve(app, owner);
             } else {
                 options.model.application.once('change', function() {
-                    var app = options.model.application.get('app');
-                    var owner = options.model.application.get('owner');
+                    var app = self._getApp(options),
+                        owner = options.model.application.get('owner');
                     if (app && owner) {
                         applicationDfd.resolve(app, owner);
                     }
@@ -97,16 +155,19 @@ function(
             }
 
             applicationDfd.done(function(){
-                var url = route.appNavUrl(options.model.application.get('root'), options.model.application.get('locale'), options.model.application.get('app'));
+                var url = route.appNavUrl(options.model.application.get('root'), options.model.application.get('locale'), self._getApp(options));
                 $.ajax({
                     url: url,
                     dataType:'json'
                 }).done(function(data){
-                        self._applyAppNavData(data, options.model.appNav, options, false);
-                    }).fail(function() {
-                        self.createWithBackbone(options);
-                    });
+                    self._applyAppNavData(data, options.model.appNav, options, false);
+                }).fail(function() {
+                    self.createWithBackbone(options);
+                });
             });
+        },
+        _getApp: function(options) {
+            return options.model.application.get('app') || 'search';
         },
         createWithAppNavModel: function(options) {
             var appNav = options.model.appNav;
@@ -141,13 +202,13 @@ function(
                 }, options.model.appNav, options, false);
             }
 
-            var app = options.model.application.get('app');
-            var owner = options.model.application.get('owner');
+            var app = self._getApp(options),
+                owner = options.model.application.get('owner');
             if (app && owner) {
                 applicationDfd.resolve(app, owner);
             } else {
                 options.model.application.once('change', function() {
-                    var app = options.model.application.get('app');
+                    var app = self._getApp(options);
                     var owner = options.model.application.get('owner');
                     if (app && owner) {
                         applicationDfd.resolve(app, owner);
@@ -207,10 +268,13 @@ function(
             $.when(viewsDfd, savedSearchesDfd, appNavDfd).then(updateNavData);
         },
         _applyAppNavData: function(data, appNav, options, fromCache) {
-            var app = options.model.application;
-            var appLink = route.page(app.get('root'), app.get('locale') || '', app.get('app'));
-            var appIcon = route.appIcon(app.get('root'), app.get('locale') || '', app.get('owner'), app.get('app'));
-            var appLogo = route.appLogo(app.get('root'), app.get('locale') || '', app.get('owner'), app.get('app'));
+            var root = options.model.application.get('root'),
+                locale = options.model.application.get('locale'),
+                app = this._getApp(options),
+                owner = options.model.application.get('owner'),
+                appLink = route.page(root, locale || '', app),
+                appIcon = route.appIcon(root, locale || '', owner, app),
+                appLogo = route.appLogo(root, locale || '', owner, app);
 
             if (console.DEBUG_ENABLED) {
                 if (this._lastApply) {
@@ -239,15 +303,15 @@ function(
             return 'sessionStorage' in window && window.sessionStorage;
         },
         _cachePrefix: 'splunk-appnav',
-        _cacheKey: function(app) {
-            return [this._cachePrefix, app.get('app'), app.get('owner'), app.get('locale')].join(':');
+        _cacheKey: function(app, options) {
+            return [this._cachePrefix, this._getApp(options), app.get('owner'), app.get('locale')].join(':');
         },
         _cacheValue: function(data, options) {
             if (this._supportsSessionStorage()) {
                 data = _(data).pick('nav', 'color', 'label', 'defaultView', 'searchView');
                 console.debug('Caching app nav data: %o', data);
                 try {
-                    window.sessionStorage.setItem(this._cacheKey(options.model.application), JSON.stringify(data));
+                    window.sessionStorage.setItem(this._cacheKey(options.model.application, options), JSON.stringify(data));
                 } catch (e) {
                     console.warn('Update to store app nav data in sessionStorage: ', e);
                 }
@@ -256,7 +320,7 @@ function(
         _createFromCache: function(options) {
             if (this._supportsSessionStorage()) {
                 try {
-                    var cacheKey = this._cacheKey(options.model.application);
+                    var cacheKey = this._cacheKey(options.model.application, options);
                     var cachedData = JSON.parse(window.sessionStorage.getItem(cacheKey));
                     if (cachedData) {
                         console.debug('Applying cached app nav data: %o', cachedData);

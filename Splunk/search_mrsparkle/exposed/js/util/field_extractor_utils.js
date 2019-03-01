@@ -57,7 +57,10 @@ define([
                     throw new Error ('Delimiter contains a dangling backslash at the end');
                 }
                 // the only escaped characters we interpret in the backend are \\, \r, \n, and \t
-                if (delim[i+1]=='\\' || delim[i+1]=='r' || delim[i+1]=='n' || delim[i+1]=='t') {
+                if (delim[i+1]=='\\') {
+                    throw new Error ('Backslash is not a valid delimiter');
+                }
+                if (delim[i+1]=='r' || delim[i+1]=='n' || delim[i+1]=='t') {
                     delimRegex += sep + delim[i] + delim[i+1];
                     ++i;
                 } else {
@@ -211,16 +214,19 @@ define([
         newString += _.escape(string.substring(previousEndIndex));
         return newString;
     };
-    
+
     var getFieldColorWithIndex = function(index) {
          var colors = [
-            "green",
-            "yellow",
-            "pink",
-            "blue",
-            "orange", 
-            "salmon",
-            "purple" 
+            "cat1",
+            "cat2",
+            "cat3",
+            "cat4",
+            "cat5",
+            "cat6",
+            "cat7",
+            "cat8",
+            "cat9",
+            "cat10"
         ];
         //get the number of capture groups, and assign colors based on positioning, then modulo to go through again
         var numColors = colors.length;
@@ -241,8 +247,8 @@ define([
     };
 
     /**
-     * Parses the offset_field field that is set by calling 
-     * '| rex <regex> offset_field=<fieldname>', 
+     * Parses the offset_field field that is set by calling
+     * '| rex <regex> offset_field=<fieldname>',
      * returns a data structure that lists all named capture groups with
      * the start and end indices of the substrings they capture.
      *
@@ -273,7 +279,7 @@ define([
             }
             var endIndex = parseInt(captureGroups[3], 10) + 1; // Need to normalize because '| rex' command returns an inclusive endIndex
             if (isExisting) {
-                fieldBounds.push({ 
+                fieldBounds.push({
                     fieldName: captureGroups[1],
                     startIndex: parseInt(captureGroups[2], 10),
                     endIndex: endIndex,
@@ -281,14 +287,14 @@ define([
                     hidden: true
                 });
             } else {
-                fieldBounds.push({ 
+                fieldBounds.push({
                     fieldName: captureGroups[1],
                     startIndex: parseInt(captureGroups[2], 10),
                     endIndex: endIndex
                 });
             }
         });
-        return _(fieldBounds).sortBy('startIndex');                
+        return _(fieldBounds).sortBy('startIndex');
     };
 
     /**
@@ -310,11 +316,11 @@ define([
                     ((extractionStart >= extract.startIndex) && (extractionStart < extract.endIndex));
         });
     };
-    
+
     /**
      * Checks if the extractions in extractionsArray overlap with each other.
      * If they don't overlap return true.
-     * 
+     *
      * @param extractionsArray {Array} array of extractions to check
      * @returns {Boolean}
      */
@@ -397,16 +403,16 @@ define([
 
     var isEditFieldsMode = function(mode, interactiveMode) {
         return (
-            mode === MODES.SELECT_FIELDS_MODE || 
+            mode === MODES.SELECT_FIELDS_MODE ||
             mode === MODES.VALIDATE_FIELDS_MODE ||
-            mode === MODES.SAVE_FIELDS_MODE || 
+            mode === MODES.SAVE_FIELDS_MODE ||
             isManualEditorMode(mode, interactiveMode)
         );
     };
 
     var isEventsTableMode = function(mode, interactiveMode) {
-        return  ( 
-            mode === MODES.SELECT_SAMPLE_MODE || 
+        return  (
+            mode === MODES.SELECT_SAMPLE_MODE ||
             mode === MODES.SELECT_FIELDS_MODE ||
             mode === MODES.SELECT_DELIM_MODE ||
             mode === MODES.VALIDATE_FIELDS_MODE ||

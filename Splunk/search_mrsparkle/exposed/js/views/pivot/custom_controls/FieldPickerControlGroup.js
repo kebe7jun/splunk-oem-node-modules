@@ -20,7 +20,7 @@ define([
         initialize: function() {
             this.options = $.extend({
                 modelAttribute: 'fieldName',
-                toggleClassName: 'btn',
+                toggleClassName: 'btn btn-block',
                 menuClassName: 'pivot-field-picker-dropdown',
                 popdownOptions: { detachDialog: true }
             }, this.options);
@@ -79,6 +79,7 @@ define([
                 this.options.label = _('Field').t();
             }
             this.$el.addClass('pivot-field-picker-group');
+
             ControlGroup.prototype.initialize.call(this, this.options);
         },
 
@@ -107,7 +108,7 @@ define([
         render: function() {
             ControlGroup.prototype.render.call(this);
             if(this.options.showRemoveButton !== false) {
-                this.$('.dropdown-toggle').after('<a class="remove-button" href="#"><i class="icon-x-circle icon-large"></i></a>');
+                this.$('.dropdown-toggle').after('<a class="btn-pill btn-square remove-button" href="#"><i class="icon-x icon-large"></i></a>');
             }
             this.$('.dropdown-toggle').tooltip({
                 animation: false,

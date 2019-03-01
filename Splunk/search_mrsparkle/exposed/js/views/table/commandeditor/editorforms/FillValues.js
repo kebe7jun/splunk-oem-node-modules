@@ -47,7 +47,7 @@ define(
                     controlType: 'Text',
                     size: 'small',
                     label: _("Default value").t(),
-                    controlClass: 'controls-fill',
+
                     controlOptions: {
                         model: this.model.command,
                         modelAttribute: 'fillValue',
@@ -59,7 +59,7 @@ define(
                 this.children.fillType = new ControlGroup({
                     controlType: 'SyntheticRadio',
                     size: 'small',
-                    controlClass: 'controls-fill',
+
                     label: _('Fill type').t(),
                     controlOptions: {
                         modelAttribute: 'fillType',

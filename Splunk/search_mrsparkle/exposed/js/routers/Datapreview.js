@@ -51,7 +51,6 @@ function(
 
             this.setPageTitle(_('Data Preview').t());
             this.enableAppBar = false;
-            this.enableFooter = false;
 
             this.fetchUser = true;
             this.fetchAppLocals = true;

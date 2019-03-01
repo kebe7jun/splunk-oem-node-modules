@@ -429,8 +429,6 @@ function updateGeneratedList(buildFilesInfo) {
             ['d', '755', 'splunk', 'splunk', path.posix.join('splunk', name), '-'].join(' ') :
             ['f', '444', 'splunk', 'splunk', path.posix.join('splunk', name), name].join(' ');
     }).join('\n');
-    var bucketBarName = path.posix.join('etc', 'apps', 'splunk_monitoring_console', 'appserver', 'static', 'bucket-bar.css');
-    generatedListContent += ['\nf', '444', 'splunk', 'splunk', path.posix.join('splunk', bucketBarName), bucketBarName].join(' ');
     logger.debug('Generated generated.list content:\n', generatedListContent);
     logger.log('Adding', count, 'entries to generated.list');
     fs.appendFileSync(GENERATED_LIST_FILE, generatedListContent + '\n', {encoding: 'utf8'});

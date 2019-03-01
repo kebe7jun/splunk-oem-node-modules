@@ -39,8 +39,8 @@ define(
             },
             
             template: '\
-                <td class="job-prop-name"><%- this.options.prop.key %></td>\
-                <td class="job-prop-value">\
+                <td class="job-prop-name" tabindex="0"><%- this.options.prop.key %></td>\
+                <td class="job-prop-value" tabindex="0">\
                     <% if (!this.children.jsonTree) { %>\
                         <%- this.options.prop.value || _("None").t() %>\
                     <% } %>\

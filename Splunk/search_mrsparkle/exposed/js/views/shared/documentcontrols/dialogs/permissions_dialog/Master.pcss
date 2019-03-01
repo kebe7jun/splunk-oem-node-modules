@@ -18,13 +18,19 @@ td > .control > label.checkbox {
     display: inline-block !important;
 }
 
-.table .perms-read,
-.table .perms-write
-{
-	width: 30px;
-	text-align: center;
-}
-
-.table .icon-check {
-	color: $textColor;
+.table {
+	.perms-read, .perms-write {
+		width: 40px;
+		text-align: center;
+		> .control > .checkbox:only-child {
+			display: inline-block;
+			width: calc($inputHeight / 2);
+		}
+		&:last-child {
+			padding-right: $spacing;
+		}
+	}
+	.icon-check {
+		color: $textColor;
+	}
 }

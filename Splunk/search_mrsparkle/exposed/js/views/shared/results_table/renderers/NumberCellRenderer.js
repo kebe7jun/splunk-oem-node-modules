@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var BaseCellRenderer = require("./BaseCellRenderer");
     var Color = require("jg/graphics/Color");
     var ColorUtil = require("splunk/utils/ColorUtil");
+    var css = require('./NumberCellRenderer.pcssm');
 
     return BaseCellRenderer.extend({
 
@@ -32,12 +33,16 @@ define(function(require, exports, module) {
 
             var backgroundColor = null;
             if (cellData.dataOverlay === "heatmap" && !_.isNaN(cellData.heatValue)) {
-                backgroundColor = Color.interpolate(Color.fromString("#FFFFFF"), Color.fromString("#D6563C"), cellData.heatValue);
+                backgroundColor = Color.interpolate(
+                    Color.fromString(css.tableOverlayHeatmapFromColor),
+                    Color.fromString(css.tableOverlayHeatmapToColor),
+                    cellData.heatValue
+                );
             } else if (cellData.dataOverlay === "highlow") {
                 if (cellData.floatValue === cellData.extremes.min) {
-                    backgroundColor = Color.fromString("#1E93C6");
+                    backgroundColor = Color.fromString(css.tableOverlayHighLowMinColor);
                 } else if (cellData.floatValue === cellData.extremes.max) {
-                    backgroundColor = Color.fromString("#D6563C");
+                    backgroundColor = Color.fromString(css.tableOverlayHighLowMaxColor);
                 }
             }
 
@@ -57,18 +62,7 @@ define(function(require, exports, module) {
             $td.html(_.template(this.template, cellData));
         },
 
-        template: '\
-            <% if (_.isArray(value)) { %>\
-                <% _(value).each(function(subValue, i) { %>\
-                    <div class="<%- MV_SUBCELL_CLASSNAME %>" <%- MV_INDEX_ATTR %>="<%- i %>">\
-                        <%- subValue %>\
-                    </div>\
-                <% }) %>\
-            <% } else { %>\
-                <%- value %>\
-            <% } %>\
-        '
-
+        template: '<% if (_.isArray(value)) { %><% _(value).each(function(subValue, i) { %><div class="<%- MV_SUBCELL_CLASSNAME %>" <%- MV_INDEX_ATTR %>="<%- i %>"><%- subValue %></div><% }) %><% } else { %><%- value %><% } %>'
     });
 
 });

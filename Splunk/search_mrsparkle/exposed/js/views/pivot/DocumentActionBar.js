@@ -71,7 +71,8 @@ define([
 
             this.children.createDropDown = new DropDownMenu({
                 label: _('Save As...').t(),
-                className: 'btn-combo create-drop-down',
+                className: 'create-drop-down',
+                anchorClassName: 'btn-pill',
                 dropdownClassName: 'dropdown-menu-narrow',
                 popdownOptions: { attachDialogTo: 'body' },
                 items: [
@@ -215,12 +216,6 @@ define([
                 reportName = isNew ? _('New Pivot').t() : this.model.report.entry.get('name');
 
             $nameHolder.empty().text(reportName);
-            if(isNew) {
-                $nameHolder.prepend('<i class="icon-pivot"></i>');
-            }
-            else {
-                $nameHolder.prepend('<i class="icon-report-pivot"></i>');
-            }
         },
 
         onDataSourceShow: function() {
@@ -255,19 +250,19 @@ define([
         template: '\
             <h2 class="report-name section-title"></h2>\
             <div class="action-bar pull-right">\
-                <a href="#" class="save-button btn btn-primary <%- canSave ? "" : "disabled" %>">\
+                <a href="#" class="save-button btn-pill <%- canSave ? "" : "disabled" %>">\
                     <%- _("Save").t() %>\
                 </a>\
                 <div class="report-action-buttons btn-group">\
                     <span class="save-as-dropdown-placeholder"></span>\
-                    <a href="#" class="clear-button btn"><%- _("Clear").t() %></a>\
+                    <a href="#" class="clear-button btn-pill"><%- _("Clear").t() %></a>\
                 </div>\
                 <% if (tableIsEditable && !tempDataModel) { %>\
-                    <a href="<%- editDatasetHref %>" class="edit-dataset-button btn">\
+                    <a href="<%- editDatasetHref %>" class="edit-dataset-button btn-pill">\
                         <%- _("Edit Dataset").t() %>\
                     </a>\
                 <% } %>\
-                <a href="#" class="data-source-button btn">\
+                <a href="#" class="data-source-button btn-pill">\
                     <%- tempDataModel ? _("Acceleration").t() : dataTableName %>\
                     <span class="caret"></span>\
                 </a>\

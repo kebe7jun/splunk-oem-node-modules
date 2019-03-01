@@ -41,6 +41,14 @@ define([
         allowInlineStyles: function() {
             return GeneralUtils.normalizeBoolean(SplunkConfig['DASHBOARD_HTML_ALLOW_INLINE_STYLES'], {"default": true});
         },
+        /**
+         * Determine whether iframes are allowed for HTML elements in dashboards. This is determined
+         * by examining the splunk.config ($C) from the server
+         * @returns {Boolean} true if iframes are allowed, otherwise false
+         */
+        allowIframes: function() {
+            return GeneralUtils.normalizeBoolean(SplunkConfig['DASHBOARD_HTML_ALLOW_IFRAMES'], {"default": true});
+        },
         updateSearchMessage: function(model, searchId, level, message, options) {
             options = options || {};
             var messages = model.get(searchId);

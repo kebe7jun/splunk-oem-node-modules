@@ -126,6 +126,7 @@ define(
                 this.targetPercentage = (doneProgress * 100.0).toFixed(1);
 
                 var isRealTime = this.model.entry.content.get("isRealTimeSearch");
+                
                 if ((this.model.isRunning() || this.model.isParsing() || this.model.isFinalizing())  && !(isRealTime && this.percentage == 100 && !this.options.animateRealTime)) {
 
                     var tooltipVisible = this.$progressAnimation.next(".tooltip:visible").length;
@@ -138,8 +139,12 @@ define(
                     if (isRealTime && this.targetPercentage == 100) {
                         this.$el.addClass('real-time');
                         this.$progressAnimation.tooltip({animation:false, title:_('Updating in Real-time.').t()});
+                    } else if (typeof this.model.isDataFabricEnabled === 'function' && this.model.isDataFabricEnabled()) {
+                        this.$el.addClass('data-fabric');
+                        this.$progressAnimation.tooltip({animation:false, title:_('Search is running in Data Fabric mode.').t()});
                     } else {
                         this.$el.removeClass('real-time');
+                        this.$el.removeClass('data-fabric');
                         this.$progressAnimation.tooltip({animation:false, title:splunkUtil.sprintf(_('%s%% of the time range scanned.').t(), this.targetPercentage)});
                     }
 

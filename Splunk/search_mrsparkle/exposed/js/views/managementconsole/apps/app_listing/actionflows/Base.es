@@ -121,9 +121,21 @@ export default Modal.extend({
 
             const taskId = response.entry[0].name;
             this.model.deployTask.entry.set('name', taskId);
-            this.model.deployTask.beginPolling()
-                .done(this.onDeploySuccess.bind(this))
-                .fail(this.onDeployFail.bind(this));
+            const pollDeployTask = () => {
+                this.model.deployTask.beginPolling()
+                    .done(this.onDeploySuccess.bind(this))
+                    .fail(this.onDeployFail.bind(this));
+            };
+
+            pollDeployTask();
+            this.model.deployTask.on('serverValidated', (success, context, messages) => {
+                const netErrorMsg = _.find(messages, msg =>
+                    msg.type === 'network_error',
+                );
+                if (netErrorMsg) {
+                    pollDeployTask();
+                }
+            }, this);
         } else {
             this.handleSuccess();
         }

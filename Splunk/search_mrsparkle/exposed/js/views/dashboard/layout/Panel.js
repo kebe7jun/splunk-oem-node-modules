@@ -15,7 +15,8 @@ define(
         'views/dashboard/editor/dialogs/ConvertPanel',
         'splunkjs/mvc/postprocessmanager',
         'splunkjs/mvc/simplexml/dashboard/tokendeps',
-        'splunk.util'
+        'splunk.util',
+        './Panel.pcssm'
     ],
     function(module,
              $,
@@ -32,7 +33,9 @@ define(
              ConvertPanelDialog,
              PostProcessSearch,
              TokenDependenciesMixin,
-             SplunkUtil) {
+             SplunkUtil,
+             css
+    ) {
 
         var sprintf = SplunkUtil.sprintf;
 
@@ -50,7 +53,7 @@ define(
             render: function() {
                 this.$el.attr('id', this.id);
                 // create panel div as master container
-                this.$panel = this.createOrFind('dashboard-panel');
+                this.$panel = this._createOrFindPanel();
                 // always render fieldset.
                 this._renderFieldSet();
                 this._onModeChange();
@@ -59,6 +62,21 @@ define(
                 this._resetComponents();
                 this.stopListeningToTokenDependencyChange();
                 BaseDashboardView.prototype.remove.apply(this, arguments);
+            },
+            _createOrFindPanel: function() {
+                // note: ideally we should write this.createOrFind('dashboard-panel ' + css.dashboardPanel), 
+                // but views/dashboard/layout/PanelRef.js interferes with this component in a way that,
+                // PanelRef calls this.createOrFind('dashboard-panel') in _renderMessage() to create
+                // <div class="dashboard-panel"></div> to render the loading message, 
+                // then it calls Panel.prototype.render (as part of the actual panel rendering) which triggers _createOrFindPanel(), 
+                // which means, _createOrFindPanel() must find that <div class="dashboard-panel"></div> dom element otherwise it will
+                // create a new div to render the actual panel. So, this.createOrFind('dashboard-panel ' + css.dashboardPanel) doesn't
+                // work in this case. We are restricted to only use 'dashboard-panel' classname as css selector here. Ref: SPL-158269
+                // But we still need the css.dashboardPanel classname to properly style the panel background color (especially for dark mode),
+                // that's why I added the classname after selecting the dom element, it is noop if that classname has been added.
+                var $panel = this.createOrFind('dashboard-panel'); 
+                $panel.addClass(css.dashboardPanel);
+                return $panel;
             },
             _onModeChange: function() {
                 // clear all children
@@ -207,7 +225,7 @@ define(
                 return this.getElements().length === 0;
             },
             _addElement: function(element) {
-                this.$panel = this.$panel || this.createOrFind('dashboard-panel');
+                this.$panel = this.$panel || this._createOrFindPanel();
                 var destRow;
                 if (element.getVisualizationType() == 'single') {
                     destRow = this.$panel.children('.panel-element-row:last');

@@ -114,7 +114,7 @@
 .info:before                     {content: "\0069"; }
 .infoCircle:before               {content: "\0049"; }
 .question:before  {
-    font-family: inherit; /* Roboto */
+    font-family: inherit; /* Proxima Nova */
     content: "\003F";
 }
 .questionCircle:before        {content: "\EC9D"; }
@@ -125,8 +125,8 @@
 .code:before                  {content: "\ECD7"; }
 .codeThin:before              {content: "\ECD6"; }
 .alert:before,
-.error:before                  {content: "\26A0"; }
-.warning:before                {content: "\ECE2"; }
+.error:before                  {content: "\ECE2"; }
+.warning:before                {content: "\26A0"; }
 
 /*objects*/
 .bell:before                   {content: "\EC9C"; }

@@ -26,6 +26,7 @@ class SearchManagerConnection {
             this.options.data || 'preview',
             this.dataSource.getFetchParams());
         this.listenTo(this.resultsModel, 'data', this.onDataChange);
+        this.listenTo(this.resultsModel, 'nodata', this.onDataClear);
         this.listenTo(this.resultsModel, 'error', this.onSearchError);
         this.listenTo(this.dataSource, 'fetchParamsChange', this.onFetchParamsChange);
     }
@@ -54,6 +55,9 @@ class SearchManagerConnection {
             data = this.options.formatter(data);
         }
         this.dataSource.setSearchResults(data);
+    }
+    onDataClear() {
+        this.dataSource.clearSearchResults();
     }
     onSearchError(text, err) {
         this.trigger('error', text, err);

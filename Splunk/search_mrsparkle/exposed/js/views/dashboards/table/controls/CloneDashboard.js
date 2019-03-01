@@ -51,17 +51,21 @@ define([
                 label: this.model.dashboard.meta.get('label') + _(' Clone').t()
             });
 
-             this.children.titleTextControl = new TextControl({
+            var titleTextControlLabel = _("Title").t();
+            this.children.titleTextControl = new TextControl({
                 modelAttribute: 'label',
                 model: this.model.dashboard.meta,
                 placeholder: _('optional').t(),
-                save: false
+                save: false,
+                ariaLabel: titleTextControlLabel
             });
 
+            var filenameTextControlLabel = _("ID").t();
             this.children.filenameTextControl = new TextControl({
                 modelAttribute: 'name',
                 model: this.model.dashboard.entry.content,
-                save: false
+                save: false,
+                ariaLabel: filenameTextControlLabel
             });
             this.children.filenameTextControl.setValue(
                 splunkDUtils.nameFromString(this.model.dashboard.meta.get('label'))
@@ -75,32 +79,33 @@ define([
 
             this.children.title = new ControlGroup({
                 controls: this.children.titleTextControl,
-                label: _("Title").t()
+                label: titleTextControlLabel
             });
 
             this.children.filename = new ControlGroup({
                 controls: this.children.filenameTextControl,
-                label: _("ID").t(),
+                label: filenameTextControlLabel,
                 help: _("Can only contain letters, numbers and underscores.").t(),
                 tooltip: _("The ID is used as the filename on disk. Cannot be changed later.").t()
             });
 
+            var descriptionControlLabel = _("New Description").t();
             this.children.description = new ControlGroup({
                 controlType: 'Textarea',
                 controlOptions: {
                     modelAttribute: 'description',
                     model: this.model.dashboard.meta,
                     placeholder: _("optional").t(),
+                    ariaLabel: descriptionControlLabel,
                     save: false
                 },
-                label: _("New Description").t()
+                label: descriptionControlLabel
             });
 
             this.children.permissions = new ControlGroup({
                 controlType: 'SyntheticRadio',
-                controlClass: 'controls-halfblock',
                 controlOptions: {
-                    className: "btn-group btn-group-2",
+                    additionalClassNames: "btn-group-2",
                     modelAttribute: 'clonePermissions',
                     model: this.model.perms,
                     items: [
@@ -130,7 +135,7 @@ define([
                         dashboard: this.model.dashboard,
                         application: this.model.application,
                         appLocal: this.model.appLocal,
-                        state: this.model.state, 
+                        state: this.model.state,
                         user: this.model.user,
                         serverInfo: this.model.serverInfo
                     },

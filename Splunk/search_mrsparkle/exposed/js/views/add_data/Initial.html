@@ -1,5 +1,5 @@
-<div id="gdi-overview-main-container">
-    <div class="section-padded section-header">
+<div class="gdi-overview-section">
+    <div class="section-header">
         <h1 class="section-title"><%=_("Add Data").t()%></h1>
         <p class="section-description">
             <%=_("How do you want to add data?").t()%>
@@ -11,14 +11,13 @@
             <% if (model.user.canUploadData()){ %>
             <div class="type-container">
                 <div id="btn-upload" class="type-btn link-wrap" tabIndex="0">
-                    <svg width="102px" height="102px" viewBox="0 0 102 102" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                        <circle class="stroke stroke-thick" cx="51" cy="51" r="50"/></circle>
+                    <svg width="102px" height="82px" viewBox="-20 -17 102 82" version="1.1" xmlns="http://www.w3.org/2000/svg">
                         <g class="fill">
-                            <path transform="translate(30.000000, 21.000000)" d="M30,16 L39.5,16 C41.4334271,16 43,17.5665729 43,19.5 L43,48.5 C43,50.4334271 41.4334271,52 39.5,52 L3.5,52 C1.56657288,52 0,50.4334271 0,48.5 L0,19.5 C0,17.5665729 1.56657288,16 3.5,16 L12,16 L12,19 L3.5,19 C3.22342712,19 3,19.2234271 3,19.5 L3,48.5 C3,48.7765729 3.22342712,49 3.5,49 L39.5,49 C39.7765729,49 40,48.7765729 40,48.5 L40,19.5 C40,19.2234271 39.7765729,19 39.5,19 L30,19 L30,16 Z"></path>
-                            <polygon transform="translate(42.000000, 21.000000)" points="9.5,0 0,9.5 1.929,11.327 8,5.423 8,32 11,32 11,5.423 16.865,11.432 19,9.5 9.5,0" class="fill"></polygon>
+                            <path d="M59.3,46.1 L2.7,46.1 C1.2,46.1 0,44.8 0,43.1 L0,37.1 L2,37.1 L2,43.1 C2,43.6 2.3,44.1 2.7,44.1 L59.4,44.1 C59.8,44.1 60.1,43.7 60.1,43.1 L60.1,37.1 L62.1,37.1 L62.1,43.1 C62,44.8 60.8,46.1 59.3,46.1 L59.3,46.1 Z" id="XMLID_873_"></path>
+                            <polygon id="XMLID_825_"  points="45.7 14.7 31 0 16.3 14.7 17.7 16.1 30 3.8 30 37.1 32 37.1 32 3.8 44.3 16.1"></polygon>
                         </g>
                     </svg>
-                    <div class="type-text1"><%=_("upload").t()%></div>
+                    <div class="type-text1"><%=_("Upload").t()%></div>
                     <div class="type-text2"><%=_("files from my computer").t()%></div>
                 </div>
                 <div class="type-text3"><%=_("Local log files").t()%></div>
@@ -31,27 +30,13 @@
             <% if (model.user.canMonitorData() || hasModularInputs){ %>
                 <div class="type-container">
                     <div id="btn-monitor" class="type-btn link-wrap" tabIndex="0">
-                        <svg width="102px" height="102px" viewBox="0 0 102 102" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                            <circle class="stroke stroke-thick" cx="51" cy="51" r="50"/></circle>
-                            <g class="fill" transform="translate(-9.000000, -6.000000)" >
-                                <path d="M87.942,59.638c-0.018-0.069-0.008-0.143-0.035-0.211c-0.01-0.027-0.035-0.043-0.046-0.069
-                                  c-0.017-0.04-0.013-0.083-0.035-0.122C82.923,50.103,72.255,43.559,61,43.559c-11.256,0-21.924,6.533-26.827,15.666
-                                  c-0.021,0.039-0.018,0.082-0.035,0.122c-0.012,0.026-0.036,0.042-0.046,0.069c-0.026,0.067-0.017,0.141-0.033,0.21
-                                  C34.03,59.75,34,59.869,34,59.994s0.03,0.244,0.059,0.368c0.016,0.069,0.007,0.143,0.033,0.21
-                                  c0.01,0.027,0.035,0.043,0.046,0.069c0.017,0.04,0.013,0.084,0.035,0.122C39.077,69.897,49.744,76.441,61,76.441
-                                  c11.255,0,21.923-6.533,26.827-15.666c0.021-0.039,0.018-0.082,0.035-0.122c0.011-0.026,0.036-0.042,0.046-0.069
-                                  c0.027-0.068,0.017-0.141,0.035-0.211C87.97,60.25,88,60.131,88,60.006C88,59.88,87.97,59.761,87.942,59.638z M61,74.104
-                                  c-9.907,0-19.607-5.633-24.441-14.108c4.86-8.487,14.546-14.1,24.441-14.1c9.907,0,19.607,5.633,24.44,14.108
-                                  C80.581,68.491,70.895,74.104,61,74.104z"/>
-                                <path d="M61,52.946c-0.004,0-0.007,0.002-0.007,0.002c-3.893,0.007-7.046,3.16-7.046,7.051
-                                  c0,0.488,0.395,0.882,0.882,0.882c0.486,0,0.88-0.395,0.88-0.882c0-2.916,2.29-5.289,5.29-5.289v-0.002
-                                  c0,0,0.881-0.395,0.881-0.881C61.881,53.341,61.486,52.946,61,52.946z"/>
-                                <path d="M60.959,47.654c-6.822,0-12.352,5.53-12.352,12.352s5.53,12.352,12.352,12.352s12.352-5.53,12.352-12.352
-                                  S67.781,47.654,60.959,47.654z M60.959,70.594c-5.838,0-10.588-4.749-10.588-10.588s4.749-10.588,10.588-10.588
-                                  s10.588,4.749,10.588,10.588S66.797,70.594,60.959,70.594z"/>
+                    <svg width="102px" height="82px" viewBox="-14 -10 102 82" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                            <g class="fill">
+                                <path d="M5,47 L67,47 L67,5 L5,5 L5,47 L5,47 Z M7,45 L7,29 L24.9,29 L30.9,16.7 L38.9,42 L47.4,21.9 L53.6,29 L65,29 L65,45 L7,45 L7,45 Z M65,7 L65,27 L54.5,27 L46.7,18.1 L39.1,37 L31.3,11.3 L23.7,27 L7,27 L7,7 L65,7 L65,7 Z"></path>
+                                <path d="M68,0 L4,0 C1.8,0 0,1.8 0,4 L0,48 C0,50.2 1.8,52 4,52 L31,52 L31,58 L19,58 L19,60 L53,60 L53,58 L41,58 L41,52 L68,52 C70.2,52 72,50.2 72,48 L72,4 C72,1.8 70.2,0 68,0 L68,0 Z M39,58 L33,58 L33,52 L39,52 L39,58 L39,58 Z M70,48 C70,49.1 69.1,50 68,50 L4,50 C2.9,50 2,49.1 2,48 L2,4 C2,2.9 2.9,2 4,2 L68,2 C69.1,2 70,2.9 70,4 L70,48 L70,48 Z"></path>
                             </g>
-                        </svg>
-                        <div class="type-text1"><%=_("monitor").t()%></div>
+                    </svg>
+                        <div class="type-text1"><%=_("Monitor").t()%></div>
                         <div class="type-text2"><%=_("files and ports on this Splunk indexer").t()%></div>
                     </div>
                     <div class="type-text3"><%=_("Files - HTTP - WMI - TCP/UDP - Scripts").t()%></div>
@@ -61,30 +46,51 @@
             <% if (model.user.canForwardData()){ %>
             <div class="type-container">
                 <div id="btn-forward" class="type-btn link-wrap" tabIndex="0">
-                    <svg width="102px" height="102px" viewBox="0 0 102 102" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                        <circle class="stroke stroke-thick" cx="51" cy="51" r="50"/></circle>
-                        <g class="fill" transform="translate(-8.000000, -7.000000)">
-                            <polygon points="63,47 45.631,47 43.417,45 63,45 		"/>
-                            <polygon points="68,54 38.987,54 36.773,52 68,52 		"/>
-                            <polygon points="74,61 45.631,61 43.417,59 74,59 		"/>
-                            <polygon points="70,68 41.202,68 38.987,66 70,66 		"/>
-                            <polygon points="63,75 47.846,75 45.631,73 63,73 		"/>
-                            <polygon points="80.234,60 63.125,40 66.118,40 83.227,60 66.118,80 63.125,80 		"/>
-                        </g>
-                    </svg>
-                    <div class="type-text1"><%=_("forward").t()%></div>
-                    <div class="type-text2"><%=_("data from Splunk forwarder").t()%></div>
+
+                <svg width="102px" height="82px" viewBox="-26 -10 102 82" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <g class="fill">
+                        <polygon id="XMLID_777_" points="44.4 37.5 42.9 36.1 49 30 42.9 24 44.4 22.6 51.8 30"></polygon>
+                        <path d="M10.7,62 L4.3,62 C1.9,62 0,60.1 0,57.7 L0,4.3 C0,1.9 1.9,0 4.3,0 L10.8,0 C13.1,0 15,1.9 15,4.3 L15,57.8 C15,60.1 13.1,62 10.7,62 L10.7,62 Z M4.3,2 C3,2 2,3 2,4.3 L2,57.8 C2,59 3,60 4.3,60 L10.8,60 C12.1,60 13.1,59 13.1,57.7 L13.1,4.3 C13,3 12,2 10.7,2 L4.3,2 L4.3,2 Z"></path>
+                        <rect id="XMLID_775_" x="32" y="11" width="3" height="2"></rect>
+                        <rect id="XMLID_774_" x="17" y="11" width="7" height="2"></rect>
+                        <rect id="XMLID_773_" x="17" y="29" width="9" height="2"></rect>
+                        <rect id="XMLID_772_" x="29" y="29" width="4" height="2"></rect>
+                        <rect id="XMLID_771_" x="36" y="29" width="4" height="2"></rect>
+                        <rect id="XMLID_770_" x="27" y="11" width="2" height="2"></rect>
+                        <rect id="XMLID_769_" x="33" y="17" width="3" height="2"></rect>
+                        <rect id="XMLID_768_" x="23" y="17" width="7" height="2"></rect>
+                        <rect id="XMLID_767_" x="17" y="17" width="3" height="2"></rect>
+                        <rect id="XMLID_766_" x="17" y="41" width="4" height="2"></rect>
+                        <rect id="XMLID_765_" x="10" y="41" width="4" height="2"></rect>
+                        <rect id="XMLID_764_" x="30" y="41" width="7" height="2"></rect>
+                        <rect id="XMLID_763_" x="24" y="41" width="3" height="2"></rect>
+                        <rect id="XMLID_762_" x="23" y="35" width="5" height="2"></rect>
+                        <rect id="XMLID_761_" x="31" y="35" width="2" height="2"></rect>
+                        <rect id="XMLID_760_" x="17" y="35" width="3" height="2"></rect>
+                        <rect id="XMLID_759_" x="35" y="23" width="2" height="2"></rect>
+                        <rect id="XMLID_758_" x="7" y="23" width="6" height="2"></rect>
+                        <rect id="XMLID_757_" x="17" y="23" width="3" height="2"></rect>
+                        <rect id="XMLID_756_" x="23" y="23" width="3" height="2"></rect>
+                        <rect id="XMLID_755_" x="29" y="23" width="3" height="2"></rect>
+                        <rect id="XMLID_754_" x="17" y="47" width="3" height="2"></rect>
+                        <rect id="XMLID_753_" x="23" y="47" width="2" height="2"></rect>
+                        <rect id="XMLID_752_" x="28" y="47" width="3" height="2"></rect>
+                    </g>
+                </svg>
+                    <div class="type-text1"><%=_("Forward").t()%></div>
+                    <div class="type-text2"><%=_("data from a Splunk forwarder").t()%></div>
                 </div>
                 <div class="type-text3"><%=_("Files - TCP/UDP - Scripts").t()%></div>
             </div>
             <% } %>
         </div>
     </div>
-
+</div>
+<div class="gdi-overview-section">
     <div id="bottom">
         <div class="inner-container">
             <div id="examples">
-                <div id="examples-title"><%=_("Splunk can index any machine data.  Common data sources are:").t()%></div>
+                <div id="examples-title"><%=_("The Splunk platform can index any machine data.  Common data sources are:").t()%></div>
                 <div class="example-row">
                     <div class="example-group">
                         <div class="example1"></div>
@@ -189,11 +195,11 @@
                 </div>
                 <% } %>
                 <div id="faq-title"><%=_("Did you know?").t()%></div>
-                <div class="sources-and-faq-description"><%=_("You can index just about anything with Splunk.").t()%></div>
+                <div class="sources-and-faq-description"><%=_("You can index just about anything with the Splunk platform.").t()%></div>
                 <div class="sources-and-faq-help">
                     <a class="sources-and-faq-help external" href="<%- monitorLink %>" target="_blank"> <%= _("Learn More").t() %></a>
                 </div>
-                <div class="sources-and-faq-description"><%=_("Having trouble finding data you added in Splunk?").t()%></div>
+                <div class="sources-and-faq-description"><%=_("Having trouble finding data you added in the Splunk platform?").t()%></div>
                 <div class="sources-and-faq-help">
                     <a class="sources-and-faq-help external" href="<%- troubleshootLink %>" target="_blank"> <%= _("Learn More").t() %></a>
                 </div>

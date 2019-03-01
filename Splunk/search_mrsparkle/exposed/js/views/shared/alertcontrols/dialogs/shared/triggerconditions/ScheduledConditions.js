@@ -6,7 +6,7 @@ define(
         'views/shared/controls/ControlGroup',
         'views/shared/controls/SyntheticSelectControl',
         'views/shared/controls/TextControl'
-    ], 
+    ],
     function(
         _,
         BaseView,
@@ -19,10 +19,9 @@ define(
         moduleId: module.id,
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
-            
+
             this.children.triggerCondition = new  ControlGroup({ 
                 controlType: 'SyntheticSelect',
-                controlClass: 'controls-block',
                 label: _('Trigger alert when').t(),
                 controlOptions: {
                     items: [
@@ -57,9 +56,8 @@ define(
                     }
                 }
             });
-            
+
             this.children.comparativeGroup = new ControlGroup ({
-                controlClass: 'controls-split input-prepend',
                 controls: [
                     new SyntheticSelectControl ({
                         modelAttribute: 'ui.scheduled.resultscomparator',
@@ -76,19 +74,20 @@ define(
                         popdownOptions: {
                             attachDialogTo: '.modal:visible',
                             scrollContainer: '.modal:visible .modal-body:visible'
-                        }
+                        },
+                        ariaLabel: _('Trigger alert when : Comparator').t()
                     }),
                     new TextControl ({
                         modelAttribute: 'ui.scheduled.resultsinput',
-                        model: this.model.alert.entry.content
+                        model: this.model.alert.entry.content,
+                        ariaLabel: _('Trigger alert when: Compare with this input').t()
                     })
                 ]
             });
-            
+
             this.children.customInput = new ControlGroup({
                 className: 'alert-name custom-condition control-group',
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 help: _('e.g. "search count > 10". Evaluated against the results of the base search.').t(),
                 controlOptions: {
                     model: this.model.alert.entry.content,

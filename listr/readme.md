@@ -1,6 +1,6 @@
 # listr
 
-[![Build Status Linux](https://travis-ci.org/SamVerschueren/listr.svg?branch=master)](https://travis-ci.org/SamVerschueren/listr) [![Build status Windows](https://ci.appveyor.com/api/projects/status/y8vhpwsb98b8o4cm?svg=true)](https://ci.appveyor.com/project/SamVerschueren/listr) [![Coverage Status](https://coveralls.io/repos/SamVerschueren/listr/badge.svg?branch=master&service=github)](https://coveralls.io/github/SamVerschueren/listr?branch=master)
+[![Build Status Linux](https://travis-ci.org/SamVerschueren/listr.svg?branch=master)](https://travis-ci.org/SamVerschueren/listr) [![Build status Windows](https://ci.appveyor.com/api/projects/status/y8vhpwsb98b8o4cm?svg=true)](https://ci.appveyor.com/project/SamVerschueren/listr) [![Coverage Status](https://codecov.io/gh/SamVerschueren/listr/branch/master/graph/badge.svg)](https://codecov.io/gh/SamVerschueren/listr)
 
 > Terminal task list
 
@@ -47,7 +47,7 @@ const tasks = new Listr([
 		title: 'Install package dependencies with Yarn',
 		task: (ctx, task) => execa('yarn')
 			.catch(() => {
-				ctx.yarn === false;
+				ctx.yarn = false;
 
 				task.skip('Yarn not available, install it via `npm install -g yarn`');
 			})
@@ -95,7 +95,7 @@ const tasks = new Listr([
 
 ### Promises
 
-A `task` can also be async by returning a `Promise`. If the promise resolves, the task completed successfully, it it rejects, the task failed.
+A `task` can also be async by returning a `Promise`. If the promise resolves, the task completed successfully, if it rejects, the task failed.
 
 ```js
 const tasks = new Listr([
@@ -146,8 +146,20 @@ const tasks = new Listr([
 
 ### Streams
 
-It's also possible to return a `stream`. The stream will be converted to an `Observable` and handled as such.
+It's also possible to return a [`ReadableStream`](https://nodejs.org/api/stream.html#stream_class_stream_readable). The stream will be converted to an `Observable` and handled as such.
 
+```js
+const fs = require('fs');
+const split = require('split');
+
+const list = new Listr([
+	{
+		title: 'File',
+		task: () => fs.createReadStream('data.txt', 'utf8')
+			.pipe(split(/\r?\n/, null, {trailing: false}))
+	}
+]);
+```
 
 ### Skipping tasks
 
@@ -186,7 +198,7 @@ const tasks = new Listr([
 
 ## Enabling tasks
 
-By default, every task is enabled which means that every task will be executed. However, it's also possible to provide an `enabled` function that returns wheter the task should be executed or not.
+By default, every task is enabled which means that every task will be executed. However, it's also possible to provide an `enabled` function that returns whether the task should be executed or not.
 
 ```js
 const tasks = new Listr([
@@ -194,7 +206,7 @@ const tasks = new Listr([
 		title: 'Install package dependencies with Yarn',
 		task: (ctx, task) => execa('yarn')
 			.catch(() => {
-				ctx.yarn === false;
+				ctx.yarn = false;
 
 				task.skip('Yarn not available, install it via `npm install -g yarn`');
 			})
@@ -251,7 +263,7 @@ tasks.run({
 
 ## Task object
 
-A special task object is being passed as second argument into the `task` function. This task object lets you change the title while running your task or you can skip it depending on some results.
+A special task object is being passed as second argument into the `task` function. This task object lets you change the title while running your task, you can skip it depending on some results or you can update the task's output.
 
 ```js
 const tasks = new Listr([
@@ -268,7 +280,11 @@ const tasks = new Listr([
 	{
 		title: 'Install package dependencies with npm',
 		skip: ctx => ctx.yarn !== false && 'Dependencies already installed with Yarn'
-		task: () => execa('npm', ['install'])
+		task: (ctx, task) => {
+			task.output = 'Installing dependencies...';
+
+			return execa('npm', ['install'])
+		}
 	}
 ]);
 
@@ -374,14 +390,14 @@ Skip function. Read more about [skipping tasks](#skipping-tasks).
 
 #### options
 
-Any renderer specific options.
+Any renderer specific options. For instance, when using the `update-renderer`, you can pass in all of its [options](https://github.com/SamVerschueren/listr-update-renderer#options).
 
 ##### concurrent
 
-Type: `boolean`<br>
+Type: `boolean` `number`<br>
 Default: `false`
 
-Set to `true` if you want tasks to run concurrently.
+Set to `true` if you want to run tasks in parallel, set to a number to control the concurrency. By default it runs tasks sequentially.
 
 ##### exitOnError
 

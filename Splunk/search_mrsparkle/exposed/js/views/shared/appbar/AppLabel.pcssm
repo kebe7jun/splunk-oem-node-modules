@@ -1,24 +1,28 @@
+
 /*  App Bar */
 /*  ========== */
 /*  Note, the menus that open from the app bar are in a separate file navs-app */
 
-
+$appIconSize: 32px;
 .view {
     margin: 0;
-    line-height: 40px;
+    line-height: $appBarHeight;
     font-weight:200;
-    font-size:18px;
-    height: 40px;
+    font-size: $fontSizeLarge;
+    height: $appBarHeight;
     font-weight: 200;
     overflow: hidden;
-    float: right;
+    flex: 0 0 auto;
+}
+
+.name {
 
 }
 
 .link {
     color: $white;
     display: block;
-    padding: 0 20px;
+    padding: 0 $spacing;
     position: relative;
     text-decoration: none;
 
@@ -37,7 +41,23 @@
     }
 }
 
-.image {
-    max-height: 40px;
-    display:block;
+.icon {
+    height: $appIconSize;
+    width: auto;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+    line-height: $lineHeight !important;
+
+    img {
+        height: $appIconSize;
+        width: auto;
+        margin-top: -1px;
+    }
+}
+
+.logo {
+    &, img {
+        max-height: $appBarHeight;
+    }
 }

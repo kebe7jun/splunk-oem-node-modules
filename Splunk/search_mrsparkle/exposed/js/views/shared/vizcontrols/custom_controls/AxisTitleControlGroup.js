@@ -7,6 +7,7 @@
  */
 
 define([
+            'jquery',
             'underscore',
             'module',
             'models/Base',
@@ -14,6 +15,7 @@ define([
             'views/shared/controls/Control'
         ],
         function(
+            $,
             _,
             module,
             BaseModel,
@@ -46,7 +48,6 @@ define([
             this.axisTitleText = this.model.get(this.axisTitleTextAttr);
 
             this.options.label = _('Title').t();
-            this.options.controlClass = 'controls-block';
             this.options.controls = [
                 {
                     type: 'SyntheticSelect',
@@ -112,6 +113,7 @@ define([
         render: function() {
             ControlGroup.prototype.render.apply(this, arguments);
             this.handleTitleState();
+            this.handlePopdownFocus();
             return this;
         },
 
@@ -135,6 +137,23 @@ define([
                 this.hideTitleTextInput();
             }
             this.model.set(setObject);
+        },
+
+        handlePopdownFocus: function() {
+            var control = this.showHideControl;
+            if (control && control.$el && control.children && control.children.popdown &&
+                control.children.popdown.$activeToggle) {
+
+                var $toggle = $(control.children.popdown.$activeToggle);
+                var $control = $(control.$el);
+
+                $($toggle).on('focus', function(){
+                    $control.addClass('control-focused');
+                })
+                .on('blur', function(){
+                    $control.removeClass('control-focused');
+                });
+            }
         },
 
         showTitleTextInput: function() {

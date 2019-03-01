@@ -55,9 +55,9 @@ define(
 					this.$('.windows-forwarders').hide();
 					this.$('.pre70-forwarders').show();
 					this.$('.nix-forwarders').hide();
-				}  				
+				}
             }),
-            
+
             render: function() {
                 this.$el.html(Modal.TEMPLATE);
                 this.$(Modal.HEADER_TITLE_SELECTOR).html(_.escape(_("Forwarder Setup").t()));
@@ -74,20 +74,20 @@ define(
                 }));
 
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_DONE);
-                
+
 				this.$('.nix-tab').addClass('active');
 				this.$('.windows-tab').removeClass('active');
 				this.$('.pre70-tab').removeClass('active');
-				this.$('.nix-forwarders').show();				
+				this.$('.nix-forwarders').show();
 				this.$('.windows-forwarders').hide();
 				this.$('.pre70-forwarders').hide();
-				
+
                 return this;
             },
 
             template: '\
 	            <div><%- _("Follow these setup instructions for your forwarder version and operating system.").t() + "  "%>\
-	            <span class="text-bold"><%- _("Splunk Cloud Forwarder Management is supported for Splunk forwarders 6.5.0 or later.").t()%> </span>\
+	            <b><%- _("Splunk Cloud Forwarder Management is supported for Splunk forwarders 6.5.0 or later.").t()%> </b>\
     			<%- _("You need access to the Splunk CLI on your forwarder to execute the commands below.").t() + "  "%>\
     			<a class="external" href="<%- helpLink %>" target="_blank">\
     			<%- _("Learn more.").t()%>\

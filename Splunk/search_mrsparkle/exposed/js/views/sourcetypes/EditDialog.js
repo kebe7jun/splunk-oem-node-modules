@@ -10,11 +10,12 @@ define([
     'underscore',
     'backbone',
     'module',
+    'models/services/data/transforms/MetricSchema',
     'views/shared/FlashMessages',
     'views/shared/Modal',
     'views/shared/controls/ControlGroup',
-    'views/datapreview/settings/SettingsPanels'
-
+    'views/datapreview/settings/SettingsTabControls',
+    'views/shared/waitspinner/Master'
 ],
 
     function(
@@ -22,10 +23,12 @@ define([
         _,
         Backbone,
         module,
+        MetricTransformsModel,
         FlashMessages,
         Modal,
         ControlGroup,
-        SettingsPanels
+        SettingsTabControls,
+        WaitSpinner
         ) {
 
         return Modal.extend({
@@ -34,30 +37,26 @@ define([
 
             events: $.extend({}, Modal.prototype.events, {
                 'click .btn-primary': function(e) {
-                    var saveOptions = {};
-                    if(this.model.entity.isNew()  || this.options.isClone){
-                        var app = this.canUseApps ? this.model.entity.entry.acl.get('app') : "search";
-                        saveOptions.data = {app: app, owner: 'nobody'};
-                        this.model.entity.entry.content.set('pulldown_type', 1);
-                    }
+                    this.updateModel();
 
-                    if (_.isUndefined(this.model.entity.entry.get('name'))) {
-                        this.model.entity.entry.set({name:''}, {silent:true});
+                    var selectedCategory = this.model.entity.entry.content.get('category');
+                    var isCategoryLogToMetrics = selectedCategory === 'Log to Metrics';
+                    if (!isCategoryLogToMetrics) {
+                        this.saveSourcetype(isCategoryLogToMetrics);
+                        return;
                     }
-                    this.model.entity.set('name', this.model.entity.entry.get('name'));
-
-                    if (this.options.isClone){
-                        this.model.entity.set('id', undefined);
-                    }
-
-                    var saveDfd = this.model.entity.save({}, saveOptions);
+                    var saveDfd = this.model.metricTransformsModel.save({}, {}, {sourcetypeModel: this.model.entity});
                     if (saveDfd) {
+                        this.$('.shared-waitspinner').show();
                         saveDfd.done(function() {
-                            this.trigger("entitySaved", this.model.entity.get("name"));
-                            this.hide();
+                            // Remove timeout after SPL-157987 is fixed
+                            setTimeout(function() {
+                                this.saveSourcetype(isCategoryLogToMetrics);
+                            }.bind(this), 2000);
                         }.bind(this))
                         .fail(function() {
                             this.$el.find('.modal-body').animate({ scrollTop: 0 }, 'fast');
+                            this.$('.shared-waitspinner').hide();
                         }.bind(this));
                     }
                 }
@@ -68,17 +67,25 @@ define([
                 options = options || {};
                 _(options).defaults({isNew:true});
 
+                this.model.metricTransformsModel = new MetricTransformsModel({
+                    isCloud: this.model.serverInfo.isCloud()
+                });
+
                 this.renderDfd = new $.Deferred();
                 this.deferreds = options.deferreds;
 
                 this.canUseApps = this.model.user.canUseApps();
-                // Create flash messages view
+
                 this.children.flashMessagesView = new FlashMessages({
-                    model: this.model.entity,
                     helperOptions: {
-                        removeServerPrefix: true
+                        removeServerPrefix: true,
+                        postProcess: this.postProcess
                     }
                 });
+                this.children.flashMessagesView.register(this.model.entity);
+                this.children.flashMessagesView.register(this.model.metricTransformsModel);
+
+                this.children.waitSpinner = new WaitSpinner({});
 
                 // Create the form controls
                 this.children.entityName = new ControlGroup({
@@ -87,7 +94,6 @@ define([
                         modelAttribute: 'name',
                         model: this.model.entity.entry
                     },
-                    controlClass: 'controls-block',
                     label: _('Name').t()
                 });
 
@@ -98,7 +104,6 @@ define([
                         model: this.model.entity.entry.content,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
                     label: _('Description').t(),
                     required: false
                 });
@@ -106,12 +111,11 @@ define([
                 this.children.appSelect = new ControlGroup({
                     label: _('Destination app').t(),
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.entity.entry.acl,
                         modelAttribute: 'app',
                         items: [],
-                        className: 'fieldAppSelect',
+                        additionalClassNames: 'fieldAppSelect',
                         toggleClassName: 'btn',
                         popdownOptions: {
                             detachDialog: true
@@ -123,12 +127,11 @@ define([
                 this.children.categorySelect = new ControlGroup({
                     label: _('Category').t(),
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.entity.entry.content,
                         modelAttribute: 'category',
                         items: [],
-                        className: 'fieldCategorySelect',
+                        additionalClassNames: 'fieldCategorySelect',
                         toggleClassName: 'btn',
                         popdownOptions: {
                             detachDialog: true
@@ -137,23 +140,28 @@ define([
                     }
                 });
 
+                var indexedExtractionItems = [
+                    {value: '', label: 'none'},
+                    {value: 'json'},
+                    {value: 'csv'},
+                    {value: 'tsv'},
+                    {value: 'psv'},
+                    {value: 'w3c'}
+                ];
+                var selectedCategory = this.model.entity.entry.content.get('category');
+                var isCategoryLogToMetrics = selectedCategory === 'Log to Metrics';
+                if (isCategoryLogToMetrics) {
+                    indexedExtractionItems.push({value: 'field_extraction'});
+                }
                 this.children.indexedExtractions = new ControlGroup({
                     label: _('Indexed Extractions').t(),
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     tooltip: _('Use this setting only for structured data files whose type matches an entry in this list. Choose \'none\' for other types of data.').t(),
                     controlOptions: {
                         model: this.model.entity.entry.content,
                         modelAttribute: 'INDEXED_EXTRACTIONS',
-                        items: [
-                            {value: '', label: 'none'},
-                            {value: 'json'},
-                            {value: 'csv'},
-                            {value: 'tsv'},
-                            {value: 'psv'},
-                            {value: 'w3c'}
-                        ],
-                        className: 'fieldIndexedExtractionsSelect',
+                        items: indexedExtractionItems,
+                        additionalClassNames: 'fieldIndexedExtractionsSelect',
                         toggleClassName: 'btn',
                         popdownOptions: {
                             attachDialogTo: 'body'
@@ -162,16 +170,19 @@ define([
                     }
                 });
 
-                this.children.settingsPanels = new SettingsPanels({
+                this.children.settingsTabControls = new SettingsTabControls({
                     collection: this.collection,
                     model: {
                         sourcetypeModel: this.model.entity,
+                        metricTransformsModel: this.model.metricTransformsModel,
                         application: this.model.application
                     },
                     enableAccordion: false,
                     advancedToggle: true,
                     updateSilent: false
                 });
+
+                this.startListening();
 
                 $.when(
                     this.deferreds.entity
@@ -196,7 +207,58 @@ define([
                 ).done(function(){
                     this.setCategoryItems();
                 }.bind(this));
+            },
 
+            startListening: function() {
+                this.listenTo(this.model.entity.entry.content, 'change:category', this.updateIndexedExtractions);
+                this.listenTo(this.model.entity.entry.content, 'change:INDEXED_EXTRACTIONS', this.updateIndexedExtractionWarning);
+            },
+
+            saveSourcetype: function(isCategoryLogToMetrics) {
+                var saveOptions = {};
+                if (this.model.entity.isNew() || this.options.isClone) {
+                    var app = this.canUseApps ? this.model.entity.entry.acl.get('app') : "search";
+                    saveOptions.data = {app: app, owner: 'nobody'};
+                    this.model.entity.entry.content.set('pulldown_type', 1);
+                }
+
+                var schemaName = this.model.metricTransformsModel.get('name') || this.model.entity.get('ui.metric_transforms.schema_name');
+                if (schemaName && schemaName.includes('metric-schema:')) {
+                    schemaName = schemaName.split('metric-schema:')[1];
+                }
+                if (!isCategoryLogToMetrics && schemaName) {
+                    this.model.entity.set('ui.metric_transforms.schema_name', '');
+                } else if (schemaName) {
+                    this.model.entity.set({'ui.metric_transforms.schema_name': 'metric-schema:' + schemaName});
+                }
+                var saveDfd = this.model.entity.save({}, saveOptions);
+                if (saveDfd) {
+                    saveDfd.done(function() {
+                        this.$('.shared-waitspinner').hide();
+                        this.trigger("entitySaved", this.model.entity.get("name"));
+                        this.hide();
+                        var schemaNameExists = !_.isEmpty(schemaName);
+                        if (!isCategoryLogToMetrics && schemaNameExists) {
+                            this.model.metricTransformsModel.deleteMetricTranform(schemaName, this.model.entity);
+                        }
+                    }.bind(this))
+                    .fail(function() {
+                        this.$('.shared-waitspinner').hide();
+                        this.$el.find('.modal-body').animate({ scrollTop: 0 }, 'fast');
+                        if (isCategoryLogToMetrics) {
+                            this.model.metricTransformsModel.deleteMetricTranform(schemaName, this.model.entity);
+                        }
+                    }.bind(this));
+                } else {
+                    this.$('.shared-waitspinner').hide();
+                }
+            },
+
+            postProcess: function(messages) {
+                if (messages.length) {
+                    messages[0].set({'html': _.unescape(messages[0].get('html'))});
+                }
+                return messages;
             },
 
             setEnabledState: function(){
@@ -215,23 +277,24 @@ define([
                 }.bind(this));
             },
 
-            setIndexedExtractions: function(){
-                this.children.indexedExtractions.childList[0].setValue(this.model.entity.entry.content.get('INDEXED_EXTRACTIONS'));
+            setIndexedExtractions: function() {
+                var indexedExtraction = this.model.entity.entry.content.get('INDEXED_EXTRACTIONS');
+                this.children.indexedExtractions.childList[0].setValue(indexedExtraction);
             },
 
-            setCategoryItems: function(){
+            setCategoryItems: function() {
                 var items = this.collection.sourcetypesCategories.getCategories();
                 this.children.categorySelect.childList[0].setItems(items);
                 this.children.categorySelect.childList[0].setValue(this.model.entity.entry.content.get('category') || _('Custom').t());
             },
 
-            setAppItems: function(){
+            setAppItems: function() {
                 var items = this.buildAppItems();
                 this.children.appSelect.childList[0].setItems(items);
                 this.children.appSelect.childList[0].setValue(this.model.entity.entry.acl.get('app') || 'search');
             },
 
-            buildAppItems: function(){
+            buildAppItems: function() {
                 var items = [];
                 this.collection.appLocals.each(function(app){
                     items.push( {
@@ -243,6 +306,53 @@ define([
                 return _.sortBy(items, function(item){
                     return (item.label||'').toLowerCase();
                 });
+            },
+
+            updateModel: function() {
+                var sourceTypeName = this.model.entity.entry.get('name');
+                if (_.isUndefined(sourceTypeName)) {
+                    this.model.entity.entry.set({name:''}, {silent:true});
+                } else {
+                    this.model.entity.set('name', sourceTypeName);
+                }
+
+                if (this.options.isClone){
+                    this.model.entity.set('id', undefined);
+                }
+            },
+
+            updateIndexedExtractions: function() {
+                var newItems = this.children.indexedExtractions.options.controlOptions.items;
+                var selectedCategory = this.model.entity.entry.content.get('category');
+                var isCategoryLogToMetrics = selectedCategory === 'Log to Metrics';
+                if (isCategoryLogToMetrics) {
+                    newItems.push({value: 'field_extraction'});
+                } else {
+                    var fieldExtractionIndex = newItems.map(function(e) {
+                        return e.value;
+                    }).indexOf('field_extraction');
+                    if (fieldExtractionIndex >= 0) {
+                        newItems.splice(fieldExtractionIndex, 1);
+                    }
+                }
+                var indexedExtractionList = this.children.indexedExtractions.childList[0];
+                indexedExtractionList.setItems(newItems);
+                if (indexedExtractionList._value === 'field_extraction') {
+                    isCategoryLogToMetrics ? this.showIndexedExtractionWarning() : this.hideIndexedExtractionWarning();
+                }
+            },
+
+            updateIndexedExtractionWarning: function() {
+                var indexedExtraction = this.model.entity.entry.content.get('INDEXED_EXTRACTIONS');
+                indexedExtraction === 'field_extraction' ? this.showIndexedExtractionWarning() : this.hideIndexedExtractionWarning();
+            },
+
+            showIndexedExtractionWarning: function() {
+                this.$('.extractions-warning').show();
+            },
+
+            hideIndexedExtractionWarning: function() {
+                this.$('.extractions-warning').hide();
             },
 
             render: function() {
@@ -264,15 +374,19 @@ define([
 
                 this.children.categorySelect.render().appendTo(this.$(".category-placeholder"));
                 this.children.indexedExtractions.render().appendTo(this.$(".extractions-placeholder"));
-                this.children.settingsPanels.render().appendTo(this.$(".settings-placeholder"));
+                this.children.settingsTabControls.render().appendTo(this.$(".settings-placeholder"));
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL);
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_SAVE);
+                this.$(Modal.FOOTER_SELECTOR).append(this.children.waitSpinner.render().el);
+                this.children.waitSpinner.start();
+                this.$('.shared-waitspinner').hide();
 
-                this.$('.accordion-group').addClass('active').find('.accordion-inner').show();
+                this.$('.accordion-group').find('.accordion-inner').show();
                 this.$('.icon-accordion-toggle').addClass('icon-triangle-down-small');
-                this.$('.accordion-group').last().find('.accordion-inner').hide();
+                this.$('.accordion-group').last().removeClass('active').find('.accordion-inner').hide();
                 this.$('.icon-accordion-toggle').last().removeClass('icon-triangle-down-small');
                 this.$('.copyToClipboardDialog textarea').removeProp('readonly');
+                this.updateIndexedExtractionWarning();
 
                 this.renderDfd.resolve();
 
@@ -286,6 +400,10 @@ define([
                 <div class="appselect-placeholder"></div>\
                 <div class="category-placeholder"></div>\
                 <div class="extractions-placeholder"></div>\
+                <div class="extractions-warning">\
+                    <div class="extractions footer"><%- _("Performs simple key=value field extractions based on a default regular expression.").t() %></div>\
+                    <a class="extractions learn-more-extractions-warning external" href="/help?location=settings.sourcetype.fieldextraction" target="_blank"><%- _("Learn More").t() %></a>\
+                </div>\
                 <div class="settings-placeholder"></div>\
             '
         });

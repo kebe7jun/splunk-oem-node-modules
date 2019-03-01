@@ -2,8 +2,6 @@
 
 .view {
     composes: view from '../../Menu.pcssm';
-    /* DCE-OEM-CHANGE */
-    height: 40px;
 }
 
 .toggle {

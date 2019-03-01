@@ -5,7 +5,8 @@ define([
             'splunk.paginator',
             'module',
             'views/Base',
-            'bootstrap.tooltip'
+            'bootstrap.tooltip',
+            './SearchResultsPaginator.pcss'
         ],
         function(
             $,
@@ -27,7 +28,7 @@ define([
         initialize: function(options) {
             Base.prototype.initialize.apply(this, arguments);
             this.maxPerPage = this.options.maxPerPage || 10;
-            this.maxPages = this.options.maxPages || 10;
+            this.maxPages = this.options.maxPages || 9;
             this.offset = this.options.offset || 0;
             this.offsetKey = this.options.offsetKey || 'offset';
             this.countKey = this.options.countKey || 'count';
@@ -72,7 +73,7 @@ define([
             if (this.active) {
                 return Base.prototype.activate.apply(this, arguments);
             }
-            
+
             //force a render to ensure we are in a proper state
             if (!options.noRender) {
                 this.render();
@@ -138,7 +139,7 @@ define([
              *
              */
             length = Math.ceil(length / options.max_items_page) * options.max_items_page;
-            
+
             this.$el.html(template);
             if (this.model.timeline) {
                 this.$('.max-events-per-bucket span').tooltip({animation: false, title: 'Currently displaying the most recent ' +  length + ' events in the selected range. Select a narrower range or zoom in to see more events.'});

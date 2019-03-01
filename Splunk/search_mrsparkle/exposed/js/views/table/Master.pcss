@@ -14,7 +14,7 @@ body,
 
 .main-section-body {
     background-color: $white;
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
     width: 100%;
 }
 
@@ -75,7 +75,7 @@ body,
     position:relative;
 
     .message, .call-to-action {
-        font-size: $baseFontSizeLarge;
+        font-size: $fontSizeLarge;
 
         .icon-arrow-left {
             color: $textGray;
@@ -115,7 +115,7 @@ body,
     padding: 0px 20px;
 
     &:focus {
-        @mixin focus-pill
+        @mixin focus-element-inset;
     }
 }
 
@@ -154,20 +154,13 @@ body,
         &.has-icon {
             padding-left: 25px;
         }
-
-        &.disabled:hover {
-            cursor: not-allowed;
-        }
     }
 }
 
 /*  Table */
 
-.shared-datasettable {
-
-    .scroll-table-wrapper {
-        margin-top: 38px;
-    }
+.shared-datasettable .scroll-table-wrapper {
+    margin-top: 40px;
 }
 
 /*  Menu Dropdown */
@@ -180,7 +173,7 @@ body,
 .shared-jobdispatchstate {
     position: absolute;
     margin: 80px;
-    font-size: 11px;
+    font-size: $fontSizeSmall;
     z-index: 1;
 
     .alert {

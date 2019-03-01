@@ -98,16 +98,14 @@ define(
 
                     this.children.textDisplayName = new ControlGroup({
                         label:_("Title").t(),
-                        controls: this.textDisplayNameControl,
-                        controlClass: 'controls-block'
+                        controls: this.textDisplayNameControl
                     });
 
                     this.children.textModelName = new ControlGroup({
                         label:_("ID").t(),
                         tooltip: _('The ID is used as the filename on disk and used in the data model search command. Cannot be changed later.').t(),
                         help: _('Can only contain letters, numbers and underscores.').t(),
-                        controls: this.textModelNameControl,
-                        controlClass: 'controls-block'
+                        controls: this.textModelNameControl
                     });
 
                     this.pairedTextControls = new PairedTextControls({sourceDelegate: this.textDisplayNameControl,
@@ -117,7 +115,7 @@ define(
                     this.children.selectApp = new ControlGroup({
                         label:_("App").t(),
                         controlType: "SyntheticSelect",
-                        controlClass: 'controls-block',
+
                         controlOptions: {
                             modelAttribute:"app",
                             model:this.model.createDataModel,
@@ -133,7 +131,7 @@ define(
                     this.children.textAreaDescription = new ControlGroup({
                         label:_("Description").t(),
                         controlType: "Textarea",
-                        controlClass: 'controls-block',
+
                         controlOptions: {
                             modelAttribute:"description",
                             model:this.model.createDataModel,

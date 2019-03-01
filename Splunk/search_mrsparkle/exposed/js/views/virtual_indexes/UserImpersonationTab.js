@@ -83,12 +83,11 @@ define(function(require, exports, module) {
             this.children.providerList = new ControlGroup({
                 className: 'provider-list control-group',
                 controlType: 'SyntheticSelect',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'provider',
                     model: this._mediator,
                     items: this._providerListItems,
-                    className: 'btn-group view-count',
+                    additionalClassNames: 'view-count',
                     menuWidth: 'narrow',
                     toggleClassName: 'btn',
                     prompt: _("Select a Provider").t()
@@ -116,12 +115,11 @@ define(function(require, exports, module) {
             this.children.usersList = new ControlGroup({
                 className: 'users-list control-group',
                 controlType: 'SyntheticSelect',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'splunkUser',
                     model: this._mediator,
                     items: this._usersListThisProvider,
-                    className: 'btn-group view-count',
+                    additionalClassNames: 'view-count',
                     menuWidth: 'narrow',
                     toggleClassName: 'btn',
                     prompt: _("Select a User").t()
@@ -136,7 +134,6 @@ define(function(require, exports, module) {
             this.children.hadoopUser = new ControlGroup({
                 className: 'hadoop-user-name control-group',
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'hadoopUser',
                     model: this._mediator,
@@ -150,7 +147,6 @@ define(function(require, exports, module) {
             this.children.hadoopQueue = new ControlGroup({
                 className: 'queue control-group',
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 controlOptions: {
                     modelAttribute: 'hadoopQueue',
                     model: this._mediator,

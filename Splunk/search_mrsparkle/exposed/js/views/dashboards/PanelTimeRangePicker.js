@@ -87,7 +87,7 @@ define(function(require, exports, module) {
                     controlType: 'SyntheticSelect',
                     className: 'time-range-scope',
                     controlOptions: {
-                        className: 'btn-group time-range-scope-select',
+                        additionalClassNames: 'time-range-scope-select',
                         toggleClassName: 'btn',
                         items: scopeItems,
                         model: this.model.timeRange,
@@ -106,7 +106,7 @@ define(function(require, exports, module) {
             this.children.advancedEarliest = new ControlGroup({
                 label: _("Earliest Token").t(),
                 controlType: 'Text',
-                controlClass: 'controls-block',
+
                 controlOptions: {
                     model: this.model.timeRange,
                     modelAttribute: 'earliest_token'
@@ -115,7 +115,7 @@ define(function(require, exports, module) {
             this.children.advancedLatest = new ControlGroup({
                 label: _("Latest Token").t(),
                 controlType: 'Text',
-                controlClass: 'controls-block',
+
                 controlOptions: {
                     model: this.model.timeRange,
                     modelAttribute: 'latest_token'

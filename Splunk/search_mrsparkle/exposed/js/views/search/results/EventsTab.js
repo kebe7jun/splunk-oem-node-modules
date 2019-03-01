@@ -15,11 +15,11 @@ define(['underscore', 'module', 'views/search/results/shared/BaseTab', 'splunk.i
             var length = this.model.searchJob.entry.content.get("eventCount") || 0,
                 timelineEarliestTime = this.model.report.entry.content.get('display.events.timelineEarliestTime'),
                 timelineLatestTime = this.model.report.entry.content.get('display.events.timelineLatestTime');
-            
+
             if (this.model.searchJob.entry.content.get('statusBuckets')>0 && timelineEarliestTime && timelineLatestTime) {
                 length = this.model.timeline.totalCount(timelineEarliestTime, timelineLatestTime);
             }
-           
+
             this.$el.html(this.compiledTemplate({
                 _: _,
                 length: length,
@@ -31,7 +31,7 @@ define(['underscore', 'module', 'views/search/results/shared/BaseTab', 'splunk.i
         },
         template:'\
             <a href="#" data-tab="events" data-type="events">\
-                <% if (searchJob.isNew() || searchJob.entry.content.get("statusBuckets") === 0) { %>\
+                <% if (searchJob.isNew() || searchJob.entry.content.get("statusBuckets") === 0 || searchJob.isDataFabricEnabled()) { %>\
                     <%- _("Events").t() %>\
                 <% } else { %>\
                     <%- _("Events").t() %> (<%= i18n.format_decimal(length) %>)\

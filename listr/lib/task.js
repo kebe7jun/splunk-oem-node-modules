@@ -1,5 +1,4 @@
 'use strict';
-const isStream = require('is-stream');
 const isPromise = require('is-promise');
 const streamToObservable = require('stream-to-observable');
 const Subject = require('rxjs/Subject').Subject;
@@ -38,17 +37,13 @@ class Task extends Subject {
 		this._listr = listr;
 		this._options = options || {};
 		this._subtasks = [];
-		this._output = undefined;
 		this._enabledFn = task.enabled;
 		this._isEnabled = true;
 
+		this.output = undefined;
 		this.title = task.title;
 		this.skip = task.skip || defaultSkipFn;
 		this.task = task.task;
-	}
-
-	get output() {
-		return this._output;
 	}
 
 	get subtasks() {
@@ -126,7 +121,7 @@ class Task extends Subject {
 			}
 
 			// Detect stream
-			if (isStream(result)) {
+			if (utils.isStream(result)) {
 				result = streamToObservable(result);
 			}
 
@@ -135,7 +130,7 @@ class Task extends Subject {
 				result = new Promise((resolve, reject) => {
 					result.subscribe({
 						next: data => {
-							this._output = data;
+							this.output = data;
 
 							this.next({
 								type: 'DATA',
@@ -164,7 +159,7 @@ class Task extends Subject {
 			.then(skipped => {
 				if (skipped) {
 					if (typeof skipped === 'string') {
-						this._output = skipped;
+						this.output = skipped;
 					}
 					this.state = state.SKIPPED;
 					return;
@@ -185,7 +180,10 @@ class Task extends Subject {
 					return;
 				}
 
-				this._output = err.message;
+				if (!this.hasSubtasks()) {
+					// Do not show the message if we have subtasks as the error is already shown in the subtask
+					this.output = err.message;
+				}
 
 				this.next({
 					type: 'DATA',

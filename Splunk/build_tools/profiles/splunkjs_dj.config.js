@@ -9,7 +9,6 @@ var entryPath = path.join(process.env.SPLUNK_SOURCE, 'web', 'build_tools', 'prof
 
 module.exports = function(options) {
     return mergeConfigs(sharedConfig, _.merge({}. options, postCssConfig({
-        loadTheme: 'enterprise',
         profileName: 'splunkjs_dj'
         })), {
         output: {

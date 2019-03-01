@@ -72,9 +72,8 @@ define(
                 this.children.dashCreateType = new ControlGroup({
                     label: _("Dashboard").t(),
                     controlType:'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             {value:"new", label:_("New").t()},
                             {value:"existing", label:_("Existing").t()}
@@ -87,12 +86,14 @@ define(
                 this.children.dashTitleTextControl = new TextControl({
                     model: this.model.inmem,
                     modelAttribute: 'dashTitle',
+                    ariaLabel: _('Dashboard Title').t(),
                     placeholder: _('optional').t()
                 });
 
                 this.children.dashNameTextControl = new TextControl({
                     model: this.model.inmem,
-                    modelAttribute: 'dashName'
+                    modelAttribute: 'dashName',
+                    ariaLabel: _('Dashboard ID').t()
                 });
 
                 this.pairedTextControls = new PairedTextControls({
@@ -103,13 +104,11 @@ define(
 
                 this.children.dashTitle = new ControlGroup({
                     label: _("Dashboard Title").t(),
-                    controlClass: 'controls-block',
                     controls: this.children.dashTitleTextControl
                 });
 
                 this.children.dashName = new ControlGroup({
                     label: _("Dashboard ID").t(),
-                    controlClass: 'controls-block',
                     controls: this.children.dashNameTextControl,
                     tooltip: _('The ID is used as the filename on disk. Cannot be changed later.').t(),
                     help: _('Can only contain letters, numbers and underscores.').t()
@@ -117,11 +116,11 @@ define(
 
                 this.children.dashDesc = new ControlGroup({
                     label: _("Dashboard Description").t(),
-                    controlClass: 'controls-block',
                     controlType:'Textarea',
                     controlOptions: {
                         model: this.model.inmem,
                         modelAttribute: 'dashDesc',
+                        ariaLabel: _('Dashboard Description').t(),
                         placeholder: _('optional').t()
                     }
                 });
@@ -130,9 +129,8 @@ define(
                 this.children.dashPerm = new ControlGroup({
                     label: _("Dashboard Permissions").t(),
                     controlType:'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group btn-group-2 locale-responsive-layout",
+                        additionalClassNames: "btn-group-2 locale-responsive-layout",
                         items: [
                             {value:"private", label:_("Private").t()},
                             {value:"shared", label:sharedLabel}
@@ -157,7 +155,7 @@ define(
                         label: "",
                         controlType:'SyntheticSelect',
                         controlOptions: {
-                            className: 'btn-group view-count',
+                            additionalClassNames: 'view-count',
                             toggleClassName: 'btn',
                             model: this.model.inmem,
                             modelAttribute: 'existingDash',
@@ -178,10 +176,10 @@ define(
                 this.children.panelTitle = new ControlGroup({
                     label: _("Panel Title").t(),
                     controlType:'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.inmem,
                         modelAttribute: 'panelTitle',
+                        ariaLabel: _('Panel Title').t(),
                         placeholder: _('optional').t()
                     }
                 });
@@ -190,9 +188,8 @@ define(
                 this.children.panelInline = new ControlGroup({
                     label: _("Panel Powered By").t(),
                     controlType:'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group  locale-responsive-layout",
+                        additionalClassNames: "locale-responsive-layout",
                         items: [
                             {value:true, label: _("Inline Search").t(), icon: 'search', iconSize: '', tooltip: _('Clones the report\'s search string and time range. The inline search exists only in the dashboard and has no external dependencies.').t()},
                             {value:false, label: _("Report").t(), icon: 'report', iconSize: '', tooltip: poweredByReportTooltip }
@@ -223,9 +220,8 @@ define(
                 this.children.panelContent = new ControlGroup({
                     label: _("Panel Content").t(),
                     controlType:'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
-                        className: "btn-group locale-responsive-layout",
+                        additionalClassNames: "locale-responsive-layout",
                         items: [
                             {value:"table", label: _("Statistics").t(), icon: 'table', iconSize: ''},
                             {value:"chart", label: viz_type.label, icon: viz_type.icon, iconSize: '' }

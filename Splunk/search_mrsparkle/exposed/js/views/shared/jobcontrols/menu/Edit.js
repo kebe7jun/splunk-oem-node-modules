@@ -23,6 +23,9 @@ define(
                             report: this.model.report,
                             user: this.model.user
                         },
+                        collection: {
+                            workloadManagementStatus: this.collection.workloadManagementStatus
+                        },
                         onHiddenRemove: true,
                         externalJobLinkPage: this.options.externalJobLinkPage
                     });
@@ -37,10 +40,11 @@ define(
                 }
             },
             render: function() {
-                this.$el.html('<a href="#">' + _("Edit Job Settings...").t() + '</a>');
+                this.$el.html('<a href="#" aria-disabled="false">' + _("Edit Job Settings...").t() + '</a>');
                 var canWrite = this.model.searchJob.entry.acl.canWrite();
                 if (!this.model.searchJob.entry.acl.canWrite()) {
-                    this.$('a').addClass('disabled');
+                    this.$('a').addClass('disabled').attr('aria-disabled', 'true');
+                    
                 }
                 return this;
             }

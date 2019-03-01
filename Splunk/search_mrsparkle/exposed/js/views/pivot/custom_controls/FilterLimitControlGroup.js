@@ -88,7 +88,7 @@ define([
             this.limitAmountControl = new TextControl({
                 model: this.model,
                 modelAttribute: 'limitAmount',
-                className: Control.prototype.className + ' input-prepend',
+                className: Control.prototype.className + ' input-prepend input-number-small',
                 inputClassName: this.options.inputClassName || 'input-very-small'
             });
 

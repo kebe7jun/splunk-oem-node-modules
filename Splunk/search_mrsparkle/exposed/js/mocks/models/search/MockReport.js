@@ -21,6 +21,13 @@ define([
 
         isPivotReport: function() {
             return this._attributes['is_pivot_report'] === true;
+        },
+        
+        openInView: function() {
+            if (this._attributes['is_pivot_report'] === true) {
+                return 'pivot';
+            }
+            return 'search';
         }
     });
 

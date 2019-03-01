@@ -3,16 +3,13 @@
 <%!
 from splunk.appserver.mrsparkle.lib import util
 isLite = util.isLite()
-colorClass = ''
-if not isLite:
-  colorClass = 'green'
 %>
 <%def name="js()">
 <script type="text/javascript" src="${make_url('/static/js/etb.js')}"></script>
 
 % if len(successmessage) > 0:
 <script type="text/javascript">
-    openSuccess();
+openSuccess();
 </script>
 % endif
 <%
@@ -77,18 +74,17 @@ def alphanumCMP(x,y):
   <input type="hidden" name="namespace"   value="${namespace|h}" />
 
 
-  <div id="etbheader">
-
-    <h2 class="${colorClass}">${_('Generated event type')}</h2>
+  <div id="control">
+    <h2>${_('Generated event type')}</h2>
     <div id="generatedEventtype">
       <ul class="rulesetList">
-        <span class="et"><b>
+        <span class="et">
             % if len(eventtype) == 0:
                ${_('None')}
             % else:
                ${eventtype|h}
             % endif
-        </b></span>
+        </span>
       </ul>
     </div>
     <div class="eventtypeButtons">
@@ -112,16 +108,16 @@ def alphanumCMP(x,y):
 
     <div class="fieldsetWrapper">
         <fieldset>
-            <legend class="hasHelpText ${colorClass}">${_('Suggested field values')}</legend>
+            <h2>${_('Suggested field values')}</h2>
             <div class="ifxHelpColumn" style="xwidth:80%">
-              <div class="advancedHelpText" style="padding:5px">
-                  <b>${_('Check the below field values, to build up your new event type.')}</b>
+              <div class="advancedHelpText">
+                  ${_('Check the below field values, to build up your new event type.')}
                   <font class="eventval">${_('Blue field values')}</font> ${_('are from your selected event; other values are from other events.')}
               </div>
             </div>
             <ul style="padding:0px; margin:0px;">
             % for attr in fieldOrder:
-                <b class="${colorClass}">${attr|h}</b><br/>
+                <h4>${attr|h}</h4>
                 <li style="list-style-type: none">
                 <% i = 0 %>
                 <% val = eventValues[attr] %>
@@ -163,9 +159,9 @@ def alphanumCMP(x,y):
 % endif
     </div>
     <div id="events">
-      <h2 class="${colorClass}" style="padding:0px">${_('Sample events')}</h2>
+      <h2>${_('Sample events')}</h2>
       <div class="ifxHelpColumn" style="xwidth:80%">
-        <div class="advancedHelpText" style="padding:5px">
+        <div class="advancedHelpText">
           <b>Note:</b> ${_('Sample events match the current event type search.')}</b>
         </div>
       </div>

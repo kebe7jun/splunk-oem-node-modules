@@ -32,7 +32,7 @@ function(
         initialize: function(){
             BaseView.prototype.initialize.apply(this, arguments);
             this.children.searchInput = new TextControl({
-                placeholder: _('Search Documentation').t(),
+                placeholder: _('Search Splunk Docs').t(),
                 style: 'search',
                 useLocalClassNames: true
             });
@@ -51,6 +51,7 @@ function(
                     model: {
                         application: this.model.application,
                         appLocal: this.model.appLocal,
+                        appNav: this.model.appNav,
                         serverInfo: this.model.serverInfo
                     },
                     onHiddenRemove: true

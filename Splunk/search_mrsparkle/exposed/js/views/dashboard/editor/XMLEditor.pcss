@@ -19,7 +19,7 @@
 
 .ace_marker-layer .splunk_warning_marker {
   position: absolute;
-  background: $warningBackground;
+  background: $xmlEditorWarningBackgroundColor;
   z-index: 4; /*z-index of selection marker is 5*/
 }
 
@@ -35,7 +35,10 @@
     }
   }
 }
-
+.ace-tm {
+  background: $xmlEditorBackgroundColor;
+  color: $textColor;
+}
 #dashboard-editor {
   .ace_gutter-cell.ace_error {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAZpJREFUOBGVUz0vQ2EUPuf2cquCCpOPQQwkDYO2f4CBxUjQxsZi6GwUE3/C4iMhsQkRzJIiMYiSiD9gQSJR7T2e0/tRvb138A5vz3m+znvfe0sUvfgpnz19zmXPIOEomRFFPOczC3DNwDqtdZQuNPlhLtVqWokSyCE1CtFr5ftrNHX0UA4GhZ7AbGlb88xq0FqxoNnlGuGbuXRXh2W8sIgpxIcYz8w0L0w/n9/2cObo9v2vo+kEnZaxjok9EO2M7BVXR/aLK0L2rmLK/TVr3RBwnxsfAFZQAhMT+usso90tCq7GIxoD4mRtgonXWKF+X0WkwbrirsbpsPsneMylx5hl2WPw3H1ejVsc9GrVqNbr/QCDeAv37fcQeFORJV4NmA1H60TgbohKixOTRix26UD1XUSO8QpagMzWUaeyq9Wp0YO7K52IyNh2UKA9Ai6wn4RxrocZn+kiMvaDIhGqfJbt3krru3Rz8o2pdpKATJZMvK+NsL8KHtzstPiWKAlTmBkwvPja5JyFPwLRblu7Iq0R1LzgvW5G/4n8AuIHZ4o4A6cIAAAAAElFTkSuQmCC');
@@ -49,13 +52,13 @@
     background-position: 5px 1px;
   }
   .ace_tooltip {
-    background: $grayDark;
-    color: $offWhite;
+    background: $gray30;
+    color: $gray98;
     padding: 8px 10px;
     border: 0;
     border-radius: 5px;
-    font-family: $baseFontFamily;
-    font-size: $baseFontSize;
+    font-family: $fontFamily;
+    font-size: $fontSize;
     line-height: 140%;
   }
 }

@@ -15,6 +15,8 @@ define([
                 search += ' AND ' + options.data.search;
             }
             options.data.search = search;
+            // SPL-157139: call to fetch alert actions with bigger than default limits
+            options.data.count = 1000;
             if (options.addListInTriggeredAlerts) {
                 var success = options.success;
                 options.success = function(collection, response, options) {

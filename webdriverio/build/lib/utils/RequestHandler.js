@@ -28,6 +28,14 @@ var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
 
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
+var _https = require('https');
+
+var _https2 = _interopRequireDefault(_https);
+
 var _request2 = require('request');
 
 var _request3 = _interopRequireDefault(_request2);
@@ -38,6 +46,8 @@ var _deepmerge2 = _interopRequireDefault(_deepmerge);
 
 var _constants = require('../helpers/constants');
 
+var _utilities = require('../helpers/utilities');
+
 var _ErrorHandler = require('./ErrorHandler');
 
 var _package = require('../../package.json');
@@ -46,9 +56,13 @@ var _package2 = _interopRequireDefault(_package);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var httpAgent = new _http2.default.Agent({ keepAlive: true });
+var httpsAgent = new _https2.default.Agent({ keepAlive: true });
+
 /**
  * RequestHandler
  */
+
 var RequestHandler = function () {
     function RequestHandler(options, eventHandler, logger) {
         (0, _classCallCheck3.default)(this, RequestHandler);
@@ -93,6 +107,8 @@ var RequestHandler = function () {
     (0, _createClass3.default)(RequestHandler, [{
         key: 'createOptions',
         value: function createOptions(requestOptions, data) {
+            var _this = this;
+
             var newOptions = {};
 
             /**
@@ -110,7 +126,7 @@ var RequestHandler = function () {
                 newOptions.qs = this.defaultOptions.queryParams;
             }
 
-            newOptions.uri = _url2.default.parse(this.defaultOptions.protocol + '://' + this.defaultOptions.hostname + ':' + this.defaultOptions.port + (requestOptions.gridCommand ? this.gridApiStartPath : this.startPath) + requestOptions.path.replace(':sessionId', this.sessionID || ''));
+            newOptions.uri = _url2.default.parse(this.defaultOptions.protocol + '://' + (0, _utilities.formatHostname)(this.defaultOptions.hostname) + ':' + this.defaultOptions.port + (requestOptions.gridCommand ? this.gridApiStartPath : this.startPath) + requestOptions.path.replace(':sessionId', this.sessionID || ''));
 
             // send authentication credentials only when creating new session
             if (requestOptions.path === '/session' && this.auth !== undefined) {
@@ -128,11 +144,29 @@ var RequestHandler = function () {
             newOptions.json = true;
             newOptions.followAllRedirects = true;
 
+            if (this.defaultOptions.agent) {
+                newOptions.agent = this.defaultOptions.agent;
+            } else if (this.defaultOptions.protocol === 'http') {
+                newOptions.agent = httpAgent;
+            } else if (this.defaultOptions.protocol === 'https') {
+                newOptions.agent = httpsAgent;
+            } else {
+                throw new _ErrorHandler.RuntimeError('Unsupported protocol, must be http or https: ' + this.defaultOptions.protocol);
+            }
+
             newOptions.headers = {
                 'Connection': 'keep-alive',
                 'Accept': 'application/json',
                 'User-Agent': 'webdriverio/webdriverio/' + _package2.default.version
-            };
+
+                // Check for custom authorization header
+            };if (typeof this.defaultOptions.headers === 'object') {
+                (0, _keys2.default)(this.defaultOptions.headers).forEach(function (header) {
+                    if (typeof _this.defaultOptions.headers[header] === 'string') {
+                        newOptions.headers[header] = _this.defaultOptions.headers[header];
+                    }
+                });
+            }
 
             if ((0, _keys2.default)(data).length > 0) {
                 newOptions.json = data;
@@ -146,6 +180,7 @@ var RequestHandler = function () {
             }
 
             newOptions.timeout = this.defaultOptions.connectionRetryTimeout;
+            newOptions.proxy = this.defaultOptions.proxy;
 
             return newOptions;
         }
@@ -161,7 +196,7 @@ var RequestHandler = function () {
     }, {
         key: 'create',
         value: function create(requestOptions, data) {
-            var _this = this;
+            var _this2 = this;
 
             data = data || {};
 
@@ -189,16 +224,16 @@ var RequestHandler = function () {
                 /**
                  * if no session id was set before we've called the init command
                  */
-                if (_this.sessionID === null && requestOptions.requiresSession !== false) {
-                    _this.sessionID = body.sessionId || body.value.sessionId;
+                if (_this2.sessionID === null && requestOptions.requiresSession !== false) {
+                    _this2.sessionID = body.sessionId || body.value.sessionId;
 
-                    _this.eventHandler.emit('init', {
-                        sessionID: _this.sessionID,
+                    _this2.eventHandler.emit('init', {
+                        sessionID: _this2.sessionID,
                         options: body.value,
                         desiredCapabilities: data.desiredCapabilities
                     });
 
-                    _this.eventHandler.emit('info', 'SET SESSION ID ' + _this.sessionID);
+                    _this2.eventHandler.emit('info', 'SET SESSION ID ' + _this2.sessionID);
                 }
 
                 if (body === undefined) {
@@ -208,7 +243,7 @@ var RequestHandler = function () {
                     };
                 }
 
-                _this.eventHandler.emit('result', {
+                _this2.eventHandler.emit('result', {
                     requestData: data,
                     requestOptions: fullRequestOptions,
                     response: response,
@@ -217,7 +252,7 @@ var RequestHandler = function () {
 
                 return body;
             }, function (err) {
-                _this.eventHandler.emit('result', {
+                _this2.eventHandler.emit('result', {
                     requestData: data,
                     requestOptions: fullRequestOptions,
                     body: err
@@ -228,22 +263,22 @@ var RequestHandler = function () {
     }, {
         key: 'request',
         value: function request(fullRequestOptions, totalRetryCount) {
-            var _this2 = this;
+            var _this3 = this;
 
             var retryCount = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
             return new _promise2.default(function (resolve, reject) {
                 (0, _request3.default)(fullRequestOptions, function (err, response, body) {
                     /**
-                     * Resolve with a healthy response
+                     * Resolve only if successful response
                      */
-                    if (!err && body && (body.status === 0 || body.value && !body.status && !(body.value.error || body.value.stackTrace))) {
-                        return resolve({ body: body, response: response });
+                    if (!err && (0, _utilities.isSuccessfulResponse)(response)) {
+                        return resolve({ body, response });
                     }
 
                     if (fullRequestOptions.gridCommand) {
                         if (body.success) {
-                            return resolve({ body: body, response: response });
+                            return resolve({ body, response });
                         }
 
                         return reject(new _ErrorHandler.RuntimeError({
@@ -266,9 +301,8 @@ var RequestHandler = function () {
                     }
 
                     if (body) {
-                        var errorCode = _constants.ERROR_CODES[body.status] || _constants.ERROR_CODES[body.value.error] || _constants.ERROR_CODES[-1];
+                        var errorCode = _constants.ERROR_CODES[body.status] || body.value && _constants.ERROR_CODES[body.value.error] || _constants.ERROR_CODES[-1];
                         var error = {
-                            status: body.status || errorCode.status || -1,
                             type: errorCode ? errorCode.id : 'unknown',
                             message: errorCode ? errorCode.message : 'unknown',
                             orgStatusMessage: body.value ? body.value.message : ''
@@ -283,24 +317,28 @@ var RequestHandler = function () {
                     }
 
                     if (retryCount >= totalRetryCount) {
-                        var _error = null;
+                        var message = 'Couldn\'t connect to selenium server';
+                        var status = -1;
+                        var type = 'ECONNREFUSED';
 
                         if (err && err.message.indexOf('Nock') > -1) {
                             // for better unit test error output
-                            _error = err;
-                        } else {
-                            _error = new _ErrorHandler.RuntimeError({
-                                status: -1,
-                                type: err.code || 'ECONNREFUSED',
-                                message: 'Couldn\'t connect to selenium server',
-                                orgStatusMessage: err.message
-                            });
+                            return reject(err);
                         }
 
-                        return reject(_error);
+                        if (err) {
+                            return reject(new _ErrorHandler.RuntimeError({
+                                status,
+                                type: err.code || type,
+                                orgStatusMessage: err.message,
+                                message
+                            }));
+                        }
+
+                        return reject(new _ErrorHandler.RuntimeError({ status, type, message }));
                     }
 
-                    _this2.request(fullRequestOptions, totalRetryCount, ++retryCount).then(resolve).catch(reject);
+                    _this3.request(fullRequestOptions, totalRetryCount, ++retryCount).then(resolve).catch(reject);
                 });
             });
         }

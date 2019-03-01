@@ -85,28 +85,30 @@ define(
                 }
                 this.listenTo(this.model.state, 'change:id', function() {
                     var model = this.collection.get(this.model.state.get('id'));
-                    this.displaySelectedModel(model); 
+                    this.displaySelectedModel(model);
                 });
             },
             displaySelectedModel: function(model) {
-                if (model) {  // User has made a valid selection from the auto-suggest results 
+                if (model) {  // User has made a valid selection from the auto-suggest results
                         this.$('input').toggleClass('selected', true);
                         var attr = this.options.map(model);
                         var name = attr.name;
                         this.model.state.set('search', '', {silent:true});
                         this.$('input').val(name).attr('title', name);
-                } else {  // User does not have a valid selection.  change to "unselected" state 
+                } else {  // User does not have a valid selection.  change to "unselected" state
                         this.$('input').toggleClass('selected', false);
                 }
-            }, 
+            },
             events: {
                 'keyup input': function(e) {
                     e.preventDefault();
                     if (e.keyCode == 27) {
+                        e.stopPropagation();
                         this.clear();
-                    } else if(e.keyCode == 13) {  //User pressed 'enter' key.  Don't do anything, just submit the form. 
+                    } else if(e.keyCode == 13) {  //User pressed 'enter' key.  Don't do anything, just submit the form.
+                        e.stopPropagation();
                         return;
-                    }          
+                    }
                 },
                 'input input': function(e) {
                     e.preventDefault();
@@ -115,7 +117,7 @@ define(
                         this.model.state.unset('id');
                     } else {
                         this.model.state.set('id', "");
-                    }  
+                    }
                 },
                 'change input': function(e) {
                     e.preventDefault();
@@ -129,11 +131,16 @@ define(
                 },
                 'click input': function(e) {
                     //this.showMenu();
-                    this.model.state.trigger('change:search'); 
+                    this.model.state.trigger('change:search');
                 },
                 'click .edit-btn': function(e) {
                     //this.showMenu();
-                    this.model.state.trigger('change:search'); 
+                    this.model.state.trigger('change:search');
+                },
+                'keyup .edit-btn': function(e) {
+                    if (e.keyCode === 13) {
+                        this.model.state.trigger('change:search');
+                    }
                 },
                 'submit': function(e) {
                     return false;
@@ -144,7 +151,7 @@ define(
                 this.set('');
             },
             set: _.debounce(function(value) {
-                //filter exists 
+                //filter exists
                 if (value.length) {
                     this.model.state.set('search', value);
                 } else {
@@ -153,17 +160,20 @@ define(
             }, 250),
             showMenu: function() {
                 if (this.children.poptart) {
+                    this.children.poptart.off();
                     this.children.poptart.remove();
-                } 
+                }
 
                 // show the currently selected item if it exists, or show the last saved item
-                var selectedModelId = ''; 
-                if (this.model.state.get('id')) { 
-                    selectedModelId = this.model.state.get('id'); 
+                var selectedModelId = '';
+                if (this.model.state.get('id')) {
+                    selectedModelId = this.model.state.get('id');
                 } else if (this.model.active){
                     var attr = this.options.map(this.model.active);
                     selectedModelId = attr.id;
                 }
+
+                this.$('.edit-btn').removeAttr('tabindex');
 
                 this.children.poptart = new MenuView({
                     mode: 'menu',
@@ -171,26 +181,30 @@ define(
                     collection: this.collection,
                     map: this.options.map,
                     model: this.model.state,
-                    selectedModelId: selectedModelId 
+                    selectedModelId: selectedModelId
                 });
+                this.children.poptart.on('hide', function() {
+                    this.$('.edit-btn').attr('tabindex', '0');
+                }.bind(this));
+
                 this.children.poptart.appendTo(this.$el).render();
-                this.children.poptart.show(this.$('input'), {$onOpenFocus: this.$('input')}); 
+                this.children.poptart.show(this.$('input'), {$onOpenFocus: this.$('input')});
             },
             render: function() {
                 this.$el.html(this.compiledTemplate({
                     _: _,
                     model: this.model.state
                 }));
- 
+
                 if (this.model.active) {
-                    this.displaySelectedModel(this.model.active); 
+                    this.displaySelectedModel(this.model.active);
                 }
-     
+
                 return this;
             },
             template: '\
                 <input type="text" class="dashboard-search-query" style="margin-bottom:0px" placeholder="<%-_("No dashboard selected").t() %>" value="<%- model.get("search") %>">\
-                <a class="btn edit-btn"><span class="caret"></span></a>\
+                <a class="btn edit-btn" tabindex="0"><span class="caret"></span></a>\
            '
         });
     }

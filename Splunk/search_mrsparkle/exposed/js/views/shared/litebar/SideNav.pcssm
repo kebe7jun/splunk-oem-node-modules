@@ -4,7 +4,7 @@
 .view {
     width: $sideNavWidth;
     height: 100%;
-    background: $splunkLiteBlack;
+    background: $gray20;
     color: $white;
     box-sizing: border-box;
     position: fixed;
@@ -12,15 +12,21 @@
     left: -$sideNavWidth;
     z-index: $zindexSideNav;
     transition: .5s left;
+    font-family: $sansFontFamily;
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+    line-height: $lineHeight;
     a {
         color: $white;
+        text-decoration: none;
+        cursor: pointer;
     }
 }
 
 .sidenavHead {
     padding: 0 20px;
-    height: $navbarHeightLite;
-    line-height: $navbarHeightLite;
+    height: $litebarHeight;
+    line-height: $litebarHeight;
     font-size: 14px;
 }
 

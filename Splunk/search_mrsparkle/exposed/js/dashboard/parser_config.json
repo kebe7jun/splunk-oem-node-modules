@@ -1,4 +1,4 @@
-{
+    {
     "structure": [
         {
             "name": "dashboard",
@@ -16,6 +16,16 @@
                     "description": "Text that displays beneath a dashboard or form",
                     "type": "node",
                     "dataType": "string"
+                },
+                {
+                    "name": "theme",
+                    "description": "Dashboard theme",
+                    "type": "attribute",
+                    "dataType": "enum",
+                    "values": [
+                        "dark",
+                        "light"
+                    ]
                 },
                 {
                     "name": "isVisible",
@@ -60,7 +70,7 @@
                 },
                 {
                     "name": "hideChrome",
-                    "description": "When truthy the header and footer won't show up",
+                    "description": "When truthy the header won't show up",
                     "type": "attribute",
                     "dataType": "boolean"
                 },
@@ -83,12 +93,6 @@
                     "dataType": "boolean"
                 },
                 {
-                    "name": "hideFooter",
-                    "description": "When truthy the footer won't show up",
-                    "type": "attribute",
-                    "dataType": "boolean"
-                },
-                {
                     "name": "hideSplunkBar",
                     "description": "When truthy the splunk bar won't show up",
                     "type": "attribute",
@@ -99,6 +103,12 @@
                     "description": "When truthy the title won't show up",
                     "type": "attribute",
                     "dataType": "boolean"
+                },
+                {
+                  "name": "hideExport",
+                  "description": "When truthy the export dropdown button won't show up",
+                  "type": "attribute",
+                  "dataType": "boolean"
                 }
             ],
             "children": [
@@ -723,6 +733,13 @@
                     "reportProperty": "display.visualizations.trellis.scales.shared",
                     "type": "option",
                     "dataType": "boolean"
+                },
+                {
+                    "name": "displayview",
+                    "description": "Set the view to open the report in",
+                    "reportProperty": "displayview",
+                    "type": "option",
+                    "dataType": "string"
                 }
             ],
             "normalization": {
@@ -3436,6 +3453,12 @@
                     "type": "attribute",
                     "dataType": "string",
                     "trim": false
+                },
+                {
+                    "name": "submit",
+                    "type": "attribute",
+                    "dataType": "boolean",
+                    "default": true
                 }
             ]
         },
@@ -3453,6 +3476,12 @@
                     "name": "token",
                     "type": "attribute",
                     "dataType": "token-name"
+                },
+                {
+                    "name": "submit",
+                    "type": "attribute",
+                    "dataType": "boolean",
+                    "default": true
                 }
             ]
         },
@@ -3509,6 +3538,12 @@
                     "name": "token",
                     "type": "attribute",
                     "dataType": "token-name"
+                },
+                {
+                    "name": "submit",
+                    "type": "attribute",
+                    "dataType": "boolean",
+                    "default": true
                 }
             ]
         }

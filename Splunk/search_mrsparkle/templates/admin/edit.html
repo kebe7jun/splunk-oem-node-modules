@@ -7,11 +7,10 @@
 
 <%
 sessionId = cherrypy.session.id
-
+import splunk.util
 import splunk.auth
 import splunk.entity as en
 from splunk.appserver.mrsparkle.lib.msg_pool import MsgPoolMgr, UI_MSG_POOL
-
 jmFormActionsStyle = ''
 isEmbedded = splunk.util.normalizeBoolean(cherrypy.request.params.get('embedded'))
 if isEmbedded:
@@ -22,7 +21,7 @@ if isEmbedded:
 % if uiHelper:
     <script type="text/javascript">
     function handleEditFormSubmit(ev) {
-        
+
         var frm = $('#eaiform');
         var eai = Splunk.EAI.getInstance();
         if (!eai)
@@ -30,19 +29,19 @@ if isEmbedded:
             // eai.confirmSubmission = true;
             // eai.confirmQuestion = _("Submitting this form will switch you to LDAP configuration, make sure you write down your failsafe login information or you won't be able to login.");
         eai.saveForm(frm);
-        return false;    
+        return false;
     }
-
     function handleCancelButtonClick() {
-        % if kwargs.get('redirect_override_cancel'):
-            window.location = ${ jsonify(make_url(kwargs['redirect_override_cancel'])) };
+      % if kwargs.get('redirect_override_cancel') and splunk.util.isRedirectSafe(kwargs['redirect_override_cancel']):
+          window.location = ${ jsonify(make_url(kwargs['redirect_override_cancel'])) };
+          
         % else:
             var IEregex = /(?=.*msie ([\d.]+))|(?=.*trident)(?=.*rv\:([\d.]+))/i;
             var isIE = IEregex.test(window.navigator.userAgent);
 
-            if (((isIE && history.length > 0) || (!isIE && history.length > 1)) 
+            if (((isIE && history.length > 0) || (!isIE && history.length > 1))
                 && document.referrer.indexOf('/account/login?') === -1) {
-                // you have history and you are not visiting from login page 
+                // you have history and you are not visiting from login page
                 history.go(-1);
             }else{
                 // you do not have history or you might be visiting from login page
@@ -72,7 +71,7 @@ if isEmbedded:
             save_to = "_new"
         else:
             save_to = entity_name
-        %>    
+        %>
         <%
         actionPath = make_url(["manager", namespace, endpoint_base, en.quoteEntity(save_to)])
         eaiAttributes = form_defaults['eai:attributes']
@@ -102,7 +101,7 @@ if isEmbedded:
             enctype="multipart/form-data" \
             autocomplete="off"
             >
-        <!--h2>${breadcrumbs[len(breadcrumbs) - 1][0]|h}</h2--> 
+        <!--h2>${breadcrumbs[len(breadcrumbs) - 1][0]|h}</h2-->
         % if not '__ns' in uiHelper_elements:
           <input type="hidden" name="__ns" value="${entity.namespace | h}">
         % endif
@@ -118,10 +117,10 @@ if isEmbedded:
           <input type="hidden" name="__action" value="edit">
         % endif
 
-        ## pass through index page filter settings 
+        ## pass through index page filter settings
         % for key in kwargs.keys():
             % if key.startswith('f_'):
-              <input type="hidden" name="__${key}" value="${kwargs[key] | h}">
+              <input type="hidden" name="__${key | h}" value="${kwargs[key] | h}">
             % endif
         % endfor
 
@@ -148,7 +147,11 @@ if isEmbedded:
                         <input type="hidden" name="__uri" value="${edit_links[0][1] | h}">
                     % endif
                     % if isEditable:
-                       <button type="submit" class="splButton-primary" accesskey="s"><span><%doc>TRANS: Save the item</%doc>${_('Save')}</span></button>
+                        <button type="submit" class="splButton-primary" accesskey="s"
+                        % if uiHelper.get("disableSaveButton"):
+                            disabled
+                        % endif
+                        ><span><%doc>TRANS: Save the item</%doc>${_('Save')}</span></button>
                     % endif
                 </div>
             % endif

@@ -51,7 +51,6 @@ define(
                     username = this.model.user.entry.get('name'),
                     fullname = name || username || '';
 
-                fullname = _.escape(fullname);
                 this.welcomeText = splunk_utils.sprintf(_('Welcome, %s').t(), fullname);
                 this.introText = this.options.introText || _('It looks like this is your first time on this page. Would you like to take a quick tour?').t();
                 this.on('hidden', function() {

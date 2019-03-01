@@ -1,0 +1,58 @@
+{
+  "name": "@splunk/time-range-utils",
+  "version": "1.2.0",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Splunk",
+  "scripts": {
+    "build": "babel src -d . --ignore \"**/tests/*.unit.js\"",
+    "build:ci": "yarn build && yarn docs",
+    "docs": "NODE_ENV=production splunk-docs-gen",
+    "docs:start": "splunk-docs-gen --watch",
+    "lint": "eslint src",
+    "lint:ci": "yarn run lint -- -f junit -o test-reports/lint-results.xml",
+    "publish:ci": "cicd-publish-package && cicd-publish-docs",
+    "start": "babel src -d . --watch --ignore \"**/tests/*.unit.js\"",
+    "test": "splunk-karma-unit-test-runner start karma.conf.js --single-run",
+    "test:ci": "yarn run test -- --reporters mocha,junit --junitDirectory test-reports --junitFilename unit-results.xml --no-colors",
+    "test:watch": "splunk-karma-unit-test-runner start karma.conf.js"
+  },
+  "dependencies": {
+    "@splunk/moment": "^0.4.0",
+    "@splunk/splunk-utils": "^1.2.0",
+    "@splunk/ui-utils": "^1.1.0",
+    "lodash": "^4.14.2"
+  },
+  "devDependencies": {
+    "@splunk/babel-preset": "^1.2.0",
+    "@splunk/cicd-tools": "^0.0.15",
+    "@splunk/docs-gen": "^0.5.0",
+    "@splunk/eslint-config": "^1.2.0",
+    "@splunk/jsdoc-loader": "^1.1.0",
+    "@splunk/karma-unit-test-runner": "^3.0.0",
+    "@splunk/react-docs": "^0.4.0",
+    "@splunk/webpack-configs": "^2.0.0",
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.24.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-add-header-comment": "^1.0.3",
+    "chai": "^3.5.0",
+    "eslint": "^4.4.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^2.3.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.2.1",
+    "raw-loader": "^0.5.1",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
+    "sinon": "^3.0.0",
+    "webpack": "^4.17.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.7",
+    "whatwg-fetch": "^2.0.3"
+  },
+  "engines": {
+    "node": ">=6"
+  }
+}

@@ -229,7 +229,7 @@ define(
             _resetInput: function() {
                 if (this.children.input) {
                     this.stopListening(this.children.input);
-                    this.children.input.off();
+                    this.children.input.off(null, null, this);
                     // Remove will revoke it from the registry
                     this.children.input.remove();
                     this.children.input = null;

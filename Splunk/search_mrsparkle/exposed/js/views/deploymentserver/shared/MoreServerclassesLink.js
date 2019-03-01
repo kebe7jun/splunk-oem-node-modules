@@ -46,7 +46,7 @@ define(
                             collection: this.collection
                         });  
                         this.children.modalDialog = new CollectionModal({id: "modal_delete", parent: this});
-                        this.children.modalDialog.settings.set("titleLabel",_("Apps").t());
+                        this.children.modalDialog.settings.set("titleLabel",_("Server Classes").t());
                         var contentHTML = this.children.modalContent.render().el; 
                         this.children.modalDialog.setContent(contentHTML);
                         $("body").append(this.children.modalDialog.render().el);

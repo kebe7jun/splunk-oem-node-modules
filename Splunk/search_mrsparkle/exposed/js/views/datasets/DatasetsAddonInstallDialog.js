@@ -4,16 +4,18 @@ define(
         'underscore',
         'module',
         'views/shared/Modal',
-        'views/shared/controls/ControlGroup',
-        'splunk.util'
+        'views/shared/controls/SyntheticCheckboxControl',
+        'splunk.util',
+        './DatasetsAddonInstallDialog.pcss'
     ],
     function(
         $,
         _,
         module,
         BaseModal,
-        ControlGroup,
-        splunkUtils
+        SyntheticCheckboxControl,
+        splunkUtils,
+        css
     ) {
         return BaseModal.extend({
             moduleId: module.id,
@@ -22,15 +24,12 @@ define(
             initialize: function(options) {
                 BaseModal.prototype.initialize.apply(this, arguments);
 
-                this.children.dontShowAgainControl = new ControlGroup({
+                this.children.dontShowAgainControl = new SyntheticCheckboxControl({
                     label: _('Do not show this again').t(),
-                    controlType: 'SyntheticCheckbox',
                     additionalClassNames: 'dont-show-again-control',
-                    controlOptions: {
-                        model: this.model.userPref.entry.content,
-                        modelAttribute: 'datasets:showInstallDialog',
-                        invertValue: true
-                    }
+                    model: this.model.userPref.entry.content,
+                    modelAttribute: 'datasets:showInstallDialog',
+                    invertValue: true
                 });
 
                 this.on('hidden', function() {
@@ -49,7 +48,6 @@ define(
                 $(_.template(this.template, {
                     _: _
                 })).appendTo(this.$(BaseModal.BODY_SELECTOR));
-                this.$(BaseModal.BODY_SELECTOR).append(BaseModal.FORM_HORIZONTAL);
 
                 this.children.dontShowAgainControl.render().appendTo(this.$(BaseModal.FOOTER_SELECTOR));
                 this.$(BaseModal.FOOTER_SELECTOR).append(BaseModal.BUTTON_CLOSE);

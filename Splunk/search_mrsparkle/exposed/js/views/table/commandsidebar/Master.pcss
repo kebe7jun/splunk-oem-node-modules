@@ -1,22 +1,22 @@
 @import '../variables.pcss';
 
 .table-commandsidebar {
-    $sidebarColor: #666;
+    $sidebarColor: $gray30;
     $sidebarWidth: 180px;
-    $sidebarColorHover: color($sidebarColor blend($white 10%));
-    $commandColor: color($sidebarColor blend($white 15%));
-    $commandColorHover:  color($commandColor blend($white 10%));
-    $commandColorActive: $blue;
-    $commandColorActiveHover: color($commandColorActive blend($white 20%));
-    $commandColorError:  color($commandColor blend($red 50%));
-    $commandColorErrorHover: color($commandColorHover blend($red 55%));
-    $commandColorActiveError:  $red;
-    $commandColorActiveErrorHover: color($commandColorActiveError blend($white 10%));
+    $sidebarColorHover: $gray45;
+    $commandColor: $gray45;
+    $commandColorHover:  $gray60;
+    $commandColorActive: $accentColor;
+    $commandColorActiveHover: $accentColorL10;
+    $commandColorError:  $errorColorD50;
+    $commandColorErrorHover: $errorColorD30;
+    $commandColorActiveError:  $errorColor;
+    $commandColorActiveErrorHover: $errorColorL20;
 
     z-index: 2;
 
     @define-mixin focus-dark {
-        background-color:  color($focusColor blend($commandColor 50%));
+        background-color:  $accentColorD10;
         box-shadow: none;
         outline: none;
     }
@@ -26,7 +26,7 @@
 
     box-sizing: border-box;
     background-color: $sidebarColor;
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
     position: relative;
     overflow: hidden;
 
@@ -145,12 +145,20 @@
         > .btn {
             border: none;
             border-radius: 0;
-            border-bottom: transparent 4px solid;
+            border-bottom: transparent 3px solid;
             background: none;
             line-height: 16px;
             color: $white;
-            flex: 1 0 0px;
             box-shadow: none;
+            padding: 10px;
+
+            &:first-child {
+                flex: 1 1 auto;
+            }
+
+            &:last-child {
+                flex: 1 0 auto;
+            }
 
             &.active, &:hover {
                 color: $white;
@@ -162,14 +170,14 @@
                 border-bottom-right-radius: 0px;
             }
             &:hover:not(.active) {
-                background: $tableBackgroundFocus;
-                border-bottom: $grayLight 4px solid;
+                border-bottom: $gray60 3px solid;
             }
             &.active {
-                border-bottom: $blue 4px solid;
+                font-weight: $fontWeightSemiBold;
+                border-bottom: $infoColor 3px solid;
             }
             &:focus {
-                @mixin focus-pill;
+                @mixin focus-element;
             }
         }
     }
@@ -180,8 +188,8 @@
         .btn-command {
             background-color: $commandColor;
             color: $white;
-            padding: 7px 30px 7px 10px;
-            line-height: $baseLineHeight;
+            padding: 5px 30px 5px 10px;
+            line-height: $lineHeight;
             word-wrap: break-word;
             cursor: pointer;
 
@@ -203,7 +211,7 @@
             }
 
             &.active.error {
-                background-color: $red;
+                background-color: $errorColor;
             }
 
             &:focus {
@@ -220,6 +228,8 @@
             display: inline-block;
             right: 0;
             top: 0;
+            bottom: 0;
+            overflow: hidden;
             width: 30px;
             line-height: 30px;
             color: $white;

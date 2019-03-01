@@ -86,7 +86,6 @@ define(
                     this.children.filterControl = new ControlGroup(
                         {
                             size: 'small',
-                            controlClass: 'input-prepend',
                             controls: [
                                 {
                                     type: 'SyntheticSelect',
@@ -99,7 +98,8 @@ define(
                                         size: 'small',
                                         popdownOptions: {
                                             detachDialog: true
-                                        }
+                                        },
+                                        additionalClassNames: 'comparator-control'
                                     }
                                 },
                                 {

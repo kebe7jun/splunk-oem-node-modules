@@ -4,20 +4,23 @@ define(
         'jquery',
         'module',
         'views/shared/splunkbar/find/results/BaseResults',
-        'uri/route'
+        'uri/route',
+        'splunk.util'
     ],
     function(
         _,
         $,
         module,
         BaseResultView,
-        route
+        route,
+        splunkUtils
     ){
         return BaseResultView.extend({
             className: 'reportResults',
             render: function() {
                 var html = this.compiledTemplate({
                     _: _,
+                    splunkUtils: splunkUtils,
                     collection: this.collection.reports || [],
                     css: this.css,
                     className: "reports",
@@ -40,7 +43,7 @@ define(
                     alternateApp: this.options.alternateApp,
                     getViewingPageRoute: this.getViewingPageRoute
                 });
-                
+
                 this.$el.html(html);
                 this.addIcons(this.$('[data-role=main-link]'), 'report', 1.3333);
                 this.addIcons(this.$('[data-role=secondary-link]'), 'external', 1);

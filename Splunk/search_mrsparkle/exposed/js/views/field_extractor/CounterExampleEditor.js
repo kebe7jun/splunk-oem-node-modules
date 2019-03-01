@@ -79,7 +79,7 @@ define([
         // NOTE: it is safe to not escape the counter example text, since it has been pre-processed and escaped below
         template: '\
         <% _(counterExamples).each(function(counterExample, i) { %>\
-            <a href="#" class="remove-button" data-counter-example-index="<%- i %>"><i class="icon-x-circle"></i></a>\
+            <a href="#" class="remove-button" data-counter-example-index="<%- i %>"><i class="icon-x"></i></a>\
             <div class="event-wrapper counter-example-wrapper">\
                 <span class="event-text"><%= counterExample %></span>\
             </div>\

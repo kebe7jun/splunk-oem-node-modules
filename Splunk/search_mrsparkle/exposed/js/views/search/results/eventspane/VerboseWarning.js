@@ -37,11 +37,11 @@ define(
             template: '\
                 <div class="alert alert-warning">\
                     <% if (adhocSearchLevel==splunkd_utils.FAST) { %>\
-                        <i class="icon-alert"></i><%- _("Your search did not return any events because you are in Fast Mode.").t() %>\
+                        <h2><%- _("Your search did not return any events because you are in Fast Mode.").t() %></h2>\
                     <% } else if (adhocSearchLevel==splunkd_utils.SMART) { %>\
-                        <i class="icon-alert"></i><%- _("Your search did not return any events because you are in Smart Mode.").t() %>\
+                        <h2><%- _("Your search did not return any events because you are in Smart Mode.").t() %></h2>\
                     <% } %>\
-                    <%= _(\'<a href="#">Search in Verbose Mode</a> to see the events.\').t() %>\
+                    <%= _(\'<a href="#">Search in Verbose Mode</a> to view events.\').t() %>\
                 </div>\
             '
         });

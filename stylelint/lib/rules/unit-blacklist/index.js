@@ -1,73 +1,134 @@
-"use strict"
+"use strict";
 
-const atRuleParamIndex = require("../../utils/atRuleParamIndex")
-const declarationValueIndex = require("../../utils/declarationValueIndex")
-const getUnitFromValueNode = require("../../utils/getUnitFromValueNode")
-const optionsMatches = require("../../utils/optionsMatches")
-const report = require("../../utils/report")
-const ruleMessages = require("../../utils/ruleMessages")
-const validateOptions = require("../../utils/validateOptions")
-const _ = require("lodash")
-const validateObjectWithStringArrayProps = require("../../utils/validateObjectWithStringArrayProps")
-const valueParser = require("postcss-value-parser")
+const _ = require("lodash");
+const atRuleParamIndex = require("../../utils/atRuleParamIndex");
+const declarationValueIndex = require("../../utils/declarationValueIndex");
+const getUnitFromValueNode = require("../../utils/getUnitFromValueNode");
+const mediaParser = require("postcss-media-query-parser").default;
+const optionsMatches = require("../../utils/optionsMatches");
+const report = require("../../utils/report");
+const ruleMessages = require("../../utils/ruleMessages");
+const validateObjectWithStringArrayProps = require("../../utils/validateObjectWithStringArrayProps");
+const validateOptions = require("../../utils/validateOptions");
+const valueParser = require("postcss-value-parser");
 
-const ruleName = "unit-blacklist"
+const ruleName = "unit-blacklist";
 
 const messages = ruleMessages(ruleName, {
-  rejected: unit => `Unexpected unit "${unit}"`,
-})
+  rejected: unit => `Unexpected unit "${unit}"`
+});
 
-const rule = function (blacklistInput, options) {
-  const blacklist = [].concat(blacklistInput)
+// a function to retrieve only the media feature name
+// could be externalized in an utils function if needed in other code
+const getMediaFeatureName = mediaFeatureNode => {
+  const value = mediaFeatureNode.value.toLowerCase();
+
+  return /((-?\w*)*)/i.exec(value)[1];
+};
+
+const rule = function(blacklistInput, options) {
+  const blacklist = [].concat(blacklistInput);
   return (root, result) => {
-    const validOptions = validateOptions(result, ruleName, {
-      actual: blacklist,
-      possible: [_.isString],
-    }, {
-      optional: true,
-      actual: options,
-      possible: {
-        ignoreProperties: validateObjectWithStringArrayProps,
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      {
+        actual: blacklist,
+        possible: [_.isString]
       },
-    })
+      {
+        optional: true,
+        actual: options,
+        possible: {
+          ignoreProperties: validateObjectWithStringArrayProps,
+          ignoreMediaFeatureNames: validateObjectWithStringArrayProps
+        }
+      }
+    );
     if (!validOptions) {
-      return
+      return;
     }
 
-    function check(node, value, getIndex) {
-      valueParser(value).walk(function (valueNode) {
+    function check(node, nodeIndex, valueNode, input, option) {
+      const unit = getUnitFromValueNode(valueNode);
+
+      // There is not unit or it is not configured as a violation
+      if (!unit || (unit && blacklist.indexOf(unit.toLowerCase()) === -1)) {
+        return;
+      }
+
+      // The unit has an ignore option for the specific input
+      if (optionsMatches(option, unit.toLowerCase(), input)) {
+        return;
+      }
+
+      report({
+        index: nodeIndex + valueNode.sourceIndex,
+        message: messages.rejected(unit),
+        node,
+        result,
+        ruleName
+      });
+    }
+
+    function checkMedia(node, value, getIndex) {
+      mediaParser(node.params).walk(/^media-feature$/i, mediaFeatureNode => {
+        const mediaName = getMediaFeatureName(mediaFeatureNode);
+        const parentValue = mediaFeatureNode.parent.value;
+
+        valueParser(value).walk(function(valueNode) {
+          // Ignore all non-word valueNode and
+          // the values not included in the parentValue string
+          if (
+            valueNode.type !== "word" ||
+            !parentValue.includes(valueNode.value)
+          ) {
+            return;
+          }
+          check(
+            node,
+            getIndex(node),
+            valueNode,
+            mediaName,
+            options ? options.ignoreMediaFeatureNames : {}
+          );
+        });
+        return;
+      });
+    }
+
+    function checkDecl(node, value, getIndex) {
+      // make sure multiplication operations (*) are divided - not handled
+      // by postcss-value-parser
+      value = value.replace(/\*/g, ",");
+
+      valueParser(value).walk(function(valueNode) {
         // Ignore wrong units within `url` function
-        if (valueNode.type === "function" && valueNode.value.toLowerCase() === "url") {
-          return false
+        if (
+          valueNode.type === "function" &&
+          valueNode.value.toLowerCase() === "url"
+        ) {
+          return false;
         }
-
-        const unit = getUnitFromValueNode(valueNode)
-
-        if (!unit || unit && blacklist.indexOf(unit.toLowerCase()) === -1) {
-          return
-        }
-
-        if (options && optionsMatches(options.ignoreProperties, unit.toLowerCase(), node.prop)) {
-          return
-        }
-
-        report({
-          index: getIndex(node) + valueNode.sourceIndex,
-          message: messages.rejected(unit),
+        check(
           node,
-          result,
-          ruleName,
-        })
-      })
+          getIndex(node),
+          valueNode,
+          node.prop,
+          options ? options.ignoreProperties : {}
+        );
+      });
     }
 
-    root.walkAtRules(/^media$/i, atRule => check(atRule, atRule.params, atRuleParamIndex))
-    root.walkDecls(decl => check(decl, decl.value, declarationValueIndex))
-  }
-}
+    root.walkAtRules(/^media$/i, atRule =>
+      checkMedia(atRule, atRule.params, atRuleParamIndex)
+    );
+    root.walkDecls(decl => checkDecl(decl, decl.value, declarationValueIndex));
+  };
+};
 
-rule.primaryOptionArray = true
+rule.primaryOptionArray = true;
 
-rule.ruleName = ruleName
-rule.messages = messages
-module.exports = rule
+rule.ruleName = ruleName;
+rule.messages = messages;
+module.exports = rule;

@@ -3,7 +3,7 @@
  * @date 3/30/16
  *
  * Represents a row in the table. The row contains links to perform
- * operations on the given saved search. 
+ * operations on the given saved search.
  */
 define([
     'jquery',
@@ -257,7 +257,7 @@ define([
                 var html = this.compiledTemplate({
                     model: this.model.entity,
                     canDeleteSourcetype: this.model.entity.entry.links.has('remove'),
-                    description: _(this.model.entity.entry.content.get('description') || '').t(),
+                    description: this.model.entity.entry.content.get('description') || '',
                     stringUtils: stringUtils,
                     descMaxLength: 300,
                     isCloud: this.model.serverInfo.isCloud(),
@@ -281,7 +281,7 @@ define([
                     title: _('Name').t()
                 }, {
                     id: 'auto_summarize',
-                    html: '<i class="icon-lightning"></i>',
+                    html: '<i aria-label="' + _('Accelerate').t() + '" class="icon-lightning"></i>',
                     noSort: true
                 }, {
                     id: 'next_scheduled_time',

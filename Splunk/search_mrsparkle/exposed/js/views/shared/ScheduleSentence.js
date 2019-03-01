@@ -7,7 +7,8 @@ define(
         'views/shared/controls/ControlGroup',
         'views/shared/controls/SyntheticSelectControl',
         'uri/route',
-        'splunk.util'
+        'splunk.util',
+        './ScheduleSentence.pcss'
     ],
     function(
         $,
@@ -17,10 +18,12 @@ define(
         ControlGroup,
         SyntheticSelectControl,
         route,
-        splunkUtil
+        splunkUtil,
+        css
     ){
         return BaseView.extend({
             moduleId: module.id,
+            className: 'schedule-sentence',
             /**
             * @param {Object} options {
             *   model: {
@@ -54,8 +57,8 @@ define(
                 this.children.timeRange = new ControlGroup({
                     className: 'control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
+                        ariaLabel: this.options.lineOneLabel || _('Schedule ').t(),
                         modelAttribute: 'cronType',
                         model: this.model.cron,
                         items: [
@@ -83,6 +86,7 @@ define(
                     toggleClassName: 'btn',
                     labelPosition: 'outside',
                     elastic: true,
+                    ariaLabel: _('Select how many minutes past the hour to schedule the alert').t(),
                     popdownOptions: $.extend(true, {}, this.options.popdownOptions)
                 });
 
@@ -102,6 +106,7 @@ define(
                     save: false,
                     toggleClassName: 'btn',
                     labelPosition: 'outside',
+                    ariaLabel: _('Select which day of the week the alert is scheduled').t(),
                     popdownOptions: $.extend(true, {}, this.options.popdownOptions)
                 });
 
@@ -114,6 +119,7 @@ define(
                     save: false,
                     toggleClassName: 'btn',
                     labelPosition: 'outside',
+                    ariaLabel: _('Select which day of the month the alert is scheduled').t(),
                     popdownOptions: $.extend(true, {}, this.options.popdownOptions)
                 });
 
@@ -126,7 +132,9 @@ define(
                     save: false,
                     toggleClassName: 'btn',
                     labelPosition: 'outside',
-                    popdownOptions: $.extend(true, {}, this.options.popdownOptions)
+                    ariaLabel: _('Select which hour of the day the alert is scheduled').t(),
+                    popdownOptions: $.extend(true, {},
+                         this.options.popdownOptions)
                 });
 
                 this.children.scheduleOptions = new ControlGroup({
@@ -136,6 +144,7 @@ define(
                         this.children.monthly,
                         this.children.daily
                     ],
+                    controlsLayout: 'separate',
                     label: this.options.lineTwoLabel
                 });
 
@@ -146,68 +155,61 @@ define(
                 );
                 this.children.cronSchedule = new ControlGroup({
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'cron_schedule',
                         model: this.model.cron
                     },
                     label: _('Cron Expression').t(),
                     help: splunkUtil.sprintf(_('e.g. 00 18 *** (every day at 6PM). %s').t(),
-                        '<a href="'+ docRoute +'" class="help" target="_blank" title="' +
-                        _("Splunk help").t() +'">' + _("Learn More").t() + '</a>')
+                        '<a href="'+ docRoute +'" class="help" target="_blank" title="' + _("Splunk help").t() + '"' +
+                        'aria-label="' + _("Learn more about cron schedule").t() +
+                        '">' + _("Learn More").t() + '</a>')
                 });
 
                 this.activate();
             },
             timeRangeToggle: function() {
-                var $preLabel = this.children.scheduleOptions.$el.find('.pre_label'),
-                    $hourPostLabel = this.children.scheduleOptions.$el.find('.hour_post_label'),
-                    $weeklyPreLabel = this.children.scheduleOptions.$el.find('.weekly_pre_label'),
-                    $monthlyPreLabel = this.children.scheduleOptions.$el.find('.monthly_pre_label'),
-                    $dailyPreLabel = this.children.scheduleOptions.$el.find('.daily_pre_label'),
-                    $customControls = this.$el.find('.custom_time');
-
                 this.children.hourly.$el.hide();
                 this.children.daily.$el.hide();
                 this.children.weekly.$el.hide();
                 this.children.monthly.$el.hide();
 
-                $preLabel.hide();
-                $hourPostLabel.hide();
-                $weeklyPreLabel.hide();
-                $monthlyPreLabel.hide();
-                $dailyPreLabel.hide();
+                this.$preLabel.hide();
+                this.$hourPostLabel.hide();
+                this.$weeklyPreLabel.hide();
+                this.$monthlyPreLabel.hide();
+                this.$dailyPreLabel.hide();
 
-                $customControls.css('display', 'none');
+                this.$customControls.css('display', 'none');
 
                 switch(this.model.cron.get('cronType')){
                     case 'hourly':
                         this.children.scheduleOptions.$el.show();
                         this.children.hourly.$el.css('display', '');
-                        $preLabel.css('display', '');
-                        $hourPostLabel.css('display', '');
+                        this.$preLabel.css('display', '');
+                        this.$hourPostLabel.css('display', '');
                         break;
                     case 'daily':
                         this.children.scheduleOptions.$el.show();
                         this.children.daily.$el.css('display', '');
-                        $preLabel.css('display', '');
+                        this.$preLabel.css('display', '');
                         break;
                     case 'weekly':
                         this.children.scheduleOptions.$el.show();
                         this.children.weekly.$el.css('display', '');
                         this.children.daily.$el.css('display', '');
-                        $weeklyPreLabel.css('display', '');
-                        $dailyPreLabel.css('display', '');
+                        this.$weeklyPreLabel.css('display', '');
+                        this.$dailyPreLabel.css('display', '');
                         break;
                     case 'monthly':
                         this.children.scheduleOptions.$el.show();
                         this.children.monthly.$el.css('display', '');
                         this.children.daily.$el.css('display', '');
-                        $monthlyPreLabel.css('display', '');
-                        $dailyPreLabel.css('display', '');
+                        this.$monthlyPreLabel.css('display', '');
+                        this.$dailyPreLabel.css('display', '');
                         break;
                     case 'custom':
-                        $customControls.css('display', '');
+                        this.$customControls.css('display', '');
                         this.children.scheduleOptions.$el.hide();
                         break;
                 }
@@ -222,30 +224,57 @@ define(
                 this.$el.append(this.children.timeRange.render().el);
                 this.$el.append(this.children.scheduleOptions.render().el);
 
-                this.children.scheduleOptions.$el.find('.schedule_hourly').before(
-                    '<span class="pre_label">' + _("At ").t() + '</span>');
-                this.children.scheduleOptions.$el.find('.schedule_hourly').after(
-                    '<span class="hour_post_label">' + _(" minutes past the hour").t() + '</span>');
+                this.$preLabel = $(_.template(this.labelTemplate, {
+                    labelClass: 'pre_label',
+                    label: _("At ").t()
+                }));
+                
+                this.$hourPostLabel = $(_.template(this.labelTemplate, {
+                    labelClass: 'hour_post_label',
+                    label: _(" minutes past the hour ").t()
+                }));
+                
+                this.$weeklyPreLabel = $(_.template(this.labelTemplate, {
+                    labelClass: 'weekly_pre_label',
+                    label: _("On ").t()
+                }));
+                
+                this.$monthlyPreLabel = $(_.template(this.labelTemplate, {
+                    labelClass: 'monthly_pre_label',
+                    label: _("On day ").t()
+                }));
+                
+                this.$dailyPreLabel = $(_.template(this.labelTemplate, {
+                    labelClass: 'daily_pre_label',
+                    label: _(" at ").t()
+                }));
+                
+                this.children.scheduleOptions.$('.schedule_hourly')
+                    .before(this.$preLabel)
+                    .after(this.$hourPostLabel);
 
-                this.children.scheduleOptions.$el.find('.schedule_weekly').before(
-                    '<span class="weekly_pre_label">' + _("On ").t() + '</span>');
-                this.children.scheduleOptions.$el.find('.schedule_weekly .btn').width('75px');
+                this.children.scheduleOptions.$('.schedule_weekly')
+                    .before(this.$weeklyPreLabel);
 
-                this.children.scheduleOptions.$el.find('.schedule_monthly').before(
-                    '<span class="monthly_pre_label">' + _("On day ").t() + '</span>');
-                this.children.scheduleOptions.$el.find('.schedule_monthly .btn').width('55px');
+                this.children.scheduleOptions.$('.schedule_monthly')
+                    .before(this.$monthlyPreLabel);
 
-                this.children.scheduleOptions.$el.find('.schedule_daily').before(
-                    '<span class="daily_pre_label">' + _(" at ").t() + '</span>');
-                this.children.scheduleOptions.$el.find('.schedule_daily .btn').width('50px');
-
-                this.$el.append('<div class="custom_time"></div>');
-                this.$el.find('.custom_time').append(this.children.cronSchedule.render().el);
+                this.children.scheduleOptions.$('.schedule_daily')
+                    .before(this.$dailyPreLabel);
+                    
+                this.$customControls = $('<div class="custom_time"></div>');
+                this.$el.append(this.$customControls);
+                this.$customControls.append(this.children.cronSchedule.render().el);
 
                 this.timeRangeToggle();
 
                 return this;
-            }
+            },
+            
+            labelTemplate:
+                '<span role="label" class="<%- labelClass %> input-label">\
+                    <%- label %>\
+                </span>'
         });
      }
  );

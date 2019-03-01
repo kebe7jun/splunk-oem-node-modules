@@ -1,9 +1,10 @@
 define(
     [
+        'util/general_utils',
         'models/services/data/ui/Time',
         'collections/SplunkDsBase'
     ],
-    function(TimeModel, SplunkDsBaseCollection) {
+    function(Utils, TimeModel, SplunkDsBaseCollection) {
         var TimesCollection = SplunkDsBaseCollection.extend({
             url: 'data/ui/times',
             model: TimeModel,
@@ -31,7 +32,23 @@ define(
                 });
             },
             comparator: function(model) {
-                return parseInt(model.entry.content.get('order'), 10);
+                // return the numeric value of the order field or MAXINT if not a valid number
+                return parseInt(model.entry.content.get('order'), 10) || Number.MAX_VALUE;
+            },
+            // Return a settings model to enable/disable time-picker panels
+            getSettings: function () {
+                return this.filter(function (model) {
+                    return model.isSettings();
+                }).map(function (model) {
+                    return {
+                        showAdvanced: Utils.normalizeBoolean(model.entry.content.get('show_advanced')),
+                        showDate: Utils.normalizeBoolean(model.entry.content.get('show_date_range')),
+                        showDateTime: Utils.normalizeBoolean(model.entry.content.get('show_datetime_range')),
+                        showPresets: Utils.normalizeBoolean(model.entry.content.get('show_presets')),
+                        showRealtime: Utils.normalizeBoolean(model.entry.content.get('show_realtime')),
+                        showRelative: Utils.normalizeBoolean(model.entry.content.get('show_relative'))
+                    };
+                })[0];
             }
         });
 

@@ -1,145 +1,129 @@
 /*
  *  Glorious Splunk Skin
- *
  */
 
-
-
-
-/* Basic Typography
----------------------------------*/
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('$(staticFontPath)/roboto-regular-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('$(staticFontPath)/roboto-bold-webfont.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('$(staticFontPath)/roboto-light-webfont.woff') format('woff');
-  font-weight: 200;
-  font-style: normal;
-}
-
-@font-face {
-    font-family: 'Splunk Icons';
-    src: url('/static/fonts/splunkicons-regular-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-
-/*  Monospace */
-@font-face {
-	font-family: 'Droid Sans Mono';
-	src: url('$(staticFontPath)/droid-sans-mono-webfont.woff') format('woff');
-	font-weight: 400;
-	font-style: normal;
-}
-
-@if $theme == lite {
-	/*  Ubuntu */
-	@font-face {
-	  font-family: 'Ubuntu';
-	  font-style: normal;
-	  font-weight: 400;
-	  src: url('$(staticFontPath)/ubuntu-regular.ttf') format('truetype');
-	}
-	@font-face {
-	  font-family: 'Ubuntu';
-	  font-style: normal;
-	  font-weight: 300;
-	  src: url('$(staticFontPath)/ubuntu-light.ttf') format('truetype');
-	}
-	@font-face {
-	  font-family: 'Ubuntu';
-	  font-style: normal;
-	  font-weight: 700;
-	  src: url('$(staticFontPath)/ubuntu-medium.ttf') format('truetype');
-	}
-}
-
-
+/*************************************************************************************************/
+/*  TYPOGRAPHY                                                                                   */
+/*************************************************************************************************/
+@mixin define-font 'Proxima Nova', proxima-bold-webfont.woff, woff, bold;                     /*  Bold */
+@mixin define-font 'Proxima Nova', proxima-regular-webfont.woff;                              /*  Regular */
+@mixin define-font 'Proxima Nova', proxima-semibold-webfont.woff, woff, $fontWeightSemiBold;   /*  semi-bold */
+@mixin define-font 'Inconsolata', inconsolata-regular.woff, woff;                               /*  Monospace */
+@mixin define-font 'Architects Daughter', ArchitectsDaughter.ttf, truetype;
+@mixin define-font 'Splunk Icons', splunkicons-regular-webfont.woff;  /*  Splunk Icons :  unicode-range: U+00-FF; */
 
 body {
-    font-family: $baseFontFamily;
-    font-size: $baseFontSizeSmall;
-    color: $grayDark;
+    font-family: $fontFamily;
+    font-size: $fontSize;
+    color: $gray30;
+}
+input, textarea, select, optgroup {
+    font-family: $fontFamily;
+    font-size: $fontSize;
+    color: $textColor;
+}
+select {
+    @mixin interactive;
+    @mixin button-states;
+    height: 32px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjMycHgiIGhlaWdodD0iOHB4IiB2aWV3Qm94PSIwIDAgMzIgOCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMzIgOCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlsaW5lIGZpbGw9IiM4MThEOTkiIHBvaW50cz0iMTMsMiAxOSwyIDE2LjAxMiw1Ljk4NCAiLz48L3N2Zz4=);
+    background-repeat: no-repeat;
+    background-position: right;
+    padding: 2px 25px 2px $spacingHalf;
+    text-overflow: ellipsis;
+    &:hover {
+        color: $linkColor;
+    }
+    &:focus {
+        outline: none !important;
+        outline-style: none;
+    }
+    &:-moz-focusring {
+        color: transparent;
+        text-shadow: 0 0 0 #000;
+    }
+    &::-ms-expand {
+        display: none;
+    }
 }
 
-input, textarea, select, optgroup {
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: $baseFontSize;
-    color: #111;
+
+/*************************************************************************************************/
+/*  HEADINGS                                                                                     */
+/*************************************************************************************************/
+h1, h2, h3, h4 {
+    margin: calc($lineHeight / 2) 0;
+    font-family: $headingsFontFamily;
+    font-weight: $headingsFontWeight;
+    line-height: $headingsLineHeight;
+    color: $headingsColor;
+    text-rendering: optimizelegibility; /*  Fix the character spacing for headings */
 }
 
 h1 {
-    font-size: 18px;
-    font-weight: normal;
-    color:$splunkGreen;
+    font-size: $fontSizeXXLarge;
+    font-weight: bold;
 }
 h2 {
-    font-size: $baseFontSize;
-    font-weight:bold;
-    color: $grayDark;
+    font-size: $fontSizeXLarge;
 }
+
 h3 {
-    font-size: $baseFontSize;
-    font-weight: bold;
-    color: $grayDark;
+    font-size: $fontSizeLarge;
 }
 h4 {
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSize;
+    color: $textColor;
     font-weight: bold;
-    color: $grayDark;
+    margin: 0;
 }
 
 /* font styles */
 .splFont-mono, .SearchBar label {
-	font-family: $monoFontFamily;
+    font-family: $monoFontFamily;
 }
 
 .SearchBar textarea, .SearchBar label {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     box-shadow: none;
 }
 .SearchBar textarea:focus {
-	outline: 0;
+    outline: 0;
 }
 
-/* link colors
----------------------------------*/
+
+/*************************************************************************************************/
+/*  LINK COLORS                                                                                  */
+/*************************************************************************************************/
 a {
-    color: #3e83bd;
-}
-a.disabled {
-    color: $textGray;
-}
+    @mixin link;
 
-/* panel-specific font colors
----------------------------------*/
-.appHeaderWrapper {
-    margin: 0 !important;
+    &.disabled {
+        color: $textGray;
+    }
 }
 
 
-/* Application Header
-_________________________________*/
+/*************************************************************************************************/
+/*  APPLICATION HEADER                                                                           */
+/*************************************************************************************************/
 /* app header wrapper */
 /* - this can be used to set a background for the entire header area.  */
 .appHeaderWrapper {
-    background: $black url(/static/img/skins/default/bg_appHeaderWrapper.png) repeat-x;
-}
-/* application header */
-.appHeader {
-    /* height:100px;  /*  to change the height of the header area, add a height property here.  */
+    background: $navbarBackground;
+    margin: 0 !important;
+    min-height: $navbarHeight;
+
+    /*
+    use this to display the name of the app.
+    use line-height to adjust alignment with logo. if
+    if the name of the app is in the logo,  set this to display: none;
+    */
+    h1 {
+        line-height: 43px;
+    }
 }
 
 /* change the app logo here.  set the height/width for your image, as well as the path to the image */
@@ -149,24 +133,13 @@ _________________________________*/
     background: url(/static/img/skins/default/splunk_logo_black.png) no-repeat 0 0;
 }
 
-/*
-use this to display the name of the app.
-use line-height to adjust alignment with logo. if
-if the name of the app is in the logo,  set this to display: none;
-*/
-.appHeaderWrapper h1 {
-    color:$splunkGreen;
-    line-height: 43px;
-}
 
-
-/* background colors
----------------------------------*/
-
+/*************************************************************************************************/
+/*  BACKGROUND COLOR                                                                             */
+/*************************************************************************************************/
 /* default page color */
 body {
-    background-color: $white;
-
+    background-color: $bodyBackgroundColor;
 }
 
 .splTemplate-search, .splTemplate-dashboard {
@@ -181,7 +154,7 @@ body {
 
 /* primary background - applies to search controls and primary action panels */
 .saHelpWrapper {
-    background-color: $offWhite;
+    background-color: $gray98;
 }
 
 /* secondary background - sidebar, other panels */
@@ -195,16 +168,15 @@ body {
 }
 
 
-/* headers
----------------------------------*/
+/*************************************************************************************************/
+/*  HEADERS                                                                                      */
+/*************************************************************************************************/
 .splHeader-primary {
-    border-top-width: 1px;
-    border-top-style: solid;
+    border-top: $border;
 }
 
 .splHeader-secondary {
-    border-top-width: 1px;
-    border-top-style: solid;
+    border-top: $border;
     background-image: $bodyBackgroundColor;
 }
 /* navigation bar */
@@ -221,12 +193,12 @@ body {
     background-image: none;
 }
 
-.FlashTimeline .splHeader-primary {
-    background: $white url(/static/img/skins/default/overlay_topgradient_7.png) repeat-x;
-}
-
 .FlashTimeline {
     background: $white url(/static/img/skins/default/overlay_bottomgradient_7.png) repeat-x bottom center;
+
+    .splHeader-primary {
+        background: $white url(/static/img/skins/default/overlay_topgradient_7.png) repeat-x;
+    }
 }
 
 .DisableRequiredFieldsButton {
@@ -240,44 +212,46 @@ body {
 }
 
 .splView-flashtimeline .ResultsHeader .splHeader-primary h2 {
-	background-color: $white;
+    background-color: $white;
     border-top-left-radius: 6px;
 }
 
-/* borders
----------------------------------*/
+
+/*************************************************************************************************/
+/*  BORDERS                                                                                      */
+/*************************************************************************************************/
 * {
     border-color: $borderColor;
 }
 
-div.sidebarCollapsed .sidebarControl {	border-radius: 0 0 5px 0;
-	background: $bodyBackgroundColor url(/static/img/skins/default/overlay_topgradient_32.png) repeat-x;
-	border-top: 1px solid #A4A4A4;
+div.sidebarCollapsed .sidebarControl {
+    border-radius: 0 0 5px 0;
+    background: $bodyBackgroundColor url(/static/img/skins/default/overlay_topgradient_32.png) repeat-x;
+    border-top: 1px solid #A4A4A4;
 }
 
 div.sidebar .FieldPicker {
-	border-color: #a4a4a4;
+    border-color: #a4a4a4;
 }
 
-/* Dashboards
-_______________________________*/
 
+/*************************************************************************************************/
+/*  DASHBOARDS                                                                                   */
+/*************************************************************************************************/
 /* dashboard headers */
-
-body.splTemplate-dashboard {
-    background-color: $bodyBackgroundColor;
-}
 .splHeader-dashboard {
     background-image: none;
-}
-.splHeader-dashboard {
     background-color: transparent;
+
+    body& {
+        background-color: $bodyBackgroundColor;
+    }
 }
 .splHeader-dashboard h2,
 .dashboardContent .ServerSideInclude h2,
 .dashboardContent .GenericHeader h3 {
-    font-size: $baseFontSize;
-    color: $splunkGreen;
+    font-size: $fontSize;
+    color: $brandColor;
     font-weight:bold;
     background-color: transparent;
 }
@@ -286,123 +260,132 @@ body.splTemplate-dashboard {
     position: relative;
     background: $white;
     border-style: solid;
-    border-width: 1px;    border-radius: 2px;
-
-
+    border-width: 1px;
+    border-radius: 2px;
 }
 
-.dashboardContent .SimpleResultsTableResults, .dashboardContent .EventsViewer {
-    background-image: none;
-    background: transparent;
+.dashboardContent {
+    .SimpleResultsTableResults, .EventsViewer {
+        background-image: none;
+        background: transparent;
+    }
 }
 
 
-
-/* form elements
-_________________________________*/
+/*************************************************************************************************/
+/*  FORM ELEMENTS                                                                                */
+/*************************************************************************************************/
 fieldset legend {
-    color: $splunkGreen;
-    font-size: 14px;
+    color: $brandColor;
+    font-size: $fontSize;
     font-weight: bold;
+    span {
+        color: $black;
+        font-size: 10px;
+        font-weight: normal;
+    }
 }
-fieldset legend span{
-    color: $black;
-    font-size: 10px;
-    font-weight: normal;
-}
+
 input, textarea, select {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: $baseFontSizeSmall;
-}
-input[type="text"], input[type="textfield"], input[type="password"],
-textarea, .input-facade,
-.splTextAreaStd,
-.codeMirrorTextAreaWrapper,
-div.accumulator-scrollbox {
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-.input-hide, input.input-hide, textarea.input-hide,
-.splTextAreaStd .disabledTextarea pre,
-.splTextAreaStd textarea {
-	box-shadow: none;
+    font-family: $fontFamily;
+    font-size: $fontSize;
+
+    &:focus {
+        @mixin focus-element;
+    }
 }
 label {
-    font-size: $baseFontSize;
-}
-label.disabledLabel {
-    color:$textGrayDark;
+    font-size: $fontSize;
+    &.disabledLabel {
+        color:$textDisabledColor;
+    }
 }
 select option[disabled] {
     color: $textGray;
     box-shadow: none;
 }
 input.readonly {
-    background-color: $grayLight;
+    background-color: $gray60;
     box-shadow: none;
 }
 p.exampleText {
-    color:$textGrayDark;
+    color: $textGray;
     clear: both;
+
+    em {
+        font-style: normal;
+    }
 }
 p.fieldsetHelpText {
-    color:$textGrayDark;
+    color: $textGray;
 }
 input[disabled]:not([type=checkbox]){
-    background-color: $offWhite;
-    color: $grayDark;
+    background-color: $gray98;
+    color: $gray30;
     box-shadow: none;
 }
 .splTextArea {
-    border:1px solid $borderColor;
+    textarea, > div {
+        border: $borderDefault;
+        padding: $spacingQuarter;
+        box-sizing: border-box;
+
+        &:focus {
+            border-color: $focusColor;
+        }
+    }
 }
 
 
-/* tables
-------------------------------*/
+/*************************************************************************************************/
+/*  TABLES                                                                                       */
+/*************************************************************************************************/
 table.splTable {
-    border-color: $borderDarkColor;
-}
-table.splTable th {
-    border-color: $borderDarkColor;
-}
-table.splTable th a {
-    color: $black;
-}
-table.splTable td {
-    border-color: $borderColor;
+    border-color: $tableBorderColor;
+    th {
+        border-color: $tableBorderColor;
+        a {
+            color: $textColor;
+        }
+    }
+    td {
+        border-color: $tableBorderColor;
+    }
 }
 .empty_results {
-	background: #eaeaea;
-	border: 0px !important;
-	font-size: $baseFontSize;
-	font-weight: normal !important;
-	padding: 10px !important;
-	border-radius: $interactiveBorderRadius;
-	color:$textGrayDark !important;
+    background: #eaeaea;
+    border: 0px !important;
+    font-size: $fontSize;
+    font-weight: normal !important;
+    padding: $spacingHalf !important;
+    border-radius: $interactiveBorderRadius;
+    color:$textGrayDark !important;
 }
 
 /* sorting */
 .splSortNone, .splSortAsc, .splSortDesc {
     background-image: url(/static/img/skins/default/splIcons.gif);
-	background-position: -67px -446px;
-	background-repeat: no-repeat;
-	cursor: pointer;
+    background-position: -67px -446px;
+    background-repeat: no-repeat;
+    cursor: pointer;
 }
 .splSortDesc {
-	background-position: -67px -365px;
+    background-position: -67px -365px;
+    &:hover {
+        background-position: -67px -385px;
+    }
 }
-.splSortDesc:hover {
-	background-position: -67px -385px;
-}
-.splSortAsc{
-	background-position: -67px -385px;
-}
-.splSortAsc:hover {
-    background-position: -67px -366px;
+.splSortAsc {
+    background-position: -67px -385px;
+    &:hover {
+        background-position: -67px -366px;
+    }
 }
 
-/* global elements
----------------------------------*/
+
+/*************************************************************************************************/
+/*  GLOBAL ELEMENTS                                                                              */
+/*************************************************************************************************/
 .splPipe {
     color: $textGray;
 }
@@ -411,7 +394,7 @@ table.splTable td {
     border-bottom-width: 1px;
 }
 #loading  {
-    background-color:$splunkGreen;
+    background-color:$brandColor;
     color:$white;
 }  /* I smell a refactor here... */
 #loadingmessage {
@@ -422,80 +405,118 @@ table.splTable td {
     background: url(/static/img/skins/default/loading_white.gif) no-repeat 0 20px;
     font-size:18px;
 }
-.mouseoverHighlight, .mouseoverHighlight td {
-    background-color:$yellowLight;
+.mouseoverHighlight {
+    &, & td {
+        background-color:$warningColorL40;
+    }
 }
 
 .searchFieldGhost {
-    border-color: $grayDark;
+    border-color: $gray30;
 }
-.widgeterror { color: red; font-weight: bold; }
+.widgeterror {
+    color: $errorColor;
+    font-weight: bold;
+}
 
 .resultStatusMessage {
     color:$textGrayDark;
 }
 
-/* percentage bar graph
-_________________________________*/
+
+/*************************************************************************************************/
+/*  PERCENTAGE BAR GRAPH                                                                         */
+/*************************************************************************************************/
 .splBarGraph {
     background: $bodyBackgroundColor;
 }
 .splBarGraphBar {
-    background: $splunkGreen url(/static/img/skins/default/overlay_gradient_28.png) repeat-x;
+    background: $brandColor url(/static/img/skins/default/overlay_gradient_28.png) repeat-x;
 }
-.splBarGraphValue {
-}
-
 .graphLoading {
     padding-bottom: 5px;
 }
 
-/* popups
----------------------------------*/
 
+/*************************************************************************************************/
+/*  POPUPS                                                                                       */
+/*************************************************************************************************/
 .popupContainer {
-	z-index:10000;
+    z-index: 10000;
     border-color: $borderColor;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+    box-shadow: $overlayBoxShadow;
+
+    /* fieldpicker popup */
+    .fieldLayers & {
+        border-color: $borderColor;
+    }
+}
+.popupContent {
+    .schedulePdfPopup & iframe {
+        border: none;
+    }
+    .wizardPopup & iframe {
+        width: 400px;
+        border: none;
+        display: block;
+    }
+    .wideTreeviewPopup & iframe {
+        width: 700px;
+        height: 433px;
+        border: none;
+        display: block;
+    }
+    .panelEditorPopup & {
+        min-width: 340px;
+        iframe {
+            width: 340px;
+            border: none;
+            display: block;
+        }
+    }
 }
 
-.schedulePdfPopup .popupContent iframe {border:none;}
-
-.wizardPopup .popupContent iframe {
-    width:400px;
-    border:none;
-    display: block;
-}
-
-.wideTreeviewPopup .popupContent iframe {
-    width:700px;
-    height:433px;
-    border:none;
-    display: block;
-}
-
-.panelEditorPopup .popupContent iframe {
-    width:340px;
-    border:none;
-    display: block;
-}
-.panelEditorPopup .popupContent  {
-    min-width:340px;
-}
-
+/* Field Value popup-specific styles */
 .fieldValuePopup {
     border-color: $borderColor;
     box-shadow: none;
     border: none;
-}
-.fieldValuePopup .fieldValuePopupInner {
-    border:1px solid $borderColor;
-    background-image:url(/static/img/skins/default/bg_reversegradient_28.png);
-}
 
-/* fieldpicker popup */
-.fieldLayers .popupContainer {
-    border-color: $borderColor;
+    .fieldValuePopupInner {
+        border: $borderDefault;
+        background-image:url(/static/img/skins/default/bg_reversegradient_28.png);
+
+    }
+    h3 em {
+        font-size: $fontSizeSmall;
+    }
+    table {
+        th.fieldName {
+            font-weight: normal;
+
+            tr:first-child & {
+                font-weight: bold;
+            }
+        }
+        td, th {
+            color: $gray30;
+            border-bottom-style: dotted;
+            border-bottom-width: 1px;
+        }
+        tr, th {
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+        }
+        tr.fieldNameHeaderRow td {
+            font-weight: bold;
+            color: $black;
+            border-bottom: none;
+        }
+    }
+    p.reportLinks,
+    div.reportLinks {
+        border-radius: $interactiveBorderRadius;
+    }
 }
 
 .pdfPopup {
@@ -504,348 +525,236 @@ _________________________________*/
 
 /* popup header bar */
 .splHeader-popup {
-  background: $white;
-  border-bottom: 1px solid $borderColor;
-}
+    background: $white;
+    border-bottom: $borderDefault;
 
-
-.splHeader-popup h2 {
-    font-size:14px;
-    font-weight: normal;
-}
-
-.splHeader-popup, .splHeader-popup h2 {
-	cursor: move;
-}
-
-/*iframe loading*/
-.popupContent .popup-loading {
-    width: 100%;
-    height:100%;
-    position:absolute;
-    top:0;
-    text-indent:-1000em;
-    direction:ltr;
-    background: $white url('/static/img/skins/default/loading_white.gif') no-repeat center center;
+    h2 {
+        font-size: $fontSize;
+        font-weight: normal;
+    }
+    &, h2 {
+        cursor: move;
+    }
 }
 
 /* popup content */
 .popupContent {
     background-color: $white;
-    position:relative;
-}
+    position: relative;
 
-.popupContent .error, .wizard .error {
-    font-size: $baseFontSize;
-    background: #af4444;
-	margin: 10px;
-	margin-bottom: 0px;
-    border-radius: $interactiveBorderRadius;
+    /*iframe loading*/
+    .popup-loading {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        text-indent: -1000em;
+        direction: ltr;
+        background: $white url('/static/img/skins/default/loading_white.gif') no-repeat center center;
+    }
+}
+.error {
+    .popupContent &, .wizard & {
+        font-size: $fontSize;
+        background: $errorColor;
+        margin: $spacingHalf $spacingHalf 0;
+        border-radius: $interactiveBorderRadius;
+    }
 }
 
 /* popup footer (button container) */
 .popupFooter {
-  	border-top: 1px solid $borderColor;
+    border-top: $borderDefault;
     background: $white;
 }
 
-/* Field Value popup-specific styles */
-
-.fieldValuePopup h3 em {
-    font-size: $baseFontSizeSmall;
+.wizard {
+    .scheduledView {
+        .error,
+        .info {
+            margin: 0px 0px $spacingHalf;
+        }
+        .disabled {
+            cursor: not-allowed;
+        }
+    }
 }
 
-.fieldValuePopup table th.fieldName {
-    font-weight: normal;
-}
 
-.fieldValuePopup table tr:first-child th.fieldName {
-    font-weight: bold;
-}
-
-.fieldValuePopup table td, .fieldValuePopup table th {
-    color:$grayDark;
-    border-bottom-style: dotted;
-    border-bottom-width: 1px;
-}
-
-.fieldValuePopup table tr.fieldNameHeaderRow th {
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-}
-
-.fieldValuePopup table tr.fieldNameHeaderRow td {
-    font-weight:bold;
-    color:$black;
-    border-bottom: none;
-}
-.fieldValuePopup p.reportLinks,
-.fieldValuePopup div.reportLinks
-{
-    border-radius: $interactiveBorderRadius;
-}
-
-.wizard .scheduledView .error,
-.wizard .scheduledView .info
-{
-    margin: 0px 0px 10px;
-}
-
-.wizard .scheduledView .disabled {
-    cursor: not-allowed;
-}
-
-/* overlays and shadows
----------------------------------*/
+/*************************************************************************************************/
+/*  OVERLAYS AND SHADOWS                                                                         */
+/*************************************************************************************************/
 .splOverlay, .splOverlay-white {
     background-color: $black;
-    opacity:0.7;
-    filter:alpha(opacity=70);
+    opacity:0.5;
+    filter:alpha(opacity=50);
 }
 .splOverlay-white {
     background-color:$white;
 }
-
 .splShadow {
     background: url(/static/img/skins/default/shadow_soft.png) no-repeat bottom right;
     border-top-right-radius:17px;
     border-bottom-left-radius:17px;
 }
 
-/* buttons
----------------------------------*/
 
+/*************************************************************************************************/
+/*  BUTTONS                                                                                      */
+/*************************************************************************************************/
 .splButton-primary,
 .splButton-secondary,
 .splButton-tertiary,
 .splRadio-control {
-    font-size: $baseFontSize;
-
+    @mixin base-input $buttonPadding, auto;
+    @mixin button-padding;
+    cursor: pointer;
+    font-size: $fontSize;
+    font-family: $fontFamily;
+    border-radius: $interactiveBorderRadius;
     @mixin interactive;
-    border-radius:$interactiveBorderRadius;
 
-}
-
-.splButton-primary {
-    @mixin interactive-primary;
-}
-
-button.splButton-primary span,
-button.splButton-secondary span,
-button.splButton-tertiary span {
-    line-height:21px; /*Note: line-height won't work on buttons in FF*/
-}
-
-
-.splButton-primary:hover {
-    @mixin interactive-primary-hover;
-}
-
-
-.splButton-primary:focus {
-    @mixin focus-button;
-
-    @if $theme == lite {
-    	background: $splunkLiteBlack;
+    button& span {
+        position: relative;
+        bottom: 1px;
     }
 }
 
-.splButton-secondary:hover,
-.splButton-tertiary:hover,
-.splRadio-control:hover {
-    @mixin interactive-hover;
-}
+.splButton-primary {
+    @mixin button-padding-primary;
+    font-weight: $fontWeightSemiBold;
+    border: none;
 
-.splButton-secondary:focus,
-.splButton-tertiary:focus,
-.splRadio-control:focus {
-    @mixin focus-button;
-}
+    @mixin interactive-primary;
+    @mixin button-states interactive-primary-hover, interactive-primary-active, interactive-primary-disabled, interactive-primary $primaryBackgroundColor;
 
-.splButton-disabled,
-.splButton-disabled:hover,
-.splButton-disabled:focus,
-.splButton.disabled,
-.splButton.disabled:hover,
-.splButton.disabled:focus,
-.splButton-primary.disabled,
-.splButton-primary.disabled:hover,
-.splButton-primary.disabled:focus,
-.splButton-primary[disabled],
-.splButton-primary[disabled]:hover,
-.splButton-primary[disabled]:focus{
-    background: $interactiveDisabledBackgroundColor;
-    filter: none;
-    border-color: $borderColor;
-    border-top-color: $borderColor;
-    border-bottom-color: $borderColor;
-    box-shadow: none;
-    cursor: not-allowed;
-    color: $textGray;
-    text-shadow: none;
-    opacity: 0.65;
+    span.splMenuIcon {
+        background-position: 0 -300px;
+    }
 }
-
-.splButton-disabled .splButtonIcon {
-    opacity:0.5;
+.splButton-secondary,
+.splButton-tertiary,
+.splRadio-control {
+    border: $interactiveBorder;
+    @mixin button-states;
+    span.splMenuIcon {
+        background-position: -13px -300px;
+    }
+    &.selected, &.s-active {
+        @mixin interactive-hover;
+    }
 }
-
-.splButton-primary span.splMenuIcon {
-   background-position: 0 -300px;
-}
-.splButton-secondary span.splMenuIcon,
-.splButton-tertiary span.splMenuIcon {
-   background-position: -13px -300px;
-}
-
-.splButton-secondary.selected,
-.splButton-tertiary.selected,
-.splRadio-control.s-active{
-    @mixin interactive-hover;
+.splButton-disabled {
+    &, &:hover, &:focus {
+        background: $interactiveBackgroundColorDisabled;
+        filter: none;
+        border-color: $borderColor;
+        cursor: not-allowed;
+        color: $textGray;
+        text-shadow: none;
+        opacity: 0.65;
+    }
+    .splButtonIcon {
+        opacity:0.5;
+    }
 }
 
 
-/* buttons Groups
----------------------------------*/
+/*************************************************************************************************/
+/*  BUTTON GROUPS                                                                                */
+/*************************************************************************************************/
+.splButtonGroup {
+    .splButton-primary,
+    .splButton-secondary,
+    .splButton-tertiary {
+        border-radius: 0;
+        margin:0;
 
-.splButtonGroup .splButton-primary,
-.splButtonGroup .splButton-secondary,
-.splButtonGroup .splButton-tertiary {	border-radius: 0;
-	margin:0;
+        &:first-child {
+            border-radius: $inputBorderRadiusLeft;
+        }
+        &:last-child {
+            border-radius: $inputBorderRadiusRight;
+        }
+    }
+    .splButton-disabled {
+        border-left-color: #bbb;
+        cursor:not-allowed;
+    }
 }
 
-
-.splButtonGroup .splButton-disabled {
-	border-left-color: #bbb;
-	cursor:not-allowed;
-}
-
-.splButtonGroup .splButton-primary:first-child,
-.splButtonGroup .splButton-secondary:first-child,
-.splButtonGroup .splButton-tertiary:first-child {
-	border-bottom-left-radius: $interactiveBorderRadius;
-	border-top-left-radius: $interactiveBorderRadius;
-}
-
-.splButtonGroup .splButton-primary:last-child,
-.splButtonGroup .splButton-secondary:last-child,
-.splButtonGroup .splButton-tertiary:last-child {
-	border-bottom-right-radius: $interactiveBorderRadius;
-	border-top-right-radius: $interactiveBorderRadius;
-    border-right-width:1px;
-}
 
 /* Iconic Links
 ---------------------------------*/
-
-.splIconicLinkIcon, .splButtonIcon, span.splMenuIcon {
-    background-image: url(/static/img/skins/default/sprite_button_icons.png);
-    background-position: 0 0;
-}
-
 .splIconicLinkIcon, .splButtonIcon, span.splMenuIcon {
     background-image: url(/static/img/skins/default/sprite_button_icons.png);
     background-position: 0 0;
 }
 
 .splIconicLinkIcon {
-	margin-top:2px;
+    margin-top:2px;
 }
 .splIconicLinkLabel {
-	font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
 }
-
-.splIconicLinkDisabled  {
-   background-image: none;
-   color: $textGray;
-}
-
-
-.splIconicLinkDisabled .splIconicLinkIcon {
-   opacity: 0.45;
-
-   color: $textGray;   border-radius: 3px;
-}
-
 .splIcon-export {
     background-position: -26px -660px;
 }
-
-.splIconicLinkDisabled .splIcon-export {
-    background-position: -13px -660px;
-}
-
 .splIcon-options {
     background-position: -26px -680px;
+}
+.splIconicLinkDisabled  {
+    background-image: none;
+    color: $textGray;
+
+    .splIconicLinkIcon {
+        opacity: 0.45;
+        color: $textGray;
+        border-radius: 3px;
+    }
+    .splIcon-export {
+        background-position: -13px -660px;
+    }
 }
 
 
 /* Splunk search button */
-
-/* search button */
 input.searchButton {
-    border-radius: $interactiveBorderRadius;
-
+    @mixin search-icon-background;
+    background-position: 3px 2px;
+    width: 32px !important;
+    height: 32px !important;
     cursor: pointer;
-
-    color: $white;
-    text-shadow: 0 -1px 0 rgba(51, 51, 51, 0.7);
-
-    background-color: $splunkGreen;
-    background-image: url(/static/img/skins/default/ieGradients/interactivePrimarySearch.png); /* Used for all browsers that support 1 background image */
-
-    background-image: url(/static/img/skins/default/search_button.png), linear-gradient(to bottom, $primaryGradientStartColor, $primaryGradientEndColor);
-
-    background-position: right center ;
-    background-position: right center, center ;
-    background-repeat: repeat-x;
-    border: 1px solid $primaryBorderColor;
-}
-
-input.searchButton:hover {
-    background-color: $primaryGradientStartColorHover;
-    background-image: url(/static/img/skins/default/ieGradients/interactivePrimarySearchHover.png); /* Used for all browsers that support 1 background image */
-
-    background-image: url(/static/img/skins/default/search_button.png), linear-gradient(to bottom, $primaryGradientStartColorHover, $primaryGradientEndColorHover);
-
-    background-position: right center;
-    background-position: right center, center ;
-
-    border-color: $primaryBorderColorHover;
-}
-
-input.searchButton:focus {
-    @mixin focus-button;
-}
-
-table.mainSearchControlsTable input.searchButton {
-    border-left-color: $primaryBorderColor;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    color: $textColor;
+    border: $interactiveBorder;
+    border-radius: $inputBorderRadiusRight;
+    @mixin interactive;
+    @mixin button-states;
 }
 
 /* button wrapper */
 .splButtonWrapper {
-    border-top-width:1px;
-    border-top-style:solid;
+    border-top: $border;
 }
 
 /* icons
 ---------------------------------*/
 .splIcon {
     background-image: url(/static/img/skins/default/splIcons.gif);
-    background-color: $grayLight;
+    background-color: $gray60;
 }
 
 /*-- external link icon --*/
 .spl-icon-external-link-xsm {
-	background: transparent url(/static/img/skins/default/icon-external-xsm.png) no-repeat 0 0;
-    background-repeat:no-repeat;
-	background-position: 0% 50%;
-	display:inline-block;
-	padding-left: 15px;
-	margin-left: 5px;
-	font-style: normal;
+    vertical-align: middle;
+    white-space: nowrap;
+    &:before {
+        display: inline-block;
+        padding: 0 4px;
+        content: "\EC13";
+        font-family: 'Splunk Icons';
+        vertical-align: middle;
+    }
 }
 .spl-icon-external-link-xsm.inline-icon {
 	margin-left: 0px;
@@ -861,7 +770,7 @@ div.FlashTimeline a.linLogToggle {
 }
 
 div.FlashTimeline a.linLogToggle:focus {
-   background-color: $grayLightMedium;
+   background-color: $gray80;
 }
 
 div.FlashTimeline a.linLogToggle .splIcon-triangle-4-s {
@@ -881,8 +790,8 @@ div.FlashTimeline a.linLogToggle .splIcon-triangle-4-s {
 .splIcon-close:hover { background-position: -20px 0px; }
 
 /*-- arrow icons --*/
-.splIcon-arrow-n, .splIcon-arrow-e, .splIcon-arrow-s, .splIcon-arrow-w {    border-radius: 5px;
-    background-color: $grayLight;
+.splIcon-arrow-n, .splIcon-arrow-e, .splIcon-arrow-s, .splIcon-arrow-w {
+    background-color: $gray60;
 }
 
 .splIcon-arrow-n { background-position: 0px -100px; }
@@ -952,37 +861,35 @@ div.FlashTimeline a.linLogToggle .splIcon-triangle-4-s {
 _________________________________*/
 
 .fatal, .error, .warn, .info, .persistent {
-    background: url(/static/img/skins/default/overlay_gradient_28_plus.png) repeat-x top left;
     font-weight: bold;
 }
 
 .fatal, .error {
-    background-color: #a62f2f;
+    background-color: $errorColor;
     color: $white;
 }
 .warn, .persistent {
-   background-color: #ffee91;
-   color: $black;
+   background-color: $warningColor;
+   color: $white;
 }
 .info {
-   background-color: #e8f8ff;
-   color: $black;
+   background-color: $infoColor;
+   color: $white;
 }
 
 
 .fatal .remove, .error .remove, .warn .remove, .info .remove, .persistent .remove {
-    background: $black url(/static/img/skins/default/splIcons.gif) no-repeat top left;
     border-radius: $interactiveBorderRadius;
 }
 
 .fatal .remove, .error .remove {
-    background-color: #6f2121;
+    background-color: $errorColor;
 }
 .warn .remove, .persistent .remove {
-   background-color: #b9ac66;
+   background-color: $warningColor;
 }
 .info .remove {
-   background-color: #94a9b2;
+   background-color: $infoColor;
 }
 
 
@@ -990,13 +897,13 @@ _________________________________*/
 ---------------------------------*/
 
 .splMenu {
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 /* primary menu - white */
 .splMenu-primary, .splMenu-primary a {
-    color: $grayDark;
+    color: $gray30;
 }
 .splMenu-primary li.disabled a {
     color: $textGray;
@@ -1017,14 +924,14 @@ _________________________________*/
 
 /* secondary menu - black */
 .splMenu-secondary, .splMenu-secondary a {
-    color: $grayLightMedium;
+    color: $gray80;
 }
 .splMenu-secondary li.disabled a {
     color: $textGray;
 }
 .splMenu-secondary ul {
     background-color: $black;
-    border-color: $grayDark;
+    border-color: $gray30;
 }
 
 /* primary menu hover styles */
@@ -1050,7 +957,7 @@ ul.tabs li {
 ul.tabs li a {
     background: #666 url(/static/img/skins/default/tab_switcher_rounded_corners.gif) no-repeat right -102px;
     color: $white;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 /* on state */
 ul.tabs li.selected {
@@ -1058,7 +965,7 @@ ul.tabs li.selected {
     background: $white url(/static/img/skins/default/tab_switcher_rounded_corners.gif) no-repeat 0 0;
 }
 ul.tabs li.selected a {
-    color: $grayDark;
+    color: $gray30;
     background: $white url(/static/img/skins/default/tab_switcher_rounded_corners.gif) no-repeat right -34px;
 }
 
@@ -1071,7 +978,7 @@ _______________________________*/
     background: $white;
 }
 .ui-datepicker a {
-    color: $grayDark;
+    color: $gray30;
 }
 .ui-datepicker-inline {
     border-style: solid;
@@ -1091,7 +998,7 @@ _______________________________*/
     background-position: -67px -398px;
 }
 .ui-datepicker-current-day {
-    background-color: $yellowLight;
+    background-color: $warningColorL40;
 }
 
 /* resizable styles */
@@ -1119,7 +1026,7 @@ _______________________________*/
 
 /* TimeRangeBinning */
 .TimeRangeBinning .trbToggle {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 .TimeRangeBinning .trbToggle span.splIcon-triangle {
     background-position: -87px -407px;
@@ -1140,7 +1047,7 @@ _______________________________*/
 .JobStatus .output .scanned,
 .JobStatus .output .results {
     font-style:normal;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 .JobStatus .output .running h2,
 .JobStatus .output .runningReport h2,
@@ -1158,7 +1065,7 @@ _______________________________*/
 }
 
 .autoPauseText > strong {
-	color: $red;
+	color: $errorColor;
 }
 
 /* link icons */
@@ -1208,7 +1115,7 @@ _______________________________*/
 .xml .splButtonIcon{background-position:-13px  -620px;}
 
 .JobStatus .autoPauseTip {
-    color: $red;
+    color: $errorColor;
 }
 .JobStatus .autoPauseTip a {
     color: #3e83bd;
@@ -1222,7 +1129,7 @@ ul.appBarNav li a.menuOpen {
     background: url(/static/img/skins/default/overlay_white_28.png) repeat-x 0 0;
 }
 ul.appBarNav li a {
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
     font-weight: bold;
 }
 .splMenu-primary ul li.splUserCreated {
@@ -1241,13 +1148,13 @@ ul.appBarNav li a {
 
 /* TitleBar */
 .TitleBar div.menuOpen, .TitleBar a.menuOpen {
-    background-color: $grayLightMedium;
+    background-color: $gray80;
 }
 .TitleBar h2 em {
     font-style:normal; /* wtf? */
 }
 .TitleBar .splPipe {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 
 /*** Results header ***/
@@ -1262,37 +1169,29 @@ h2 .timeRangeStr {
     line-height: 1;
 }
 .Message ol li {
-	font-size: $baseFontSizeSmall;
-	line-height: $baseLineHeight;
+	font-size: $fontSizeSmall;
+	line-height: $lineHeight;
 	padding: 6px 10px;
 }
 
 /*** Paginator ***/
 
 .Paginator a {
-    background-color: transparent;
+    @mixin button-padding calc($buttonPaddingVertical + 1px); /*  note the vertical padding will be funky unless it's block, inline-block, or floated */
+    float: left;
+    line-height: $lineHeight;
     border: 1px solid transparent;
     border-radius: $interactiveBorderRadius;
-    line-height: 20px;
-    min-width: 10px;
-    padding: 2px 8px;
-    text-align: center;
-    font-size: $baseFontSize;
-}
-.Paginator a:hover {
-    background-color: $offWhite;
-    text-decoration:none;
+
+    @mixin interactive none, transparent, none, $pillTextColor;
+    @mixin button-states link-style $linkColor, link-style, link-style $textDisabledColor, link-style-underline $linkColor;
 }
 .Paginator .active a,
 .Paginator .active a:hover {
-    background-color: $offWhite;
-    color: $textGray;
+    cursor: default;
+    color: $accentColor;
+    border: $border $accentColor;
 }
-.Paginator .previous,
-.Paginator .next {
-    color: $textGray;
-}
-
 
 /*** Prototypes ***/
 
@@ -1302,7 +1201,7 @@ h2 .timeRangeStr {
     background-color:$white;
 }
 .SimpleEventsViewer span.searchTermHighlight {
-    background-color:$yellowLight;
+    background-color:$warningColorL40;
 }
 .SimpleEventsViewer .eventFields {
     color: LightSlateGrey;
@@ -1324,8 +1223,8 @@ h2 .timeRangeStr {
 }
 .EventsViewer .header {
 	font-weight:normal;
-	font-size: $baseFontSizeSmall;
-	color:$grayDark;
+	font-size: $fontSizeSmall;
+	color:$gray30;
 }
 .EventsViewer .header em {
 	font-weight:bold;
@@ -1333,10 +1232,10 @@ h2 .timeRangeStr {
 }
 
 .EventsViewer .tb {
-	border:1px solid red;
+	border:1px solid $errorColor;
 }
 .EventsViewer .tb h2 {
-	font-size: $baseFontSizeSmall;
+	font-size: $fontSizeSmall;
 	font-weight:bold;
 }
 .EventsViewer .tb h3 {
@@ -1348,12 +1247,12 @@ h2 .timeRangeStr {
 }
 .EventsViewer .default .pos {
 	font-style:normal;
-	font-size: $baseFontSizeSmall;
+	font-size: $fontSizeSmall;
 	color:#bbb;
 }
 .EventsViewer .default .time {
 	font-style:normal;
-	font-size: $baseFontSizeSmall;
+	font-size: $fontSizeSmall;
 	color:$textGrayDark;
     /* SPL-56751 prevent dates breaking*/
     white-space: nowrap;
@@ -1379,12 +1278,12 @@ h2 .timeRangeStr {
 }
 /* END NOTICE: decoration_audit_ class names currently have no indirection, do not change! */
 .EventsViewer .default .event {
-	font-family:Consolas, Monaco, Courier New, monospace;
-	font-size: $baseFontSize;
-	color:$grayDark;
+	font-family: $monoFontFamily;
+	font-size: $fontSize;
+	color:$gray30;
 }
 .EventsViewer .default .a, .EventsViewer .default .h, .EventsViewer .default .fields .v:hover, .EventsViewer .default .fields .tg:hover, .EventsViewer .default .time:hover {
-	background-color:$yellowLight;
+	background-color:$warningColorL40;
 }
 .EventsViewer .default .showinline {
 	color:#4D9BB3;
@@ -1399,7 +1298,7 @@ h2 .timeRangeStr {
 	color: $textGray;
 }
 .EventsViewer .default .fields .v {
-	color:$grayDark;
+	color:$gray30;
 }
 .EventsViewer .default .fields .tg {
 	color: $textGray;
@@ -1415,7 +1314,7 @@ h2 .timeRangeStr {
 
 
 .results-table-help {
-	font-size: $baseFontSize;
+	font-size: $fontSize;
 }
 
 /* BEGIN: tag field popup styles */
@@ -1423,15 +1322,15 @@ h2 .timeRangeStr {
 	background:$white;
 }
 .tagfieldpopup input {
-	font-size: $baseFontSizeSmall;
-	color:$grayDark;
+	font-size: $fontSizeSmall;
+	color:$gray30;
 }
 
 
 
 /* FancyChartTypeFormatter */
 .FancyChartTypeFormatter .chartTypeTitle {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 .FancyChartTypeFormatter .chartTypeActivator {
     border-style: solid;
@@ -1451,9 +1350,9 @@ h2 .timeRangeStr {
 }
 .FancyChartTypeFormatter .chartTypeActivator a,
 .FancyChartTypeFormatter .chartTypeMenu li a {
-    color:$grayDark;
+    color:$gray30;
     text-decoration:none;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     background-image:url(/static/img/skins/default/chart_type_icons.gif);
     background-repeat:no-repeat;
     background-position: 5px -45px;
@@ -1496,7 +1395,7 @@ div.FlashTimeline .splHeader {
     border-left-color: $black;
 
     /* Color of the columns */
-    border-right-color: $splunkGreen;
+    border-right-color: $brandColor;
 
     color: $black;
 }
@@ -1602,16 +1501,16 @@ div.FlashChart {
 
 /* Count */
 .Count label, .Count select {
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
 }
 
 .pageControls .Count .perPageLabel{
-	color: $grayDark;
+	color: $gray30;
 }
 
 /* EnablePreview */
 .pageControls .EnablePreview label {
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
 }
 
 /* ResultsActionsButtons */
@@ -1629,7 +1528,7 @@ table.simpleResultsTable td.lowValue {
     border: 1px solid blue;
 }
 table.simpleResultsTable td.highValue {
-    border: 1px solid red;
+    border: 1px solid $errorColor;
 }
 
 /* SingleValue */
@@ -1676,14 +1575,14 @@ table.simpleResultsTable td.highValue {
     color: $textGray;
 }
 .FieldPickerPopup .fpAddTermCell span.splIcon-arrow-e {
-    background-color:  $splunkGreen;
+    background-color:  $brandColor;
 }
 .FieldPickerPopup li.fpSelFieldsNotPresent span {
-    background-color: $grayLightMedium;
+    background-color: $gray80;
 }
 .FieldPickerPopup .fpFilterFields label {
     font-weight: bold;
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
 }
 .FieldPickerPopup .fpFieldListContainerOuter {
 }
@@ -1705,7 +1604,7 @@ table.simpleResultsTable td.highValue {
     color: $textGray;
 }
 .FieldPickerPopup .fpFieldList tr.fieldSelected td.fpAddTermCell span {
-    background-color: $grayLightMedium;
+    background-color: $gray80;
 }
 
 .FieldPickerPopup .splHeader {
@@ -1718,7 +1617,7 @@ table.simpleResultsTable td.highValue {
 
 /* adding this class on hover via jquery, handles row highlighting and graph icon */
 .FieldPickerPopup .fpFieldList tbody tr:hover, .FieldPickerPopup .fpFieldList tbody tr.mouseoverHighlight {
-    background-color: $yellowLight;
+    background-color: $warningColorL40;
 }
 .FieldPickerPopup .fpFieldList tbody tr:hover .fpFieldListSecond a,
 .FieldPickerPopup .fpFieldList tbody tr.mouseoverHighlight .fpFieldListSecond a {
@@ -1741,7 +1640,7 @@ table.mainSearchControlsTable .SearchBar .searchFieldWrapper {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    background:  $splunkGreen url(/static/img/skins/default/search_bar.png);
+    background:  $brandColor url(/static/img/skins/default/search_bar.png);
 }
 
 .SearchBar .searchFieldWrapperInner {
@@ -1763,17 +1662,17 @@ table.mainSearchControlsTable .SearchBar .searchFieldWrapper {
 	background:transparent url(/static/img/skins/default/bg_resizer_white.png) center no-repeat;
 }
 .SearchBar h4 {
-    color: $splunkGreen;
+    color: $brandColor;
 }
 .sakeywordCount{
     background-color: $white;
-    color: $grayDark;
+    color: $gray30;
 }
 .saKeywordSelected {
-    background-color: $yellowLight;
+    background-color: $warningColorL40;
 }
 .saKeywordSelected .sakeywordCount{
-    background-color: $yellowLight;
+    background-color: $warningColorL40;
 }
 
 .sakeyword:hover {
@@ -1819,21 +1718,21 @@ table.mainSearchControlsTable .SearchBar .searchFieldWrapper {
     color: $linkColor;
 }
 .SearchBar .saNotice {
-    background-color: $yellowLight;
+    background-color: $warningColorL40;
     border-color: $borderColor  !important;
 }
 .SearchBar .error {
-    background-color: $yellowLight;
+    background-color: $warningColorL40;
     border-color: $borderColor  !important;
     color: $errorText;
     background-image: none;
 }
 
 .introstep {
-  color: $grayDark;
+  color: $gray30;
 }
 .intro code {
-  color: $splunkGreen;
+  color: $brandColor;
 }
 .SearchBar .intro ul li{
     list-style-type: disc;
@@ -1850,7 +1749,7 @@ table.mainSearchControlsTable .SearchBar .searchFieldWrapper {
 }
 
 .splView-flashtimeline .ShowHideHeader div.secondary h2 {
-	font-size: $baseFontSize;
+	font-size: $fontSize;
 }
 .splView-flashtimeline .ShowHideHeader {
 	border-top-width: 2px;
@@ -1878,7 +1777,7 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper  {
 
 	border-left-width: 0;
 	border-radius: 0;
-	font-size: $baseFontSize;
+	font-size: $fontSize;
 	height: 26px;
 	border-left: none;
 }
@@ -1889,7 +1788,7 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper:hover 
 
 
 table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper:focus {
-    @mixin focus-button;
+    @mixin focus-element;
 }
 
 table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropDown {
@@ -1911,8 +1810,8 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
     border: 1px solid $borderColor;
 }
 .trpCustomDateTime .dateTimeDisabled {
-    background-color: $offWhite;
-    border-color:$offWhite;
+    background-color: $gray98;
+    border-color:$gray98;
     color:$textGrayDark;
 }
 .trpCustomDateTime .dateTimeDisabled input {
@@ -1923,9 +1822,9 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
     background: transparent;
 }
 .trpCustomDateTime div.outputString {
-    background-color: $offWhite;
-    border: 1px solid $offWhite;
-    color:$grayDark;
+    background-color: $gray98;
+    border: 1px solid $gray98;
+    color:$gray30;
 }
 
 
@@ -2009,10 +1908,10 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
 
 /* Link Switcher */
 .LinkSwitcher a {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 .LinkSwitcher ul li.selected a {
-    color:$grayDark;
+    color:$gray30;
     font-weight: bold;
     text-decoration:none;
 }
@@ -2025,7 +1924,7 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
     background-position: -67px -367px;
 }
 .ShowHideHeader div.secondary h2 {
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
     font-weight: normal;
 }
 .ShowHideHeader div.secondary h2 span.splIcon-triangle {
@@ -2049,7 +1948,7 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
     background: #666 url(/static/img/skins/default/tab_switcher_rounded_corners.gif) no-repeat 0 -68px;
 }
 .TabSwitcher ul li a {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     background: #666 url(/static/img/skins/default/tab_switcher_rounded_corners.gif) no-repeat right -102px;
     color: $white;
 }
@@ -2058,7 +1957,7 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
     background: $white url(/static/img/skins/default/tab_switcher_rounded_corners.gif) no-repeat 0 0;
 }
 .TabSwitcher ul li.selected a {
-    color: $grayDark;
+    color: $gray30;
     background: $white url(/static/img/skins/default/tab_switcher_rounded_corners.gif) no-repeat right -34px;
 }
 
@@ -2076,7 +1975,7 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
 .section-paywall {
     padding: 10px 20px 20px;
     min-height: 500px;
-    font-family: $baseFontFamily;
+    font-family: $fontFamily;
 }
 
 .section-paywall .section-title {
@@ -2084,22 +1983,21 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
     font-size: 24px;
     font-weight: 200;
     line-height: 29px;
-    color: $grayDark;
+    color: $gray30;
     text-rendering: optimizelegibility;
 }
 .section-paywall #paywall-content {
     margin: 10px 0;
-    font-size: $baseFontSize;
-    line-height: $baseLineHeight;
+    font-size: $fontSize;
+    line-height: $lineHeight;
 }
 /* one off button override for consistancy */
 .section-paywall a.splButton-primary {
-    line-height: $baseLineHeight;
+    line-height: $lineHeight;
     vertical-align: middle;
     padding: 4px 12px;
     border-radius:$interactiveBorderRadius;
-    background-color: $splunkGreen;
-    @mixin gradient-vertical $splunkGreen, #4E802A;
+    background-color: $brandColor;
     background-repeat: repeat-x;
     border-color: #4E802A #426D24 #32521B;
     border-left: 1px solid #426D24;
@@ -2122,21 +2020,3 @@ table.mainSearchControlsTable .TimeRangePicker .timeRangeActivatorWrapper .dropD
 {
     display: inline !important;
 }
-
-
-/*this should be on a wrapper not body*/
-/*body {
-  background-color: $bodyBackgroundColor;
-  color: $grayDark;
-  min-height: 500px;
-}
-*/
-
-/**********************************
-hacks
-***********************************/
-
-/* safari focus outline  */
-/*
-*:focus {outline: 0;}
-*/

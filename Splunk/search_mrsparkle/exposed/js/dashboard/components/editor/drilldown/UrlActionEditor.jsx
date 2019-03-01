@@ -1,7 +1,8 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
-import ControlGroup from 'splunk-ui/components/ControlGroup';
-import Text from 'splunk-ui/components/Text';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
+import Text from '@splunk/react-ui/Text';
 import OpenInNewTab from 'dashboard/components/shared/OpenInNewTab';
 import FormMessage from 'dashboard/components/shared/FormMessage';
 import { createTestHook } from 'util/test_support';

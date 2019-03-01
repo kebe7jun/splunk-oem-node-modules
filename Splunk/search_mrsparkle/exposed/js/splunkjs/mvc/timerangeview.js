@@ -1,16 +1,18 @@
 define(function(require, exports, module) {
+    var _ = require('underscore');
     var $ = require('jquery');
-    var _ = require("underscore");
-    var mvc = require('./mvc');
-    var Backbone = require("backbone");
-    var BaseSplunkView = require("./basesplunkview");
+    var BaseSplunkView = require('./basesplunkview');
     var console = require('util/console');
-    var InternalTimeRangePicker = require('views/shared/timerangepicker/Master');
+    var normalizeBoolean = require('util/general_utils').normalizeBoolean;
     var SharedTimesCollection = require('collections/shared/Times');
-    var TimeRangeModel = require('models/shared/TimeRange');
     var TokenUtils = require('./tokenutils');
-    var utils = require('./utils');
     var sharedModels = require('./sharedmodels');
+    var React = require('react');
+    var ReactDOM = require('react-dom');
+    var route = require('uri/route');
+    var timeRangeUtils = require('@splunk/time-range-utils/time');
+    var moment = require('@splunk/moment')['default'];
+    var TimeRangePickerDropdown = require('./components/TimeRangePickerDropdown');
 
     // DOC: The 'timepicker' field is private.
 
@@ -157,7 +159,7 @@ define(function(require, exports, module) {
     var TimeRangeView = BaseSplunkView.extend(/** @lends splunkjs.mvc.TimeRangeView.prototype */{
         moduleId: module.id,
 
-        className: "splunk-timerange",
+        className: 'splunk-timerange',
 
         options: {
             'default': undefined,
@@ -201,20 +203,7 @@ define(function(require, exports, module) {
 
             this._initializeValue();
 
-            // Initialize view state
-            var initialValue = this.settings.get('value');
-            this._state = new Backbone.Model({
-                'dispatch.earliest_time': (initialValue !== undefined)
-                    ? initialValue['earliest_time']
-                    : '',
-                'dispatch.latest_time': (initialValue !== undefined)
-                    ? initialValue['latest_time']
-                    : ''
-            });
-
             // Get the shared models
-            var appModel = sharedModels.get('app');
-            var userModel = sharedModels.get('user');
             var timesCollection = (this.settings.get('presets') !== undefined)
                 ? SharedTimesCollection.createFromPresets(this.settings.get('presets'))
                 : sharedModels.get('times');
@@ -223,52 +212,18 @@ define(function(require, exports, module) {
 
             // We cannot create the timepicker until these internal models
             // have been fetched, and so we wait on them being done.
-            this._pickerDfd = $.when(timesCollection.dfd, userModel.dfd).done(function() {
-                var timeRangeModel = new TimeRangeModel();
-                timeRangeModel.save({
-                    'earliest': that._state.get('dispatch.earliest_time'),
-                    'latest': that._state.get('dispatch.latest_time')
-                });
-
-                that.timepicker = new InternalTimeRangePicker({
-                    className: "controls",
-                    model: {
-                        state: that._state,
-                        timeRange: timeRangeModel,
-                        user: userModel,
-                        application: appModel
-                    },
-                    collection: timesCollection,
-                    dialogOptions: that.settings.get('dialogOptions'),
-                    popdownOptions: that.settings.get('popdownOptions')
-                });
-
-                // We don't register the change handler on the internal
-                // state until we're done creating the timepicker
-                that._state.on(
-                    "change:dispatch.earliest_time change:dispatch.latest_time",
-                    _.debounce(that._onTimeRangeChange),
-                    that
-                );
-            });
+            this._pickerDfd = $.when(timesCollection.dfd);
 
             // Whenever the times collection changes and/or the preset changes,
             // we update the timepicker
-            this._timesCollection.on("change reset", this._onTimePresetUpdate, this);
-            this.settings.on("change:preset", this._onTimePresetUpdate, this);
-
-            // Update view if model changes
-            this.settings.on("change:value", function(model, value, options) {
-                that.val(value || {earliest_time: '', latest_time: ''});
-            });
-
-            // Update model if view changes
-            this.on("change", function() {
-                that.settings.set("value", that._getTimeRange());
-            });
+            this._timesCollection.on('change reset', this._onTimePresetUpdate, this);
+            this.settings.on('change:preset', this._onTimePresetUpdate, this);
 
             // Update the default if it changes
-            this.settings.on("change:default", this._onDefaultChange, this);
+            this.settings.on('change:default', this._onDefaultChange, this);
+
+            // this should be the central place to broadcast 'change' event to outside world
+            this.settings.on('change:value', this._onTimeRangeChange, this);
 
             this.bindToComponentSetting('managerid', this._onManagerChange, this);
 
@@ -306,7 +261,7 @@ define(function(require, exports, module) {
                     'latest_time': initialValue['latest_time']
                 });
             } else if (this.settings.get('earliest_time') !== undefined ||
-                       this.settings.get('latest_time') !== undefined)
+                this.settings.get('latest_time') !== undefined)
             {
                 this.settings.set('value', {
                     'earliest_time': this.settings.get('earliest_time'),
@@ -322,11 +277,11 @@ define(function(require, exports, module) {
             }
 
             // Keep {value, earliest_time, latest_time} in sync
-            this.settings.on("change:value", function(model, value, options) {
+            this.settings.on('change:value', function(model, value) {
                 if (value) {
                     that.settings.set({
-                        "earliest_time": value.earliest_time,
-                        "latest_time": value.latest_time
+                        'earliest_time': value.earliest_time,
+                        'latest_time': value.latest_time
                     });
                 }
             });
@@ -338,7 +293,7 @@ define(function(require, exports, module) {
                 var newValue = _.clone(that.settings.get('value')) || {};
                 newValue.earliest_time = that.settings.get('earliest_time');
                 newValue.latest_time = that.settings.get('latest_time');
-                that.settings.set("value", newValue);
+                that.settings.set('value', newValue);
             }), this);
 
             // If value is bound to $token$, automatically bind
@@ -378,10 +333,10 @@ define(function(require, exports, module) {
             }
         },
 
-        _onDefaultChange: function(model, value, options) {
+        _onDefaultChange: function() {
             // Initialize value with default, if provided
-            var oldDefaultValue = this.settings.previous("default");
-            var defaultValue = this.settings.get("default");
+            var oldDefaultValue = this.settings.previous('default');
+            var defaultValue = this.settings.get('default');
             var currentValue = this.settings.get('value');
 
             if (defaultValue !== undefined &&
@@ -392,7 +347,7 @@ define(function(require, exports, module) {
         },
 
         _onTimePresetUpdate: function() {
-            var preset = this.settings.get("preset");
+            var preset = this.settings.get('preset');
             if (!preset) {
                 return;
             }
@@ -404,7 +359,7 @@ define(function(require, exports, module) {
             var that = this;
             $.when(this._pickerDfd).done(function() {
                 var timeModel = that._timesCollection.find(function(model) {
-                    return model.entry.content.get("label") === preset;
+                    return model.entry.content.get('label') === preset;
                 });
 
                 if (timeModel) {
@@ -419,8 +374,8 @@ define(function(require, exports, module) {
                     console.warn('Could not find matching preset "' + preset + '" for time range view.');
                     that.val({
                         // All time
-                        earliest_time: "0",
-                        latest_time: ""
+                        earliest_time: '0',
+                        latest_time: ''
                     });
                 }
                 if (that._presetDfd) {
@@ -439,8 +394,8 @@ define(function(require, exports, module) {
             if (manager && manager.search) {
                 this.listenTo(
                     manager.search,
-                    "change:earliest_time change:latest_time",
-                    _.debounce(this._onManagerTimeRangeChange)
+                    'change:earliest_time change:latest_time',
+                    _.debounce(this._onManagerTimeRangeChange.bind(this))
                 );
 
                 this._onManagerTimeRangeChange();
@@ -453,16 +408,19 @@ define(function(require, exports, module) {
 
             // The manager's time range, if it has one, overrides the timepicker's
             // current range.
-            timeRange.earliest_time = this.manager.settings.get("earliest_time") || timeRange.earliest_time;
-            timeRange.latest_time = this.manager.settings.get("latest_time") || timeRange.latest_time;
+            timeRange.earliest_time = this.manager.settings.get('earliest_time') || timeRange.earliest_time;
+            timeRange.latest_time = this.manager.settings.get('latest_time') || timeRange.latest_time;
 
             // Set it back
             this.val(timeRange);
         },
 
         _onTimeRangeChange: function(model, value, options) {
+            // Not sure why we need this condition, but it has been there for 4+ years, so be it.
             if (!options || (options && !options._self)) {
-                this.trigger("change", this._getTimeRange(), this);
+                this.trigger('change', this._getTimeRange(), this);
+                // this is needed when developer set time range by calling val() or this.settings.set('value', ...)
+                this.render();
             }
         },
 
@@ -470,13 +428,82 @@ define(function(require, exports, module) {
          * Draws the view to the screen. Called only when you create the view manually.
          */
         render: function() {
-            var that = this;
             $.when(this._pickerDfd).done(function() {
-                that.timepicker.render();
-                that.$el.append(that.timepicker.el);
-            });
+                this.renderReactComponent();
+            }.bind(this));
 
             return this;
+        },
+
+        renderReactComponent: function() {
+            ReactDOM.render(
+                React.createElement(this.getReactComponent(), this.getState()),
+                this.getReactRoot()
+            );
+        },
+
+        getReactComponent: function() {
+            return TimeRangePickerDropdown;
+        },
+
+        getReactRoot: function() {
+            return this.el;
+        },
+
+        getState: function() {
+            // ideally we should use @splunk/time-range-utils/presets instead of using ModelHelper, because
+            // @splunk/time-range-utils is designed for @splunk/react-time-range.
+
+            var documentationURL = route.docHelp(
+                sharedModels.get('app').get('root'),
+                sharedModels.get('app').get('locale'),
+                'learnmore.timerange.picker'
+            );
+
+            return {
+                locale: sharedModels.get('app').get('locale'),
+                presets: this.getPresets(),
+                menuSettings: this.getMenuSettings(),
+                onChange: function(e, timeRange) {
+                    var earliest_time = this._convertISOtoEpoch(timeRange.earliest);
+                    var latest_time = this._convertISOtoEpoch(timeRange.latest);
+
+                    this.val({
+                        earliest_time: earliest_time,
+                        latest_time: latest_time
+                    });
+                }.bind(this),
+                earliest: this._convertEpochToISO(this._getTimeRange().earliest_time),
+                latest: this._convertEpochToISO(this._getTimeRange().latest_time),
+                documentationURL: documentationURL
+            };
+        },
+
+        getMenuSettings: function () {
+            return this._timesCollection.filter(function (model) {
+                return model.entry.get('name') === 'settings';
+            }).map(function (model) {
+                return {
+                    showAdvanced: normalizeBoolean(model.entry.content.get('show_advanced')),
+                    showDate: normalizeBoolean(model.entry.content.get('show_date_range')),
+                    showDateTime: normalizeBoolean(model.entry.content.get('show_datetime_range')),
+                    showPresets: normalizeBoolean(model.entry.content.get('show_presets')),
+                    showRealtime: normalizeBoolean(model.entry.content.get('show_realtime')),
+                    showRelative: normalizeBoolean(model.entry.content.get('show_relative'))
+                };
+            })[0];
+        },
+
+        getPresets: function() {
+            return this._timesCollection.filter(function(model) {
+                return (model.entry.content.get('earliest_time') || model.entry.content.get('latest_time')) && !model.entry.content.get('disabled');
+            }).map(function(model) {
+                return {
+                    label: model.entry.content.get('label'),
+                    earliest: model.entry.content.get('earliest_time') || '',
+                    latest: model.entry.content.get('latest_time') || ''
+                };
+            });
         },
 
         /**
@@ -489,18 +516,9 @@ define(function(require, exports, module) {
             if (arguments.length === 0) {
                 return this._getTimeRange();
             }
-            newValue = newValue || {earliest_time: undefined, latest_time: undefined};
-
-            var oldValue = this.val();
+            newValue = newValue || { earliest_time: undefined, latest_time: undefined };
 
             this._setTimeRange(newValue);
-            var realNewValue = this.val();
-
-            // Trigger change event manually since programmatic DOM
-            // manipulations don't trigger events automatically.
-            if (!_.isEqual(realNewValue, oldValue)) {
-                this.trigger('change', realNewValue, this);
-            }
 
             // If there is an asynchronous preset change
             // in progress, abort it.
@@ -519,9 +537,8 @@ define(function(require, exports, module) {
         },
 
         _getSelectedLabel: function() {
-            if (this.timepicker) {
-                return this.timepicker.model.timeRange.generateLabel(this.timepicker.collection);
-            }
+            var timeRange = this._getTimeRange();
+            return timeRangeUtils.createRangeLabel(timeRange.earliest_time, timeRange.latest_time, this.getPresets());
         },
 
         _getSelectedValue: function() {
@@ -531,37 +548,66 @@ define(function(require, exports, module) {
             return tr;
         },
 
-        // This logic applies what Dashboards expects in order for an input to have a "value" - it is not a generally
+        // This logic applies what Dashboards expects in order for an input to have a 'value' - it is not a generally
         // applicable construct, and should only be used by the Dashboard helpers
         _hasValueForDashboards: function() {
-            var value = this.settings.get("value");
-            var defaultValue = this.settings.get("default");
+            var value = this.settings.get('value');
+            var defaultValue = this.settings.get('default');
             var valueIsDefined = value !== undefined && value !== null;
             return valueIsDefined || defaultValue === undefined || value === defaultValue;
         },
 
         _setTimeRange: function(value) {
-            this._state.set({
-                "dispatch.earliest_time": value.earliest_time,
-                "dispatch.latest_time": value.latest_time
-            }, { _self: true });
+            var hasEarliestOrLatest = Object.keys(value).find(function(key) {
+                return key === 'earliest_time' || key === 'latest_time';
+            });
+
+            if (!hasEarliestOrLatest) {
+                throw Error('invalid time range value: ' + JSON.stringify(value));
+            }
+
+            // Note we rely on the event listener to sync 'value', 'earliest_time', 'latest_time'.
+            // The reason we don't directly set 'earliest_time' and 'latest_time' is:
+            // 'value' could be token, in that case 'earliest_time' and 'latest_time' become something
+            // like $token.earliest_time$ or $token.latest_time$, so I don't really know if it makes
+            // sense to set 'earliest_time' and 'latest_time' here.
+            this.settings.set('value', value);
         },
 
         _getTimeRange: function() {
+            var timeRange = this.settings.get('value') || {};
+
+            // This is to make sure _getTimeRange always returns an object with earliest_time and latest_time keys.
+            // That's how this method was implemented before, and many other logic relies on this assumption.
             return {
-                "earliest_time": this._state.get("dispatch.earliest_time"),
-                "latest_time": this._state.get("dispatch.latest_time")
+                earliest_time: timeRange.earliest_time || '',
+                latest_time: timeRange.latest_time || ''
             };
         },
 
+        _convertISOtoEpoch: function(time) {
+            var momentTime = moment(time, moment.ISO_8601, true);
+            if (momentTime.isValid()) {
+                return momentTime.unix().toString();
+            }
+            return time;
+        },
+
+        _convertEpochToISO: function(time) {
+            if (!time || time === '0') {
+                // deal with empty string and special case '0'
+                return time;
+            }
+
+            var momentTime = moment.unix(time);
+            if (momentTime.isValid()) {
+                return momentTime.toISOString();
+            }
+            return time;
+        },
+
         remove: function() {
-            var that = this;
-
-            // We can't remove the timepicker until it is created
-            $.when(this._pickerDfd).done(function() {
-                that.timepicker.remove();
-            });
-
+            ReactDOM.unmountComponentAtNode(this.getReactRoot());
             BaseSplunkView.prototype.remove.apply(this, arguments);
         }
     });

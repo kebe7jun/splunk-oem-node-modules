@@ -103,7 +103,6 @@ define(
                         },
                         clearOnEsc: false
                     },
-                    controlClass: 'controls-block',
                     label: _('Stanza Name').t(),
                     enabled: this._isCreate
                 });
@@ -136,8 +135,7 @@ define(
                                 {label: _("Attributes").t(), value: VIEW.ATTRIBUTES},
                                 {label: _("Text").t(), value: VIEW.TEXT}
                             ]
-                        },
-                        controlClass: 'controls-block'
+                        }
                     });
 
                     this.children.importText = new ControlGroup({
@@ -148,14 +146,13 @@ define(
                             model: this.model._state,
                             placeholder: _('Insert full stanza as text').t()
                         },
-                        controlClass: 'controls-block',
                         label: _('Stanza text').t()
                     });
 
                     this.listenTo(this.model._state, 'change:currentView', this.changeCurrentView);
                     this.listenTo(this.model._state, 'switcherClicked', this.changeRequestedView);
                 }
-                
+
                 this.children.warnings = new SyntheticCheckboxControl({
                     className: SyntheticCheckboxControl.prototype.className + ' pull-right',
                     model: this.model._state,
@@ -182,7 +179,7 @@ define(
                 this.listenTo(this.collection.flashMessages, 'reset', _.debounce(function() {
                     this.model._state.trigger('rerenderTypeaheads');
                 }.bind(this), 100));
-                
+
                 this._resetFlashMessages([]);
             },
 
@@ -194,9 +191,9 @@ define(
                     var error = null,
                         saveStanza = function() {
                             var saveDfd = this.model.stanza.save(
-                                {}, 
+                                {},
                                 {
-                                    warnings: this.model._state.get('stanzaWarnings') 
+                                    warnings: this.model._state.get('stanzaWarnings')
                                 }
                             );
 
@@ -303,7 +300,7 @@ define(
                     this.$('.attribute-view-placeholder').hide();
                     this.$('.text-view-placeholder').show();
                 }
-                
+
                 return this;
             },
 
@@ -392,8 +389,8 @@ define(
                     placeholders = this.model.confStanzaSpec.getPlaceholders();
 
                 // If there are no autocomplete keys returned by default, then this might
-                // be a user-defined stanza, which should have "default" keys as part of the 
-                // autocomplete suggestions. 
+                // be a user-defined stanza, which should have "default" keys as part of the
+                // autocomplete suggestions.
                 // Check to see if this is a known stanza as well; in which case autocomplete keys
                 // should be taken as truth.
                 if (autocompleteKeys.length === 0 &&
@@ -460,7 +457,7 @@ define(
                     messages = [],
                     unrecognized = {
                         key: [],
-                        name: []    
+                        name: []
                     };
 
                 try {
@@ -468,18 +465,18 @@ define(
                     errorMsgs = errorObj.error.message;
                 } catch (e) {
                 }
-                
+
                 if (_.isObject(errorMsgs)) {
                     _.each(errorMsgs.warnings, function(warning) {
-                       unrecognized[warning.type].push($.trim(warning.name)); 
+                       unrecognized[warning.type].push($.trim(warning.name));
                     });
-                    
+
                     _.each(_.keys(unrecognized), function(type) {
                         var unrecognizedList = unrecognized[type],
                             messageHtml = (unrecognizedList.length === 1 ?
                                 UNRECOGNIZED_MESSAGE_HTMLS :
                                 UNRECOGNIZED_MESSAGE_HTMLS_PLURAL)[type];
-                             
+
                         if (unrecognizedList.length > 0) {
                             messages.push({
                                 type: 'warning',
@@ -495,14 +492,14 @@ define(
                 if (_.isString(errorMsgs)) {
                     messages = [{ type: 'error', html: errorMsgs || FAILURE_HTML }];
                 }
-                
+
                 if (messages.length === 0) {
                     messages = [{
                         type: 'error',
                         html: FAILURE_HTML
                     }];
                 }
-                
+
                 this._resetFlashMessages(messages);
             },
 

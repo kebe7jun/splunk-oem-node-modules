@@ -158,14 +158,12 @@ define([
                 return this;
             }
             this.$el.html(this.compiledTemplate(this.vizModel.toJSON()));
-
             return this;
         },
 
         template: '\
-            <a class="btn-pill popdown-toggle viz-picker" href="#" data-selected-id="<%- id %>">\
-                <i class="icon-<%- icon %>"/>\
-                <span class="link-label"><%- label %></span>\
+            <a class="btn-pill popdown-toggle viz-picker" href="#" data-selected-id="<%- id %>" aria-label="<%- _("Select visualization").t() %>">\
+                <i class="icon-<%- icon %>"/><span class="link-label"><%- label %></span>\
             </a>\
         ',
 

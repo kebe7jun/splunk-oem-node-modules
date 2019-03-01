@@ -6,8 +6,7 @@
 	background-image: none;
 }
 .wizard .content {
-    padding:10px;
-    padding-top:15px;
+    padding: 20px;
     padding-bottom:0px;
 }
 
@@ -41,7 +40,7 @@
     padding-right:10px;
     font-weight:bold;
     text-align:right;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     white-space: nowrap;
     line-height:20px;
     width:2%;
@@ -55,7 +54,6 @@
 .wizard h1.spl-icon-success-md {
 	padding-left: 18px;
 	padding-bottom: 15px;
-	line-height: 14px;
 	background: transparent url(/static/img/skins/default/icon-check.png) no-repeat 0 0;
 }
 .wizard h3 {
@@ -72,7 +70,7 @@
 }
 .wizard .note {
 color: $textGrayDark;
-	font-size: $baseFontSizeSmall;
+	font-size: $fontSizeSmall;
 	font-style: italic;
 }
 .wizard p.note, .wizard li.note {
@@ -86,7 +84,7 @@ color: $textGray;
 	display: none;
 }
 .wizard .errors {
-    font-size: $baseFontSize;
+    font-size: $fontSize;
     font-weight: bold;
     background: #af4444;
     margin: 0px;
@@ -96,7 +94,7 @@ color: $textGray;
 	color: $white;
 	margin-bottom: 10px;
 
-    border-radius: $baseBorderRadius;
+    border-radius: $borderRadius;
 }
 
 .wizard .required {
@@ -107,7 +105,7 @@ color: $textGray;
 }
 .wizard .information {
     margin-bottom: 15px;
-    font-size: $baseFontSize;
+    font-size: $fontSize;
 }
 .wizard .information a {
 	word-break: break-word;
@@ -126,7 +124,7 @@ color: $textGray;
 	box-sizing: border-box;
 	width: 98%;
 	line-height: 130%;
-	font-size: $baseFontSize;
+	font-size: $fontSize;
 }
 .wizard textarea {
 	resize: vertical;
@@ -139,7 +137,7 @@ color: $textGray;
 }
 .wizard input[disabled], .wizard textarea[disabled], .wizard select[disabled] {
     background-color:#ededed;
-    border-color:#CCC;
+    border-color:$borderColor;
     padding-left: 5px;
    color: $textGray;
 }
@@ -215,11 +213,11 @@ textarea::placeholder {
 
 /* wizard buttons style */
 .wizard ul.buttons {
-    padding:10px;
+    padding: 20px;
     margin:0px;
     list-style:none;
     border-top: 1px solid #b7b7b7;
-    background-color: $offWhite;;
+    background-color: $gray98;;
 }
 .wizard ul.buttons .left {
     float:left;
@@ -243,7 +241,7 @@ textarea::placeholder {
     padding: 0px 5px;
 }
 .wizard .saveSearchForm .managerperms {
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
    color: $textGray;
 }
 .wizard .saveSearchForm td.share {
@@ -273,7 +271,7 @@ textarea::placeholder {
     white-space: nowrap;
 }
 .wizard .steps em {
-    background-color:$grayLight;
+    background-color:$gray60;
     width:14px;
     border-radius:10px;
     float:left;
@@ -336,7 +334,7 @@ textarea::placeholder {
 
 .verificationWizard .note {
    color: #888;
-   font-size: $baseFontSizeSmall;
+   font-size: $fontSizeSmall;
    font-style: normal;
 }
 
@@ -348,7 +346,7 @@ textarea::placeholder {
 }
 
 .verificationWizard {
-   font-size: $baseFontSize;
+   font-size: $fontSize;
 }
 
 .checkboxNote {

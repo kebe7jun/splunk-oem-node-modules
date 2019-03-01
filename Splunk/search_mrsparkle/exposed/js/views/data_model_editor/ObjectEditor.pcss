@@ -21,7 +21,7 @@
 	}
 
 	.main-list-row {
-		$border: 1px solid $grayLighter;
+		$border: 1px solid $gray92;
 
 		border-bottom: $border;
 		padding: 1px 0;
@@ -54,7 +54,8 @@
 	}
 
     .field-checkbox.uneditable .input-label {
-        margin-left: 23px;
+      margin-left: 23px;
+      font-weight: $fontWeight;
     }
 
 	.calculation {
@@ -73,8 +74,7 @@
 	}
 	.calculation:hover {
 		cursor: move;
-		@mixin gradient-vertical $interactiveGradientStartColor, $interactiveGradientEndColor;
-
+		background-color: $interactiveBackgroundColor;
 	}
 
 	.footer {

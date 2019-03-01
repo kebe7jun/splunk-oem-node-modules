@@ -1,22 +1,22 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _request = require('request');
 
 var _request2 = _interopRequireDefault(_request);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var jobDataProperties = ['name', 'tags', 'public', 'build', 'custom-data'];
 
-var SauceService = (function () {
+var SauceService = function () {
     function SauceService() {
         _classCallCheck(this, SauceService);
     }
@@ -65,6 +65,13 @@ var SauceService = (function () {
             global.browser.execute('sauce:context=' + test.parent + ' - ' + test.title);
         }
     }, {
+        key: 'afterSuite',
+        value: function afterSuite(suite) {
+            if (suite.hasOwnProperty('err')) {
+                ++this.failures;
+            }
+        }
+    }, {
         key: 'afterTest',
         value: function afterTest(test) {
             if (!test.passed) {
@@ -78,13 +85,21 @@ var SauceService = (function () {
                 return;
             }
 
-            this.suiteTitle = feature.getName();
+            this.suiteTitle = feature.name || feature.getName();
             global.browser.execute('sauce:context=Feature: ' + this.suiteTitle);
         }
     }, {
         key: 'afterStep',
         value: function afterStep(feature) {
-            if (feature.getFailureException()) {
+            if (
+            /**
+             * Cucumber v1
+             */
+            feature.failureException ||
+            /**
+             * Cucumber v2
+             */
+            typeof feature.getFailureException === 'function' && feature.getFailureException()) {
                 ++this.failures;
             }
         }
@@ -95,12 +110,14 @@ var SauceService = (function () {
                 return;
             }
 
-            global.browser.execute('sauce:context=Scenario: ' + scenario.getName());
+            var scenarioName = scenario.name || scenario.getName();
+            global.browser.execute('sauce:context=Scenario: ' + scenarioName);
         }
 
         /**
          * update Sauce Labs job
          */
+
     }, {
         key: 'after',
         value: function after() {
@@ -125,10 +142,10 @@ var SauceService = (function () {
         value: function updateJob(sessionId, failures) {
             var _this = this;
 
-            var calledOnReload = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+            var calledOnReload = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
             return new Promise(function (resolve, reject) {
-                return _request2['default'].put(_this.getSauceRestUrl(sessionId), {
+                return _request2.default.put(_this.getSauceRestUrl(sessionId), {
                     json: true,
                     auth: {
                         user: _this.sauceUser,
@@ -149,10 +166,11 @@ var SauceService = (function () {
         /**
          * massage data
          */
+
     }, {
         key: 'getBody',
         value: function getBody(failures) {
-            var calledOnReload = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+            var calledOnReload = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
             var body = {};
 
@@ -187,8 +205,8 @@ var SauceService = (function () {
                 _iteratorError = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion && _iterator['return']) {
-                        _iterator['return']();
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
                     }
                 } finally {
                     if (_didIteratorError) {
@@ -203,7 +221,7 @@ var SauceService = (function () {
     }]);
 
     return SauceService;
-})();
+}();
 
-exports['default'] = SauceService;
+exports.default = SauceService;
 module.exports = exports['default'];

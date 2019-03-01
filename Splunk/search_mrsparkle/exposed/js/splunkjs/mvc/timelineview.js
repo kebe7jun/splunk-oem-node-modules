@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var DateTime = require("splunk/time/DateTime");
     var JobModel = require("models/search/Job");
     var SimpleTimeZone = require("splunk/time/SimpleTimeZone");
+
     /**
      * @constructor
      * @memberOf splunkjs.mvc
@@ -74,9 +75,7 @@ define(function(require, exports, module) {
                 // External changes to this property are ignored.
                 value: undefined,
                 // What the 'value' setting is initialized to.
-                'default': undefined,
-                // DCE-OEM-CHANGE
-                height: null
+                'default': undefined
             },
 
             initialize: function() {
@@ -97,9 +96,6 @@ define(function(require, exports, module) {
                 model.searchJob.isNew = function() { return false; };
 
                 this.timeline = new CanvasTimeline({model: model});
-                if (this.options.height) {
-                    this.timeline.setParam('height', this.options.height);
-                }
                 this.timeline.update = function() {};
 
                 this._onDefaultChange();

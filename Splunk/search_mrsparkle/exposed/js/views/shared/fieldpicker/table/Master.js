@@ -346,12 +346,12 @@ define(
             template: '\
                 <div class="header-table-static"></div>\
                 <div class="scroll-table-wrapper">\
-                    <table class="table table-striped table-row-expanding table-fields-list">\
+                    <table class="table table-striped table-row-expanding table-chrome table-fields-list">\
                         <tbody class="fields-list">\
                             <tr class="waiting"><td colspan="6"><%- _("Waiting for results...").t() %></td></tr>\
                         </tbody>\
                     </table>\
-                    <table class="table table-striped table-row-expanding table-field-moving" style="display:none; position:absolute; left:0; right:0;">\
+                    <table class="table table-striped table-row-expanding table-chrome table-field-moving" style="display:none; position:absolute; left:0; right:0;">\
                         <tbody class="field-moving">\
                         </tbody>\
                     </table>\

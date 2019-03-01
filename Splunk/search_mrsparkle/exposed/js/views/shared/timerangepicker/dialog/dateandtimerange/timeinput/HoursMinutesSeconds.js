@@ -15,7 +15,7 @@ function(
 ){
     return Base.extend({
         tagName: 'span',
-        className: "view-time-range-picker-time-and-date-range-hours-minutes-seconds pull-left",
+        className: "view-time-range-picker-time-and-date-range-hours-minutes-seconds",
         moduleId: module.id,
         initialize: function() {
             Base.prototype.initialize.apply(this, arguments);
@@ -29,7 +29,7 @@ function(
                     this.$("input").addClass("error");
                 }
             });
-            
+
             this.listenTo(this.model, "change", this.updateTime);
         },
         events: {
@@ -47,15 +47,16 @@ function(
             var time = this.model.time();
 
             var template = _.template(this.template, {
-                time: time
+                time: time,
+                ariaLabel: this.options.ariaLabel
             });
             this.$el.html(template);
 
             return this;
         },
         template: '\
-            <input type="text" class="hms-input" value="<%- time %>"/>\
+            <input type="text" class="hms-input" aria-label="<%- ariaLabel %>"value="<%- time %>"/>\
             <span class="help-block"><%- _("HH:MM:SS.SSS").t() %></span>\
-            '
+        '
     });
 });

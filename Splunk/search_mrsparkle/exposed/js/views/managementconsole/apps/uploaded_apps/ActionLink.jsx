@@ -1,6 +1,7 @@
-import { createTestHook } from 'util/test_support';
-import React, { Component, PropTypes } from 'react';
-import Link from 'splunk-ui/components/Link';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import Link from '@splunk/react-ui/Link';
+import splunkUtils from 'splunk.util';
 import './ActionLink.pcss';
 
 class ActionLink extends Component {
@@ -15,7 +16,7 @@ class ActionLink extends Component {
                 <Link
                     onClick={this.handleActionLinkClick}
                     disabled={this.props.disabledDuringDeployment && this.props.deploymentInProgress}
-                    {...createTestHook(module.id, this.props.action)}
+                    data-test={splunkUtils.sprintf('UploadedApps-ActionLink-%s', this.props.action)}
                 >
                     { this.props.action }
                 </Link>

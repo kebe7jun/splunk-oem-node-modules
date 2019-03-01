@@ -17,6 +17,7 @@ define(
         'views/managementconsole/apps/app_listing/actionflows/uninstall/Master',
         'views/managementconsole/apps/app_listing/actionflows/update/Master',
         'views/managementconsole/apps/app_listing/controls/PermissionsDialog',
+        'views/managementconsole/apps/app_listing/controls/CreateAppDialog',
         'views/managementconsole/apps/app_listing/NewButtons',
         'views/shared/controls/SyntheticSelectControl',
         'views/managementconsole/shared/TopologyProgressControl',
@@ -43,6 +44,7 @@ define(
         UninstallDialog,
         UpdateDialog,
         PermissionsDialog,
+        CreateAppDialog,
         NewButtons,
         SyntheticSelectControl,
         TopologyProgressControl,
@@ -147,9 +149,17 @@ define(
                 this.model.controller.on('editPermissions', this.handleEditPermissions.bind(this));
                 this.model.controller.on('updateApp', this.openUpdateDialog.bind(this));
                 this.model.controller.on('uninstallApp', this.openUninstallDialog.bind(this));
+                this.model.controller.on('createApp', this.openCreateAppDialog.bind(this));
 
                 this.model.deployTask.on('syncApps', this.syncApps.bind(this));
                 this.collection.appsLocal.on('sync', this.updateAppLocalsMap.bind(this));
+            },
+
+            openCreateAppDialog: function() {
+                var createAppDialog = new CreateAppDialog({});
+
+                $('body').append(createAppDialog.render().el);
+                createAppDialog.show();
             },
 
             syncApps: function() {

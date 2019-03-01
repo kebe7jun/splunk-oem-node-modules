@@ -3,13 +3,16 @@ define(
         'jquery',
         'underscore',
         'views/Base',
-        'util/keyboard'
+        'util/keyboard',
+        './BaseList.pcssm'
     ],
     function($,
              _,
              BaseView,
-             KeyboardUtil) {
+             KeyboardUtil,
+             css) {
         return BaseView.extend({
+            className: css.list,
             initialize: function(options) {
                 BaseView.prototype.initialize.apply(this, arguments);
                 this.id = options.id || _.uniqueId('list_');

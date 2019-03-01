@@ -5,15 +5,15 @@ define(
         'backbone',
         'module',
         'views/shared/controls/ControlGroup',
-        'views/shared/Modal', 
+        'views/shared/Modal',
         'views/shared/FlashMessages'
     ],
-    function($, 
-        _, 
-        backbone, 
-        module, 
-        ControlGroup, 
-        Modal, 
+    function($,
+        _,
+        backbone,
+        module,
+        ControlGroup,
+        Modal,
         FlashMessagesView
     ){
         return Modal.extend({
@@ -25,13 +25,12 @@ define(
                 this.children.flashMessagesReport = new FlashMessagesView({model: this.model.report});
                 this.children.flashMessagesDashboard = new FlashMessagesView({model: this.model.dashboard});
                 //reset flashmessages to clear pre-existing flash messages on 'cancel' or 'close' of dialog
-                this.on('hide', this.model.report.error.clear, this.model.report.error); 
-                this.on('hide', this.model.dashboard.error.clear, this.model.dashboard.error); 
+                this.on('hide', this.model.report.error.clear, this.model.report.error);
+                this.on('hide', this.model.dashboard.error.clear, this.model.dashboard.error);
 
                 this.children.reportNameControlGroup = new ControlGroup({
                     label: _("Report Title").t(),
                     controlType:'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.workingReport,
                         modelAttribute: 'name'
@@ -41,7 +40,6 @@ define(
                 this.children.reportDescriptionControlGroup = new ControlGroup({
                     label: _("Description").t(),
                     controlType:'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.workingReport,
                         modelAttribute: 'description',
@@ -49,7 +47,7 @@ define(
                     }
                 });
 
-                this.listenTo(this.model.report, 'successfulReportSave', this.hide, this); 
+                this.listenTo(this.model.report, 'successfulReportSave', this.hide, this);
             },
             events: $.extend({}, Modal.prototype.events, {
                 'click .modal-btn-primary': 'onSave'

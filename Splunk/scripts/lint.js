@@ -41,6 +41,11 @@ var config = {
             patterns: ['../cfg/bundles/splunk_monitoring_console/src'],
             options: ['-c', path.join('.', '.jshintrc'), '--exclude-path', path.join('.', '.jshintignore')],
             reportRoot: path.join('..', 'cfg', 'bundles', 'splunk_monitoring_console')
+        },
+        splunk_instance_monitoring: {
+            patterns: ['../cfg/bundles/splunk_instance_monitoring/src'],
+            options: ['-c', path.join('.', '.jshintrc'), '--exclude-path', path.join('.', '.jshintignore')],
+            reportRoot: path.join('..', 'cfg', 'bundles', 'splunk_instance_monitoring')
         }
     },
     es: {

@@ -82,7 +82,7 @@ define(
                         application: this.model.application,
                         state: this.model.state
                     },
-                    tableDockOffset: 36,
+                    tableDockOffset: 42,
                     enableEditing: true,
                     generalTypeOverride: ReportVisualizer.GENERAL_TYPES.STATISTICS
                 });

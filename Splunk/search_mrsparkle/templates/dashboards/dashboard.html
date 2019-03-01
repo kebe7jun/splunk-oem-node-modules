@@ -25,7 +25,7 @@ augment_perf = splunk.util.normalizeBoolean(cherrypy.config.get('simple_xml_perf
 hasGlobalTRP = dashboard.hasGlobalTRP()
 
 options = dict()
-for option in ['hideChrome', 'hideSplunkBar', 'hideAppBar', 'hideFooter', 'hideTitle', 'hideEdit', 'targetTop']:
+for option in ['hideChrome', 'hideSplunkBar', 'hideAppBar', 'hideTitle', 'hideEdit', 'targetTop']:
     options[option] = splunk.util.normalizeBoolean(kw.get(option, False)) if option in kw else getattr(dashboard, option, False)
 %>\
 <!DOCTYPE html>
@@ -40,11 +40,10 @@ for option in ['hideChrome', 'hideSplunkBar', 'hideAppBar', 'hideFooter', 'hideT
     <link rel="shortcut icon" href="${util.getFaviconURL()}" />
 % if isLite:
     <link rel="stylesheet" type="text/css" href="${url('/static/build/css/bootstrap-lite.css')}" />
-    <link rel="stylesheet" type="text/css" href="${url('/static/css/build/pages/dashboard-simple-bootstrap-lite.min.css')}" />
 % else:
     <link rel="stylesheet" type="text/css" href="${url('/static/build/css/bootstrap-enterprise.css')}" />
-    <link rel="stylesheet" type="text/css" href="${url('/static/css/build/pages/dashboard-simple-bootstrap.min.css')}" />
 % endif
+    <link rel="stylesheet" type="text/css" href="${url('/static/build/css/splunkjs-dashboard.css')}" />
 % for css in customCssFiles:
     <link rel="stylesheet" type="text/css" media="all" href="${url(css)}" />
 % endfor
@@ -55,13 +54,13 @@ for option in ['hideChrome', 'hideSplunkBar', 'hideAppBar', 'hideFooter', 'hideT
 % else:
 <body class="simplexml preload locale-${i18n.current_lang()[0]|h}" data-splunk-version="${cherrypy.config.get('version_number')}" data-splunk-product="${cherrypy.config.get('product_type')}">
 % endif
-<!-- 
+<!--
 BEGIN LAYOUT
 This section contains the layout for the dashboard. Splunk uses proprietary
-styles in <div> tags, similar to Bootstrap's grid system. 
+styles in <div> tags, similar to Bootstrap's grid system.
 -->
 <header>
-    <a class="navSkip" href="#navSkip" tabindex="1">Screen reader users, click here to skip the navigation bar</a>
+    <a aria-label="Screen reader users, click here to skip the navigation bar" class="navSkip" href="#navSkip" tabIndex="1">Skip Navigation &gt;</a>
     % if (not options['hideChrome']):
     <div class="header splunk-header">
         % if not isLite:
@@ -192,7 +191,7 @@ width = str(round(100.0/len(row.panels),3))[0:-1].rstrip('0').rstrip('.') + '%'
 % endfor
 </div>
 
-<!-- 
+<!--
 END LAYOUT
 -->
 
@@ -225,7 +224,7 @@ __log_perf('configured require');
 // In the require function, we include the necessary libraries and modules for
 // the HTML dashboard. Then, we pass variable names for these libraries and
 // modules as function parameters, in order.
-// 
+//
 // When you add libraries or modules, remember to retain this mapping order
 // between the library or module and its function parameter. You can do this by
 // adding to the end of these lists, as shown in the commented examples below.
@@ -301,8 +300,8 @@ require([
         PostProcessManager,
         UrlTokenModel
 
-        // Add comma-separated parameter names here, for example: 
-        // ...UrlTokenModel, 
+        // Add comma-separated parameter names here, for example:
+        // ...UrlTokenModel,
         // TokenForwarder
         ) {
 % if augment_perf:
@@ -316,10 +315,10 @@ require([
         var pageLoading = true;
 
 
-        // 
+        //
         // TOKENS
         //
-        
+
         // Create token namespaces
         var urlTokenModel = new UrlTokenModel();
         mvc.Components.registerInstance('url', urlTokenModel);
@@ -376,8 +375,8 @@ require([
 
             % endif
         % endfor
-        
-        
+
+
         //
         // SEARCH MANAGERS
         //
@@ -386,7 +385,7 @@ require([
         % if getattr(search,'searchMode', None):
         <%include file="contexts/${search.searchMode}.js" args="ctx=search,runOnSubmit= not isinstance(obj, BaseInput), cancelOnUnload=dashboard.onUnloadCancelJobs" />\
         % for eventName, props in search.eventHandlers:
-            
+
         <%include file="contexts/eventhandler.js" args="search=search, eventName=eventName, conditions=props" />
         % endfor
         % if augment_perf:
@@ -448,7 +447,7 @@ require([
 % if dashboard.submitButton:
 
 
-        // 
+        //
         // SUBMIT FORM DATA
         //
 

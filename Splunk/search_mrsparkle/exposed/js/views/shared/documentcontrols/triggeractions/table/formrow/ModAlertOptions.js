@@ -36,7 +36,8 @@ define([
                         application: this.model.application,
                         target: this.model.document.entry.content
                     },
-                    html: _(this.model.alertActionUI.entry.content.get('eai:data') || '').t(),
+                    html: this.model.alertActionUI.entry.content.get('eai:data') ?
+                        _(this.model.alertActionUI.entry.content.get('eai:data')).t() : '',
                     attributePrefix: 'action.' + this.model.alertAction.entry.get('name') + '.param.',
                     entityReference: 'alert action: ' + this.model.alertAction.entry.get('name')
                 });

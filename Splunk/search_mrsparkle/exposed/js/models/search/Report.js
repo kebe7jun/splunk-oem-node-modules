@@ -144,7 +144,7 @@ define(
                 historiesCollection.url = splunkd_utils.fullpath(this.entry.links.get('history'));
                 historiesCollection.fetch({
                     data: {
-                        search: "isScheduled=true",
+                        search: "isScheduled=true AND (isDone=true OR isRealTimeSearch=true)",
                         sort_key: "start",
                         sort_dir: "desc"
                     },
@@ -169,7 +169,8 @@ define(
                     }
                     return 'pivot';
                 } else {
-                    return 'search';
+                    var displayview = this.entry.content.get("displayview");
+                    return displayview || 'search';
                 }
             },
 
@@ -362,9 +363,9 @@ define(
                     if (displayTimeRangePicker && dispatchAs === 'user') {
                         return {
                             type: splunkd_utils.WARNING,
-                            html: splunkUtil.sprintf(_("Scheduling this report: \
-                                %(openUl)s %(openLi)s Causes its permissions to change from Run as User to Run as Owner. %(closeLi)s \
-                                %(openLi)s Results in removal of the time range picker from the report display. %(closeLi)s %(closeUl)s").t(), {
+                            html: splunkUtil.sprintf(_("Scheduling this report: " +
+                                "%(openUl)s %(openLi)s Causes its permissions to change from Run as User to Run as Owner. %(closeLi)s " +
+                                "%(openLi)s Results in removal of the time range picker from the report display. %(closeLi)s %(closeUl)s").t(), {
                                 openUl: '<ul>',
                                 closeUl: '</ul>',
                                 openLi: '<li>',
@@ -501,7 +502,7 @@ define(
                     sortColumn = content.get('display.events.table.sortColumn');
 
                 if (sortColumn && !_.isUndefined(offset) && !_.isUndefined(count)) {
-                    search = ('| sort ' + (parseInt(offset, 10) + parseInt(count, 10)) + ((content.get('display.events.table.sortDirection') === 'desc') ? ' - ': ' ') + sortColumn);
+                    search = ('| sort ' + (parseInt(offset, 10) + parseInt(count, 10)) + ((content.get('display.events.table.sortDirection') === 'desc') ? ' - ': ' ') + '"' + sortColumn + '"');
                 }
                 return search;
             },
@@ -581,6 +582,7 @@ define(
                 '^dispatch\.earliest_time$',
                 '^dispatch\.latest_time$',
                 '^dispatch\.sample_ratio',
+                '^workload_pool',
                 '^display\.*$',
                 '^search$'
             ],

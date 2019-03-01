@@ -1,5 +1,5 @@
-import { createTestHook } from 'util/test_support';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import UploadAppButton from 'views/managementconsole/apps/uploaded_apps/UploadAppButton';
 import HeaderSection from './HeaderSection';
 import PackagesTable from './PackagesTable';
@@ -31,6 +31,8 @@ function UploadedAppsPage(props) {
         canEdit,
         onUpdatePackageOpen,
         onUpdatePackage,
+        onDeletePackageOpen,
+        onDeletePackage,
         onMoreInfoOpen,
         loginDialogOpen,
         consent,
@@ -79,11 +81,13 @@ function UploadedAppsPage(props) {
         canEdit,
         onUpdatePackageOpen,
         onUpdatePackage,
+        onDeletePackageOpen,
+        onDeletePackage,
         onMoreInfoOpen,
     };
 
     return (
-        <div {...createTestHook(module.id)}>
+        <div data-test="UploadedApps-Page">
             <HeaderSection {...headerSectionProps}>
                 <div className="buttons-wrapper pull-right">
                     { props.canEdit && <UploadAppButton {...uploadButtonProps} /> }
@@ -120,6 +124,8 @@ UploadedAppsPage.propTypes = {
     canEdit: PropTypes.bool,
     onUpdatePackageOpen: PropTypes.func.isRequired,
     onUpdatePackage: PropTypes.func.isRequired,
+    onDeletePackageOpen: PropTypes.func.isRequired,
+    onDeletePackage: PropTypes.func.isRequired,
     onMoreInfoOpen: PropTypes.func.isRequired,
     loginDialogOpen: PropTypes.bool,
     consent: PropTypes.bool,

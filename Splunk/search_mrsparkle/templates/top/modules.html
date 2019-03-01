@@ -9,12 +9,12 @@
     <% parent.css() %>
     <style>
         body { font-size: 12px; }
-        h2 { font-size: 16px; background-color: #ccc; padding: 3px; width: 45em;}
+        h2 { font-size: 16px; background-color: #E1E6EB; padding: 3px 3px 3px 10px;}
         h3 { font-size: 14px; }
         h4 { margin: 10px 0 5px 0;}
         p { width: 50em;}
-        
-        #toc { float: right;}
+
+        #toc { float: right; width: 310px; background-color: #FFFFFF; padding: 10px 0 20px 20px; box-sizing: border-box;}
         #toc ul { margin: 0; padding: 0;}
         #toc li { list-style-type: none;}
         .mapping { margin-bottom: 30px; }
@@ -23,11 +23,11 @@
         .mdescription { font-size: 14px;}
         .signature { font-style: italic; font-size: 11px; color: #555; width: 100%;}
         .plisting { margin-left: 10px;}
-        dt.required .pname { font-weight: bold; color: #800; }
+        dt.required .pname { font-weight: bold; color: #DC4E41; }
         ul.pvalues { margin: 0 0 5px 0;}
         .pvalues .default code { font-weight: bold;}
         dt { border-top: 1px solid #eee; }
-        p.warning { color: #800; font-weight: bold;}
+        p.warning { color: #DC4E41; font-weight: bold;}
     </style>
 </%def>
 <%def name="header()">
@@ -93,13 +93,13 @@
 
         output.append('\n')
     %>
-    
+
     <h2>DocWiki alternate</h2>
-    <textarea rows="20" cols="100">${''.join(output)}</textarea>
+    <textarea rows="20" cols="100" style="max-width: 604px;">${''.join(output)}</textarea>
 % endif
-    
-    
-    
+
+
+
 <div id="toc">
     <ul class="pathnames">
       % for name in names:
@@ -110,8 +110,8 @@
 
 <div id="docs">
     % for i, name in enumerate(names):
-        <% 
-            module = modules[name] 
+        <%
+            module = modules[name]
             mappingClass = 'mapping'
             if module['isAbstract']:
                 mappingClass += ' abstract'

@@ -2,13 +2,22 @@ import { connect } from 'react-redux';
 import SearchEditor from 'dashboard/components/editor/drilldown/search/SearchActionEditor';
 import { LINK_TO_SEARCH } from 'dashboard/containers/editor/drilldown/drilldownNames';
 import route from 'uri/route';
-import { updateLinkToSearchSetting } from './searchActions';
+import {
+    updateLinkToSearchSetting,
+    parseEarliest,
+    parseLatest,
+} from './searchActions';
 
 const mapStateToProps = state => ({
     options: state.forms[LINK_TO_SEARCH].options,
     activeOption: state.forms[LINK_TO_SEARCH].activeOption,
     search: state.forms[LINK_TO_SEARCH].search,
     searchError: state.forms[LINK_TO_SEARCH].searchError,
+    isFetchingPresets: state.timeRangePresets.isFetching,
+    presets: state.timeRangePresets.items,
+    locale: state.splunkEnv.application.locale,
+    parseEarliest: state.forms[LINK_TO_SEARCH].parseEarliest,
+    parseLatest: state.forms[LINK_TO_SEARCH].parseLatest,
     extraTimeRangeOptions: state.forms[LINK_TO_SEARCH].extraTimeRangeOptions,
     activeTimeRangeOption: state.forms[LINK_TO_SEARCH].activeTimeRangeOption,
     activeTimeRange: state.forms[LINK_TO_SEARCH].activeTimeRange,
@@ -20,6 +29,11 @@ const mapStateToProps = state => ({
         state.splunkEnv.application.root,
         state.splunkEnv.application.locale,
         'learnmore.dashboard.drilldown.tokens',
+    ),
+    timeRangePickerDocsURL: route.docHelp(
+        state.splunkEnv.application.root,
+        state.splunkEnv.application.locale,
+        'learnmore.timerange.picker',
     ),
 });
 
@@ -38,11 +52,17 @@ const mapDispatchToProps = dispatch => ({
     onTimeRangeOptionChange: (e, { value }) => {
         dispatch(updateLinkToSearchSetting({ activeTimeRangeOption: value }));
     },
-    onTimeRangeChange: (e, { value }) => {
-        dispatch(updateLinkToSearchSetting({ activeTimeRange: value }));
+    onTimeRangeChange: (e, { earliest, latest }) => {
+        dispatch(updateLinkToSearchSetting({ activeTimeRange: { earliest, latest } }));
     },
     onTimeRangeTokenChange: (e, { value }) => {
         dispatch(updateLinkToSearchSetting({ activeTimeRangeToken: value }));
+    },
+    onRequestParseEarliest: (time) => {
+        dispatch(parseEarliest(time));
+    },
+    onRequestParseLatest: (time) => {
+        dispatch(parseLatest(time));
     },
 });
 

@@ -75,12 +75,12 @@ define([
                 id: "modal_inline",
                 onHiddenRemove: true
             });
-            dialog.settings.set("primaryButtonLabel", _("Clone to " + name + "").t());
+            dialog.settings.set("primaryButtonLabel", splunkUtils.sprintf(_("Clone to %s").t(), name));
             dialog.settings.set("cancelButtonLabel", _("Cancel").t());
-            dialog.settings.set("titleLabel", _("Clone to " + name + "").t());
+            dialog.settings.set("titleLabel", splunkUtils.sprintf(_("Clone to %s").t(), name));
             dialog.setText('<div>\
-                <p>' + _("The report will be cloned to an " + name.toLowerCase() + ".").t() + '</p>\
-                <p>' + _("The " + name.toLowerCase() + ":").t() + '\
+                <p>' + splunkUtils.sprintf(_("The report will be cloned to %s.").t(), name.toLowerCase()) + '</p>\
+                <p>' + splunkUtils.sprintf(_("The %s:").t(), name.toLowerCase()) + '\
                 </p><ul>\
                 <li>' + _("Cannot be scheduled.").t() + '</li>\
                 <li>' + _("Will run every time the dashboard is loaded.").t() + '</li>\

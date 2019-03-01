@@ -66,22 +66,22 @@ define(
                 this.children.icons = {
                     lightIcon: new IconView({
                         icon: 'greater',
-                        size: 3,
+                        size: 2.7,
                         id: 'light'
                     }),
                     adddataIcon: new IconView({
                         icon: 'dataInput',
-                        size: 3,
+                        size: 2.7,
                         id: 'add-data'
                     }),
                     searchIcon: new IconView({
                         icon: 'search',
-                        size: 3,
+                        size: 2.7,
                         id: 'search'
                     }),
                     dashboardsIcon: new IconView({
                         icon: 'dashboard',
-                        size: 3,
+                        size: 2.7,
                         id: 'dashboards'
                     })
                 };

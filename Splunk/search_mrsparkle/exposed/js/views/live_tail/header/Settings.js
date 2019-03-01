@@ -44,7 +44,6 @@ define(
                 this.children.fontPicker = new ControlGroup({
                     controlType:'SyntheticSelect',
                     className: 'settings-default',
-                    controlClass: 'controls-block',
                     label: _("Font size").t(),
                     controlOptions: {
                         items: [
@@ -68,7 +67,6 @@ define(
                 this.children.linesPicker = new ControlGroup({
                     controlType:'SyntheticSelect',
                     className: 'settings-default',
-                    controlClass: 'controls-block',
                     label: _("Show").t(),
                     controlOptions: {
                         items: [

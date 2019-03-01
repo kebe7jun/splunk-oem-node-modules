@@ -8,8 +8,10 @@ var fs = require('fs');
 var os = require('os');
 var path = require('path');
 var wrench = require('wrench');
-var version = '1.0.9';
+var version = '4.0.1';
 const execSync = require('child_process').execSync;
+
+const uploadArg = '--upload';
 
 function rmrf(path) {
     wrench.rmdirSyncRecursive(path, true);
@@ -62,6 +64,7 @@ var wpNodeModules = path.join(tmpDir, 'node_modules');
 wrench.mkdirSyncRecursive(wpNodeModules);
 wrench.copyDirSyncRecursive(nodeModulePath, wpNodeModules, {forceDelete: true});
 fs.writeFileSync(path.join(tmpDir, 'package.json'), fs.readFileSync(path.join(process.env.SPLUNK_SOURCE, 'web', 'package.json')));
+fs.writeFileSync(path.join(tmpDir, 'npm-shrinkwrap.json'), fs.readFileSync(path.join(process.env.SPLUNK_SOURCE, 'web', 'npm-shrinkwrap.json')));
 fs.writeFileSync(path.join(tmpDir, '.npmrc'), fs.readFileSync(path.join(process.env.SPLUNK_SOURCE, 'web', '.npmrc')));
 
 // 5. install the node modules needed
@@ -76,4 +79,22 @@ fs.readdirSync(cleanNodeModules).forEach(function(dir) {
 // 7. make the tarball
 execSync('/usr/local/opt/gnu-tar/libexec/gnubin/tar -cvzf wp-' + version + '.tar.gz node_modules/', {stdio:[0,1,2], cwd: tmpDir});
 
-console.log("your package is found in:",  path.join(tmpDir, 'wp-' + version + '.tar.gz'));
+const packageName = `wp-${version}.tar.gz`;
+const packagePath = path.join(tmpDir, packageName);
+console.log("your package is found in:",  packagePath);
+console.log(`package is generated, size: ${fs.statSync(packagePath).size / 1000000 } MB. `);
+
+if (process.argv.find(arg => arg === uploadArg)) {
+    const srcPath = process.env.SPLUNK_SOURCE;
+    const contribPath = path.join(srcPath, 'contrib');
+    execSync(`mv ${packagePath} ${contribPath}`, { stdio: [0, 1, 2] });
+    execSync(`./upload_archive.py ${packageName}`, { stdio: [0, 1, 2], cwd: contribPath });
+
+    console.log('Next steps:');
+    console.log('  - copy SHA1');
+    console.log('  - open $SPLUNK_SOURCE/contrib/buildit.py');
+    console.log('  - search for "wp"');
+    console.log(`  - update version number to ${version}`);
+    console.log('  - paste SHA1');
+    console.log('  - commit changes');
+}

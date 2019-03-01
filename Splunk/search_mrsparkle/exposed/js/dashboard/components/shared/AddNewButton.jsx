@@ -1,7 +1,8 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
-import Button from 'splunk-ui/components/Button';
-import Plus from 'splunk-ui/icons/Plus';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Button from '@splunk/react-ui/Button';
+import Plus from '@splunk/react-icons/Plus';
 import { createTestHook } from 'util/test_support';
 
 const AddNewButton = ({

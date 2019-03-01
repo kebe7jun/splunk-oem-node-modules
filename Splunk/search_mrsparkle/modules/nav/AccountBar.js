@@ -29,14 +29,12 @@ Splunk.Module.AccountBar = $.klass(Splunk.Module, {
             'views/shared/splunkbar/Master',
             'models/shared/Application',
             'models/services/server/ServerInfo',
-            'views/shared/footer/Master',
             'models/config'
         ], function(
             Backbone,
             GlobalNav,
             ApplicationModel,
             ServerInfoModel,
-            FooterView,
             configModel
         ){
 
@@ -79,17 +77,6 @@ Splunk.Module.AccountBar = $.klass(Splunk.Module, {
             };
 
             self.container.html(splunkbar.$el);
-
-            if(Splunk.util.normalizeBoolean(self._params['footer'])){
-                var footerView = FooterView.create({
-                    model: {
-                        application: applicationModel
-                    }
-                });
-                var $footerContainer = $('<div class="splunk-components"/>');
-                $footerContainer.append(footerView.render().el);
-                $('body').append($footerContainer);
-            }
 
         });
     }

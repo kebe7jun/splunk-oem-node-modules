@@ -353,6 +353,7 @@ define(
                 attrsFromJob["dispatch.earliest_time"] = this.model.searchJob.getDispatchEarliestTimeOrAllTime(isScheduled);
                 attrsFromJob["dispatch.latest_time"] = this.model.searchJob.getDispatchLatestTimeOrAllTime(isScheduled);
                 attrsFromJob["dispatch.sample_ratio"] = this.model.searchJob.getSampleRatio();
+                attrsFromJob["workload_pool"] = this.model.searchJob.getWorkloadPool();
 
                 //make sure that the job has the same preview setting as the report
                 if (this.model.searchJob.entry.acl.canWrite()) {
@@ -389,6 +390,19 @@ define(
                         searchToStart.entry.content.custom.set(reportMediatedAttrs);
                     }
 
+                    // This is to handle the scenario where dropdown is not touched to run adhoc-search in search bar.
+                    // when user has permission and WLM is enabled, and user has not changed the dropdown,
+                    // use default_pool as the workload pool.
+                    // reportMediatedAttrs.search is to differenciate btwn adhoc-search and <open in search> for saved search.
+                    // Doing this is because this.model.report got re-fetched from savedsearch.conf before form submit
+                    if (!_.isUndefined(this.collection.workloadManagementStatus)
+                        && this.model.user.canListAndSelectWorkloadPools(this.collection.workloadManagementStatus)
+                        && _.isEmpty(this.model.report.entry.content.get('workload_pool'))
+                        && !_.isUndefined(reportMediatedAttrs.search)
+                        && _.isUndefined(reportMediatedAttrs.workload_pool)) {
+                        this.model.report.entry.content.set('workload_pool', this.collection.workloadManagementStatus.getDefaultPoolName());
+                    }
+
                     this.addNewSearchListeners(searchToStart, jobCreationDeferred);
                     searchToStart.save({}, {
                         data: {
@@ -401,6 +415,7 @@ define(
                             ui_dispatch_app: this.model.application.get('app'),
                             preview: this.model.report.entry.content.get('display.general.enablePreview'),
                             adhoc_search_level: this.model.report.entry.content.get('display.page.search.mode'),
+                            workload_pool: this.model.report.entry.content.get('workload_pool'),
                             app: this.model.application.get('app'),
                             owner: this.model.application.get('owner'),
                             indexedRealtime: this.model.report.entry.content.get('dispatch.indexedRealtime'),

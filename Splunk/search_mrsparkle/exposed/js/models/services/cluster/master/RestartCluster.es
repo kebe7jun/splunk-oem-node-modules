@@ -9,7 +9,6 @@ export default SplunkDBaseModel.extend({
      * This model is used to call the rolling restart of index cluster.
      * The POST calls returns an empty payload. (this might change in future).
      */
-    url: splunkdUtils.fullpath('cluster/master/control/control/restart'),
     sync(method, model, options) {
         const defaults = {};
         const hasSiteOrder = _.has(model.attributes, 'site-order');
@@ -23,6 +22,8 @@ export default SplunkDBaseModel.extend({
             'site-by-site': hasSiteOrder ? true : undefined,
         });
 
+        this.url = `${splunkdUtils.fullpath('cluster/master/control/control/restart')}?` +
+            `searchable=${model.get('searchable')}&force=${model.get('force')}`;
         defaults.processData = true;
         $.extend(true, defaults, options);
         return Backbone.sync.call(null, method, model, defaults);

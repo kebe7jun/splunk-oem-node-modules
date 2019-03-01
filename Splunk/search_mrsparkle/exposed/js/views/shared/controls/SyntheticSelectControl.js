@@ -123,6 +123,7 @@ function(
                 iconClassName: 'icon-large',
                 iconURLClassName: 'icon-large',
                 descriptionPosition: 'right',
+                ariaLabel: '',
                 label: '',
                 popdownOptions: {el: this.el},
                 html: '',
@@ -326,10 +327,12 @@ function(
         disable: function(){
             this.options.enabled = false;
             this.$('a.dropdown-toggle').addClass('disabled');
+            this.$('a.dropdown-toggle').attr('aria-disabled', 'true');
         },
         enable: function(){
             this.options.enabled = true;
             this.$('a.dropdown-toggle').removeClass('disabled');
+            this.$('a.dropdown-toggle').attr('aria-disabled', 'false');
         },
         tooltip: function(options){
             this.$('a.dropdown-toggle').tooltip(options);
@@ -549,6 +552,10 @@ function(
                     if (this.options.useLabelAsTitle) {
                         $dropdownToggle.attr('title', formattedLabel);
                     }
+                    
+                    if (this.options.ariaLabel) {
+                        $dropdownToggle.attr('aria-label', this.options.ariaLabel + ":" + formattedLabel);
+                    }
 
                     if (userAgent.isIE11()) {
                         // IE11 bug SPL-114438 and SPL-114756
@@ -583,7 +590,10 @@ function(
             <% } else if (!_.has(item, "value")) { %>\
                 <li role="presentation" class="dropdown-header"><%- options.formatLabel(item) %></li>\
             <% } else { %>\
-                <li><a class="synthetic-select <%- item.enabled === false ? \"disabled\" : \"\"%>" href="#" data-item-idx="<%- item[options.expando] %>" data-item-value="<%- item.value %>">\
+                <% var label = options.formatLabel(item); %>\
+                <li><a class="synthetic-select <%- item.enabled === false ? \"disabled\" : \"\"%>" href="#" data-item-idx="<%- item[options.expando] %>" data-item-value="<%- item.value %>"\
+                <% if (options.ariaLabel) { %> aria-label="<%- options.ariaLabel %> : <%- label %> : <%- item.description? item.description : \"\" %>"<% } %>\
+                >\
                     <i class="icon-check" style="display:none"></i>\
                     <% if (item.icon) { %> <i class="icon-<%-item.icon%> <%-options.iconClassName %>"></i><% } %>\
                     <% if (item.iconURL) { %> <img class="<%-options.iconURLClassName %>" src="<%-item.iconURL%>" alt="icon"><% } %>\
@@ -596,7 +606,9 @@ function(
         ',
         template: '\
             <% var label = options.label + " " + selectedItem && options.formatLabel(selectedItem); %>\
-            <a class="dropdown-toggle <%- options.toggleClassName %>" href="#" <% if (options.useLabelAsTitle) { %>title="<%- label %>"<% } %>>\
+            <a class="dropdown-toggle <%- options.toggleClassName %>" href="#"\
+             <% if (options.ariaLabel) { %> aria-label="<%- options.ariaLabel %> : <%- label %>"<% } %>\
+             <% if (options.useLabelAsTitle) { %>title="<%- label %>"<% } %>>\
                 <i class="<%- (selectedItem && selectedItem.icon) ? "icon-" + selectedItem.icon : ""%> icon-large"></i>\
                 <span class="link-label"><%- label %></span><span class="caret"></span>\
             </a>\

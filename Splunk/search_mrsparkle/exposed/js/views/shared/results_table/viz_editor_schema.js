@@ -27,27 +27,18 @@ define([
                     name: 'display.statistics.wrap',
                     label: _('Wrap Results').t(),
                     defaultValue: '1',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl
                 },
                 {
                     name: 'display.statistics.rowNumbers',
                     label: _('Row Numbers').t(),
                     defaultValue: '0',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl
                 },
                 {
                     name: 'display.statistics.drilldown',
                     label: _('Click Selection').t(),
                     defaultValue: 'cell',
-                    groupOptions: {
-                        controlClass: 'controls-thirdblock'
-                    },
                     control: SyntheticRadioControl,
                     controlOptions: {
                         items: [
@@ -60,9 +51,6 @@ define([
                     name: 'display.statistics.overlay',
                     label: _('Data Overlay').t(),
                     defaultValue: 'none',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: SyntheticSelectControl,
                     controlOptions: {
                         items: [
@@ -82,9 +70,6 @@ define([
                     name: 'display.prefs.statistics.count',
                     label: _('Rows Per Page').t(),
                     defaultValue: '10',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: TextControl,
                     validation: {
                         pattern: 'digits',
@@ -104,19 +89,13 @@ define([
                     name: 'display.statistics.totalsRow',
                     control: BooleanRadioControl,
                     defaultValue: '0',
-                    label: _('Totals').t(),
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    }
+                    label: _('Totals').t()
                 },
                 {
                     name: 'display.statistics.percentagesRow',
                     control: BooleanRadioControl,
                     defaultValue: '0',
-                    label: _('Percentages').t(),
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    }
+                    label: _('Percentages').t()
                 }/*
                     TODO @pwied :
                     - uncomment once totals column is ready
@@ -126,9 +105,6 @@ define([
                     control: BooleanRadioControl,
                     defaultValue: '0',
                     label: _('Summary Column').t(),
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    }
                 }*/
             ]
         }

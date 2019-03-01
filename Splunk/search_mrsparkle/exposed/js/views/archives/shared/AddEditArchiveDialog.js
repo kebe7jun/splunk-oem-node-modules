@@ -136,9 +136,8 @@ define([
                         modelAttribute: 'name',
                         model: this.addEditArchiveModel
                     },
-                    controlClass: 'controls-block',
                     label: _('Archive Name').t(),
-                    help:_("").t()
+                    help: ''
                 });
 
                 if (this.options.isNew) {
@@ -157,7 +156,6 @@ define([
 
                     this.children.inputPath = new ControlGroup({
                         controls: [this.children.inputPathText, this.children.inputPathEditButton],
-                        controlClass: 'controls-block',
                         label: _('AWS S3 Bucket Path').t(),
                         help: _("An AWS S3 Bucket in the same AWS region as your Splunk Cloud environment. eg. s3a://mybackup").t()
                     });
@@ -168,7 +166,6 @@ define([
                             modelAttribute: 'vix.fs.default.name',
                             model: this.addEditArchiveModel
                         },
-                        controlClass: 'controls-block',
                         label: _('AWS S3 Bucket Path').t(),
                         help: _("An AWS S3 Bucket in the same AWS region as your Splunk Cloud environment. eg. s3a://mybackup").t()
                     });

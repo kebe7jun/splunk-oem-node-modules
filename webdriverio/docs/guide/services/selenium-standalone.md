@@ -36,10 +36,13 @@ By default, Google Chrome, Firefox and PhantomJS are available when installed on
 
 ```js
 // wdio.conf.js
-export.config = {
+exports.config = {
   // ...
   services: ['selenium-standalone'],
   // ...
+  // Options are set here as well
+  seleniumLogs: './logs',
+  //...
 };
 ```
 
@@ -51,7 +54,13 @@ Path where all logs from the Selenium server should be stored.
 Type: `String`
 
 ### seleniumArgs
-Array of arguments for the Selenium server, passed directly to `child_process.spawn`.
+Object configuration for selenium-standalone.start().
 
-Type: `String[]`<br>
-Default: `[]`
+Type: `Object`<br>
+Default: `{}`
+
+### seleniumInstallArgs
+Object configuration for selenium-standalone.install().
+
+Type: `Object`<br>
+Default: `{}`

@@ -1,0 +1,10 @@
+generated
+**/screenshots/current
+**/screenshots/diff
+
+/*.js
+!/.eslintrc.js
+!/functional*.js
+!/karma.conf.js
+!/*.config.js
+!/unit-test-hooks.js

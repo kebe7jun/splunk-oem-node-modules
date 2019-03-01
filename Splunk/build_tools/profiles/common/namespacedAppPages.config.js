@@ -6,9 +6,6 @@ var mergeConfigs = require('../../util/mergeConfigs');
 var sharedConfig = require('./shared.config');
 var postcssConfig = require('./postcss.config');
 var SplunkNameModuleIdsPlugin = require('../../plugins/SplunkNameModuleIdsPlugin');
-var postcssOptions = {
-    loadTheme: 'enterprise'
-};
 
 module.exports = function(appDir, appName, options) {
     var loadTheme = options.loadTheme ? '/' + options.loadTheme : '';
@@ -49,8 +46,7 @@ module.exports = function(appDir, appName, options) {
         plugins.push(commonsChunkPlugin);
     }
 
-    postcssOptions = _.merge({}, postcssOptions, options);
-    return mergeConfigs(sharedConfig, postcssConfig(postcssOptions), {
+    return mergeConfigs(sharedConfig, postcssConfig(options), {
         resolve: {
             alias: alias
         },

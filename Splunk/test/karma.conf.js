@@ -19,6 +19,7 @@ var settings = {
     testStyle: 'tdd',
     wpVersion: 1,
     features: {
+        chai: true,
         coverage: {
             direct: true,
             babel: true

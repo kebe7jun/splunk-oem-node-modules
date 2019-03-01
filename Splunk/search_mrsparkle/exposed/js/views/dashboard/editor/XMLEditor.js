@@ -6,6 +6,7 @@ define([
     "ace/ace",
     "views/Base",
     "util/general_utils",
+    "util/theme_utils",
     "util/xml",
     "splunk.util",
     "helpers/user_agent",
@@ -18,6 +19,7 @@ define([
             Ace,
             BaseView,
             GeneralUtils,
+            themeUtils,
             XML,
             SplunkUtil,
             userAgent,
@@ -80,7 +82,7 @@ define([
             this.editor.getSession().setMode(this.model.editor.get('mode') || "ace/mode/xml");
         },
         applyTheme: function() {
-            this.editor.setTheme(this.model.editor.get('theme') || "ace/theme/chrome");
+            this.editor.setTheme(this.model.editor.get('theme') || themeUtils.getXmlEditorTheme());
         },
         applyEditorOptions: function() {
             this.editor.setOptions({
@@ -123,7 +125,7 @@ define([
             this.editor.gotoLine(line, 0, true);
             this.editor.focus();
         },
-        getSummaryMessage: function(parseResults) {
+        getSummaryMessage: function(validateResults) {
             var message = {
                 text: _("No validation issues").t(),
                 level: "info",
@@ -132,7 +134,7 @@ define([
                 linkPosition: undefined,
                 linkClass: undefined
             };
-            var errorCount = parseResults.errors.length, warningCount = parseResults.warnings.length;
+            var errorCount = validateResults.errors.length, warningCount = validateResults.warnings.length;
             if (errorCount > 1) {
                 if (warningCount > 0) {
                     message.text = SplunkUtil.sprintf(_("%d Validation errors, %d validation warnings").t(), errorCount, warningCount);
@@ -141,13 +143,13 @@ define([
                 }
                 message.level = "error";
             } else if (errorCount == 1) {
-                this.buildSummarySpecifiedResult(parseResults.errors[0], 'error', message);
+                this.buildSummarySpecifiedResult(validateResults.errors[0], 'error', message);
             } else {    //No errors
                 if (warningCount > 1) {
                     message.text = SplunkUtil.sprintf(_("%d Validation warnings").t(), warningCount);
                     message.level = "warning";
                 } else if (warningCount == 1) {
-                    this.buildSummarySpecifiedResult(parseResults.warnings[0], 'warning', message);
+                    this.buildSummarySpecifiedResult(validateResults.warnings[0], 'warning', message);
                 }
             }
             return message;
@@ -159,7 +161,7 @@ define([
         },
         applyAnnotations: function() {
             this.clearEditorMarkers();
-            var result = this.model.editor.get('parseResults');
+            var result = this.model.editor.get('validateResults');
             if (!result) {
                 this.model.editorMessage.unset({
                     text: true,
@@ -241,14 +243,21 @@ define([
             this.$editor.attr('id', 'dashboard-editor');
             this.updateHeight();
             this.editor = Ace.edit(this.$editor[0]);
+            this.applyTheme();
             this.editor.$blockScrolling = Infinity;
             this.newEditorSession();
             this.editor.getSession().getDocument().on('change', function() {
                 this.model.editor.set('code', this.getEditorValue());
             }.bind(this));
+            
+            // for screen readers
+            var elementID = 'id-' + GeneralUtils.generateUUID();
+            this.$('.ace_content').attr('id', elementID);
+            this.$('textarea.ace_text-input').attr('aria-describedby', elementID);
+            this.$('textarea.ace_text-input').attr('aria-label', _('Edit').t());
+            
             this.setupEditorListeners();
             this.applyMode();
-            this.applyTheme();
             this.applyEditorOptions();
             this.applyEditorCommands();
             this.applyAnnotations();
@@ -268,11 +277,19 @@ define([
         },
         setupEditorListeners: function() {
             // This fix has to be reverted once the ace editor is updated to 1.2.6. https://github.com/ajaxorg/ace/pull/3116
-            if (userAgent.getChromeVersion() >= 53) {
+            if (userAgent.getChromeVersion() >= 53 || userAgent.isIE11) {
                 var textArea = this.editor.textInput && this.editor.textInput.getElement();
                 if (textArea) {
                     $(textArea).on("compositionend", function() {
-                        textArea.dispatchEvent(new window.Event('input'));
+                        var inputEvent;
+                        if (typeof window.Event === "function") {
+                            inputEvent = new window.Event('input');
+                        }
+                        else if (typeof document.createEvent === "function") {
+                            inputEvent = document.createEvent("Event");
+                            inputEvent.initEvent("input", true, true);
+                        }
+                        inputEvent && textArea.dispatchEvent(inputEvent);
                     });
                 }
             }

@@ -24,6 +24,7 @@ define(function(require, exports, module) {
     var LatLonParser = require('splunk/mapping2/parsers/LatLonParser');
     var FieldColorPalette = require('splunk/palettes/FieldColorPalette');
     var ListColorPalette = require('splunk/palettes/ListColorPalette');
+    var ColorCodes = require('splunk/palettes/ColorCodes');
     var ArrayParser = require('splunk/parsers/ArrayParser');
     var BooleanParser = require('splunk/parsers/BooleanParser');
     var ColorParser = require('splunk/parsers/ColorParser');
@@ -86,44 +87,7 @@ define(function(require, exports, module) {
             var latLonParser = LatLonParser.getInstance();
             var latLonBoundsParser = LatLonBoundsParser.getInstance();
 
-            var defaultSeriesColors = [
-                Color.fromNumber(0x1e93c6),
-                Color.fromNumber(0xf2b827),
-                Color.fromNumber(0xd6563c),
-                Color.fromNumber(0x6a5c9e),
-                Color.fromNumber(0x31a35f),
-                Color.fromNumber(0xed8440),
-                Color.fromNumber(0x3863a0),
-                Color.fromNumber(0xa2cc3e),
-                Color.fromNumber(0xcc5068),
-                Color.fromNumber(0x73427f),
-                Color.fromNumber(0x11a88b),
-                Color.fromNumber(0xea9600),
-                Color.fromNumber(0x0e776d),
-                Color.fromNumber(0xffb380),
-                Color.fromNumber(0xaa3977),
-                Color.fromNumber(0x91af27),
-                Color.fromNumber(0x4453aa),
-                Color.fromNumber(0x99712b),
-                Color.fromNumber(0x553577),
-                Color.fromNumber(0x97bc71),
-                Color.fromNumber(0xd35c2d),
-                Color.fromNumber(0x314d5b),
-                Color.fromNumber(0x99962b),
-                Color.fromNumber(0x844539),
-                Color.fromNumber(0x00b290),
-                Color.fromNumber(0xe2c188),
-                Color.fromNumber(0xa34a41),
-                Color.fromNumber(0x44416d),
-                Color.fromNumber(0xe29847),
-                Color.fromNumber(0x8c8910),
-                Color.fromNumber(0x0b416d),
-                Color.fromNumber(0x774772),
-                Color.fromNumber(0x3d9988),
-                Color.fromNumber(0xbdbd5e),
-                Color.fromNumber(0x5f7396),
-                Color.fromNumber(0x844539)
-            ];
+            var defaultSeriesColors = ColorCodes.CATEGORICAL.map(Color.fromString);
 
             var seriesColorPalette = new ListColorPalette(defaultSeriesColors);
             var fieldColorPalette = new FieldColorPalette(null, seriesColorPalette);

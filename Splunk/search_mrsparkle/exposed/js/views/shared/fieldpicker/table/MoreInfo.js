@@ -33,7 +33,7 @@ define(
              */
             initialize: function() {
                 BaseView.prototype.initialize.apply(this, arguments);
-                this.$el.addClass((this.options.index % 2) ? 'odd' : 'even');
+                this.$el.addClass((this.options.index % 2) ? 'even' : 'odd');
                 this.model.intentionsParser = new IntentionsParser();
                 this.rowExpanded = 'rowExpanded' + this.options.index;
                 this.activate();

@@ -55,10 +55,12 @@ define(
                     $expander.addClass('icon-chevron-down');
                     $expander.removeClass('icon-chevron-right');
                     this.$('.action-item').show();
+                    this.$('a.expand').attr('aria-label', _("Collapse").t());
                 } else {
                     $expander.addClass('icon-chevron-right');
                     $expander.removeClass('icon-chevron-down');
                     this.$('.action-item').hide();
+                    this.$('a.expand').attr('aria-label', _("Expand").t());
                 }
             },
             render: function() {
@@ -76,7 +78,7 @@ define(
                 <div><% if(alertActions.length) {%><a class="expand" href="#"><i class="icon-chevron-down"></i></a><% } %><%- splunkUtil.sprintf(i18n.ungettext("%s Action", "%s Actions", alertActions.length), alertActions.length) %></div>\
                 <% _.each(alertActions, function(alertAction) { %>\
                     <div class="action-item">\
-                        <img src="<%= route.alertActionIconFile(applicationModel.get("root"), applicationModel.get("locale"), alertAction.entry.acl.get("app"), {file: alertAction.entry.content.get("icon_path")}) %>">\
+                        <img alt="<%- _("Alert icon").t() %>" src="<%= route.alertActionIconFile(applicationModel.get("root"), applicationModel.get("locale"), alertAction.entry.acl.get("app"), {file: alertAction.entry.content.get("icon_path")}) %>">\
                         <span><%- _(alertAction.entry.content.get("label")).t() || _(alertAction.entry.get("name")).t() %></span>\
                     </div>\
                 <% }); %>\

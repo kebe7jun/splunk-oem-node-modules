@@ -1,21 +1,30 @@
 var path = require('path');
-var _ = require('lodash');
+var createBabelLoader = require('../../util/createBabelLoader');
 var mergeConfigs = require('../../util/mergeConfigs');
 var sharedConfig = require('./shared.config');
 var postcssConfig = require('./postcss.config');
 
-var postcssOptions = {
-    loadTheme: 'enterprise'
-};
-
 module.exports = function(appDir, options) {
-    postcssOptions = _.merge({}, postcssOptions, options);
-    return mergeConfigs(sharedConfig, postcssConfig(postcssOptions), {
+    return mergeConfigs(sharedConfig, postcssConfig(options), {
         resolve: {
             root: [
                 path.join(appDir, 'src'),
-                path.join(appDir, 'bower_components')
-            ]
-        }
+                path.join(appDir, 'bower_components'),
+            ],
+        },
+        module: {
+            loaders: [
+                createBabelLoader({
+                    test: /\.es$/,
+                    include: new RegExp(appDir),
+                    presets: ['babel-preset-es2015'],
+                }),
+                createBabelLoader({
+                    test: /\.jsx$/,
+                    include: new RegExp(appDir),
+                    presets: ['babel-preset-es2015', 'babel-preset-react'],
+                }),
+            ],
+        },
     });
 }

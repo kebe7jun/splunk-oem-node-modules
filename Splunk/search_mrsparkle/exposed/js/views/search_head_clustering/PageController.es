@@ -7,17 +7,19 @@
 
 import $ from 'jquery';
 import _ from 'underscore';
+import Backbone from 'backbone';
 import route from 'uri/route';
 import BaseController from 'controllers/BaseManagerPageController';
 import MembersCollection from 'collections/services/cluster/searchhead/Members';
 import MemberModel from 'models/services/cluster/searchhead/Member';
 import SHClusterStatusModel from 'models/services/shcluster/SHClusterStatus';
+import SetManualDetention from 'models/services/shcluster/config/SetManualDetention';
 import GridRow from './GridRow';
 import RestartButton from './RestartButton';
 import TransferCaptainConfirmationDialog from './TransferCaptainConfirmationDialog';
+import ManualDetentionDialog from './components/ManualDetention/Master';
 import RollingRestartConfirmationDialog from './RollingRestartConfirmationDialog';
 import ServiceNotReadyDialog from './ServiceNotReadyDialog';
-
 
 export default BaseController.extend({
     moduleId: module.id,
@@ -75,10 +77,14 @@ export default BaseController.extend({
         BaseController.prototype.initialize.call(this, optionsExtended);
 
         this.model.SHClusterStatusInstance = new SHClusterStatusModel();
+        this.model.setManualDetention = new SetManualDetention();
 
         // Captaincy Transfer Events
         this.listenTo(this.model.controller, 'beginTransferCaptaincy', this.beginTransferCaptaincy);
         this.listenTo(this.model.controller, 'openCaptainConfirmationDialog', this.openCaptainConfirmationDialog);
+
+        // Manual Detention Events
+        this.listenTo(this.model.controller, 'openManualDetentionDialog', this.openManualDetentionDialog);
 
         // Rolling Restart Events
         this.listenTo(this.model.controller,
@@ -133,11 +139,34 @@ export default BaseController.extend({
         this.children.transferCaptainConfirmDialog.show();
     },
 
+    openManualDetentionDialog(options) {
+        const memberNameVal = options.targetMember.getMemberName();
+        const mgmtUri = options.targetMember.entry.content.get('mgmt_uri');
+        this.model.setManualDetention.entry.content.set({
+            manual_detention: options.targetMember.entry.content.get('status') === 'ManualDetention' ? 'on' : 'off',
+        });
+        this.children.manualDetentionDialog = new ManualDetentionDialog({
+            controller: this.model.controller,
+            collection: { entities: this.collection.entities.clone() },
+            model: this.model.setManualDetention,
+            memberName: memberNameVal,
+            mgmt_uri: mgmtUri,
+            open: true,
+        });
+
+        $('body').append(this.children.manualDetentionDialog.render());
+    },
+
     /*
      * Rolling Restart
      */
 
     openRollingRestartConfirmationDialog() {
+        this.workingModel = new Backbone.Model({
+            searchable: false,
+            force: false,
+        });
+
         this.children.rollingRestartConfirmDialog = new RollingRestartConfirmationDialog({
             learnMoreLink: this.children.learnMoreLink.restart,
             controller: this.model.controller,
@@ -145,6 +174,7 @@ export default BaseController.extend({
             backdrop: 'static',
             keyboard: false,
             onHiddenRemove: true,
+            workingModel: this.workingModel,
         });
 
         $('body').append(this.children.rollingRestartConfirmDialog.render().el);
@@ -152,11 +182,12 @@ export default BaseController.extend({
     },
 
     beginRollingRestart() {
-        this.collection.entities.beginRollingRestart()
-        .done(() => { this.rollingRestartSuccess(); })
-        .fail(() => { this.rollingRestartError(); });
-
         this.model.controller.trigger('rollingRestartInProgress');
+        this.collection.entities.beginRollingRestart(this.workingModel)
+        .done(() => { this.rollingRestartSuccess(); }).fail((response) => {
+            this.rollingRestartError(response);
+        });
+
         this.canShowServiceReadyDialog = false;
     },
 
@@ -165,7 +196,8 @@ export default BaseController.extend({
         this.canShowServiceReadyDialog = true;
     },
 
-    rollingRestartError() {
+    rollingRestartError(response) {
+        this.model.controller.trigger('rollingRestartError', response);
         this.canShowServiceReadyDialog = true;
     },
 

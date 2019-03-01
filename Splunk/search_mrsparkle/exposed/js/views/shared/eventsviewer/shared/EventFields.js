@@ -184,13 +184,13 @@ define(
                     <% if (!hideEventActions) { %>\
                         <a class="btn popdown-toggle event-actions" href="#"><span><%-_("Event Actions").t()%></span><span class="caret"></span></a>\
                     <% } %>\
-                    <table class="table table-condensed table-embed table-expanded table-dotted">\
+                    <table class="table table-condensed table-expanded">\
                         <thead>\
-                            <th class="col-field-type"><%- _("Type").t() %></th>\
+                            <th class="col-field-type" tabindex="0"><%- _("Type").t() %></th>\
                             <% if(selectableFields){ %> <th class="col-visibility"><label class="checkbox"><a href="#" class="btn disabled"><i class="icon-check"></i></a></label></th><% } %>\
-                            <th class="col-field-name"><%- _("Field").t() %></th>\
-                            <th class="col-field-value"><%- _("Value").t() %></th>\
-                            <th class="col-field-action"><%- _("Actions").t() %></th>\
+                            <th class="col-field-name" tabindex="0"><%- _("Field").t() %></th>\
+                            <th class="col-field-value" tabindex="0"><%- _("Value").t() %></th>\
+                            <th class="col-field-action" tabindex="0"><%- _("Actions").t() %></th>\
                         </thead>\
                         <tbody>\
                         <%= _partial({fields: selectedfields, slen: slen, iconVisibility: true, m: m, label: _("Selected").t(), selectableFields: selectableFields}) %>\
@@ -208,7 +208,7 @@ define(
                                </td>\
                                <td class="field-value f-v"><%- mTime[0] %>\
                                    <% var tags = m.getTags("_time", mTime); %>\
-                                   <% if (tags.length > 0) { %>(<% _(tags).each(function(tag, idx){ %><a data-field-name="_time" data-tagged-field-name="tag::_time" class="tag" href="#"><%- tag %><%if(idx!=tags.length-1){%> <%}%></a><% }); %>)<% } %>\
+                                   <% if (tags.length > 0) { %> (<% _(tags).each(function(tag, idx){ %><a data-field-name="_time" data-tagged-field-name="tag::_time" class="tag" href="#"><%- tag %><%if(idx!=tags.length-1){%> <%}%></a><% }); %>) <% } %>\
                                </td>\
                                <td class="actions"></td>\
                             </tr>\

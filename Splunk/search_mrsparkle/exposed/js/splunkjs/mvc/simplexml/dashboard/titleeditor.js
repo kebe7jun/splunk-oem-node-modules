@@ -18,7 +18,7 @@ define(function (require, exports, module) {
             var curVal = this.$el.val();
             var newVal = this.model.get(this.attribute);
             if (curVal != newVal) {
-                this.$el.val(_(newVal || '').t());
+                this.$el.val(newVal ? _(newVal).t() : '');
             }
         },
         updateModel: function () {

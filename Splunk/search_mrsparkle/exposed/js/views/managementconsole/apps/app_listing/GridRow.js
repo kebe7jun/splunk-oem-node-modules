@@ -36,6 +36,7 @@ define([
 
                 this.listenTo(this.model.deployTask.entry.content, 'change:state', this.handleDeployTaskChange);
                 this.listenTo(this.collection.appsLocal, 'syncAppsLocal', this.syncAppsLocal);
+                this.collection.entities.on('sync', this.render);
             },
 
             events: $.extend({}, BaseManagerGridRow.prototype.events, {
@@ -83,9 +84,16 @@ define([
                     isExternal = this.model.entity.isExternal(),
                     isIndexerOnly = this.model.entity.isIndexerOnly(),
                     isPrivate = this.model.entity.isPrivate(),
+                    appTemplate = this.model.entity.getTemplate(),
                     canEdit = this.model.entity.canEdit(),
                     checkForUpdates = !!this.model.appLocal && this.model.appLocal.getCheckForUpdates(),
                     template = BaseManagerGridRow.prototype.prepareTemplate.apply(this, arguments),
+                    nameHTML = _.template(this.nameTemplate)({
+                        rowIsEnabled: rowIsEnabled,
+                        name: this.model.entity.entry.content.get('@label') || this.model.entity.entry.get('name'),
+                        canLaunch: this.model.appLocal && this.model.appLocal.canLaunch(),
+                        launchUrl: this.model.entity.getLaunchUrl()
+                    }),
                     actionsHTML = _.template(this.actionsTemplate)({
                         rowIsEnabled: rowIsEnabled,
                         isExternal: isExternal
@@ -93,6 +101,7 @@ define([
                     updateCheckingHTML = _.template(this.updateCheckingTemplate)({
                         rowIsEnabled: rowIsEnabled,
                         isPrivate: isPrivate,
+                        appTemplate: appTemplate,
                         checkForUpdates: checkForUpdates
                     }),
                     visibilityHTML = _.template(this.visibilityTemplate)({
@@ -110,8 +119,11 @@ define([
                         isExternal: isExternal,
                         isIndexerOnly: isIndexerOnly,
                         canEdit: canEdit,
+                        entityAllowsDisable: this.model.entity && !!this.model.entity.getDisableLink(),
+                        entityAllowsEnable: this.model.entity && !!this.model.entity.getEnableLink(),
                         appAllowsDisable: this.model.appLocal && this.model.appLocal.appAllowsDisable(),
                         appAllowsEnable: this.model.appLocal && this.model.appLocal.appAllowsEnable(),
+                        isEntityDisabled: this.model.entity && this.model.entity.isDisabled(),
                         isDisabled: this.model.appLocal && this.model.appLocal.isDisabled()
                     }),
                     dependenciesHTML = _.template(this.dependenciesTemplate)({
@@ -122,6 +134,7 @@ define([
                         rowIsEnabled: rowIsEnabled,
                         isPrivate: isPrivate,
                         isExternal: isExternal,
+                        appTemplate: appTemplate,
                         splunkBaseUrl: this.model.appLocal && this.model.appLocal.entry.content.get('details')
                     });
                     // if appLocal does not exist, then app does not exist locally
@@ -143,6 +156,7 @@ define([
                         isIndexerOnly: isIndexerOnly,
                         canEdit: canEdit,
                         checkForUpdates: checkForUpdates,
+                        nameHTML: nameHTML,
                         actionsHTML: actionsHTML,
                         updateCheckingHTML: updateCheckingHTML,
                         visibilityHTML: visibilityHTML,
@@ -172,13 +186,20 @@ define([
                     return this;
                 },
 
+                nameTemplate: '\
+                <% if (rowIsEnabled && canLaunch) { %> \
+                    <a href="<%- launchUrl %>" class="launch-app"><%- name %></a> \
+                <% } else { %> \
+                    <%- name %> \
+                <% } %> \
+                ',
                 actionsTemplate: '\
                 <% if (rowIsEnabled && !isExternal) { %> \
                     <div class="action-cell-placeholder"></div>\
                 <% } %> \
                 ',
                 updateCheckingTemplate: '\
-                <% if (rowIsEnabled && !isPrivate) { %> \
+                <% if (rowIsEnabled && !isPrivate && !appTemplate) { %> \
                     <% if (checkForUpdates) { %> \
                         <%- _("Yes").t() %> <span class="splPipe">|</span><a href="#" class="toggle-update-checking"><%- _("No").t() %></a> \
                     <% } else { %> \
@@ -212,9 +233,9 @@ define([
                 <% if (isExternal && isIndexerOnly) { %> \
                     <%- _("N/A").t() %> \
                 <% } else if (rowIsEnabled) { %> \
-                    <% if (isDisabled && appAllowsEnable && (canEdit || isExternal)) { %> \
+                    <% if (((isDisabled && appAllowsEnable) || (isEntityDisabled && entityAllowsEnable)) && (canEdit || isExternal)) { %> \
                         <a href="#" class="toggle-status"><%- _("Enable").t() %></a> <span class="splPipe">|</span><%- _("Disabled").t() %> \
-                    <% } else if (!isDisabled && appAllowsDisable && (canEdit || isExternal)) { %> \
+                    <% } else if (((!isDisabled && appAllowsDisable) || (!isEntityDisabled && entityAllowsDisable)) && (canEdit || isExternal)) { %> \
                         <%- _("Enabled").t() %> <span class="splPipe">|</span><a href="#" class="toggle-status"><%- _("Disable").t() %></a>\
                     <% } else { %> \
                         <%- (isDisabled ? _("Disabled").t() : _("Enabled").t()) %> \
@@ -231,6 +252,8 @@ define([
                 splunkBaseTemplate: '\
                 <% if (isPrivate) { %> \
                     <%- _("Uploaded").t() %> \
+                <% } else if (appTemplate) {%> \
+                    <%- _("Template").t() %> \
                 <% } else if (splunkBaseUrl) { %> \
                     <a href="<%- splunkBaseUrl %>" target=_blank ><%- _("Splunkbase").t() %> <i class="icon-external"></i></a> \
                 <% } else {%> \
@@ -243,7 +266,7 @@ define([
                     <a href="#"><i class="icon-triangle-right-small"></i></a>\
                 </td>\
                 <td class="cell-name app-name" title="<%- name %>">\
-                    <%- name %>\
+                    <%= nameHTML %> \
                 </td>\
                 <td class="cell-actions">\
                     <%= actionsHTML %> \

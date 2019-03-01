@@ -1,0 +1,41 @@
+{
+  "name": "@splunk/stylelint-config",
+  "version": "1.3.0",
+  "description": "Stylelint configuration files",
+  "publishConfig": {
+    "registry": "https://repo.splunk.com/artifactory/api/npm/npm-solutions-local"
+  },
+  "main": "lib/index.js",
+  "license": "UNLICENSED",
+  "author": "Splunk",
+  "scripts": {
+    "build": "babel src -d lib",
+    "lint": "eslint index.js",
+    "lint:fix": "eslint index.js --fix",
+    "lint:ci": "yarn run lint -- -f junit -o test-reports/lint-results.xml",
+    "start": "babel src -d lib --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.splunk.com/scm/ui/splunk-ui.git"
+  },
+  "dependencies": {
+    "stylelint-config-standard": "^17.0.0"
+  },
+  "devDependencies": {
+    "@splunk/babel-preset": "^1.0.0",
+    "@splunk/eslint-config": "^1.0.0",
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "eslint": "^4.4.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^2.3.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.2.1"
+  },
+  "engines": {
+    "node": ">=6"
+  }
+}

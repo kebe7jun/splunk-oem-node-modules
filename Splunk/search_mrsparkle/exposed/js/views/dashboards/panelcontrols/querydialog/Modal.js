@@ -64,7 +64,7 @@ define([
         });
 
         var ReportModel = TokenAwareModel.extend({
-            validation: {             
+            validation: {
                 'search': function(value, attr, computedState) {
                     if (!this.get(attr, {tokens: true})) {
                         return _("Search string is required").t();
@@ -89,18 +89,16 @@ define([
                     }
                 );
                 this.children.title = new ControlGroup({
-                    label: _("Title").t(), 
-                    controlType: 'Label', 
-                    controlClass: 'controls-block',
+                    label: _("Title").t(),
+                    controlType: 'Label',
                     controlOptions: {
-                        model: this.model.report.entry.content, 
+                        model: this.model.report.entry.content,
                         modelAttribute: 'display.general.title'
                     }
                 });
                 this.children.searchStringInput = new ControlGroup({
                     label: _("Search String").t(),
                     controlType:'Textarea',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.workingReport,
                         modelAttribute: 'search'
@@ -153,8 +151,8 @@ define([
                 this.children.flashMessages = new FlashMessagesView({ model: this.model.dashboard });
                 this.children.searchFlashMessages = new FlashMessagesView({ model: this.model.workingReport });
                 //reset flashmessages to clear pre-existing flash messages on 'cancel' or 'close' of dialog
-                this.on('hide', this.model.dashboard.error.clear, this.model.dashboard.error); 
-                this.listenTo(this.model.report, 'successfulSave', this.hide, this); 
+                this.on('hide', this.model.dashboard.error.clear, this.model.dashboard.error);
+                this.listenTo(this.model.report, 'successfulSave', this.hide, this);
 
             },
             events: $.extend({}, Modal.prototype.events, {
@@ -225,7 +223,7 @@ define([
                     var pageInfo = utils.getPageInfo();
                     var url = route.search(pageInfo.root, pageInfo.locale, pageInfo.app, { data: params });
                     utils.redirect(url, true);
-                }, 
+                },
                 'click a.run-pivot': function(e) {
                     e.preventDefault();
                     var search = this.model.workingReport.get('search', { tokens: false }), params = { q: search };
@@ -270,20 +268,20 @@ define([
                 this.$timeRangePickerWrapper = this.$('.timerange-picker-wrapper').eq(0);
                 this.$modalParent = this.$el;
 
-                this.$(Modal.BODY_SELECTOR).prepend(this.children.flashMessages.render().el);                
-                this.$(Modal.BODY_SELECTOR).prepend(this.children.searchFlashMessages.render().el);                
+                this.$(Modal.BODY_SELECTOR).prepend(this.children.flashMessages.render().el);
+                this.$(Modal.BODY_SELECTOR).prepend(this.children.searchFlashMessages.render().el);
                 this.$(Modal.BODY_SELECTOR).append(Modal.FORM_HORIZONTAL_JUSTIFIED);
                 this.children.title.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
                 this.children.searchStringInput.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
-                
+
                 var dfd = this.model.timeRange.save({
                     'earliest': this.model.workingReport.get('dispatch.earliest_time', {tokens: false} || "0"),
                     'latest': this.model.workingReport.get('dispatch.latest_time', {tokens: false} || "now")
-                }); 
+                });
 
                 dfd.done(_.bind(function(){
                     this.$(Modal.BODY_FORM_SELECTOR).append(this.children.panelTimeRangePicker.render().el);
-                }, this)); 
+                }, this));
 
                 this.$timeRangePickerWrapper.append(this.children.timeRangePickerView.render().el);
 

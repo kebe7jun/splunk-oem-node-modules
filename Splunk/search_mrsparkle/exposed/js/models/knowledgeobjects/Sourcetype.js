@@ -39,9 +39,11 @@ define(
                 'ui.eventbreak.mode': 'auto',           // possible values: auto/everyline/regex
                 'ui.eventbreak.regexmode': 'before',    // possible values: before/after/exclude
                 'ui.eventbreak.regex': undefined,
+                'ui.unstructured.file_format': undefined, // possible values: FIELD_EXTRACTION
                 'ui.structured.file_format': undefined, // possible values: CSV,W3C,TSV,PSV,JSON
                 'ui.structured.preamble_pattern': undefined,
                 'ui.structured.header_mode': 'auto',
+                'ui.metric_transforms.schema_name': undefined,
                 'ui.structured.header_line_prefix': undefined,
                 'ui.structured.header_line_number': undefined,
                 'ui.structured.header_field_delimiter': undefined,
@@ -55,22 +57,37 @@ define(
             validation: {
                 'name': [
                     {
-                        required: true,
+                        required: function (val, attr, computed) {
+                            return computed[attr] === '';
+                        },
                         msg: _('Source type name is required').t()
                     },
                     {
+                        required: function (val, attr, computed) {
+                            return computed[attr] === '';
+                        },
                         pattern: /^[^#?&]*$/,
                         msg: _('Source type name does not allow ? or # or &.').t()
                     }
                 ]
             },
             isStructuredDataFormat: function() {
-                return !!this.entry.content.get('INDEXED_EXTRACTIONS');
+                var unstrucutedIndexedExtractions = [
+                    'field_extraction'
+                ];
+                var indexedExtraction = this.entry.content.get('INDEXED_EXTRACTIONS');
+                var isUnstructured = unstrucutedIndexedExtractions.indexOf(indexedExtraction) >= 0;
+                return !!indexedExtraction && !isUnstructured;
             },
             isParsing: function() {
                 return this._parsing;
             },
             getDataFormat: function() {
+                var selectedCategory = this.entry.content.attributes.category;
+                if (selectedCategory === 'Log to Metrics') {
+                    return this.constructor.METRIC;
+                }
+
                 var format = this.entry.content.get('INDEXED_EXTRACTIONS'),
                     type;
 
@@ -132,6 +149,17 @@ define(
                 this._parsing = false;
                 return response;
             },
+            sanitizeIndexedExtraction: function() {
+                if (!this.isStructuredDataFormat()) {
+                    var indexedExtraction = this.entry.content.get('INDEXED_EXTRACTIONS');
+                    this.unset('ui.structured.file_format');
+                    this.entry.content.unset('INDEXED_EXTRACTIONS');
+                    this.set('ui.unstructured.file_format', indexedExtraction);
+                } else {
+                    this.unset('ui.unstructured.file_format');
+                    this.entry.content.unset('TRANSFORMS-EXTRACT');
+                }
+            },
             // override save to abstract away logic from model consumer in case
             // of a sync Patch only: revert the setting of passed-in attrs on the model
             save: function(key, val, options) {
@@ -145,6 +173,8 @@ define(
                 } else {
                   (attrs = {})[key] = val;
                 }
+
+                this.sanitizeIndexedExtraction();
 
                 if (options && options.patch && !_.isEmpty(attrs)) {
                     // get copy of model attributes with same keys as passed-in attributes
@@ -169,7 +199,6 @@ define(
                         }
                     }.bind(this));
                 }
-
                 return xhr;
             },
             /*
@@ -196,7 +225,7 @@ define(
             populateFromUI: function(model, options) {
 
                 //if we see success, then this update was a result of a fetch, and we dont need to populateFromUi
-                if(options && options.success){
+                if (options && options.success) {
                     return;
                 }
 
@@ -242,6 +271,9 @@ define(
                 // 1) set timestamp related ui settings
                 if (props.DATETIME_CONFIG === 'CURRENT') {
                     attr['ui.timestamp.mode'] = 'current';
+                } else if (String(props.DATETIME_CONFIG).indexOf(".xml") !== -1 && props.DATETIME_CONFIG  !== "/etc/datetime.xml") {
+                    attr['ui.timestamp.mode'] = 'filename';
+                    attr['ui.timestamp.filename'] = props.DATETIME_CONFIG;
                 } else {
                     if (props.TIME_FORMAT || props.TIME_PREFIX || props.TZ || props.TIMESTAMP_FIELDS ||
                         (props.MAX_TIMESTAMP_LOOKAHEAD && props.MAX_TIMESTAMP_LOOKAHEAD !== this.defaults['ui.timestamp.lookahead'])) {
@@ -284,6 +316,9 @@ define(
                 // (see assigning of header_mode value, which is not the HEADER_MODE prop)
                 if ('INDEXED_EXTRACTIONS' in props)
                     attr['ui.structured.file_format'] = props.INDEXED_EXTRACTIONS;
+                    if (!attr['ui.structured.file_format']) {
+                        attr['ui.structured.file_format'] = props['TRANSFORMS-EXTRACT'];
+                    }
                 if ('PREAMBLE_REGEX' in props)
                     attr['ui.structured.preamble_pattern'] = props.PREAMBLE_REGEX;
                 if ('FIELD_HEADER_REGEX' in props){
@@ -308,14 +343,26 @@ define(
                         attr['ui.structured.header_mode'] = 'custom';
                     }
                 }
-                if ('FIELD_DELIMITER' in props)
+                if ('FIELD_DELIMITER' in props) {
                     attr['ui.structured.event_field_delimiter'] = props.FIELD_DELIMITER;
-                if ('FIELD_QUOTE' in props)
+                }
+                if ('FIELD_QUOTE' in props) {
                     attr['ui.structured.event_field_quote'] = props.FIELD_QUOTE;
+                }
 
-                // 4) misc
-                if ('NO_BINARY_CHECK' in props)
+                // 4) set unstructed data headers
+                if ('TRANSFORMS-EXTRACT' in props)
+                    attr['ui.unstructured.file_format'] = props['TRANSFORMS-EXTRACT'];
+
+                // 5) metric transforms
+                if ('METRIC-SCHEMA-TRANSFORMS' in props) {
+                    attr['ui.metric_transforms.schema_name'] = props['METRIC-SCHEMA-TRANSFORMS'];
+                }
+
+                // 6) misc
+                if ('NO_BINARY_CHECK' in props) {
                     attr['ui.misc.process_binary_files'] = props.NO_BINARY_CHECK;
+                }
 
                 return attr;
             },
@@ -360,6 +407,8 @@ define(
                     } else if (uiAttrs['ui.timestamp.mode'] === 'auto') {
                         props.DATETIME_CONFIG = '';
                         deleteTimestampProps();
+                    } else if (uiAttrs['ui.timestamp.mode'] === 'filename') {
+                        props.DATETIME_CONFIG = uiAttrs['ui.timestamp.filename'];
                     }
                 }
 
@@ -379,7 +428,7 @@ define(
 
                 // 3) set structured data headers props
                 if ('ui.structured.file_format' in uiAttrs && !_.isUndefined(uiAttrs['ui.structured.file_format']))
-                    props.INDEXED_EXTRACTIONS = uiAttrs['ui.structured.file_format'];
+                    props.INDEXED_EXTRACTIONS = uiAttrs['ui.structured.file_format'] || uiAttrs['ui.unstructured.file_format'];
                 if ('ui.structured.preamble_pattern' in uiAttrs && !_.isUndefined(uiAttrs['ui.structured.preamble_pattern']))
                     props.PREAMBLE_REGEX = uiAttrs['ui.structured.preamble_pattern'];
                 if ('ui.structured.header_line_prefix' in uiAttrs && !_.isUndefined(uiAttrs['ui.structured.header_line_prefix']))
@@ -397,7 +446,15 @@ define(
                 if ('ui.structured.event_field_quote' in uiAttrs && !_.isUndefined(uiAttrs['ui.structured.event_field_quote']))
                     props.FIELD_QUOTE = uiAttrs['ui.structured.event_field_quote'];
 
-                // 4) misc
+                // 4) set unstructed data headers
+                if ('ui.unstructured.file_format' in uiAttrs && !_.isUndefined(uiAttrs['ui.unstructured.file_format']))
+                    props['TRANSFORMS-EXTRACT'] = uiAttrs['ui.unstructured.file_format'];
+
+                // 5) metric transforms
+                if ('ui.metric_transforms.schema_name' in uiAttrs && !_.isUndefined(uiAttrs['ui.metric_transforms.schema_name']))
+                    props['METRIC-SCHEMA-TRANSFORMS'] = uiAttrs['ui.metric_transforms.schema_name'];
+
+                // 6) misc
                 if ('ui.misc.process_binary_files' in uiAttrs && !_.isUndefined(uiAttrs['ui.misc.process_binary_files']))
                     props.NO_BINARY_CHECK = uiAttrs['ui.misc.process_binary_files'];
 
@@ -417,6 +474,7 @@ define(
             TABULAR: 'tabular',
             HIERARCHICAL: 'hierarchical',
             UNSTRUCTURED: 'unstructured',
+            METRIC: 'metric',
             // singleton: sourcetype model for dictionary of all default props
             DefaultSourcetype: new SourcetypeModel()
         });

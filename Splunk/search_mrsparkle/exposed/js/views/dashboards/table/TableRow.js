@@ -113,7 +113,7 @@ define(
                 },
                 template: '\
                     <td class="expands">\
-                        <a href="#"><i class="icon-triangle-right-small"></i></a>\
+                        <a href="#" aria-label="<%- _("Expand Table Row").t() %>"><i class="icon-triangle-right-small"></i></a>\
                     </td>\
                     <td class="title">\
                     </td>\

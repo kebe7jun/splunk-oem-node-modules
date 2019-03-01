@@ -10,6 +10,7 @@ define(
         'views/shared/controls/SearchTextareaControl',
         'models/dashboard/DashboardElementReport',
         'splunkjs/mvc/utils',
+        "util/theme_utils",
         'uri/route'
     ],
     function(module,
@@ -22,6 +23,7 @@ define(
              SearchTextareaControl,
              DashboardElementReport,
              utils,
+             theme_utils,
              route
     ) {
 
@@ -37,14 +39,13 @@ define(
                     label: _("Content Title").t(),
                     controlType: 'Text',
                     className: 'content-title-control control-group',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         model: this.model.content,
                         modelAttribute: 'dashboard.element.title',
                         placeholder: _("optional").t()
                     }
                 });
-                
+
                 this.children.searchField = new SearchTextareaControl({
                     model: {
                         content: this.model.content,
@@ -53,7 +54,8 @@ define(
                     },
                     collection: {
                         searchBNFs: this.collection.searchBNFs
-                    }
+                    },
+                    syntaxHighlighting: theme_utils.getSearchEditorTheme()
                 });
 
                 this.children.panelTimeRangePicker = new PanelTimeRangePicker({

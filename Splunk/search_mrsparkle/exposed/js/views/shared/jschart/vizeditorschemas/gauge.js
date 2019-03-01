@@ -5,6 +5,7 @@ define([
             'views/shared/vizcontrols/custom_controls/ColorRangesControlGroup',
             'util/validation',
             'util/math_utils',
+            'splunk/palettes/ColorCodes',
             './shared_elements'
     ],
         function(
@@ -14,6 +15,7 @@ define([
             ColorRanges,
             validationUtils,
             mathUtils,
+            ColorCodes,
             SharedChartElements
         ) {
 
@@ -26,9 +28,6 @@ define([
                     name: 'display.visualizations.charting.chart.style',
                     label: _('Style').t(),
                     defaultValue: 'shiny',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: SyntheticRadioControl,
                     controlOptions: {
                         items: [
@@ -51,30 +50,18 @@ define([
             formElements: [
                 {
                     name: 'autoMode',
-                    group: GaugeAutoRangesControlGroup,
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    }
+                    group: GaugeAutoRangesControlGroup
                 },
                 {
                     name: 'display.visualizations.charting.chart.rangeValues',
                     group: ColorRanges,
                     groupOptions: {
-                        controlClass: 'controls-block',
                         rangeColorsName: 'display.visualizations.charting.gaugeColors',
-                        paletteColors: [
-                            '#7e9f44',
-                            '#ebe42d',
-                            '#d13b3b',
-                            '#6cb8ca',
-                            '#f7912c',
-                            '#956e96',
-                            '#c2da8a',
-                            '#fac61d',
-                            '#ebb7d0',
-                            '#324969',
-                            '#d85e3d',
-                            '#a04558'],
+                        paletteColors: _.flatten([
+                            ColorCodes.SEMANTIC,
+                            '#ffffff',
+                            ColorCodes.DARK_GREY
+                        ]),
                         displayMinMaxLabels: false
                     },
                     visibleWhen: function(reportModel) {

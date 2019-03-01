@@ -10,9 +10,7 @@ var virtualModuleLoader = require('../../web_loaders/virtual-module-loader');
 module.exports = mergeConfigs(
     sharedConfig,
     virtualModuleLoader.config,
-    postCssConfig({
-        loadTheme: 'enterprise'
-    }),
+    postCssConfig(),
     {
         output: {
             path: path.join(constants.splunkJsIndependentDestDir, 'static', 'splunkjs'),

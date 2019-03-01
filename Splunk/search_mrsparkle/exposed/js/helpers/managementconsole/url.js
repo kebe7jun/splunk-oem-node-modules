@@ -58,6 +58,22 @@ define(
                 );
             },
 
+            setupUrl: function(bundleName) {
+                var root = this._configureRoot();
+
+                return route.manager(
+                    root,
+                    config.LOCALE,
+                    bundleName,
+                    ['apps', 'local', bundleName, 'setup'],
+                    {
+                        data: {
+                            action: 'edit'
+                        }
+                    }
+                );
+            },
+
             appUrl: function(appName) {
                 var root = this._configureRoot();
 

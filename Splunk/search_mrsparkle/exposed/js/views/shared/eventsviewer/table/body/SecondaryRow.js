@@ -13,10 +13,7 @@
         return BaseView.extend({
             moduleId: module.id,
             tagName: 'tr',
-            className: 'field-row tabbable-table-secondary-row',
-            attributes: {
-                tabindex: -1
-            },
+            className: 'field-row',
             /**
              * @param {Object} options {
              *      model: {

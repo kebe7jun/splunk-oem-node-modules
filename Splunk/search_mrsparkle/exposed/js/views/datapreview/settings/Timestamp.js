@@ -4,6 +4,7 @@ define(
         'backbone',
         'module',
         'views/Base',
+        'collections/shared/TimeZones',
         'contrib/text!views/datapreview/settings/Timestamp.html',
         'views/shared/controls/ControlGroup',
         'uri/route',
@@ -14,6 +15,7 @@ define(
         Backbone,
         module,
         BaseView,
+        TimeZones,
         timestampTemplate,
         ControlGroup,
         route
@@ -27,6 +29,10 @@ define(
             },
             initialize: function() {
                 this.label = _('Presets').t();
+                var timeZones = new TimeZones();
+                this.timeZonesSelectOptions = _.map(timeZones.models, function(item) {
+                    return {label: _.unescape(_(item.get('label')).t()), value: item.get('id')};
+                });
                 BaseView.prototype.initialize.apply(this, arguments);
                 var self = this;
 
@@ -38,15 +44,34 @@ define(
                         modelAttribute: 'ui.timestamp.mode',
                         model: this.model.sourcetypeModel,
                         items: [
-                            { label: _("Auto").t(), value: 'auto'},
-                            { label: _("Current time").t(), value: 'current'},
-                            { label: _("Advanced...").t(), value: 'advanced'}
+                            { label: _("Auto").t(), value: 'auto', tooltip: _("Auto").t()},
+                            { label: _("Current time").t(), value: 'current', tooltip: _("Current time").t()},
+                            { label: _("Advanced...").t(), value: 'advanced', tooltip: _("Advanced...").t()},
+                            { label: _("Configuration file...").t(), value: 'filename', tooltip: _("Configuration file...").t()}
                         ],
+                        elastic: true,
                         save: false
                     }
                 });
                 this.model.sourcetypeModel.on('change:ui.timestamp.mode', function(){
                     self.onSelectMode(self.model.sourcetypeModel.get('ui.timestamp.mode'));
+                });
+
+                this.children.timestampZone = new ControlGroup({
+                    label: _("Time Zone").t(),
+                    controlType: 'SyntheticSelect',
+                    controlOptions: {
+                        modelAttribute: 'ui.timestamp.timezone',
+                        model: this.model.sourcetypeModel,
+                        items: this.timeZonesSelectOptions,
+                        additionalClassNames: 'timezoneSelect',
+                        toggleClassName: 'btn',
+                        menuWidth: 'wide',
+                        popdownOptions: {
+                            attachDialogTo: 'body'
+                        },
+                        save: false
+                    }
                 });
 
                 var timeformatHelpLink = route.docHelp(
@@ -102,15 +127,15 @@ define(
                     }
                 });
 
-                this.model.sourcetypeModel.on('change:ui.timestamp.timezone', function(sourcetypeModel, value, options){
-                    if(options && options.setby === self.moduleId){
-                        return;
+                this.children.filename = new ControlGroup({
+                    label: _("Configuration file").t(),
+                    controlType: 'Text',
+                    help: _('Configuration file for custom timestamp extractions from event data. File must reside in $SPLUNK_HOME and have .xml extension').t(),
+                    controlOptions: {
+                        modelAttribute: 'ui.timestamp.filename',
+                        model: this.model.sourcetypeModel,
+                        save: false
                     }
-                    self.setTimezoneInput.call(self);
-                });
-
-                this.model.sourcetypeModel.on('sync', function(){
-                    self.setTimezoneInput();
                 });
 
                 if(this.model.sourcetypeModel && this.model.sourcetypeModel.get('ui.timestamp.mode')){
@@ -127,71 +152,62 @@ define(
                 });
 
                 this.$el.html(this.compiledTemplate({_:_}));
-                var form = this.$el.find('.form');
+                var formBody = this.$el.find('.form-body');
 
                 _.each(this.children, function(child){
-                    form.append(child.render().el);
+                    formBody.append(child.render().el);
                 });
-
-                var tzInput = this.$('.control-timezone');
-                this.$('.timestamp-mode').after( tzInput );
-
-                this.setTimezoneInput();
-
-                var timestampMode = this.model.sourcetypeModel.get('ui.timestamp.mode');
-                if(timestampMode === 'advanced'){
-                    tzInput.show();
-                }else{
-                    tzInput.hide();
-                }
 
                 return this;
             },
-            setTimezoneInput: function(value){
-                value = value || this.model.sourcetypeModel.get('ui.timestamp.timezone');
-                if(typeof value === 'string'){
-                    this.$('.timezoneSelect').val(value);
-                }
-            },
-            onChangeTimezone: function(){
-                var val = this.$('.timezoneSelect').val();
-                this.model.sourcetypeModel.set({'ui.timestamp.timezone': val}, {'setby': this.moduleId});
-            },
+
             onSelectMode: function(mode){
                 if(!mode){mode = 'auto';}
 
-                var tzInput = this.$('.control-timezone');
                 switch(mode){
                     case 'auto':
+                        this.children.timestampZone.$el.hide();
                         this.children.timestampFormat.$el.hide();
                         this.children.timestampPrefix.$el.hide();
                         this.children.timestampLookahead.$el.hide();
                         this.children.timestampFields.$el.hide();
-                        tzInput.hide();
+                        this.children.filename.$el.hide();
 
                     break;
                     case 'current':
+                        this.children.timestampZone.$el.hide();
                         this.children.timestampFormat.$el.hide();
                         this.children.timestampPrefix.$el.hide();
                         this.children.timestampLookahead.$el.hide();
                         this.children.timestampFields.$el.hide();
-                        tzInput.hide();
+                        this.children.filename.$el.hide();
 
                     break;
                     case 'advanced':
+                        this.children.timestampZone.$el.show();
                         this.children.timestampFormat.$el.show();
                         this.children.timestampPrefix.$el.show();
                         this.children.timestampLookahead.$el.show();
                         this.children.timestampFields.$el.show();
-                        tzInput.show();
+                        this.children.filename.$el.hide();
+
+                    break;
+                    case 'filename':
+                        this.children.timestampZone.$el.hide();
+                        this.children.timestampFormat.$el.hide();
+                        this.children.timestampPrefix.$el.hide();
+                        this.children.timestampLookahead.$el.hide();
+                        this.children.timestampFields.$el.hide();
+                        this.children.filename.$el.show();
 
                     break;
                     default:
+                        this.children.timestampZone.$el.show();
                         this.children.timestampFormat.$el.show();
                         this.children.timestampPrefix.$el.show();
                         this.children.timestampLookahead.$el.show();
                         this.children.timestampFields.$el.show();
-                        tzInput.show();
+                        this.children.filename.$el.hide();
                     break;
                 }
 

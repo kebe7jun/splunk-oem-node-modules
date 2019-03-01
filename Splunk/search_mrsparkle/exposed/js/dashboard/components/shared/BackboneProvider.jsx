@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 
 class BackboneProvider extends Provider {

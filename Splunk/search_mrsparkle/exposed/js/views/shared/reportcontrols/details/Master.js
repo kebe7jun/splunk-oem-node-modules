@@ -139,7 +139,9 @@ define([
                         this.$('a.edit-acceleration').css('display', '');
                     }, this);
                 }
-                this.model.report.entry.content.on('change:embed.enabled', this.render, this);
+            },
+            startListening: function() {
+                this.listenTo(this.model.report.entry.content, 'change:embed.enabled', this.debouncedRender);
             },
             render: function() {
                 var canWrite = this.model.report.entry.acl.get('can_write') && !(this.model.report.entry.content.get('is_scheduled') && !this.model.user.canScheduleSearch()),

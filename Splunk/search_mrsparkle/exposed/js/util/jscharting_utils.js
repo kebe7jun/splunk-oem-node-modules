@@ -4,6 +4,7 @@ define([
             'models/config',
             'splunk/palettes/ColorCodes',
             'util/console',
+            'util/theme_utils',
             'splunk.util',
             'splunk.i18n'
         ],
@@ -13,6 +14,7 @@ define([
             configModel,
             ColorCodes,
             console,
+            themeUtils,
             splunkUtils,
             i18n
         ) {
@@ -130,9 +132,12 @@ define([
     var prepareChartingLibrary = function(chartingLib, options) {
         options = options || {};
         chartingLib.setLoggingConsole(console);
+        if (themeUtils.getCurrentTheme() === 'dark') {
+            chartingLib.setTheme('dark');
+        }
         chartingLib.setColorPalette(ColorCodes.CATEGORICAL);
         chartingLib.setTimezone(options['SERVER_ZONEINFO'] || configModel.get('SERVER_ZONEINFO'));
-        chartingLib.setI18nLibrary(i18n);
+        chartingLib.useSplunkI18nLibrary(i18n);
     };
 
     return ({

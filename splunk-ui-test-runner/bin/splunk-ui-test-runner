@@ -1,6 +1,0 @@
-#!/usr/bin/env node
-
-//Ideas:
-// - offer shortcuts, 'karma start --filter components/**' -> 'splunk-ui-test-runner components/**'
-
-require('karma/lib/cli').run();

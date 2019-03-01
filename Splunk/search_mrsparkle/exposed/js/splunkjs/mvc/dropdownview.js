@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
     var _ = require('underscore');
     var BaseChoiceView = require("./basechoiceview");
-    var BaseDropdownViewMixin = require("./basedropdownviewmixin");
     var SplunkUtil = require('splunk.util');
+    var Dropdown = require('./components/Dropdown');
 
     // See http://ricostacruz.com/backbone-patterns/#mixins for
     // this mixin pattern.
@@ -13,9 +13,9 @@ define(function(require, exports, module) {
      * @description The **Dropdown** view displays a dropdown list with a set of choices. The list can be bound to a search manager, but can also be used as a standard HTML dropdown list that emits change events.
      * @extends splunkjs.mvc.BaseChoiceView
      *
-     * @param {Object} options 
-     * @param {String} options.id - The unique ID for this control. 
-     * @param {Boolean} [options.allowCustomValues=false] - Indicates whether to allow custom values to be entered. 
+     * @param {Object} options
+     * @param {String} options.id - The unique ID for this control.
+     * @param {Boolean} [options.allowCustomValues=false] - Indicates whether to allow custom values to be entered.
      * @param {Object[]} [options.choices=[ ]] -  A static dictionary of options for the dropdown list. If bound to a `managerid`, the static choices specified here are prepended to the dynamic choices from the search.</br>
      * For example:
      *
@@ -27,14 +27,14 @@ define(function(require, exports, module) {
      *
      * @param {String} [options.default] - The default choice.
      * @param {Boolean} [options.disabled=false] - Indicates whether to disable the view.
-     * @param {String} [options.initialValue] - The initial value of the input. 
-     * If **default** is specified, it overrides this value. 
+     * @param {String} [options.initialValue] - The initial value of the input.
+     * If **default** is specified, it overrides this value.
      * @param {String} [options.labelField] -  The UI label to display for each choice.
-     * @param {String} [options.managerid=null] - The ID of the search manager to bind 
+     * @param {String} [options.managerid=null] - The ID of the search manager to bind
      * this control to.
      * @param {Number} [options.minimumResultsForSearch=8] - The minimum number of results.
      * @param {Boolean} [options.selectFirstChoice=false] - Indicates whether to use the first available choice when the user has not made a selection. If the **default** property has been set, that value is used instead.
-     * @param {Object} [options.settings] - The properties of the view. 
+     * @param {Object} [options.settings] - The properties of the view.
      * @param {Boolean} [options.showClearButton=true] - Indicates whether to display that "x" next to choices, allowing a selection to be cleared.
      * @param {String} [options.value] - The value of the current choice.
      * @param {String} [options.valueField] -  The value or search field for each choice.
@@ -46,13 +46,13 @@ define(function(require, exports, module) {
      *     "splunkjs/mvc/dropdownview",
      *     "splunkjs/mvc/simplexml/ready!"
      * ], function(SearchManager, DropdownView) {
-     * 
+     *
      *     // Use this search to populate the dropdown with index values
      *     new SearchManager({
      *         id: "example-search",
-     *         search: "| eventcount summarize=false index=* index=_* | dedup index | fields index" 
+     *         search: "| eventcount summarize=false index=* index=_* | dedup index | fields index"
      *     });
-     * 
+     *
      *     // Instantiate components
      *     new DropdownView({
      *         id: "example-dropdown",
@@ -62,73 +62,35 @@ define(function(require, exports, module) {
      *         valueField: "index",
      *         el: $("#mydropdownview")
      *     }).render();
-     * 
+     *
      * });
      */
-    var DropdownView = BaseChoiceView.extend(
-        _.extend({}, BaseDropdownViewMixin, /** @lends splunkjs.mvc.DropdownView.prototype */{
-            moduleId: module.id,
-            
-            className: "splunk-dropdown splunk-choice-input",
-            selectRoot: '<input type="hidden"/>',
-            valueIsList: false,
-            normalizeOptions: function(settings, options, settingsOptions) {
+    var DropdownView = BaseChoiceView.extend({/** @lends splunkjs.mvc.DropdownView.prototype */
+        moduleId: module.id,
+        className: "splunk-dropdown splunk-choice-input",
 
-                if (options.hasOwnProperty("managerid") && !settings.get("managerid")) {
-                    settings.set("managerid", options["managerid"]);
-                }
+        getReactComponent: function() {
+            return Dropdown;
+        },
 
-                if (options.hasOwnProperty("valueField") && !settings.get("valueField")) {
-                    settings.set("valueField", options["valueField"], settingsOptions);
-                }
+        resetValue: function() {
+            // Reset to default or undefined. This method is primarily for the clear button.
+            this.val(this.settings.get('default'));
+        },
 
-                if (options.hasOwnProperty("labelField") && !settings.get("labelField")) {
-                    settings.set("labelField", options["labelField"], settingsOptions);
-                }
+        getState: function() {
+            var baseState = BaseChoiceView.prototype.getState.apply(this, arguments);
 
-                if (options.hasOwnProperty("width") && !settings.get("width")) {
-                    settings.set("width", options["width"]);
-                }
-
-                if (options.hasOwnProperty("minimumResultsForSearch") && !settings.get("minimumResultsForSearch")) {
-                    settings.set("minimumResultsForSearch", options["minimumResultsForSearch"]);
-                }
-                if (settings.get('allowCustomValues')) {
-                    settings.set("minimumResultsForSearch", 0);
-                }
-
-                if (options.hasOwnProperty("disabled") && !settings.get("disabled")) {
-                    settings.set("disabled", SplunkUtil.normalizeBoolean(options["disabled"]) ? true : false);
-                }
-
-                if (options.hasOwnProperty("default") && !settings.get("default")) {
-                    settings.set("default", options["default"], settingsOptions);
-                }
-
-                if (options.hasOwnProperty("data") && !settings.get("data")) {
-                    settings.set("data", options["data"]);
-                }
-
-                if (options.hasOwnProperty("id") && !settings.get("id")) {
-                    settings.set("id", options["id"]);
-                }
-
-                if (options.hasOwnProperty("name") && !settings.get("name")) {
-                    settings.set("name", options["name"]);
-                }
-            },
-            initialize: function() {
-                this.options = _.extend({}, BaseChoiceView.prototype.options, this.options);
-                BaseChoiceView.prototype.initialize.apply(this, arguments);
-                this.normalizeOptions(this.settings, this.options, this.options.settingsOptions);
-                this.settings.on("change:width", _.debounce(this.render, 0), this);
-            },
-            remove: function() {
-                BaseDropdownViewMixin.remove.apply(this, arguments);
-                BaseChoiceView.prototype.remove.apply(this, arguments);
-            }
-        })
-    );
+            return _.extend({}, baseState, {
+                allowCustomValues: this.settings.get('allowCustomValues'),
+                minimumResultsForSearch: this.settings.get('minimumResultsForSearch'),
+                defaultValue: this.settings.get('default'),
+                showClearButton: this.settings.get('showClearButton'),
+                width: this.settings.get('width'),
+                onReset: this.resetValue.bind(this)
+            });
+        }
+    });
 
     return DropdownView;
 });

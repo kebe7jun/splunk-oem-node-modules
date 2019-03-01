@@ -39,24 +39,24 @@ headerPanels = ["appHeader", "navigationHeader", "liteHeader"]
 ## App Header area ##
 %>
 <div class="appHeaderWrapper">
-    % if isLite:
-        % if 'liteHeader' in modules:
-            <%call expr="parent.buildSimplePanelContainer(modules, 'liteHeader')"></%call>
-        % else:
-            <span class="splunk-components"> 
-                <div class="lite-bar empty-nav">
-                    <span class="brand" title="splunk > listen to your data"><a href="/">splunk<strong>&gt;</strong><span class="sub-brand">&#xF003;</span></a></span>
-                </div>
-            </span>
-        % endif
-    % else: 
-        % for panelName in headerPanels : 
-            <%call expr="parent.buildSimplePanelContainer(modules, panelName)"></%call>
-        % endfor
-    % endif    
+% if isLite:
+    % if 'liteHeader' in modules:
+        <%call expr="parent.buildSimplePanelContainer(modules, 'liteHeader')"></%call>
+    % else:
+        <span class="splunk-components">
+            <div class="lite-bar empty-nav">
+                <span class="brand" title="splunk > listen to your data"><a href="/">splunk<strong>&gt;</strong><span class="sub-brand">&#xF003;</span></a></span>
+            </div>
+        </span>
+    % endif
+% else:
+    % for panelName in headerPanels :
+        <%call expr="parent.buildSimplePanelContainer(modules, panelName)"></%call>
+    % endfor
+% endif
 </div>
 
-<% 
+<%
 ## View Header Area ##
 %>
 <%call expr="parent.buildSimplePanelContainer(modules, 'viewHeader')"></%call>

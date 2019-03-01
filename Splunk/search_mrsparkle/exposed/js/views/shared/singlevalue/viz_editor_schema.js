@@ -40,9 +40,9 @@ define([
         return (justCleared || hasBeforeLabel || hasAfterLabel);
     };
 
-    var greenHex = '#65a637',
+    var greenHex = ColorCodes.SEMANTIC_BY_NAME.success,
         whiteHex = '#FFFFFF',
-        redHex = '#d93f3c';
+        redHex = ColorCodes.SEMANTIC_BY_NAME.error;
 
     return ([
         {
@@ -53,9 +53,6 @@ define([
                     name: 'display.visualizations.singlevalue.showTrendIndicator',
                     label: _('Show Trend Indicator').t(),
                     defaultValue: '1',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl,
                     visibleWhen: function(reportContent) {
                         return generalUtil.normalizeBoolean(reportContent.get('is_timeseries')) === true;
@@ -65,12 +62,8 @@ define([
                     name: 'display.visualizations.singlevalue.trendDisplayMode',
                     label: _('Show Trend in').t(),
                     defaultValue: 'absolute',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: SyntheticRadioControl,
                     controlOptions: {
-                        className: 'btn-group',
                         items: [
                             {
                                 label: _('Absolute').t(),
@@ -94,9 +87,6 @@ define([
                     label: _('Compared to').t(),
                     defaultValue: 'auto',
                     group: SingleValueDeltaTimeRangeControlGroup,
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     visibleWhen: function(reportContent) {
                         return generalUtil.normalizeBoolean(reportContent.get('display.visualizations.singlevalue.showTrendIndicator')) === true
                             && generalUtil.normalizeBoolean(reportContent.get('is_timeseries')) === true;
@@ -114,9 +104,6 @@ define([
                 {   name: 'display.visualizations.singlevalue.beforeLabel',
                     label: _('Before Label').t(),
                     defaultValue: '',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: TextControl,
                     controlOptions: {
                         placeholder: _('optional').t(),
@@ -128,9 +115,6 @@ define([
                     name: 'display.visualizations.singlevalue.afterLabel',
                     label: _('After Label').t(),
                     defaultValue: '',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: TextControl,
                     controlOptions: {
                         placeholder: _('optional').t(),
@@ -146,9 +130,6 @@ define([
                     name: 'display.visualizations.singlevalue.underLabel',
                     label: _('Caption').t(),
                     defaultValue: '',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: TextControl,
                     controlOptions: {
                         placeholder: _('optional').t(),
@@ -165,9 +146,6 @@ define([
                     name: 'display.visualizations.singlevalue.showSparkline',
                     label: _('Show Sparkline').t(),
                     defaultValue: '1',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl,
                     visibleWhen: function(reportContent) {
                         return generalUtil.normalizeBoolean(reportContent.get('is_timeseries')) === true;
@@ -183,18 +161,12 @@ define([
                     name: 'display.visualizations.singlevalue.useColors',
                     label: _('Use Colors').t(),
                     defaultValue: '0',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl
                 },
                 {
                     name: 'display.visualizations.singlevalue.colorBy',
                     label: _('Color by').t(),
                     defaultValue: 'value',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: SyntheticRadioControl,
                     controlOptions: {
                         items: [
@@ -222,12 +194,10 @@ define([
                     label: _('Trend Interpretation').t(),
                     defaultValue: 'standard',
                     groupOptions: {
-                        className: 'control-group single-value-radio-icon-group',
-                        controlClass: 'controls-halfblock'
+                        className: 'control-group single-value-radio-icon-group'
                     },
                     control: ColorModeRadioControl,
                     controlOptions: {
-                        className: 'btn-group',
                         items: [
                             {
                                 value: 'standard',
@@ -275,7 +245,6 @@ define([
                     name: 'display.visualizations.singlevalue.rangeValues',
                     group: ColorRanges,
                     groupOptions: {
-                        controlClass: 'controls-block',
                         rangeColorsName: 'display.visualizations.singlevalue.rangeColors',
                         // SPL-120267, defaultColors and defaultRangeValues must match the singlevalue
                         // defaults in savedsearches.conf.in, don't forget to update it or it will generate options
@@ -297,8 +266,7 @@ define([
                     label: _('Color Mode').t(),
                     defaultValue: 'none',
                     groupOptions: {
-                        className: 'control-group single-value-radio-icon-group',
-                        controlClass: 'controls-halfblock'
+                        className: 'control-group single-value-radio-icon-group'
                     },
                     control: ColorModeRadioControl,
                     controlOptions: {
@@ -337,9 +305,6 @@ define([
                     name: 'display.visualizations.singlevalue.numberPrecision',
                     label: _('Precision').t(),
                     defaultValue: '0',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: SyntheticSelectControl,
                     controlOptions: {
                         items: [
@@ -364,25 +329,20 @@ define([
                                 value: '0.0000'
                             }
                         ],
-                        toggleClassName: 'btn'
+                        toggleClassName: 'btn',
+                        menuWidth: 'narrow'
                     }
                 },
                 {
                     name: 'display.visualizations.singlevalue.useThousandSeparators',
                     label: _('Use Thousand Separators').t(),
                     defaultValue: '1',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl
                 },
                 {
                     name: 'display.visualizations.singlevalue.unit',
                     label: _('Unit').t(),
                     defaultValue: '',
-                    groupOptions: {
-                        controlClass: 'controls-block'
-                    },
                     control: TextControl,
                     controlOptions: {
                         placeholder: _('optional').t(),
@@ -397,12 +357,8 @@ define([
                     name: 'display.visualizations.singlevalue.unitPosition',
                     label: _('Unit Position').t(),
                     defaultValue: 'after',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: SyntheticRadioControl,
                     controlOptions: {
-                        className: 'btn-group',
                         items: [
                             {
                                 label: _('Before').t(),

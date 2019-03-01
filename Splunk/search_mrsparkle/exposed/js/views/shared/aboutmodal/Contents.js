@@ -8,7 +8,9 @@ define([
     './Contents.pcssm',
     'splunk.time',
     'splunk.util',
-    'util/htmlcleaner'
+    'util/color_utils',
+    'util/htmlcleaner',
+    'views/shared/Icon'
 ],
 function(
     $,
@@ -20,7 +22,9 @@ function(
     css,
     Time,
     util,
-    HtmlCleaner
+    color_utils,
+    HtmlCleaner,
+    IconView
 ){
     return BaseView.extend({
         moduleId: module.id,
@@ -48,6 +52,10 @@ function(
             this.model.serverInfo.on('change reset', function() {
                 this.render();
             }, this);
+
+            this.children.splunk = new IconView({icon: 'splunk'});
+            this.children.prompt = new IconView({icon: 'greaterRegistered'});
+            this.children.product = new IconView({icon: this.model.serverInfo.getProductIconName()});
         },
         getListOfProducts: function() {
             var addOns = this.model.serverInfo.getAddOns(),
@@ -81,6 +89,60 @@ function(
             }
             return attributionLink;
         },
+        getAppColor: function() {
+            if (!this.model.appNav) {
+                return false;
+            }
+            var appColor = color_utils.normalizeHexString(this.model.appNav.get('color')||'#818D99');
+            var isHexColor = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(appColor);
+            if (!isHexColor){
+                return false;
+            }
+            return appColor;
+        },
+        showIcon: function() {
+            // Do not show an app icon if this isLite.
+            if (this.model.serverInfo.isLite()) {
+                return;
+            }
+            var logoSelector = '[data-role=app-logo]';
+            if (this.model.appNav && this.model.appNav.get('icon')) {
+                var img = new Image();
+                img.onload = function(){
+                    this.$el.find(logoSelector).empty().append(img);
+                    $(img).attr('class', css.aboutIcon).attr('data-role', 'icon');
+                    var appColor = color_utils.normalizeHexString(this.model.appNav.get('color')||'#818D99');
+                    var isHexColor = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(appColor);
+                    if (isHexColor){
+                        this.$el.find(logoSelector + ' img').css('background-color', appColor);
+                    }
+                }.bind(this);
+                img.src = this.model.appNav.get('icon');
+            }
+        },
+        showLogo: function(){
+            if (this.model.appNav && this.model.appNav.get('logo')) {
+                var img = new Image();
+                var logoSelector = '[data-role=app-logo]';
+                img.onload = function(){
+                    if (parseInt(img.width, 10) < 2){
+                        this.showIcon();
+                    } else {
+                        this.$el.find(logoSelector).empty().append(img);
+                        $(img).attr('class', css.aboutIcon).attr('data-role', 'logo');
+                        this.$el.find(logoSelector).show();
+                    }
+                }.bind(this);
+
+                img.onerror = function(){
+                    this.showIcon();
+                }.bind(this);
+
+                img.src = this.model.appNav.get('logo');
+            } else {
+                this.showIcon();
+            }
+        },
         render: function() {
             //this.$el.html(Modal.TEMPLATE);
             //this.$(Modal.HEADER_TITLE_SELECTOR).html('splunk<span class="prompt">&gt;&#x00AE;'+this.model.serverInfo.getProductLogo()+'</span>');
@@ -91,6 +153,7 @@ function(
                 versionText = (isLite) ? liteVersionText : versionNumberText,
                 template = this.compiledTemplate({
                     serverName: this.model.serverInfo.getServerName() || _('N/A').t(),
+                    productName: this.model.serverInfo.getProductName(),
                     version: versionText,
                     isEnterprise: this.model.serverInfo.isEnterprise(),
                     build: this.model.serverInfo.getBuild() || _('N/A').t(),
@@ -107,6 +170,11 @@ function(
                     css: css
                 });
             this.$el.html(template);
+            this.showLogo();
+
+            this.children.splunk.render().appendTo(this.$('[data-title-role=splunk]'));
+            this.children.prompt.render().appendTo(this.$('[data-title-role=prompt]'));
+            this.children.product.set({icon: this.model.serverInfo.getProductIconName()}).render().appendTo(this.$('[data-title-role=product]'));
 
             return this;
         }

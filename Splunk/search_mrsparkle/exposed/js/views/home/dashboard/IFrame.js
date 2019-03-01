@@ -19,19 +19,20 @@ function (
         attributes: {
             height: "100%",
             width: "100%",
-            scrolling: "no", 
+            scrolling: "no",
             frameborder: "0",
-            src: 'about:blank'
+            src: 'about:blank',
+            "aria-label": _('Home Dashboard').t()
         },
         events: {
             'load': function(e){
                 // SPL-88064: replace the route.redirectTo function in the iframe with the parent window's version.
                 // This will ensure that any drilldown actions performed within the dashboard will redirect the parent window.
-                var iframeWindow = $(document).find('iframe')[0].contentWindow; 
+                var iframeWindow = $(document).find('iframe')[0].contentWindow;
                 if (iframeWindow && iframeWindow.require) {
                     iframeWindow.require(['uri/route'], function(iframeRouteModule) {
                         iframeRouteModule.redirectTo = _.bind(route.redirectTo, route);
-                    });  
+                    });
                 }
 
                 if (this.isLoadingDashboard) {
@@ -51,24 +52,24 @@ function (
                     return;
                 }
 
-                // catch-all for all other 'load' events triggered outside of drilldown.js.  This is a shittier user experience, because the redirect will happen after all of the 
-                // assets in the iframe are loaded, but this will be a rare case.     
-                window.location.href = this.$el[0].contentWindow.location.href;  
+                // catch-all for all other 'load' events triggered outside of drilldown.js.  This is a shittier user experience, because the redirect will happen after all of the
+                // assets in the iframe are loaded, but this will be a rare case.
+                window.location.href = this.$el[0].contentWindow.location.href;
             }
-        }, 
+        },
         moduleId: module.id,
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
             this.isLoadingDashboard = true;
             this.listenTo(this.model.dashboard, 'change:id', function() {
-                this.render(); 
+                this.render();
                 this.isLoadingDashboard = true;
             });
         },
         render: function() {
             var src = 'about:blank';
             if (this.model.dashboard.isSimpleXML()) {
-                src = route.dashboardFromID(this.model.application.get('root'), this.model.application.get('locale'), this.model.dashboard.get('id'), {data: {hideEdit: true, hideTitle: true, hideSplunkBar: true, hideAppBar: true, hideFooter: true, targetTop: true}});
+                src = route.dashboardFromID(this.model.application.get('root'), this.model.application.get('locale'), this.model.dashboard.get('id'), { data: { hideEdit: true, hideTitle: true, hideSplunkBar: true, hideAppBar: true, targetTop: true, theme: 'light' } });
                 this.$el.attr('src', src);
             }
             return this;

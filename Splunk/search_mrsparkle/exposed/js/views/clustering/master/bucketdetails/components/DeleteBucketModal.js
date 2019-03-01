@@ -52,7 +52,7 @@ define([
                             scrollContainer: '.modal:visible .modal-body:visible'
                         }
                     },
-                    controlClass: 'controls-block btn'
+                    controlClass: 'btn'
                 });
 
                 this.flashMessages = new FlashMessagesCollection();
@@ -67,7 +67,7 @@ define([
 
                     var bucketId = this.options.bucketId;
                     var peer = this.stateModel.get('peer');
-                    
+
                     if (peer) {
                         $.ajax({
                             url: splunkdUtils.fullpath('cluster/master/buckets/' + bucketId + '/remove_from_peer'),

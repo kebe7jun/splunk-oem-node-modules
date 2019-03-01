@@ -27,6 +27,7 @@ define(
     ) {
         return BaseView.extend({
             moduleId: module.id,
+            className: 'table-padded',
 
             /**
              * @param {Object} options {
@@ -53,10 +54,10 @@ define(
                 this.children.tableRowToggle = new TableRowToggleView({ el: this.el, collapseOthers: true });
 
                 this.tableHeaders = [];
-                this.tableHeaders.push({ label: _('i').t(), className: 'col-info', html: '<i class="icon-info"></i>' });
+                this.tableHeaders.push({ label: _('i').t(), ariaLabel: _('More Info').t(), className: 'col-info', html: '<i class="icon-info"></i>' });
                 this.tableHeaders.push({ label: _('Title').t(), sortKey: 'displayName' });
                 this.tableHeaders.push({ label: _('Dataset Type').t(), sortKey: 'dataset.type,eai:type,displayName', className: 'col-type' });
-                this.tableHeaders.push({ label: _('Accelerated').t(), sortKey: 'accelerated,displayName', className: 'col-accelerate', html:'<i title="' + _('Acceleration').t() + '" class="icon-lightning"></i>'});
+                this.tableHeaders.push({ label: _('Accelerated').t(), ariaLabel: _('Acceleration').t(), sortKey: 'accelerated,displayName', className: 'col-accelerate', html:'<i class="icon-lightning"></i>'});
                 this.tableHeaders.push({ label: _('Actions').t(), className: 'col-actions' });
                 this.tableHeaders.push({ label: _('Owner').t(), sortKey: 'eai:acl.owner,displayName', className: 'col-owner' });
                 if (this.model.user.canUseApps()) {
@@ -69,8 +70,8 @@ define(
                     columns: this.tableHeaders
                 });
                 this.children.rows = this.rowsFromCollection();
-                
-                this.children.tableDock = new TableDock({ el: this.el, offset: 36, dockScrollBar: false, defaultLayout: 'fixed', flexWidthColumn: 1 });
+
+                this.children.tableDock = new TableDock({ el: this.el, offset: 42, dockScrollBar: false, defaultLayout: 'fixed', flexWidthColumn: 1 });
             },
 
             startListening: function() {

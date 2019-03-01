@@ -51,6 +51,10 @@ define(
                         dimens.bottomHeight += $(el).outerHeight(true);
                     }
                 );
+                this.$el.find('> table').each(function(i, el) {
+                    dimens.bottomHeight += parseInt($(el).css('marginBottom').slice(0, -2), 10);
+                });
+
                 this.$el.find('> table:not(.table-expanded, .table-embed)').each(function(i, el) {
                     dimens.tableHeaderHeight += $(el).find('tr').first().height();
                 });

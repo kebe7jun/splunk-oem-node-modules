@@ -1,9 +1,10 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import AddNewButton from 'dashboard/components/shared/AddNewButton';
 import TokenExpression from 'dashboard/components/editor/drilldown/tokens/TokenExpression';
-import Link from 'splunk-ui/components/Link';
-import ControlGroup from 'splunk-ui/components/ControlGroup';
+import Link from '@splunk/react-ui/Link';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
 import FormMessage from 'dashboard/components/shared/FormMessage';
 import { createTestHook } from 'util/test_support';
 

@@ -7,8 +7,10 @@ import urlHelper from 'helpers/managementconsole/url';
 const MULTIPLE_SERVER_ERROR_MSG = _('The following server errors were reported: ').t();
 
 const CONFIRM_MSG_TEMPLATE = _('Are you sure you want to %s \n' +
-    '<b>%s</b>%s? %s this app might cause \n' +
+    '<b>%s</b>%s? %s%s this app might cause \n' +
     'Splunk Cloud to restart and be unavailable for some time.').t();
+
+const SHC_WARNING_MSG = _('This app might not run on a search head cluster deployment. ').t();
 
 const IN_PROGRESS_MSG_TEMPLATE = _('Splunk Cloud is %s \n' +
     '<b>%s</b>%s. This process might take several minutes \n' +
@@ -23,6 +25,8 @@ const MISSING_CAPABILITIES_MSG_TEMPLATE = _('You do not have permission to %s th
 const DEPLOY_FAIL_MSG_TEMPLATE = _('<b>%s</b>%s could not be %s because the deploy task failed. \n' +
     'You can retry the deployment task. If this deployment task continues to fail, contact \n' +
     'Splunk Support.').t();
+
+const UNSUPPORTED_DEPLOYMENT_MSG = _('App does not support current deployment.').t();
 
 export default BaseDialog.extend({
     className: [BaseDialog.prototype.className, 'dmc-base-dialog'].join(' '),
@@ -125,6 +129,8 @@ export default BaseDialog.extend({
         // todo: Ask backend to change error object return in this case
         if (_.isObject(errorMsg) && _.has(errorMsg, 'missing_capabilities')) {
             errorMsg = this.MISSING_CAPABILITIES_MSG;
+        } else if (errorMsg.includes('AppInstall_UnsupportedDeployment')) {
+            errorMsg = UNSUPPORTED_DEPLOYMENT_MSG;
         } else if (_.isArray(errorMsg)) {
             errorMsg = this.handleMultipleErrorsResponse(errorMsg);
         }
@@ -155,6 +161,33 @@ export default BaseDialog.extend({
     disableLoginButton() {
         this.$('.modal-btn-login').addClass('disabled');
         this.$('.modal-btn-login').prop('disabled', true);
+    },
+
+    /**
+     * Return a confirmation message
+     * @operationLabels     An array of words describing the operation, with different tenses and capitalization.
+     *                      Refer to message templates and calling examples.
+     *
+     */
+    getConfirmBodyHTMLForOperation(operationLabels) {
+        const manifest = this.model.appRemote && this.model.appRemote.get('manifest');
+
+        const showSHCWarning = this.options.isSHC && !(
+            manifest &&
+            manifest.supportedDeployments && (
+                _.contains(manifest.supportedDeployments, '_search_head_clustering') ||
+                _.contains(manifest.supportedDeployments, '*')
+            )
+        );
+
+        return splunkUtils.sprintf(
+            CONFIRM_MSG_TEMPLATE,
+            operationLabels[0],
+            _.escape(this.appName),
+            _.escape(this.appVersionLabel),
+            showSHCWarning ? SHC_WARNING_MSG : '',
+            operationLabels[1],
+        );
     },
 
     multipleErrorMessagesTemplate: `

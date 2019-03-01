@@ -29,7 +29,7 @@ define(
             tagName: 'tr',
             initialize: function() {
                 BaseView.prototype.initialize.apply(this, arguments);
-                
+
                 this.children.actionControls = new JobStatusControlsView({
                     model: {
                         searchJob: this.model.job,
@@ -37,11 +37,14 @@ define(
                         appLocal: this.model.appLocal,
                         user: this.model.user
                     },
+                    collection: {
+                        workloadManagementStatus: this.collection.workloadManagementStatus
+                    },
                     allowSendBackground: false,
                     allowTouch: true,
                     externalJobLinkPage: "search"
                 });
-                
+
                 this.children.actionButtons = new JobStatusButtonsView({
                     model: {
                         searchJob: this.model.job,
@@ -57,14 +60,14 @@ define(
                     modelAttribute: 'selected',
                     model: this.model.job
                 });
-                
+
                 if (!this.model.job.entry.acl.canWrite()) {
                     this.children.bulkActionCheckbox.disable();
                 }
 
                 this.activate();
             },
-            
+
             startListening: function() {
                 this.listenTo(this.model.job, 'sync', this.render);
                 this.listenTo(this.model.job.control, 'sync', this.render);
@@ -118,6 +121,8 @@ define(
                     events = i18n.format_decimal(this.model.job.entry.content.get('eventCount') || 0),
                     expiration = this.model.job.getExpirationString(),
                     status = this.getCanonicalStatus(),
+                    workloadPool = this.model.job.entry.content.get('workload_pool') || '',
+                    canListAndSelectWorkloadPools = this.model.user.canListAndSelectWorkloadPools(this.collection.workloadManagementStatus),
                     splitRuntime,
                     runtimeHours,
                     runtimeMinutes,
@@ -133,7 +138,7 @@ define(
                 } else {
                     runtime = _("Waiting...").t();
                 }
-                
+
                 if (!html) {
                     this.$el.html(this.compiledTemplate({
                         sid: sid,
@@ -145,9 +150,11 @@ define(
                         events: events,
                         runtime: runtime,
                         expiration: expiration,
-                        status: status
+                        status: status,
+                        canListAndSelectWorkloadPools: canListAndSelectWorkloadPools,
+                        workloadPool: workloadPool
                     }));
-                    
+
                     this.children.actionControls.render().appendTo(this.$('.col-actions'));
                     this.children.actionButtons.render().appendTo(this.$('.col-actions'));
                     this.children.bulkActionCheckbox.render().appendTo(this.$('.col-selected'));
@@ -160,47 +167,52 @@ define(
                     this.$('.col-expires').html(_.template('<%- expiration %>', {expiration: expiration}));
                     this.$('.col-runtime').html(_.template('<%- runtime %>', {runtime: runtime}));
                     this.$('.col-status').html(_.template('<%- status %>', {status: status}));
+                    this.$('.col-workloadPool').html(_.template('<%- workloadPool %>', {workloadPool: workloadPool}));
                 }
 
                 return this;
             },
-            
+
             template: '\
                 <td class="expands" rowspan="2"><a href="#"><i class="icon-triangle-right-small"></i></a>\
                 </td>\
                 <td class="col-selected">\
                 </td>\
-                <td class="col-owner col-text">\
+                <td class="col-owner col-text" tabindex="0">\
                     <%- owner %>\
                 </td>\
                 <% if (canUseApps) { %>\
-                    <td class="col-application col-text">\
+                    <td class="col-application col-text" tabindex="0">\
                         <%- appName %>\
                     </td>\
                 <% } %>\
-                <td class="col-events col-text">\
+                <td class="col-events col-text" tabindex="0">\
                     <%- events %>\
                 </td>\
-                <td class="col-size col-text">\
+                <td class="col-size col-text" tabindex="0">\
                     <%- size %>\
                 </td>\
-                <td class="col-created col-text">\
+                <td class="col-created col-text" tabindex="0">\
                     <%- createdAt %>\
                 </td>\
-                <td class="col-expires col-text">\
+                <td class="col-expires col-text" tabindex="0">\
                     <%- expiration %>\
                 </td>\
-                <td class="col-runtime col-text">\
+                <td class="col-runtime col-text" tabindex="0">\
                     <%- runtime %>\
                 </td>\
-                <td class="col-status col-text">\
+                <td class="col-status col-text" tabindex="0">\
                     <%- status %>\
                 </td>\
-                <td class="col-actions">\
+                <% if (canListAndSelectWorkloadPools) { %>\
+                    <td class="col-workloadPool col-text" tabindex="0">\
+                        <%- workloadPool %>\
+                    </td>\
+                <% } %>\
+                <td class="col-actions" tabindex="0">\
                 </td>\
                 \
             '
         });
     }
 );
-

@@ -29,7 +29,6 @@ define([
         return BaseView.extend({
             moduleId: module.id,
             template: template,
-            className: 'push-margins',
             initialize: function(options) {
                 BaseView.prototype.initialize.call(this, options);
                 this.numProviders = 0;
@@ -148,9 +147,9 @@ define([
                             'learnmore.virtualindex.indexes'
                         ),
                         errMessage = _('No indexes.').t() +
-                            (this.numProviders==0?_(' You must have at least one provider to create indexes. ').t():'') +
-                            '<a href="'+learnMoreLink+'" target="_blank">' +
-                            _('Learn more.').t()+' <i class="icon-external"></i></a>';
+                            (this.numProviders == 0 ? ' ' + _('You must have at least one provider to create indexes.').t() + ' ' : ' ') +
+                            '<a href="' + learnMoreLink + '" target="_blank">' +
+                            _('Learn more.').t() + ' <i class="icon-external"></i></a>';
                     this.children.flashMessages.flashMsgHelper.addGeneralMessage('vix_no_indexes',
                         {
                             type: splunkDUtils.ERROR,

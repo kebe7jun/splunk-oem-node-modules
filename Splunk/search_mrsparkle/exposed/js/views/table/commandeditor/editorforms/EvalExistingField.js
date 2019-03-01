@@ -45,7 +45,7 @@ define(
                 });
 
                 this.children.evalExpressionBox = new TextareaControl({
-                    className: 'eval-box',
+                    additionalClassName: 'eval-box',
                     model: this.model.command,
                     modelAttribute: 'expression',
                     size: 'small'

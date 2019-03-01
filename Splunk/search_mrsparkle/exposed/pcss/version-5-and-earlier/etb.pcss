@@ -1,32 +1,35 @@
 
 
-h2 { 
-    font-size: 14px; 
-    font-weight: bold; 
+h2 {
+    @mixin create-heading-large;
     margin: 0 0 10px;
 }
 pre {
-    margin:0;   
+    margin:0;
 }
-pre, .rulesetList	{ 
+pre, .rulesetList	{
     line-height: 150%;
 }
 
-.hidden { 
+.hidden {
     display: none;
- }
-
-#etbheader {
-    padding: 20px 15px 10px 15px; 
-    border-bottom: 1px solid $borderColor; 
-    background: #ededed;
 }
 
-#sampleEvent	{ 
-    border: 1px solid $borderColor; 
-    padding: 3px; 
+#control {
+    padding: 20px 15px 10px 15px;
+    border-bottom: 1px solid $borderColor;
+    background: #ededed;
+
+    h2 {
+        @mixin create-heading-extra-large;
+    }
+}
+
+#sampleEvent	{
+    border: 1px solid $borderColor;
+    padding: 3px;
     overflow: auto;
-    max-height: 100px; 
+    max-height: 100px;
 }
 
 option 		{ padding-right: 10px; }
@@ -34,7 +37,7 @@ option 		{ padding-right: 10px; }
 .highlight { background-color: #FFED89; }
 
 p.error, p.warn, p.success, p.message, p.empty, p.info {
-    margin-top:0px;   
+    margin-top:0px;
 }
 .success { display:none; }
 
@@ -46,15 +49,14 @@ p.error, p.warn, p.success, p.message, p.empty, p.info {
     clear: both;
 }
 
-#ruleset { 
-    width: 300px; 
-    float:left; 
+#ruleset {
+    width: 300px;
+    float:left;
     border-right: 1px solid $borderColor;
     padding: 10px 10px 0 10px;
     overflow-x:auto;
 }
-#ruleset h3 { 
-    border-top: 1px dotted $borderColor;
+#ruleset #ruleset h3 {
     margin-top: 4px;
     padding: 8px 0;
 }
@@ -71,8 +73,8 @@ ul.rulesetList {
 }
 
 .rulesetList li img {
-    background-image: url('/static/img/skins/default/icon_circle_delete.png'); 
-    background-position: center left; 
+    background-image: url('/static/img/skins/default/icon_circle_delete.png');
+    background-position: center left;
     background-repeat: no-repeat;
     width: 20px;
     height: 12px;
@@ -81,7 +83,7 @@ ul.rulesetList {
 }
 
 .rulesetList li.excluded img {
-    background-image: url('/static/img/skins/default/icon_circle_add.png'); 
+    background-image: url('/static/img/skins/default/icon_circle_add.png');
 }
 .rulesetList li.excluded span {
     text-decoration: line-through;
@@ -92,10 +94,10 @@ ul.rulesetList {
     background-image: none !important;
 }
 
-#events a.term		{ 
-    padding: 0px 16px 0px 1px;  
-    background-image: url('/static/img/skins/default/icon_circle_delete.png'); 
-    background-position: center right; 
+#events a.term		{
+    padding: 0px 16px 0px 1px;
+    background-image: url('/static/img/skins/default/icon_circle_delete.png');
+    background-position: center right;
     background-repeat: no-repeat;
     color: black;
     text-decoration: none;
@@ -104,37 +106,37 @@ ul.rulesetList {
 .munmarked	{ border: 1px solid red; }
 #events pre	{ padding-left: 5px; }
 
-#events .help { 
-    background: #ffc; 
-    padding: 4px; 
-    border: 1px solid $borderColor; 
-    margin-left: 28px; 
+#events .help {
+    background: #ffc;
+    padding: 4px;
+    border: 1px solid $borderColor;
+    margin-left: 28px;
 }
 
 .searchdesc	{
     font-size: 13px;
     font-weight: bold;
  }
-#help { 
-    font-size: $baseFontSizeSmall; 
+#help {
+    font-size: $fontSizeSmall;
 }
 
-#events .help { 
-    display: block; 
+#events .help {
+    display: block;
 }
 
 /* new */
 
 #search {
-    float:left;   
+    float:left;
 }
 input.searchButton {
-    margin-top:4px;  
+    margin-top:4px;
     margin-left: 10px;
 }
 .valueInputDiv {
     padding-top:5px;
-    margin-bottom: 0px;   
+    margin-bottom: 0px;
  }
 .valueInputDiv .splButton-primary {
     margin-left: 0px;
@@ -143,10 +145,10 @@ input.searchButton {
 /* results */
 
 #results {
-    overflow:hidden; 
+    overflow:hidden;
 }
 #ruleset, #events { /* equal heights fix */
-/*    padding-bottom:10000px; 
+/*    padding-bottom:10000px;
     margin-bottom: -9980px;    */
 }
 
@@ -155,20 +157,20 @@ input.searchButton {
  }
 
 /* events section */
-#events	{ 
+#events	{
     padding-top: 10px;
-    margin-left: 320px; 
+    margin-left: 320px;
     border-left:1px solid $borderColor;
 }
 #events h2 {
-    margin-left:12px; 
+    margin-left:12px;
 }
 #events .info {
-    margin-bottom:0px;   
+    margin-bottom:0px;
 }
 #events .splTable {
     margin-bottom:0px;
-    display:block;   
+    display:block;
 }
 #eventListing {
     padding-bottom:0px;
@@ -176,7 +178,7 @@ input.searchButton {
 #events .splTable {
 }
 #events .splTable tbody {
-    display: block;   
+    display: block;
     overflow-x:auto;
 }
 #events .splTable tbody tr {
@@ -189,27 +191,15 @@ input.searchButton {
     top:50%;
     margin-top:-100px;
     left:50%;
-    margin-left:-200px;  
-    display:none;          
+    margin-left:-200px;
+    display:none;
  }
 .entityEditForm .popupContainer {
-    padding-bottom:0px;   
- }
-.popupContainer .splHeader-popup {
- }   
-.popupContainer .popupFooter {
+    padding-bottom:0px;
  }
 .popupContent {
-    width:400px;   
+    max-width: 500px;
  }
-
-.popupContent p {
-    margin-top: 0px;
-}
-
-.entityEditForm .popupContainer div {
-    padding-bottom:0px;   
-}
 .entityEditForm .popupContainer div.entityEditForm { /* contortions to get padding right in this context */
     padding-bottom: 20px;
 }
@@ -219,7 +209,7 @@ input.searchButton {
 
 label {
     display:block;
-    margin-top:5px;   
+    margin-top:5px;
 }
 #ruleset ul label {
 	display: inline;
@@ -229,7 +219,7 @@ label {
 #saveSuccessLayer div.popupContent {
     text-align: center;
     padding-top: 34px;
-    font-size: $baseFontSizeLarge;
+    font-size: $fontSizeLarge;
     padding:20px;
 }
 
@@ -242,6 +232,14 @@ h1.spl-icon-success-md {
     padding-left: 18px;
 }
 
+.fieldsetWrapper {
+    h4 {
+        @mixin create-heading-small;
+        margin: $spacingHalf 0 0 0;
+        padding: 0;
+    }
+}
+
 .fieldsetWrapper ul li {
     width: 300px;
     white-space: nowrap;
@@ -249,6 +247,10 @@ h1.spl-icon-success-md {
     text-overflow: ellipsis;
 }
 
-.green { color:$splunkGreen }
-.eventval { color:#0a78a0 }
-.et { color:$grayDark; font-size: 125%; font-family: Courier;}
+.advancedHelpText {
+    padding: 10px;
+}
+
+.green { color:$successColor }
+.eventval { color: $accentColor }
+.et {font-family: $monoFontFamily;}

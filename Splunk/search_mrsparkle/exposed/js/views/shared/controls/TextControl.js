@@ -90,7 +90,15 @@ define([
             }
 
             if (this.options.canClear && this.useLocalClassNames) {
-                this.children.clearIcon = new IconView({icon: 'xCircle'});
+                this.children.clearIcon = new IconView({icon: 'x'});
+            }
+
+            if (this.options.style == "search"  && this.useLocalClassNames) {
+                this.children.searchIcon = new IconView({icon: 'search'});
+            }
+
+            if (this.options.style == "search"  && this.useLocalClassNames) {
+                this.children.searchIcon = new IconView({icon: 'search'});
             }
 
             Control.prototype.initialize.apply(this, arguments);
@@ -98,18 +106,20 @@ define([
         events: {
             'change input[type=password], input[type=text]': function(e) {
                 this.updateClear();
+                this.toggleSearchIcon();
                 this.onInputChange();
             },
             'click [data-role=placeholder]': function(e) {
                 this.$input.focus();
             },
             'keyup input[type=password], input[type=text]': function(e) {
-                if (e.which === keyboardUtil.KEYS["ESCAPE"] && 
+                if (e.which === keyboardUtil.KEYS["ESCAPE"] &&
                     this.options.clearOnEsc) {
-                    
+
                     this.clear();
                 }
                 this.updateClear();
+                this.toggleSearchIcon();
                 this.updatePlaceholder();
                 this.trigger("keyup", e, this.$input.val());
                 if (this.options.updateOnKeyUp === true || e.keyCode === keyboardUtil.KEYS['ENTER']) {
@@ -121,9 +131,9 @@ define([
                     this._debouncedOnInputChange();
                 }
             },
-            
+
             // SPL-104353 in IE11 and IE10 the text area does not get focus when clicked with a popdown open.
-            // This forces the focus. 
+            // This forces the focus.
             'mousedown input[type=password], input[type=text]': function(e) {
                 if (userAgent.isIE()) {
                     this.$input.focus();
@@ -132,12 +142,14 @@ define([
 
             'mouseup input[type=password], input[type=text]': function(e) { //could result in pasted text
                 this.updateClear();
+                this.toggleSearchIcon();
                 this.updatePlaceholder();
             },
             'click [data-role=clear]': function(e) {
                 e.preventDefault();
                 this.clear();
                 this.updateClear();
+                this.toggleSearchIcon();
                 this.updatePlaceholder();
             },
             // The input event is fired by Firefox when auto-filling a text box.
@@ -145,6 +157,7 @@ define([
             'input input': function() {
                 if (this.options.updateOnAutofill) {
                     this.updateClear();
+                    this.toggleSearchIcon();
                     this.onInputChange();
                 }
             }
@@ -190,6 +203,9 @@ define([
         updateClear: function(){
             this.$clear[this.$input.val() ? 'show' : 'hide']();
         },
+        toggleSearchIcon: function(){
+            this.$searchIcon[this.$input.val() ? 'hide' : 'show']();
+        },
         clear: function(){
             this.$input.val('');
             this.setValue('');
@@ -201,7 +217,8 @@ define([
                 var template = _.template(this.template, {
                         options: this.options,
                         value: (_.isUndefined(this._value) || _.isNull(this._value)) ? '' : this._value,
-                        css: this.css
+                        css: this.css,
+                        id: 'control-' + this.cid
                     });
 
                 this.$el.html(template);
@@ -221,12 +238,18 @@ define([
                         if (this.$clear) {
                             this.updateClear();
                         }
+                        if (this.$searchIcon) {
+                            this.toggleSearchIcon();
+                        }
                         this.onInputChange();
                     }.bind(this), 50);
                 }
 
                 if (this.options.canClear && this.useLocalClassNames) {
-                    this.children.clearIcon.render().replaceAll(this.$('.icon-x-circle'));
+                    this.children.clearIcon.render().replaceAll(this.$('.icon-x'));
+                }
+                if (this.options.style == "search"  && this.useLocalClassNames) {
+                    this.children.searchIcon.render().replaceAll(this.$('.icon-search'));
                 }
             } else {
                 if (this.$input.val() !== this._value) {
@@ -242,7 +265,9 @@ define([
             }
 
             this.$clear = this.$('[data-role=clear]');
+            this.$searchIcon = this.$('[data-role=search-icon]');
             this.updateClear();
+            this.toggleSearchIcon();
 
             return this;
         },
@@ -260,24 +285,27 @@ define([
             prepend: 'input-prepend',
             append: 'input-append',
             clear: 'control-clear',
-            placeholder: 'placeholder'
+            placeholder: 'placeholder',
+            searchIcon: 'search-icon'
         },
-        // TODO: the `for` control-controlCid needs to be hooked up to the input with same `id`
         template: '\
         <span class="<%- css.uneditableInput %> <%= options.inputClassName %>" data-role="uneditable-input" \
             <% if(options.enabled){ %>style="display:none"<%}%>><%- value %></span>\
         <input type="<% if (options.password){%>password<%}else{%>text<%}%>" \
+               id="<%- (options.elementId || id) %>" \
                name="<%- options.modelAttribute || "" %>" \
+               aria-label="<%- options.ariaLabel || options.placeholder || options.modelAttribute || "" %>" \
                class="<%- options.style == "search" ? css.inputSearch : css.input %> <%- options.canClear ? css.inputCanClear : "" %> <%- options.inputClassName%>"\
                value="<%- value %>" \
-               <% if(options.required){ %> required <%}%>\
+               <% if(options.required){ %> required aria-required="required" <%}%>\
                <% if(options.pattern){ %> pattern="<%- options.pattern %>" <%}%>\
                autocomplete="<% if (options.autocomplete){ %>on<% } else { %>off<% } %>" \
-               <% if(options.elementId){ %>id="<%- options.elementId %>"<%}%> \
                <% if(options.placeholder && !options.useSyntheticPlaceholder){ %>placeholder="<%- options.placeholder %>"<%}%> \
                <% if(!options.enabled){ %>style="display:none"<%}%>>\
+            <% if (options.style === "search" || (options.inputClassName && (options.inputClassName.indexOf(css.inputSearch) > -1))) { %><div class="<%- css.searchIcon %>" data-role="search-icon"><i class="icon-search-thin" ></i></div><% } %>\
             <% if (options.useSyntheticPlaceholder) { %> <span class="<%- css.placeholder %>" data-role="placeholder"><%- options.placeholder %></span><% } %>\
-            <% if (options.canClear) { %><a href="#" class="<%- css.clear %>" data-role="clear" style="display:none"><i class="icon-x-circle"></i></a><% } %>\
+            <% if (options.style == "search" || (options.inputClassName && (options.inputClassName.indexOf(css.inputSearch) > -1))) { %><div class="<%- css.searchIcon %>" data-role="search-icon"><i class="icon-search" ></i></div><% } %>\
+            <% if (options.canClear) { %><a href="#" aria-label="<%- _("Clear").t() %>" class="<%- css.clear %>" data-role="clear" style="display:none"><i class="icon-x"></i></a><% } %>\
         '
     });
 });

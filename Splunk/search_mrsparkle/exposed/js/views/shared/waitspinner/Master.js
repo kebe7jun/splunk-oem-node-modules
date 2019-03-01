@@ -18,20 +18,19 @@ define(['underscore', 'module', 'views/Base', './Master.pcssm'], function(_, mod
 
             var defaults = {
               size: 'small',
-              color: 'gray',
+              color: 'gray', // Deprecated
               frameWidth: 14, //px
-              frameCount: 8,
-              fps: 10
+              frameCount: 20,
+              fps: 20
             };
 
             _.defaults(this.options, defaults);
 
             if (this.useLocalClassNames) {
-                this.$el.attr('class', this.css[this.options.size + this.options.color]);
+                this.$el.attr('class', this.css['spinner' + this.options.size]);
             } else {
-                this.$el.addClass('spinner-' + this.options.size + '-' + this.options.color);
+                this.$el.addClass('spinner-' + this.options.size);
             }
-
             this.frame=0;
         },
         stop:  function() {

@@ -47,11 +47,11 @@ define([
             this.children.flashMessage = new FlashMessages({ model: this.model.inmem });
 
             if (this.model.inmem.isTable()) {
-                
+
                 this.model.inmem.entry.content.set({
                     displayName: this.model.inmem.entry.content.get('displayName') + '_clone'
                 });
-                
+
                 this.children.tableDisplayNameControl = new TextControl({
                     model: this.model.inmem.entry.content,
                     modelAttribute: 'displayName'
@@ -60,7 +60,6 @@ define([
                 this.children.tablelDisplayNameGroup = new ControlGroup({
                     label: _('Table Title').t(),
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controls: this.children.tableDisplayNameControl
                 });
 
@@ -72,7 +71,6 @@ define([
                 this.children.tableNameGroup = new ControlGroup({
                     label: _('Table ID').t(),
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controls: this.children.tableNameControl,
                     tooltip: _('The ID is used as the filename on disk. Cannot be changed later.').t(),
                     help: _('Can only contain letters, numbers and underscores.').t()
@@ -83,7 +81,7 @@ define([
                     destDelegate: this.children.tableNameControl,
                     transformFunction: dataModelFormUtils.normalizeForID
                 });
-                
+
             } else {
                 this.children.titleField = new ControlGroup({
                     controlType: 'Text',
@@ -132,14 +130,14 @@ define([
             this.children.flashMessage.render().prependTo(this.$(Modal.BODY_SELECTOR));
 
             this.$(Modal.BODY_SELECTOR).append(Modal.FORM_HORIZONTAL_JUSTIFIED);
-            
+
             if (this.model.inmem.isTable()) {
                 this.children.tablelDisplayNameGroup.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
                 this.children.tableNameGroup.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
             } else {
                 this.children.titleField.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
             }
-            
+
             if (this.children.descriptionField) {
                 this.children.descriptionField.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
             }

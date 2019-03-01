@@ -182,8 +182,12 @@ define(
                         serverInfo: this.model.serverInfo,
                         user: this.model.user
                     },
+                    collection: {
+                        workloadManagementStatus: this.collection.workloadManagementStatus
+                    },
                     enableSearchMode: true,
                     enableSamplingMode: true,
+                    enableWorkloadPool: true,
                     autoPause: this.options.autoPause
                 });
                 //TODO: remove when views don't call activate in init

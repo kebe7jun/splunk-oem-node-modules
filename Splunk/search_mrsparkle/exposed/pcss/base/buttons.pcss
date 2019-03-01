@@ -1,249 +1,142 @@
-/*  Splunk: Buttons */
-/*  =============== */
+/*===============================================================================================*/
+/*  SPLUNK: BUTTONS                                                                              */
+/*===============================================================================================*/
 
-
-/*  Base styles & overrides */
-/*  -------------------------------------------------- */
-
-/* standard button class for use on a, button
-
-        <a class="btn">Button</a>
-        <a class="btn :hover">Button</a>
-        <a class="btn active">Button</a>
-        <button class="btn">Button</button>
+/*************************************************************************************************/
+/*  Base Styles & Overrides                                                                      */
+/*  Standard button class for use on a, button                                                   */
+/*************************************************************************************************/
+/*
+    <a class="btn">Button</a>
+    <a class="btn :hover">Button</a>
+    <a class="btn active">Button</a>
+    <button class="btn">Button</button>
 */
-
 .btn {
-    display: inline-block;
-    padding: 4px 12px;
+    @mixin base-input $buttonPadding, auto;
+    @mixin button-padding;
     margin-bottom: 0; /*  For input.btn */
-    font-size: $baseFontSize;
-    line-height: $baseLineHeight;
+    font-weight: $fontWeight;
+    color: $textGrayDark;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
+    border: $border;
+    border-radius: $interactiveBorderRadius;
+    white-space: nowrap;
 
     @mixin interactive; /*  this breaks some bootstrap styles */
-
-    &:hover {
-        @mixin interactive-hover;
-    }
-
-    &.disabled,
-    &[disabled],
-    &.disabled:hover,
-    &[disabled]:hover,
-    &.disabled:focus,
-    &[disabled]:focus {
-        background: $interactiveDisabledBackgroundColor;
-        filter: none;
-        border-color: $borderColor;
-        border-top-color: $borderColor;
-        border-bottom-color: $borderColor;
-        cursor: not-allowed;
-        color: $textGray;
-        text-shadow: none;
-        opacity: 0.65;
-        box-shadow: none;
-    }
-    &.active {
-        @mixin interactive-hover;
-        filter: none;
-        color: $textColor;
-    }
-    &:focus {
-        @mixin focus-button;
-    }
-    border-radius: $interactiveBorderRadius;
+    @mixin button-states;
 }
 
-/*  Primary */
-/*  ------------------- */
-
-/* Provides extra visual weight and identifies the primary action in a set of buttons.
-
-        <a class="btn btn-primary">Primary</a>
-        <a class="btn btn-primary :hover">Primary</a>
-        <a class="btn btn-primary active">Primary</a>
-        <button class="btn btn-primary">Primary</button>
+/*************************************************************************************************/
+/*  PRIMARY BUTTONS                                                                              */
+/*  Provides extra visual weight and identifies the primary action in a set of buttons.          */
+/*************************************************************************************************/
+/*
+    <a class="btn btn-primary">Primary</a>
+    <a class="btn btn-primary :hover">Primary</a>
+    <a class="btn btn-primary active">Primary</a>
+    <button class="btn btn-primary">Primary</button>
 */
 .btn-primary {
+    @mixin button-padding-primary;
+    font-weight: $fontWeightSemiBold;
+    border: none;
+
     @mixin interactive-primary;
-    &:hover {
-        @mixin interactive-primary-hover;
-    }
-
-    &.active {
-        @mixin interactive-primary-hover;
-        filter: none;
-        color: $white;
-    }
-    &:focus {
-        @mixin focus-button;
-
-        @if $theme == lite {
-        	background: $splunkLiteBlack;
-        }
-    }
+    @mixin button-states interactive-primary-hover, interactive-primary-active, interactive-primary-disabled, interactive-primary $primaryBackgroundColor;
 }
 
-
-/*  Other buttons */
-/*  ------------------------- */
-
-/*  Danger and error appear as red */
-.btn-danger {
-  @mixin buttonBackground $btnDangerBackground, $btnDangerBackgroundHighlight;
-}
-/*  Success appears as green */
-.btn-success {
-  @mixin buttonBackground $btnSuccessBackground, $btnSuccessBackgroundHighlight;
+.btn-secondary {
+    font-weight: $fontWeightSemiBold;
+    @mixin button-states;
 }
 
-
-/*  Links */
-/*  ------------------------- */
-
-/* pager style button pill
-    Note: this does not inherit or extend btn base styles and is meant for links only
-
-        <a href="#" class="btn-pill">Pill</a>
-        <a href="#" class="btn-pill :hover">Pill</a>
-        <a href="#" class="btn-pill :hover :active">Pill</a>
-        <a href="#" class="btn-pill active">Pill</a>
+/*************************************************************************************************/
+/*  Links                                                                                        */
+/*  Pager style button pill                                                                      */
+/*  Note: this does not inherit or extend btn base styles and is meant for links only            */
+/*************************************************************************************************/
+/*
+    <a href="#" class="btn-pill">Pill</a>
+    <a href="#" class="btn-pill :hover">Pill</a>
+    <a href="#" class="btn-pill :hover :active">Pill</a>
+    <a href="#" class="btn-pill active">Pill</a>
 */
 .btn-pill {
     display: inline-block;
-    padding: 0 10px; /*  note the vertical padding will be funky unless it's block, inline-block, or floated */
-    line-height: 27px;
+    @mixin button-padding $buttonPaddingVertical; /*  note the vertical padding will be funky unless it's block, inline-block, or floated */
+    line-height: $lineHeight;
+    border-radius: $interactiveBorderRadius;
+    border: $border transparent;
 
-    box-shadow: none !important;
-    /*  states */
-    &:hover,
-    &.active,
-    &:focus
-    {
-        background-color: $pillBackgroundColorHover;
-        text-decoration: none;
-        border-radius: $interactiveBorderRadius;
-    }
-
-    &.active
-    {
-		color: $textGray;
-    }
-
-    &:focus {
-        @mixin focus-pill;
-    }
-
-    &.disabled,
-    &.disabled:hover {
-        color: $textDisabledColor;
-        background: transparent;
-        cursor: default;
-    }
-
-    &.btn-square {
-        padding: 0;
-        height: 27px;
-        width: 27px;
-        text-align: center;
-    }
+    @mixin interactive none, transparent, none, $pillTextColor;
+    @mixin button-states pill-hover, pill-active, pill-disabled, pill-style;
 }
 
-
-/*  Link buttons */
-/*  -------------------------------------------------- */
-
-/*  Make a button look and behave like a link */
-.btn-link,
-.btn-link:active,
-.btn-link[disabled] {
-  background-color: transparent;
-  background-image: none;
-  box-shadow: none;
-}
+/*************************************************************************************************/
+/*  LINK BUTTONS                                                                                 */
+/*  Make a button look and behave like a link.                                                   */
+/*************************************************************************************************/
 .btn-link {
-  border-color: transparent;
-  cursor: pointer;
-  color: $linkColor;
-  border-radius: 0;
-}
-.btn-link:hover,
-.btn-link:focus {
-  color: $linkColorHover;
-  text-decoration: underline;
-  background-color: transparent;
-}
-.btn-link[disabled]:hover,
-.btn-link[disabled]:focus {
-  color: $grayDark;
-  text-decoration: none;
+    @mixin interactive transparent, transparent, none, $linkColor;
+    @mixin button-states link-style-underline $linkColorHover, link-style, link-style $textGray, link-style $linkColor;
 }
 
-
-/*  Block button */
-/*  ------------------------- */
-
+/*************************************************************************************************/
+/*  BLOCK BUTTON                                                                                 */
+/*************************************************************************************************/
 .btn-block {
-  display: block;
-  width: 100%;
-  padding-left: 0;
-  padding-right: 0;
-  box-sizing: border-box;
+    display: block;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
 }
 
 /*  Vertically space out multiple block buttons */
 .btn-block + .btn-block {
-  margin-top: 5px;
+    margin-top: $spacingQuarter;
 }
 
 /*  Specificity overrides */
 input[type="submit"],
 input[type="reset"],
 input[type="button"] {
-  &.btn-block {
-    width: 100%;
-  }
+    &.btn-block {
+      width: 100%;
+    }
 }
 
-
-
-/*  Draggable */
-/*  ------------------------- */
-
-/* draggable button styles
-
-        <a class="btn btn-draggable">Draggable</a>
-        <button class="btn btn-draggable">Draggable</button>
-        <div class="btn-combo">
-                <div class="btn btn-draggable">Combo</div>
-                <div class="btn"><i class="icon-pencil"></i></div>
-        </div>
-
+/*************************************************************************************************/
+/*  DRAGGABLE BUTTON                                                                             */
+/*************************************************************************************************/
+/*
+    <a class="btn btn-draggable">Draggable</a>
+    <button class="btn btn-draggable">Draggable</button>
+    <div class="btn-combo">
+        <div class="btn btn-draggable">Combo</div>
+        <div class="btn"><i class="icon-pencil"></i></div>
+    </div>
 */
 .btn-draggable {
-    cursor:move;
-    padding-left:15px;
-    width: 113px; /*  160px - padding, border, etc */
+    cursor: move;
+    width: 150px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    text-align:left;
-    position: relative;
+    box-sizing: border-box;
+
     /*  generated handle */
     &:before, .before {
         content: "";
-        position: absolute;
+        float: left;
+        margin-left: -8px;
         height: 18px;
-        width: 7px;
-        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAG0lEQVQIW2M0Njb+f/bsWUYYzciABuAyOFUAAKKMEAXhn6ySAAAAAElFTkSuQmCC) repeat;
-        top: 3px;
-        left: 4px;
-        opacity: 0.50;
+        width: 6px;
+        @mixin draggable-handle-background;
     }
-
     /*  sizes */
     &.btn-small:before{
         height: 14px;
@@ -253,53 +146,43 @@ input[type="button"] {
     }
 }
 
-
-
-/*  Button Sizes */
-/*  -------------------------------------------------- */
-
-/*  Large */
+/*************************************************************************************************/
+/*  BUTTON SIZES                                                                                 */
+/*************************************************************************************************/
+/*  Large  */
 .btn-large {
-  padding: $paddingLarge;
-  font-size: $fontSizeLarge;
-  border-radius: $borderRadiusLarge;
-}
-.btn-large [class^="icon-"],
-.btn-large [class*=" icon-"] {
-  margin-top: 4px;
+    @mixin button-size $buttonPaddingVerticalLarge, calc($buttonPaddingSides * 2), 4px;
 }
 
-/*  Small */
+/*  Small  */
 .btn-small {
-  padding: $paddingSmall;
-  font-size: $fontSizeSmall;
-  border-radius: $borderRadiusSmall;
-}
-.btn-small [class^="icon-"],
-.btn-small [class*=" icon-"] {
-  margin-top: 0;
-}
-.btn-mini [class^="icon-"],
-.btn-mini [class*=" icon-"] {
-  margin-top: -1px;
+    @mixin button-size $buttonPaddingVerticalSmall;
 }
 
-/*  Mini */
+/*  Mini  */
 .btn-mini {
-  padding: $paddingMini;
-  border-radius: $borderRadiusSmall;
+    @mixin button-size $buttonPaddingVerticalMini, calc($buttonPaddingSides / 2), -1px;
 }
-
 .btn-mini,
 .btn-group > .btn-mini {
-  font-size: 11px;
-    line-height: 18px;
+    font-size: $fontSizeSmall;
+    font-weight: $fontWeightSemiBold;
+    line-height: calc($lineHeight - 2px);
 }
 
-/*  Print */
-/*  -------------------------------------------------- */
-@media print {
+/*  Square Button  */
+.btn-square {
+    padding: calc($buttonPaddingVertical + 1) 0;
+    height: $buttonSquareSize;
+    width: $buttonSquareSize;
+    text-align: center;
+    box-sizing: border-box;
+}
 
+/*************************************************************************************************/
+/*  PRINT                                                                                        */
+/*************************************************************************************************/
+@media print {
     .btn {
         @mixin print-no-background;
         border: none !important;

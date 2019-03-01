@@ -65,7 +65,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -78,7 +77,6 @@ define(
                 this.children.lookupHost = new ControlGroup({
                     className: 'lookup-host control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.lookup_host',
                         model: this.model.input,
@@ -91,7 +89,6 @@ define(
                 this.children.interval = new ControlGroup({
                     className: 'interval control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.interval',
                         model: this.model.input,
@@ -104,7 +101,6 @@ define(
                 this.children.hosts = new ControlGroup({
                     className: 'hosts control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.server',
                         model: this.model.input,
@@ -182,12 +178,11 @@ define(
                 this.children.availableClasses = new ControlGroup({
                     className: 'available-objects control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.classes',
                         model: this.model.input,
                         items: availableClassesList,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         toggleClassName: 'btn',
                         placeholder: _('optional').t()
                     },
@@ -210,7 +205,6 @@ define(
                 this.children.counters = new ControlGroup({
                     className: 'counters control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.fields',
                         model: this.model.input,
@@ -223,7 +217,6 @@ define(
                 this.children.instances = new ControlGroup({
                     className: 'instances control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.instances',
                         model: this.model.input,
@@ -248,10 +241,10 @@ define(
                 return [
                     {
                         question: _('What is the best method for monitoring performance metrics of remote windows machines?').t(),
-                        answer: _('If possible, use a universal forwarder rather than WMI to collect data from remote \
-                    machines. The resource load of WMI can exceed that of a Splunk universal forwarder in \
-                    many cases. In particular, consider a forwarder if you collect multiple event logs or performance \
-                    counters from each host, or from very busy hosts like domain controllers. ').t() +
+                        answer: _('If possible, use a universal forwarder rather than WMI to collect data from remote ' +
+                    'machines. The resource load of WMI can exceed that of a Splunk universal forwarder in ' +
+                    'many cases. In particular, consider a forwarder if you collect multiple event logs or performance ' +
+                    'counters from each host, or from very busy hosts like domain controllers. ').t() +
                             '<a class="external" href=' + arguments[0] + ' target="_blank">' + _("Learn More").t() + '</a>'
                     }
                     ];
@@ -261,8 +254,8 @@ define(
                 '<div class="inputform_wrapper"> \
                      <p> \
                          <%= _("Configure this instance to collect performance metrics on remote Windows machines using the \
-                         Windows Management Instrumentation (WMI) framework. Splunk must run as an Active Directory \
-                         user with appropriate access to the remote machine. Both Splunk and the remote machine must \
+                         Windows Management Instrumentation (WMI) framework. The Splunk platform must run as an Active Directory \
+                         user with appropriate access to the remote machine. Both the Splunk platform and the remote machine must \
                          reside in the same AD domain or forest. ").t() %>\
                         <a class="external" href="<%- helpLink %>" target="_blank"> <%= _("Learn More").t() %> </a>\
                     </p>\

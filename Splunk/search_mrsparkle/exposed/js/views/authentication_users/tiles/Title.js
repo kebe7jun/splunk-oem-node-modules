@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var i18n = require("splunk.i18n");
     var SplunkUtil = require("splunk.util");
     var BaseView = require("views/Base");
+    var route = require("uri/route");
 
     var template = require("contrib/text!views/authentication_users/tiles/Title.html");
 
@@ -12,7 +13,7 @@ define(function(require, exports, module) {
 
         moduleId: module.id,
         template: template,
-        className: 'section-header clearfix',
+        className: 'section-header page-heading clearfix',
 
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
@@ -27,6 +28,12 @@ define(function(require, exports, module) {
                 }
             }, this);
 
+            var passwordManagementUrl = route.manager(
+                            this.model.application.get("root"),
+                            this.model.application.get("locale"),
+                            this.model.application.get("app"),
+                            ['password', 'management']);
+
             this.$el.html(this.compiledTemplate({
                 _: _,
                 sprintf: SplunkUtil.sprintf,
@@ -34,7 +41,8 @@ define(function(require, exports, module) {
                 canEditUsers: this.model.user.canEditUsers(),
                 isSplunkAuth: (this.model.user.entry.content.get("type") === "Splunk"),
                 maxUsers: this.model.serverInfo.entry.content.get("max_users"),
-                numUsers: numUsers
+                numUsers: numUsers,
+                passwordManagementUrl: passwordManagementUrl
             }));
             return this;
         }

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #  Jenkins UI integration script
 #
@@ -19,7 +19,6 @@
 #  OUTPUT:
 #    Writes ci_ui_results.properties, setting UI_UNIT_JUNIT_FILES to a list of
 #      JUnit-style XML files we want Jenkins to evaluate.
-
 printf -v line '%*s\n' 78
 line2="### %-70s ###\n"
 echo ${line// /#}
@@ -82,17 +81,18 @@ run_tasks() {
 
 # write list of xml output files
 writeResults() {
+    cd $SPLUNK_SRC
     echo UI_UNIT_JUNIT_FILES=\
-build-src/web/ci_ui_xml/test_corejs.xml,\
-build-src/web/ci_ui_xml/test_corejs_views.xml,\
-build-src/web/ci_ui_xml/test_corejs_views_shared.xml,\
-build-src/web/ci_ui_xml/test_splunkjs.xml,\
-build-src/web/ci_ui_xml/test_splunk_monitoring_console.xml,\
-build-src/web/ci_ui_xml/lint_es.xml,\
-build-src/web/ci_ui_xml/lint_postAce.xml,\
-build-src/web/ci_ui_xml/lint_preBubbles.xml,\
-build-src/web/ci_ui_xml/lint_splunk_monitoring_console.xml\
- > ci_ui_results.properties
+web/ci_ui_xml/test_corejs.xml,\
+web/ci_ui_xml/test_corejs_views.xml,\
+web/ci_ui_xml/test_corejs_views_shared.xml,\
+web/ci_ui_xml/test_splunkjs.xml,\
+web/ci_ui_xml/test_splunk_monitoring_console.xml,\
+web/ci_ui_xml/lint_es.xml,\
+web/ci_ui_xml/lint_postAce.xml,\
+web/ci_ui_xml/lint_preBubbles.xml,\
+web/ci_ui_xml/lint_splunk_monitoring_console.xml\
+ > web/ci_ui_results.properties
 }
 
 prepare

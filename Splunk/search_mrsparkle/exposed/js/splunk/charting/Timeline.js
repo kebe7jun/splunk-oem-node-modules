@@ -221,6 +221,14 @@ define(function(require, exports, module) {
                 this._seriesFillBrush.set("color", Color.fromNumber(value));
                 this._seriesBorderBrush.set("colors", [ Color.fromNumber(value).darken(0.3) ]);
             });
+        this.borderColor = new Property("borderColor", Number)
+            .getter(function() {
+                return this._borderColor;
+            })
+            .setter(function(value) {
+                this._borderColor = value;
+                this._seriesBorderBrush.set("colors", [ Color.fromNumber(this._borderColor) ]);
+            });
 
         this.minimalMode = new Property("minimalMode", Boolean, false)
             .setter(function(value) {
@@ -247,7 +255,8 @@ define(function(require, exports, module) {
         this._enableChartClick = false;
         this._scaleY = "linear";
         this._foregroundColor = 0x000000;
-        this._seriesColor = 0x73A550;
+        this._borderColor = 0xFFFFFF;
+        this._seriesColor = 0x5CC05C;
 
         this._updateCount = 0;
         this._updatingCount = 0;
@@ -321,10 +330,10 @@ define(function(require, exports, module) {
             var seriesColor = this._seriesColor;
             var seriesColorDark = Color.fromNumber(seriesColor).darken(0.3).toNumber();
             this._seriesFillBrush = new SolidFillBrush(Color.fromNumber(seriesColor), 1);
-            this._seriesBorderBrush = new BorderStrokeBrush([ Color.fromNumber(seriesColorDark) ], [ 0, 1, 0, 0 ]).set("caps", "square");
+            this._seriesBorderBrush = new BorderStrokeBrush([ Color.fromNumber(this._borderColor) ], [ 0, 0, 0, 0 ]).set("caps", "square");
             this._seriesGroupBrush = new GroupBrush([ this._seriesFillBrush, this._seriesBorderBrush ]);
 
-            this._lineBrush = new SolidStrokeBrush(Color.fromNumber(this._foregroundColor), 0.1).set("caps", "square");
+            this._lineBrush = new SolidStrokeBrush(Color.fromNumber(this._foregroundColor), 0.08).set("caps", "square");
 
             this._histogram = new Histogram();
             this._histogram.renderGraphicsPriority = 1;
@@ -561,10 +570,10 @@ define(function(require, exports, module) {
                 lineBrush.beginBrush(graphics);
 
                 // vertical lines
-                lineBrush.moveTo(x1, 0);
-                lineBrush.lineTo(x1, height);
-                lineBrush.moveTo(x2, 0);
-                lineBrush.lineTo(x2, height);
+                // lineBrush.moveTo(x1, 0);
+                // lineBrush.lineTo(x1, height);
+                // lineBrush.moveTo(x2, 0);
+                // lineBrush.lineTo(x2, height);
 
                 // horizontal lines
                 for (var i = 0; i <= numLines; i++) {

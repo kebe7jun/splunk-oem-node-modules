@@ -26,15 +26,14 @@
 		border-bottom: 1px solid $borderColor;
 	}
 	.dashboard-title {
-		font-size: $baseFontSizeLarge;
+		font-size: $fontSizeLarge;
 		font-weight: normal;
 		color: $textColor;
 	}
 }
 
 .searchFilterContainer {
-	background-color: $grayLightMedium;
-	@mixin gradient-vertical $interactiveGradientStartColor, $interactiveGradientEndColor;
+    background-color: $interactiveBackgroundColor;
 	padding: 5px 10px;
 	border-bottom: 1px solid $borderColor;
 }
@@ -48,14 +47,14 @@
 	margin: 0;
 	li {
 		padding: 10px 20px;
-		border-bottom: 1px solid $tableBorder;
+		border-bottom: $tableBorder;
 		cursor: pointer;
 	}
 	li:hover {
-		background-color: $tableBackgroundAccentHover !important;
+		background-color: $tableRowHoverColor !important;
 	}
 	li:nth-child(even){
-		background-color: $tableBackgroundAccent;
+		background-color: $tableRowAccentColor;
 	}
 	.selectPrompt {
 		color: $textGray;

@@ -224,27 +224,34 @@ define(
             },
 
             _getKeepAliveInterval: function() {
+                var interval;
+                var ttl;
+                var autoCancel;
+                var maxSafeInterval = Math.pow(2, 31) - 1;
+
                 if (this.keepAliveInterval) {
-                    return this.keepAliveInterval;
+                    interval = this.keepAliveInterval;
+                } else {
+                    ttl = this.getTTL();
+                    if (this.isDone()) {
+                        interval = ttl * 1000 / 2;
+                    } else {
+                        autoCancel = this.getAutoCancel() || Infinity;
+                        interval = Math.min(ttl, autoCancel) * 1000 / 2;
+                    }
                 }
 
-                var ttl = this.getTTL();
-
-                if (this.isDone()) {
-                    return ttl * 1000 / 2;
-                }
-
-                var autoCancel = this.getAutoCancel() || Infinity;
-                return Math.min(ttl, autoCancel) * 1000 / 2;
+                // Internally setTimeout intervals are stored as 32-bit signed integers, so we must clamp at that value.
+                return interval > maxSafeInterval ? maxSafeInterval : interval;
             },
 
             startKeepAlive: function() {
+                this.stopKeepAlive(); //ensure you never create more than one keep alive poller
+
                 //remove/add session observers to start/stop the keep alive poller based on UI session
                 this.stopPolling();
                 Session.on('timeout', this.stopKeepAlive, this);
                 Session.on('start', this.startKeepAlive, this);
-
-                this.stopKeepAlive(); //ensure you never create more than one keep alive poller
 
                 var initialInterval = this._getKeepAliveInterval();
                 if (!_.isFinite(initialInterval)) {
@@ -495,7 +502,8 @@ define(
                     email_list: clonedOptions.data.email_list,
                     email_subject: clonedOptions.data.email_subject,
                     email_results: clonedOptions.data.email_results,
-                    ttl: clonedOptions.data.ttl
+                    ttl: clonedOptions.data.ttl,
+                    workload_pool: clonedOptions.data.workload_pool
                 };
 
                 if(clonedOptions && clonedOptions.data) {
@@ -503,6 +511,10 @@ define(
                 }
 
                 return this.control.save({}, $.extend(true, clonedOptions, {data: data}));
+            },
+
+            saveWorkloadPool: function(options) {
+                return this.saveControlUpdate("setworkloadpool", options);
             },
 
             saveJob: function(options) {
@@ -621,6 +633,14 @@ define(
             },
 
             /**
+             * Function to check if the search is a Data Fabric Search (DFS).
+             * @returns {boolean}
+             */
+            isDataFabricEnabled: function() {
+                return this.entry.content.has('dfs');
+            },
+
+            /**
              * Function to check if search will rerun when exporting results
              * @returns {boolean}
              */
@@ -708,6 +728,8 @@ define(
                 var searchLogs = [];
                 _.each(this.entry.links.attributes, function(val, link) {
                     if (link.indexOf('search.log') !== -1) {
+                        searchLogs.push(link);
+                    } else if (link.indexOf('dfs.log') !== -1) {
                         searchLogs.push(link);
                     }
                 });
@@ -883,6 +905,10 @@ define(
                     return this.entry.content.request.get('sample_ratio');
                 }
                 return sampleRatio;
+            },
+
+            getWorkloadPool: function() {
+                return this.entry.content.request.get('workload_pool');
             },
 
             canBePausedOnRemove: function() {

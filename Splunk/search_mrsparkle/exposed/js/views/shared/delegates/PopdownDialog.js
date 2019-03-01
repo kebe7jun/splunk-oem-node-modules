@@ -225,7 +225,7 @@ define([
             this['adjustPosition' + string_utils.capitalize(dir)]($pointTo);
         },
         adjustPositionAuto: function($pointTo) {
-            this.$el.css({top: -9999, left: -9999, bottom: 'auto'});
+            this.$el.css({top: -9999, opacity: 0, bottom: 'auto'});
             this.$el.show();
 
             var m = {}, //measurements
@@ -290,7 +290,7 @@ define([
                  bottom: positionFromTop ? 'auto' : shift.bottom
                 };
 
-            this.$el.css(this.position);
+            this.$el.css($.extend({opacity: ''}, this.position));
             this.arrow().css('marginLeft', 0 - m.arrow.halfWidth - shift.left);
 
             //Fix left corner rounding if necessary
@@ -303,7 +303,7 @@ define([
         },
         adjustPositionRight: function($pointTo) {
             this.$el.addClass('right');
-            this.$el.css({top: -9999, left: -9999});
+            this.$el.css({top: -9999, opacity: 0});
             this.$el.show();
 
             var m = {}, //measurements
@@ -354,7 +354,7 @@ define([
                 };
 
 
-            this.$el.css(this.position);
+            this.$el.css($.extend({opacity: ''}, this.position));
             this.arrow().css('marginTop', 0 - m.arrow.halfHeight - shift.top);
 
         },
@@ -409,6 +409,19 @@ define([
                 return;
             }
 
+            // Similar to the above situation, this handles the case where a backbone popdown and a splunk-ui popover are logically nested but
+            // physically (from DOM perspective) siblings. Clicks inside the react-based popover should not close the backbone-based popdown.
+            // Note this is very fragile and it should be fixed permanently by replacing the backbone popdown by splunk-ui popover.
+            // This is to fix SPL-146444, long term solution should be re-implementing the form inputs editor by using splunk-ui.
+            var $reactPopover = $target.closest('[data-portal-layer]').closest('body > *'); // this is the root of the popover that is attached to <body>
+            if ($reactPopover.length && $reactPopover.parent().is(this.$el.parent())) {
+                // Both $reactPopover.parent() and this.$el.parent() should be <body>.
+                // Ideally the condition should also check $reactPopover.index() > this.$el.index(), which means the react-based
+                // popdown gets rendered after the backbone-based popdown, but SplunkUI v0.13.1 does not behave like that. So this
+                // condition is removed for now.
+                return;
+            }
+
             //Ignore clicks on elements with classes specified in this.options.ignoreClasses
             for(var i = 0; i < this.options.ignoreClasses.length; i++){
                 if ($target.closest("." + this.options.ignoreClasses[i]).length) {
@@ -436,6 +449,7 @@ define([
 
             if (!this.options.ignoreEscape && e.keyCode == escapeKeyCode)  {
                 this.hide();
+                $toggle.focus();
                 return true;
             }
 

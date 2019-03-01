@@ -31,7 +31,10 @@ define([
             this.allowEdit = options.allowEdit === true;
             this.deferreds = options.deferreds;
             this.listenTo(this.model.state, 'change:mode', this.render);
-            this.listenTo(this.settings, "change", this._handleSettingChange);
+            this.listenTo(this.settings, 'change', this._handleSettingChange);
+            this.listenTo(this.model.page, 'change:theme', function(model, value) {
+                this.settings.set('theme', value);
+            });
         },
         _handleSettingChange: function() {
             this.model.controller.trigger('edit:dashboard', {
@@ -95,11 +98,17 @@ define([
                 model: this.settings
             });
             this.children.descriptionView.render().$el.appendTo(this.$el);
+            if (this.$el && this.settings && this.settings.get('description')){
+                this.$el.addClass('has-description');
+            }
         },
         removeDescriptionView: function() {
             if (this.children.descriptionView) {
                 this.children.descriptionView.remove();
                 this.children.descriptionView = null;
+            }
+            if (this.$el){
+                this.$el.removeClass('has-description');
             }
         },
         createDashboardTitleEditor: function() {

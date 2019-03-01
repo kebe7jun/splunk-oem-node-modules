@@ -28,7 +28,7 @@ define(
                 return this;
             },
             template: '\
-                <h2 class="section-title"><i class="icon-bell"></i> <%- title %></h2>\
+                <h2 class="section-title"><%- title %></h2>\
                 <p class="section-description">\
                     <% if (isLite) { %>\
                         <%- _("Alerts set a condition that triggers an action, such as sending an email that contains the results of the triggering search to a list of people.").t() %>\

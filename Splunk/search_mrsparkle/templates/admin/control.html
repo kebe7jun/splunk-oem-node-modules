@@ -36,44 +36,43 @@ msg_obj = MsgPoolMgr.get_poolmgr_instance()[UI_MSG_POOL].pop(msgid)
 </div>
 
 <div class="splOverlay"></div>
-<div class="dataInputsWrapper">
-	<div class="first fieldsetWrapper splClearfix">
-		
-		% if displayRestartButton:
-            % if canRestartSplunkweb:
-                <div class="dataInputsDesc">
-                    ${_('Click the button below to restart Splunk.')}
-                </div>
-                <%helpers:displayrestartbutton displayRestartButton="${displayRestartButton}" return_to="${return_to}" />
-            % else:
-                <div class="dataInputsDesc">
-                    <em>${_('The Splunkweb interface has been disabled. You must restart Splunk via the command line (or services control panel).')}</em>
-                </div>
-            % endif
-	    % else:
-	        <div class="dataInputsDesc">${_('You do not have permission to restart splunk.')}</div>
-	    % endif
-	    
-	</div>
-
-    % if displayClearRestartButton:
+<div class="dataInputsWrapper serverControlsWrapper">
+    <div class="serverControlsWrapper">
         <div class="fieldsetWrapper splClearfix">
-            <h1>${_('Clear restart message')}</h1>
-            <div class="dataInputsDesc">${_('Click the button below to clear restart messages from Splunk.')}</div>
-            
-            <form name="actionControl" action="${make_url(['manager', namespace, 'messages', 'restart_required', 'multidelete'])}" method="post">
-                ${csrf_hidden_input()}
-                <input type="hidden" name="ctrl" id="ctrl" value="remove"/>
-                <input type="hidden" name="ctrl_link" id="ctrl_link" value="/services/messages/restart_required"/>
-                <input type="hidden" name="ctrl_name" id="ctrl_name" value="Restart Required"/>
-                <input type="hidden" name="redirect_to" id="redirect_to" value="${make_url(['manager', namespace, 'control'], translate=False)}"/>
-                <button class="splButton-primary" type="submit">
-                    <span>${_('Clear restart message')}</span>
-                </button>
-            </form>
+            <h1>${_('Restart Splunk')}</h1>
+            % if displayRestartButton:
+                % if canRestartSplunkweb:
+                    <div class="dataInputsDesc">
+                        ${_('Click the button below to restart Splunk.')}
+                    </div>
+                    <%helpers:displayrestartbutton displayRestartButton="${displayRestartButton}" return_to="${return_to}" />
+                % else:
+                    <div class="dataInputsDesc">
+                        <em>${_('The Splunkweb interface has been disabled. You must restart Splunk via the command line (or services control panel).')}</em>
+                    </div>
+                % endif
+            % else:
+                <div class="dataInputsDesc">${_('You do not have permission to restart splunk.')}</div>
+            % endif
         </div>
-    % endif
-	    
+        % if displayClearRestartButton:
+            <div class="fieldsetWrapper splClearfix">
+                <h1>${_('Clear restart message')}</h1>
+                <div class="dataInputsDesc">${_('Click the button below to clear restart messages from Splunk.')}</div>
+
+                <form name="actionControl" action="${make_url(['manager', namespace, 'messages', 'restart_required', 'multidelete'])}" method="post">
+                    ${csrf_hidden_input()}
+                    <input type="hidden" name="ctrl" id="ctrl" value="remove"/>
+                    <input type="hidden" name="ctrl_link" id="ctrl_link" value="/services/messages/restart_required"/>
+                    <input type="hidden" name="ctrl_name" id="ctrl_name" value="Restart Required"/>
+                    <input type="hidden" name="redirect_to" id="redirect_to" value="${make_url(['manager', namespace, 'control'], translate=False)}"/>
+                    <button class="splButton-primary" type="submit">
+                        <span>${_('Clear restart message')}</span>
+                    </button>
+                </form>
+            </div>
+        % endif
+    </div>
 </div>
 
 <%def name="js_initialization()">

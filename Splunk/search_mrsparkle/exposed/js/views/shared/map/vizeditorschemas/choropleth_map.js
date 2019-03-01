@@ -9,6 +9,7 @@ define([
             'views/shared/vizcontrols/custom_controls/ChoroplethColorPreview',
             'views/shared/vizcontrols/custom_controls/ChoroplethColorModeControl',
             'util/validation',
+            'splunk/palettes/ColorCodes',
             './shared_elements'
         ],
         function(
@@ -22,14 +23,13 @@ define([
             ChoroplethColorPreview,
             ChoroplethColorModeControl,
             validationUtils,
+            ColorCodes,
             SharedMapElements
         ) {
 
-    var CHOROPLETH_COLOR_OPTIONS = [
-        '#DB5800', '#AF1D12', '#49443B',
-        '#2F25BA', '#006299', '#00993E',
-        '#009983', '#929900', '#FFB600'
-    ];
+    var CHOROPLETH_COLOR_OPTIONS = _.flatten([
+        ColorCodes.SEMANTIC, ColorCodes.DIVERGENT_PAIRS, '#FFFFFF', ColorCodes.DARK_GREY
+    ]);
 
     var validateColor = function(value) {
         if (!value || value.indexOf('0x') !== 0 || _.isNaN(parseInt(value, 16))) {
@@ -53,9 +53,6 @@ define([
                     name: 'display.visualizations.mapping.legend.placement',
                     label: _('Show Legend').t(),
                     defaultValue: 'bottomright',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: SyntheticRadioControl,
                     controlOptions: {
                         items: [
@@ -101,9 +98,10 @@ define([
                 {
                     name: 'display.visualizations.mapping.choroplethLayer.maximumColor',
                     label: _('Maximum Color').t(),
-                    defaultValue: '0xDB5800',
+                    defaultValue: '0xAF575A',
                     control: ColorPickerControl,
                     controlOptions: {
+                        className: 'min-max-color-control control',
                         paletteColors: CHOROPLETH_COLOR_OPTIONS
                     },
                     validation: {
@@ -121,6 +119,7 @@ define([
                     defaultValue: '0x2F25BA',
                     control: ColorPickerControl,
                     controlOptions: {
+                        className: 'min-max-color-control control',
                         paletteColors: CHOROPLETH_COLOR_OPTIONS
                     },
                     visibleWhen: function(reportModel) {
@@ -208,9 +207,6 @@ define([
                     name: 'display.visualizations.mapping.choroplethLayer.showBorder',
                     label: _('Show Borders').t(),
                     defaultValue: '1',
-                    groupOptions: {
-                        controlClass: 'controls-halfblock'
-                    },
                     control: BooleanRadioControl
                 }
             ]

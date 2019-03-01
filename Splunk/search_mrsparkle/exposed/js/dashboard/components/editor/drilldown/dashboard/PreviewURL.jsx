@@ -1,7 +1,7 @@
 import _ from 'underscore';
-import React, { PropTypes } from 'react';
-import ControlGroup from 'splunk-ui/components/ControlGroup';
-import Box from 'splunk-ui/components/Box';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
 import { createTestHook } from 'util/test_support';
 import css from './PreviewURL.pcssm';
 
@@ -22,9 +22,9 @@ const PreviewURL = ({
             controlsLayout="none"
             {...createTestHook(module.id, 'PreviewURL')}
         >
-            <Box className={css.padTopBottom}>
+            <div className={css.padTopBottom} data-test="preview-url">
                 <span className={css.linkLabel}>{label}</span>
-            </Box>
+            </div>
         </ControlGroup>
     );
 };

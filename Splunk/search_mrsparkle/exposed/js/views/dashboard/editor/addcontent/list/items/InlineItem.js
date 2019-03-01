@@ -46,7 +46,9 @@ define(
             template: '\
                 <a href="#" title="<%- title %>">\
                     <div class="icons"><i class="icon-<%- icon %>"></i></div>\
-                    <%- name %>\
+                    <span>\
+                        <%- name %>\
+                    </span>\
                 </a>\
             '
         });

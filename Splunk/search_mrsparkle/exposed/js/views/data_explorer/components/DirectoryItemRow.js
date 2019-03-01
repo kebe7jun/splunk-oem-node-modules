@@ -116,7 +116,7 @@ define([
                     owner : content.get("owner"),
                     canBrowse: content.get("canBrowse"),
                     //if the type is dir and its size === 0, then just show a dash. Otherwise, show the file size in bytes.
-                    fileSize : (content.get("hasSubNodes") && content.get('size') === 0)? _("--").t(): theFileSize,
+                    fileSize : (content.get("hasSubNodes") && content.get('size') === 0)? "--" : theFileSize,
                     permissions: content.get("permissions"),
                     lastModifiedTime: formattedTime
                 });

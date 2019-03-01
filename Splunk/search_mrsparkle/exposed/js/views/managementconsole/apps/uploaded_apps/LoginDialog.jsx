@@ -1,12 +1,11 @@
 import _ from 'underscore';
-import { createTestHook } from 'util/test_support';
-import React, { Component, PropTypes } from 'react';
-import Text from 'splunk-ui/components/Text';
-import Link from 'splunk-ui/components/Link';
-import Switch from 'splunk-ui/components/Switch';
-import Button from 'splunk-ui/components/Button';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import Text from '@splunk/react-ui/Text';
+import Link from '@splunk/react-ui/Link';
+import Switch from '@splunk/react-ui/Switch';
+import Button from '@splunk/react-ui/Button';
 import AppDialog from './AppDialog/AppDialog';
-import './UploadedApps.pcss';
 
 const STRINGS = {
     CANCEL_BUTTON: _('Cancel').t(),
@@ -95,7 +94,7 @@ class LoginDialog extends Component {
         };
 
         return (
-            <div {...createTestHook(module.id)} >
+            <div data-test="UploadedApps-LoginDialog" >
                 <AppDialog {...appDialogProps} >
                     <AppDialog.Body {...appDialogBodyProps}>
                         Enter your Splunk.com username and password to upload an app. These credentials are required
@@ -105,20 +104,20 @@ class LoginDialog extends Component {
                         <Text
                             placeholder="Username"
                             name="username"
-                            data-text-id="username"
                             value={this.state.username}
                             onChange={this.handleFormChange}
                             style={{ width: '250px', marginBottom: '10px' }}
                             autoFocus
+                            data-test="UploadedApps-LoginDialog-Username"
                         />
                         <Text
                             placeholder="Password"
                             name="password"
-                            data-text-id="password"
                             value={this.state.password}
                             onChange={this.handleFormChange}
                             style={{ width: '250px' }}
                             type="password"
+                            data-test="UploadedApps-LoginDialog-Password"
                         />
                         <Link
                             to="http://www.splunk.com/page/lost_password"
@@ -150,8 +149,8 @@ class LoginDialog extends Component {
                         </Switch>
                     </AppDialog.Body>
                     <AppDialog.Footer>
-                        <Button {...cancelButtonProps} />
-                        <Button {...loginButtonProps} />
+                        <Button data-test="UploadedApps-LoginDialog-CancelButton" {...cancelButtonProps} />
+                        <Button data-test="UploadedApps-LoginDialog-LoginButton" {...loginButtonProps} />
                     </AppDialog.Footer>
                 </AppDialog>
             </div>

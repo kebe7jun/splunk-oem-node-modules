@@ -23,7 +23,7 @@
 .PostProcessFilter textarea {
     border-style: solid !important;   
     border-width: 1px   !important;
-    border-color: #CCC  !important;
+    border-color: #c3cbd4  !important;
     width: 99% !important;
     max-width: 300px    !important;
 }

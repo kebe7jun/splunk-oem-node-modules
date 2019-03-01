@@ -213,7 +213,7 @@ define(
                 return this;
             },
             instructionsTemplate: '\
-                <a href="<%- docHref %>" target="_blank" class="documentation" title="<%- _("Documentation").t() %>"><%- _("Documentation").t() %> <i class="icon-external"></i></a>\
+                <a href="<%- docHref %>" target="_blank" class="documentation btn-pill" title="<%- _("Documentation").t() %>"><%- _("Documentation").t() %> <i class="icon-external"></i></a>\
                 <div class="pattern-details-none">\
                     <div class="instruction">\
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="1068 790.8 99.9 103" enable-background="new 1068 790.8 99.9 103" xml:space="preserve">\

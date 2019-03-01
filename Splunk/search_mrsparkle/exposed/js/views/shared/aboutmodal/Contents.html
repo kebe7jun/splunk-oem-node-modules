@@ -1,56 +1,71 @@
-<dl class="<%=css.dotted%>">
-    <dt><%= _('Splunk Version').t() %></dt>
+<div class="<%=css.aboutIcon%>">
+    <span class="<%=css.splunk%>" data-title-role="splunk"></span><span class="<%=isLite?css.promptLite:css.prompt%>" data-title-role="prompt"></span><span class="<%=isLite?css.productLite:css.product%>" data-title-role="product"></span>
+</div>
+<dl class="<%=css.aboutSection%>" tabindex="0">
+    <h4 class="<%=css.sectionHeader%>" data-content="product-name"><%= productName %></h3>
+    <dt><%= _('Version:').t() %></dt>
     <dd data-content="splunk-version"><%- version %></dd>
-    <dt><%= _('Splunk Build').t() %></dt>
+    <dt><%= _('Build:').t() %></dt>
     <dd data-content="build"><%- build %></dd>
-</dl>
-<% if (listOfProducts && !isLite) { %>
-<dl class="<%=css.dotted%>">
-    <dt><%= _('List of Products:').t() %></dt>
-    <dd data-content="list-of-products"><%- listOfProducts %></dd>
-</dl>
-<% } %>
-<dl class="<%=css.dotted%>">
-    <dt><%= _('Server Name').t() %></dt>
+    <dt><%= _('Server:').t() %></dt>
     <dd data-content="server-name"><%- serverName %></dd>
-</dl>
-<p>
-    &copy; <%- copyrightYear %> <%= _('Splunk Inc.  All rights reserved.').t()%>
-</p>
-<p>
-    <% if (isCloud) { %>
-        <% var termsLink = sprintf('<a href="https://www.splunk.com/en_us/legal/terms/splunk-cloud-terms-of-service.html" target="_blank" data-action="cloud-terms-link">%s</a>', _('Terms of Service').t()); %>
-        <%= sprintf(_('All use of this service is subject to the Splunk Cloud %s.').t(), termsLink) %>
-    <% } else { %>
-        <% var licenseLink = sprintf('<a href="http://www.splunk.com/en_us/legal/splunk-software-license-agreement.html" target="_blank" data-action="server-license-link">%s</a>', _('Splunk Software License Agreement').t()); %>
-        <% var termsLink =  _('terms and conditions').t(); %>
-        <%= sprintf(_('All use of this Software is subject to the %s of the %s.').t(), termsLink, licenseLink) %>
+    <% if (listOfProducts && !isLite) { %>
+        <dt><%= _('Products:').t() %></dt>
+        <dd data-content="list-of-products"><%- listOfProducts %></dd>
     <% } %>
-</p>
-<h3><%= _('Trademarks').t() %></h3>
-<p>
-    <%= _('Splunk&reg;, Splunk&gt;&reg;, Listen to Your Data&reg;, The Engine for Machine Data&reg;, Splunk Cloud&#8482;, Splunk Light&reg; and SPL&#8482; are trademarks and registered trademarks of Splunk Inc. and/or its subsidiaries in the United States and other countries. All other brand names, product names, or trademarks belong to their respective owners.').t() %>
-</p>
-<h3><%= _('Patents').t() %></h3>
-<p>
-    <% var patentLink = sprintf('<a href="http://www.splunk.com/en_us/legal/patents.html" target="_blank" data-action="server-patents-link">%s</a>', _('here').t()); %>
-    <%= sprintf(_('Certain features and functionalities of this Software are or may be protected by patents owned by Splunk Inc. that are listed %s.').t(), patentLink) %>
-</p>
-<h3>
-    <a href="<%- thirdPartyCredits %>" target="_blank" data-action="server-third-party-link"><%= _('Third-Party Software Credits and Attributions').t() %></a>
-</h3>
+    <div>
+        <a class="<%=css.aboutLink%>" href="<%- thirdPartyCredits %>" target="_blank" data-action="server-third-party-link"><%= _('Third-Party Software Credits and Attributions').t() %></a>
+    </div>
+</dl>
+
+<div class="<%=css.aboutSection%>">
+    <h4 class="<%=css.sectionHeader%>" tabindex="0"><%= _('Trademarks').t() %></h4>
+    <p tabindex="0">
+        <%= _('Splunk&reg;, Splunk&gt;&reg;, Listen to Your Data&reg;, The Engine for Machine Data&reg;, Splunk Cloud&#8482;, Splunk Light&reg; and SPL&#8482; are trademarks and registered trademarks of Splunk Inc. and/or its subsidiaries in the United States and other countries. All other brand names, product names, or trademarks belong to their respective owners.').t() %>
+    </p>
+</div>
+
+<div class="<%=css.aboutSection%>">
+    <h4 class="<%=css.sectionHeader%>" tabindex="0"><%= _('Patents').t() %></h4>
+    <p tabindex="0">
+        <% var patentLink = sprintf('<a class="%s" href="http://www.splunk.com/en_us/legal/patents.html" target="_blank" data-action="server-patents-link">%s</a>', css.aboutLink, _('here').t()); %>
+        <%= sprintf(_('Certain features and functionalities of this Software are or may be protected by patents owned by Splunk Inc. that are listed %s.').t(), patentLink) %>
+    </p>
+</div>
+
+<div class="<%=css.aboutSection%>" data-section-role="footnote" tabindex="0">
+    <p>
+        &copy; <%- copyrightYear %> <%= _('Splunk Inc.  All rights reserved.').t()%>
+    </p>
+    <p>
+        <% if (isCloud) { %>
+            <% var termsLink = sprintf('<a class="%s" href="https://www.splunk.com/en_us/legal/terms/splunk-cloud-terms-of-service.html" target="_blank" data-action="cloud-terms-link">%s</a>', css.aboutLink, _('Terms of Service').t()); %>
+            <%= sprintf(_('All use of this service is subject to the Splunk Cloud %s.').t(), termsLink) %>
+        <% } else { %>
+            <% var licenseLink = sprintf('<a class="%s" href="http://www.splunk.com/en_us/legal/splunk-software-license-agreement.html" target="_blank" data-action="server-license-link">%s</a>', css.aboutLink, _('Splunk Software License Agreement').t()); %>
+            <% var termsLink =  _('terms and conditions').t(); %>
+            <%= sprintf(_('All use of this Software is subject to the %s of the %s.').t(), termsLink, licenseLink) %>
+        <% } %>
+    </p>
+</div>
+
 <div class="<%=css.divider%>"></div>
-<h3 class="<%=css.appSectionHeader%>" data-content="app-name"><%- sprintf(_('Current Application: %s').t(), currentApp) %></h3>
-<dl class="<%=css.dotted%>">
-    <% if (appVersion) { %>
-        <dt><%= _('App Version').t() %></dt>
-        <dd data-content="app-version"><%- appVersion %></dd>
+
+<div class="<%=css.aboutIcon%>" data-role='app-logo'></div>
+<div class="<%=css.aboutSection%>">
+    <h4 class="<%=css.currentAppHeader%>" tabindex="0">Current Application</h4>
+    <h4 class="<%=css.sectionHeader%>" data-content="app-name" tabindex="0"><%= currentApp %></h4>
+    <dl>
+        <% if (appVersion) { %>
+            <dt><%= _('Version:').t() %></dt>
+            <dd data-content="app-version"><%- appVersion %></dd>
+        <% } %>
+        <% if (appBuild) { %>
+            <dt><%= _('Build:').t() %></dt>
+            <dd data-content="app-build"><%- appBuild %></dd>
+        <% } %>
+    </dl>
+    <% if (appAttributionLink) { %>
+        <a class="<%=css.attributionLink %>" href="<%- appAttributionLink %>" target="_blank" data-action="app-third-party-link"><%- _('Third-Party Software Credits and Attributions').t() %></a>
     <% } %>
-    <% if (appBuild) { %>
-        <dt><%= _('App Build').t() %></dt>
-        <dd data-content="app-build"><%- appBuild %></dd>
-    <% } %>
-</dl>
-<% if (appAttributionLink) { %>
-    <a class="<%=css.attributionLink %>" href="<%- appAttributionLink %>" target="_blank" data-action="app-third-party-link"><%- _('Third-Party Software Credits and Attributions').t() %></a>
-<% } %>
+</div>

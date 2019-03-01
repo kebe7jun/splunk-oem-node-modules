@@ -4,7 +4,6 @@ define(function(require, exports, module) {
     var Backbone = require('backbone');
     var BaseSplunkView = require('./basesplunkview');
     var HeaderView = require('./headerview');
-    var FooterView = require('./footerview');
     var template = require('contrib/text!./layoutview.html');
     var splunkUtil = require('splunk.util');
     var sharedmodels = require('./sharedmodels');
@@ -18,7 +17,7 @@ define(function(require, exports, module) {
      * @memberOf splunkjs.mvc
      * @name LayoutView
      * @description The **Layout** view manages the chrome and layout of a page:<br>
-     * - The Splunk bar at the very top of the page provides a link to the Splunk Enterprise home page, 
+     * - The Splunk bar at the very top of the page provides a link to the Splunk Enterprise home page,
      * a list of apps, and menu options for Splunk Enterprise.
      * - The app bar provides links to the app-specific features and views.
      * - The footer lists Splunk Enterprise links and a copyright notice.
@@ -29,9 +28,9 @@ define(function(require, exports, module) {
      * @param {Boolean} [options.hideAppBar = false] - Hides the app bar.
      * @param {Boolean} [options.hideAppsList = false] - Hides the app list in
      * the Splunk bar.
+     * @param {Boolean} [options.hideActivityMenu = false] - Hides the activity menu in the Splunk
+     * Lite side nav.
      * @param {Boolean} [options.hideChrome = false] - Renders only the main content, hiding
-     * the app bar, Splunk bar, and footer.
-     * @param {Boolean} [options.hideFooter = false] - Hides the footer.
      * @param {Boolean} [options.hideSplunkBar = false] - Hides the Splunk bar.
      * @param {String} [options.layout = "scrolling"] - The type of page layout
      * (`fixed | scrolling`).
@@ -44,8 +43,8 @@ define(function(require, exports, module) {
             hideChrome: false,
             hideAppBar: false,
             hideSplunkBar: false,
-            hideFooter: false,
             hideAppsList: false,
+            hideActivityMenu: false,
             layout: 'scrolling'
         },
         initialize: function(options) {
@@ -79,25 +78,16 @@ define(function(require, exports, module) {
                     el: $header,
                     splunkbar: !this.options.hideSplunkBar,
                     appbar: !this.options.hideAppBar,
-                    showAppsList: !this.options.hideAppsList
+                    showAppsList: !this.options.hideAppsList,
+                    hideActivityMenu: this.options.hideActivityMenu
                 }).render();
                 $header.removeAttr('class').removeAttr('id');
-                
-                if (!this.options.hideFooter) {
-                    var $footer = this.$('footer');
-                    this._footerView = new FooterView({
-                        id: 'footer',
-                        el: $footer
-                    }).render();
-                    $footer.removeAttr('class').removeAttr('id');
-                }
             }
             return this;
         },
         remove: function() {
             this._$main = null;
             this._headerView.remove();
-            this._footerView.remove();
             return BaseSplunkView.prototype.remove.apply(this, arguments);
         },
         setElement: function() {
@@ -111,8 +101,10 @@ define(function(require, exports, module) {
             });
             if (this.options.layout === 'fixed') {
                 this._$main.css({
-                    flex: '1 0 0',
-                    position: 'relative'
+                    flex: '1 0 0%',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    width: '100vw'
                 });
                 this.$el.css({
                     display: 'flex',
@@ -124,7 +116,7 @@ define(function(require, exports, module) {
                     bottom: 0,
                     overflow: 'hidden'
                 });
-                this.$el.find('header, footer').css({
+                this.$el.find('header').css({
                     flex: '0 0 auto'
                 });
             } else {

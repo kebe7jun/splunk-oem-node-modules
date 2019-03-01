@@ -4,6 +4,7 @@ define(
         'underscore',
         'routers/AppsRemote',
         'views/managementconsole/apps/install_app/overrides/shared/apps_remote/Master',
+        'models/managementconsole/topology/Topology',
         'collections/managementconsole/Apps',
         'util/general_utils',
         'jquery.cookie'
@@ -13,6 +14,7 @@ define(
         _,
         BaseRouter,
         MasterView,
+        TopologyModel,
         DMCAppsCollection,
         GeneralUtils
     ){
@@ -20,6 +22,10 @@ define(
             initialize: function() {
                 BaseRouter.prototype.initialize.apply(this, arguments);
                 this.enableAppBar = true;
+
+                this.model.topologyModel = new TopologyModel();
+
+                this.deferreds.topologyModel = this.model.topologyModel.fetch();
 
                 this.collection.dmcApps = new DMCAppsCollection();
 
@@ -45,14 +51,16 @@ define(
                         dmcApps: this.collection.dmcApps,
                         appLocalsUnfiltered: this.collection.appLocalsUnfiltered
                     },
-                    hideDock: false
+                    hideDock: false,
+                    isSHC: !!this.model.topologyModel.entry.content.get('SHCDeployer')
                 });
             },
 
             $whenMasterViewDependencies: function() {
                 return $.when(
                     BaseRouter.prototype.$whenMasterViewDependencies.apply(this, arguments),
-                    this.deferreds.dmcApps
+                    this.deferreds.dmcApps,
+                    this.deferreds.topologyModel
                 );
             },
 

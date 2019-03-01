@@ -148,7 +148,7 @@ define(
                 var matchTypeRadio = new ControlGroup({
                     controlType: 'SyntheticRadio',
                     size: 'small',
-                    controlClass: 'controls-fill',
+
                     controlOptions: {
                         model: this.model.command,
                         modelAttribute: 'filterAllValues',

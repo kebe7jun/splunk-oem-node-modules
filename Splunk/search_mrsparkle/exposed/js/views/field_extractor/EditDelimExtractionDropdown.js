@@ -22,7 +22,7 @@ define(
         moduleId: module.id,
         tagName: 'form',
         className: 'form-horizontal field-extraction-form',
-        
+
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
             this.startIndex = this.options.startIndex;
@@ -32,7 +32,7 @@ define(
                 model: this.model.fieldName
             });
         },
-        
+
         events: {
             'click .submit-button': 'onSubmit',
             'keypress' : function(event) {
@@ -52,7 +52,7 @@ define(
             this.setButtonText('Rename Field');
             this.children.flashMessages.$el.show();
         },
-    
+
         setButtonText: function(text) {
             this.getSubmitButton().text(_(text).t());
         },
@@ -64,7 +64,7 @@ define(
         focus: function() {
             this.$('.field-name-input').focus();
         },
-    
+
         onSubmit: function(e) {
             e.preventDefault();
             if (!this.getSubmitButton().hasClass('disabled')) {
@@ -92,12 +92,12 @@ define(
             this.children.flashMessages.render().prependTo(this.el);
             return this;
         },
-        
+
         template: '\
         <div class="extraction-form-container">\
             <div class="control-group">\
                 <label class="control-label"><%- _("Field Name").t() %></label>\
-                <div class="controls">\
+                <div class="controls controls-join">\
                     <div class="control">\
                         <input type="text" class="input-medium field-name-input" <% if(usePlaceholder){ %>placeholder="<%- fieldName %>"<%}%> />\
                     </div>\

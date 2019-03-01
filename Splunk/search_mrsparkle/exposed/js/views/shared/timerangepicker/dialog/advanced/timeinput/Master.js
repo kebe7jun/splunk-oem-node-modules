@@ -17,7 +17,7 @@ function(
     time_utils
 ){
         return Base.extend({
-            className: 'timeinput pull-left',
+            className: 'timeinput',
             moduleId: module.id,
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
@@ -27,8 +27,9 @@ function(
                         timeParser: this.model.timeParser
                     }
                 });
-                
+
                 this.$el.addClass(this.options.modelAttribute || 'earliest');
+                this.$el.addClass(this.options.additionalClass || '');
 
                 this.activate();
             },
@@ -36,7 +37,7 @@ function(
                 this.listenTo(this.model.working, 'change:' + this.options.modelAttribute, function() {
                     this.update_value();
                     this.update_hint();
-                });              
+                });
             },
             events: {
                 'keyup input[type="text"]': 'handleInputChange',

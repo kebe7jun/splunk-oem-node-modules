@@ -27,7 +27,7 @@ define([
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
                 this.model.state = new BaseModel();
-                
+
                 this.children.eventControls = new TableControls({
                     model: {
                         report: this.model.report,
@@ -38,7 +38,7 @@ define([
                     offsetKey: "display.prefs.events.offset",
                     countKey: "display.prefs.events.count"
                 });
-                
+
                 this.children.eventsViewer = new LazyEventsViewerDrilldown({
                     model: {
                         result: this.model.result,
@@ -55,7 +55,7 @@ define([
                     setLocation: true,
                     selectableFields: false,
                     headerMode: 'dock',
-                    headerOffset: 36 // default TableControlsView's height in pixels
+                    headerOffset: 43 // default TableControlsView's height in pixels
                 });
 
                 this.children.jobDispatchState = new JobDispatchState({
@@ -81,7 +81,7 @@ define([
                         );
                     window.location = routeString;
                 });
-                
+
                 //eventViewer field selection
                 this.listenTo(this.model.searchJob.entry.content, 'change:eventCount change:dispatchState', _.debounce(function() {
                     if (this.active) {
@@ -96,7 +96,7 @@ define([
                 Base.prototype.activate.call(this, clonedOptions);
                 this.visibility();
                 return this;
-            },            
+            },
             deactivate: function(options) {
                 if (!this.active) {
                     return Base.prototype.deactivate.apply(this, arguments);

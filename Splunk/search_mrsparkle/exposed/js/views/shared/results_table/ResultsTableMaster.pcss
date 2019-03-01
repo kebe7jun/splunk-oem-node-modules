@@ -49,7 +49,7 @@
 	table .pos {
 		color: $textGray;
 		text-align: right;
-		font-size: 11px;
+		font-size: $fontSizeSmall;
 		width: 50px;
 	}
 	/*  default table padding for first and last cell */
@@ -78,6 +78,8 @@
     position: relative;
     width: 100%;
 
+
+
     /*  default table padding for first and last cell */
     table tr > th:first-child,
     table tr > td:first-child
@@ -94,20 +96,21 @@
     table tr > th .btn-col-format
     {
         margin: -4px -8px -4px 4px;
-        padding: 4px 6px;
-        color: $textGray;
+        padding: 4px $spacingHalf;
+        border-radius: $borderRadius;
+        color: $tableFormatterColor;
     }
     table tr > th .btn-col-format:hover
     {
-        color: $textColor;
+        color: $tableFormatterColorHover;
     }
     table tr > th:last-child .btn-col-format
     {
-            margin-right: -20px;
+            margin-right: -$spacingThreeQuarters;
     }
     table tr > th.editing-column
     {
-        background: #CCCCCC !important;
+        background: $tableEditingColumnBackgroundColor !important;
     }
 
     table tr > td:focus, table tr:focus > td
@@ -154,7 +157,7 @@
     }
 
     .table {
-        margin-bottom: 0px;
+        @mixin create-card-table;
     }
 
     /*  TODO: use some vars here */
@@ -167,16 +170,16 @@
     .overlay-cell-value {
         height: 24px;
         width: 0;
-        border-left: 15px solid $tableBackgroundAccent;
+        border-left: 15px solid $tableRowAccentColor;
     }
     .heat-value {
-        border-left-color: $red;
+        border-left-color: $errorColor;
     }
     .max-value {
-        border-left-color: $red;
+        border-left-color: $errorColor;
     }
     .min-value {
-        border-left-color: $blue;
+        border-left-color: $infoColor;
     }
     .no-value {
         border-left-color: transparent;
@@ -189,14 +192,14 @@
     }
 
     .tbody tr.odd td {
-        background-color: $tableBackgroundAccent;
+        background-color: $tableRowAccentColor;
     }
 
     /*  overrides for wrapping versus not wrapping the results */
 
     .wrapped-results th,
     .wrapped-results td {
-        white-space: normal;
+        white-space: pre-wrap;
     }
 
     .not-wrapped-results th,
@@ -211,16 +214,16 @@
     }
 
     tbody td.highlighted, tbody tr.highlighted > td {
-        background-color: $tableBackgroundHover !important;
+        background-color: $tableRowHoverColor !important;
         cursor: pointer;
     }
 
     tbody td.highlighted.color-formatted {
-        color: black !important;
+        color: $tableRowHoverTextColor !important;
     }
 
     .multivalue-subcell.highlighted {
-        background-color: $tableBackgroundHover !important;
+        background-color: $tableRowHoverColor !important;
         cursor: pointer;
     }
 
@@ -242,7 +245,7 @@
     }
 
     table > tbody > tr > td.row-expansion-toggle {
-        border-right: 1px solid $tableBorderVertical;
+        border-right: $tableBorderVertical;
         padding: 0px;
 
         a {
@@ -263,7 +266,7 @@
     }
 
     tr.expanded-row td, tr.expanded-content-row td {
-        background-color: $tableBackgroundHover !important;
+        background-color: $tableRowHoverColor !important;
     }
 
     tr.expanded-content-row td {
@@ -271,27 +274,26 @@
         color: $textColor;
     }
 
+    &#statistics > .table > tbody {
+      font-family: $monoFontFamily;
+    }
 }
 
-.shared-resultstabledrilldownpoptart {
-    &.dropdown-menu {
-        li.info {
-            max-height: 68px;
-            overflow-y: auto;
+.shared-resultstabledrilldownpoptart.dropdown-menu li.info {
+    max-height: 68px;
+    overflow-y: auto;
 
-            &+li{
-                &:after {
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    top: -8px;
-                    height: 8px;
-                    @mixin gradient-vertical color($white a(0)), $white;
-                    background-color: transparent;
-                }
-            }
+    + li{
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -8px;
+            height: 8px;
+            background-image: linear-gradient(to bottom, color($white a(0)), $white);
+            background-color: transparent;
         }
     }
 }

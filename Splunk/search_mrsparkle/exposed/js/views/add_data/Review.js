@@ -39,7 +39,7 @@ define(
 
             template: template,
             moduleId: module.id,
-
+            className: 'review-main',
             initialize: function (options) {
                 BaseView.prototype.initialize.apply(this, arguments);
                 this.children.flashMessages = new FlashMessagesView({ model: this.model.input });
@@ -170,7 +170,7 @@ define(
                         value: this.model.input.entry.content.get('outputgroup')
                     }, {
                         label: _('Allowed indexes').t(),
-                        value: this.model.input.entry.content.get('indexes')
+                        value: _.map(this.model.input.entry.content.get("indexes"), _.escape)
                     }, {
                         label: _('Default index').t(),
                         value: this.model.input.entry.content.get('index') || _('Default').t()

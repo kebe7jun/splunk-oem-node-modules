@@ -87,6 +87,19 @@ define([
         });
     }
 
+    function isGenericOption(optionConfig) {
+        if (optionConfig.name !== 'title') {
+
+            if (optionConfig.reportProperty === 'displayview') {
+                return true;
+            } else if (optionConfig.reportProperty.indexOf('dashboard.element.') === 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     function applyGenericElementSettings(report, settings, vizType, options) {
         var parserConfig = DashboardParser.getDefault().findNodeDefinitions(function(def) {
             return def['extends'] == 'element' && def.name == vizType;
@@ -94,7 +107,7 @@ define([
         if (parserConfig.length) {
             var elementConfig = parserConfig[0];
             _(elementConfig.options).each(function(optionConfig) {
-                if (optionConfig.reportProperty.indexOf('dashboard.element.') === 0 && optionConfig.name !== 'title') {
+                if (isGenericOption(optionConfig)) {
                     var value = report.get(optionConfig.reportProperty, options);
                     if (value != null) {
                         settings.options[optionConfig.name] = value;
@@ -116,7 +129,6 @@ define([
 
         if (options) {
             var reportContentToApply;
-
             if (options.searchType == 'saved') {
                 // SPL-137533: make sure drilldown is persisted when adding report to dashboard.
 
@@ -129,6 +141,10 @@ define([
                 if (ReportModelHelper.isDrilldownSupported(reportContent)) {
                     var drilldownKey = ReportModelHelper.getDrilldownPropertyKey(reportContent);
                     reportContentToApply = _.pick(reportContent, drilldownKey);
+                }
+                if (ReportModelHelper.isCustomViz(vizType)){
+                    reportContentToApply['display.visualizations.custom.type'] =
+                        reportContent['display.visualizations.custom.type'];
                 }
             } else {
                 reportContentToApply = reportContent;
@@ -166,6 +182,9 @@ define([
             var height = report.get('display.visualizations.chartHeight', options);
             if (height && options.omitHeight !== true) {
                 result.options.height = height;
+            }
+            if (!ReportModelHelper.isDrilldownSupported(report.toJSON(options))) {
+                delete result.options['charting.drilldown'];
             }
         },
         event: function(report, result, options) {

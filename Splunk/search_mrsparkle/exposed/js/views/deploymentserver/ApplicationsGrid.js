@@ -114,6 +114,7 @@ define(
                                 //Fetch #2: Get clients with this app which do not have errors 
                                 that.deferred.clientsWithAppWithoutErrors = clientsWithAppWithoutErrors.fetch({
                                     data:{
+                                        application: app.entry.get('name'),
                                         hasDeploymentError: false,
                                         count: -1
                                     },  

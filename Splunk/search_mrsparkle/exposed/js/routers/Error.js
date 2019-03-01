@@ -3,6 +3,7 @@ define(
         'underscore',
         'jquery',
         'routers/Base',
+        'models/services/server/ServerInfo',
         'models/shared/Error',
         'views/error/Master'
     ],
@@ -10,6 +11,7 @@ define(
         _,
         $,
         BaseRouter,
+        ServerInfoModel,
         ErrorModel,
         ErrorView
     ) {
@@ -20,8 +22,11 @@ define(
             initialize: function() {
                 BaseRouter.prototype.initialize.apply(this, arguments);
                 this.enableAppBar = false;
+                this.enableSplunkBar = false;
                 this.model.error = new ErrorModel();
+                this.model.serverInfo = new ServerInfoModel();
                 this.deferreds.error = $.Deferred();
+                this.deferreds.serverInfo = $.Deferred();
             },
             page: function(locale, splat) {
                 BaseRouter.prototype.page.call(this, locale, 'search', '');
@@ -39,7 +44,7 @@ define(
                     this.setPageTitle(_(status).t());
                 }.bind(this));
 
-                $.when(this.deferreds.error, this.deferreds.pageViewRendered).then(function(){
+                $.when(this.deferreds.error, this.deferreds.serverInfo, this.deferreds.pageViewRendered).then(function(){
                     if (this.shouldRender) {
                         this.initializeErrorView();
                         $('.preload').replaceWith(this.pageView.el);
@@ -64,7 +69,8 @@ define(
                     this.errorView = new ErrorView({
                         model: {
                             error: this.model.error,
-                            application: this.model.application
+                            application: this.model.application,
+                            serverInfo: this.model.serverInfo
                         }
                     });
                 }

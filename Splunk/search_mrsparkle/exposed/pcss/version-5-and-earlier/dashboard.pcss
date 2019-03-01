@@ -102,7 +102,7 @@ body.splTemplate-dashboard .TitleBar {
 
 /* quick and dirty minimizable panel css */
 .layoutCellInner h2.dashboardPanelTitle span{
-    font-size: $baseFontSizeSmall;
+    font-size: $fontSizeSmall;
     float:right;
 }
 
@@ -151,7 +151,7 @@ div.vmEditReorderCanvasWrapper legend {
     clear: both;
     height: 80px;
     width: auto;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-touch-callout: none;
     user-select: none;
 }
 .vmDashboardContainer .vmEditReorderCanvas li {
@@ -190,10 +190,10 @@ div.vmEditReorderCanvasWrapper legend {
 
 /* XXX confirm this */
 div.vmPanelDropPlaceholder {
-    border: 1px solid #ccc !important;
+    border: 1px solid $gray80 !important;
 	border-radius: 2px;
 
-	box-shadow: 0 0 5px #ccc;
+	box-shadow: 0 0 5px $gray80;
 
 	margin: 10px;
     height: 130px;
@@ -235,7 +235,7 @@ div.vmPanelDropPlaceholderOverlay:hover {
 
 p.dashboardPromptMessage {
     text-align: center;
-    font-size: $baseFontSizeLarge;
+    font-size: $fontSizeLarge;
     margin-top: 100px;
 }
 
@@ -254,8 +254,8 @@ p.dashboardPromptMessage {
 }
 .dashboardCell .paneledit:hover,
 .dashboardCell .menuOpen {
-    background-color: $offWhite;;
-	@mixin gradient-vertical $white, #e5e5e5;
+    background-color: $gray98;;
+	background-image: linear-gradient(to bottom, $white, #e5e5e5); 
     border-color: #aeaeae;
     border-top-color: #b7b7b7;
     border-bottom-color: #989898;

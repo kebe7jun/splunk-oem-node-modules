@@ -18,10 +18,10 @@ define(function(require, exports, module) {
         this.constructor = function() {
             base.constructor.call(this, 'a');
 
-            this.addClass('btn-link');
+            this.addClass('btn-pill');
 
             var icon = document.createElement('i');
-            icon.className = 'icon-x-circle';
+            icon.className = 'icon-x';
             this.element.href = '#';
             this.element.appendChild(icon);
 

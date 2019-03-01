@@ -17,7 +17,6 @@ define([
 
         return ControlGroup.extend({
                 moduleId: module.id,
-                className: 'color-ranges-control-group',
                 initialize: function() {
                     var colorRangesControl = new ColorRangeControlMaster({
                             className: Control.prototype.className,
@@ -31,8 +30,8 @@ define([
                             paletteColors: this.options.paletteColors
                     });
                     this.options.label = _('Ranges').t();
-                    this.options.controlClass = 'controls-block';
                     this.options.controls = [ colorRangesControl ];
+                    this.options.additionalClassNames = 'color-ranges-control-group';
                     ControlGroup.prototype.initialize.call(this, this.options);
                 },
 

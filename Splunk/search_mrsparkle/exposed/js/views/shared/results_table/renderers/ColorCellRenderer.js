@@ -21,8 +21,8 @@ define(function(require, exports, module) {
 
         // Public Passes
 
-        updateScalePass: new Pass("updateScale", 0.1),
-        renderColorPass: new Pass("renderColor", 0.2),
+        updateScalePass: new Pass("updateScale", 0.4),
+        renderColorPass: new Pass("renderColor", 0.5),
 
         // Public Properties
 

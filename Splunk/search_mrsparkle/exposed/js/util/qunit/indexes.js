@@ -16,9 +16,11 @@ define([
     'mocks/collections/MockCollection',
     'mocks/data/appLocal',
     'mocks/data/archives',
+    'mocks/data/bucket_list',
     'mocks/data/indexes',
     'collections/indexes/cloud/Archives',
     'collections/services/AppLocals',
+    'collections/services/configs/conf-self-storage-locations/BucketList',
     'collections/services/data/Indexes',
     'models/shared/Application',
     'models/services/server/ServerInfo',
@@ -40,9 +42,11 @@ define([
         MockCollection,
         appLocalData,
         archivesData,
+        bucketListData,
         indexesData,
         ArchivesCollection,
         AppCollection,
+        BucketListCollection,
         IndexesCollection,
         Application,
         ServerInfo,
@@ -111,6 +115,15 @@ define([
                 fetchData: this.indexesFetchData
             });
             this.indexesCollection.fetch();
+            // mock functions for cloud index archive feature
+            this.indexesCollection.isDataArchiveEnabled = function () { return true; };
+            this.indexesCollection.getMaxDataArchiveRetentionPeriod = function () { return 0; };
+            
+            if (!this.indexesCollection.url) {
+                // resolve a call to ServerInfoModel
+                this.requests[this.requestsIndex++].respond(200, {},
+                    JSON.stringify({entry: [{content: {instance_type: this.product}}]}));
+            }
             this.requests[this.requestsIndex++].respond(200, {}, JSON.stringify(indexesData.FULL_INDEXES_LIST));
 
             this.clock.tick(1);
@@ -129,12 +142,19 @@ define([
             this.clock.tick(1);
             this.deferreds.archives.resolve();
 
-
-            this.appsCollection = new AppCollection();
-            this.appsCollection.parse({
-                data: appLocalData.APP_LOCAL
+            this.appsFetchData = new MockModel({
+                count: 5
+            });
+            this.appsCollection = new AppCollection(null, {
+                fetchData: this.appsFetchData
             });
 
+            this.appsCollection.setFromSplunkD(appLocalData.APP_LOCAL);
+            this.clock.tick(1);
+            this.deferreds.apps.resolve();
+
+            this.bucketListCollection = new BucketListCollection(null, {});
+            this.bucketListCollection.setFromSplunkD(bucketListData);
             // Clear the requests
             this.requests = [];
         },
@@ -167,7 +187,7 @@ define([
             this.deferreds = {};
             this.deferreds.indexes = $.Deferred();
             this.deferreds.archives = $.Deferred();
-
+            this.deferreds.apps = $.Deferred();
 
         },
 
@@ -188,7 +208,9 @@ define([
                     user: this.userModel
                 },
                 collection: {
-                    entities: this.indexesCollection
+                    entities: this.indexesCollection,
+                    appLocalsUnfilteredAll: this.appsCollection,
+                    appLocals: this.appsCollection
                 },
                 template: this.testController.options.templates.grid,
                 templates: this.testController.options.templates,
@@ -208,9 +230,20 @@ define([
          */
         setupTestIndexesGridRow: function(product){
             this.initialSetupTestIndexes(product);
+            this.createTestIndexesCollection();
 
             this.indexModel = new IndexModel();
             this.indexModel.parse({entry:[indexesData.FULL_INDEXES_LIST.entry[0]]});
+
+            this.appsFetchData = new MockModel({
+                count: 5
+            });
+            this.appsCollection = new AppCollection(null, {
+                fetchData: this.appsFetchData
+            });
+            this.appsCollection.setFromSplunkD(appLocalData.APP_LOCAL);
+            this.clock.tick(1);
+            this.deferreds.apps.resolve();
 
             this.view = new IndexesGridRow({
                 model: {
@@ -218,6 +251,11 @@ define([
                     controller: this.controllerModel,
                     entity: this.indexModel,
                     user: this.userModel
+                },
+                collection: {
+                    entities: this.indexesCollection,
+                    appLocalsUnfilteredAll: this.appsCollection,
+                    appLocals: this.appsCollection
                 },
                 index: 2,
                 isExpanded: false,
@@ -248,7 +286,8 @@ define([
                 },
                 collection: {
                     entities: this.indexesCollection,
-                    appLocals: this.appsCollection
+                    appLocals: this.appsCollection,
+                    appLocalsUnfilteredAll: this.appsCollection
                 },
                 template: this.testController.options.templates.mainView,
                 templates: this.testController.options.templates,
@@ -280,24 +319,30 @@ define([
             this.indexModel = new MockSplunkD();
             this.indexModel.parse({entry:[indexesData.FULL_INDEXES_LIST.entry[0]]});
 
+            this.stateModel = new MockSplunkD();
+
             var dialogOptions = {
                 isNew: isNew,
                 model: {
                     application: this.createTestApplicationModel(),
                     controller: this.controllerModel,
                     entity: this.indexModel,
-                    user: this.userModel
+                    user: this.userModel,
+                    stateModel: this.stateModel
                 },
                 collection: {
                     archives: this.archivesCollection,
                     entities: this.indexesCollection,
-                    appLocals: this.appsCollection
+                    appLocals: this.appsCollection,
+                    bucketList: this.bucketListCollection
                 },
                 customViews: {
                     AddEditDialog: this.testController.options.addEditDialogClass
                 },
-                entityModelClass: MockSplunkD
+                entityModelClass: MockSplunkD,
+                archiverModelClass: this.testController.options.archiverModelClass
             };
+
             this.view = new this.testController.options.addEditDialogClass(dialogOptions);
 
             this.view.render().appendTo(this.$container);

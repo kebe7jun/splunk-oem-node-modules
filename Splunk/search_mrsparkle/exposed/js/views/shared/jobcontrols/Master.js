@@ -19,6 +19,9 @@ define(
             className: 'pull-left includes-job-menu',
             /**
              * @param {Object} options {
+             *     collection: {
+             *         workloadManagementStatus: <collections.services.admin.workload_management> (Optional.)
+             *     }
              *     model: {
              *         searchJob: <helpers.ModelProxy>,
              *         application: <models.Application>,
@@ -35,7 +38,10 @@ define(
              */
             initialize: function(){
                 Base.prototype.initialize.apply(this, arguments);
-                
+
+                this.collection = this.collection || {};
+                this.collection.workloadManagementStatus = this.collection.workloadManagementStatus || {};
+
                 var defaults = {
                     showJobMenu: true,
                     allowDelete: true,
@@ -55,6 +61,9 @@ define(
                             appLocal: this.model.appLocal,
                             report: this.model.report,
                             user: this.model.user
+                        },
+                        collection: {
+                            workloadManagementStatus: this.collection.workloadManagementStatus
                         },
                         allowDelete: this.options.allowDelete,
                         allowSendBackground: this.options.allowSendBackground,

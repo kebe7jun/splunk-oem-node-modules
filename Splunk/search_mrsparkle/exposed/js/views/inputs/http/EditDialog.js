@@ -54,7 +54,6 @@ define([
                         modelAttribute: 'name',
                         model: this.model.entity.entry
                     },
-                    controlClass: 'controls-block',
                     label: _('Name').t()
                 });
                 this.children.inputDesc = new ControlGroup({
@@ -64,7 +63,6 @@ define([
                         model: this.model.entity,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
                     label: _('Description').t(),
                     required: false
                 });
@@ -75,7 +73,6 @@ define([
                         model: this.model.entity,
                         placeholder: _('optional').t()
                     },
-                    controlClass: 'controls-block',
                     label: _('Source').t(),
                     required: false
                 });
@@ -101,7 +98,6 @@ define([
                             attachDialogTo: 'body'
                         }
                     },
-                    controlClass: 'controls-block',
                     label: _('Set Source Type').t(),
                     required: false
                 });
@@ -111,20 +107,17 @@ define([
                         modelAttribute: 'ui.sourcetype',
                         model: this.model.entity
                     },
-                    controlClass: 'controls-block',
                     label: _('Source Type').t(),
                     required: false
                 });
                 this.children.sourcetype = new ControlGroup({
                     controls: [_sourcetypeMenuControl],
-                    controlClass: 'controls-block',
                     label: _('Source Type').t(),
                     required: false
                 });
                 this.children.useAck = new ControlGroup({
                     className: 'http-useack control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.useACK',
                         model: this.model.entity,
@@ -239,7 +232,6 @@ define([
                 this.children.allowedIndexes = new ControlGroup({
                     className: 'allowed-indexes control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.indexes',
                         model: this.model.entity,
@@ -262,12 +254,11 @@ define([
                 this.children.index = new ControlGroup({
                     className: 'index control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.index',
                         model: this.model.entity,
                         items: this.indexes,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'narrow',
                         toggleClassName: 'btn',
                         popdownOptions: {
@@ -289,12 +280,11 @@ define([
                 this.children.outputs = new ControlGroup({
                     className: 'output-group control-group',
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.outputgroup',
                         model: this.model.entity,
                         items: items,
-                        className: 'btn-group view-count',
+                        additionalClassNames: 'view-count',
                         menuWidth: 'wide',
                         toggleClassName: 'btn',
                         popdownOptions: {

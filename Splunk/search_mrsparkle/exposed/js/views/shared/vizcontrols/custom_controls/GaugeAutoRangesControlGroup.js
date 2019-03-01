@@ -31,7 +31,7 @@ define([
                 }
             ];
             this._ranges = '["0", "30", "70", "100"]';
-            this._colors = '[0x84E900, 0xFFE800, 0xBF3030]';
+            this._colors = '[0x53A051, 0xF8BE34, 0xDC4E41]';
             this.model.on('change:autoMode', this.handleModeChange, this);
             SyntheticRadioControl.prototype.initialize.call(this, this.options);
         },
@@ -64,7 +64,6 @@ define([
 
         initialize: function() {
             var rangesControl = new AutoRangesControl({ model: this.model });
-            this.options.controlClass = 'controls-halfblock';
             // this.options.label = _("Colors").t();
             this.options.controls = [rangesControl];
             ControlGroup.prototype.initialize.call(this, this.options);

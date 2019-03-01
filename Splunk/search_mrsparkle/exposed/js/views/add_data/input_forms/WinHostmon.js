@@ -43,7 +43,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'ad-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -59,7 +58,6 @@ define(
                 this.children.eventTypes = new ControlGroup({
                     className: 'reg-eventTypes control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.type',
                         model: this.model.input,
@@ -75,7 +73,6 @@ define(
                 this.children.interval = new ControlGroup({
                     className: 'net-port control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.interval',
                         model: this.model.input,
@@ -98,19 +95,19 @@ define(
                 return [
                 {
                     question: _('What information does the Windows Host Monitoring input gather?').t(),
-                    answer: _('The Host Monitoring input gathers information about a Windows machine, including \
-                     operating system build, hardware information, service and process status, and installed \
-                     applications. ').t() +
+                    answer: _('The Host Monitoring input gathers information about a Windows machine, including ' +
+                     'operating system build, hardware information, service and process status, and installed ' +
+                     'applications. ').t() +
                      '<a class="external" href="' + arguments[0] + '" target="_blank">' + _("Learn More").t() + '</a>'
                 },
                 {
-                    question: _('Does Splunk need to run as an administrative user to access local host monitoring information?').t(),
-                    answer: _('Yes. You must run Splunk as the "Local System" user or as a domain user that is a member of the local Administrators group.').t()
+                    question: _('Does the Splunk platform need to run as an administrative user to access local host monitoring information?').t(),
+                    answer: _('Yes. You must run the Splunk platform as the "Local System" user or as a domain user that is a member of the local Administrators group.').t()
                 },
                 {
                     question: _('Can I configure Windows local host monitoring on remote Windows machines?').t(),
-                    answer: _('Yes, if you install a universal forwarder on the machines that you want to get this \
-                    information from. You can’t collect this type of data from remote machines from this Splunk instance.').t()
+                    answer: _('Yes, if you install a universal forwarder on the machines that you want to get this ' +
+                    'information from. You can’t collect this type of data from remote machines from this Splunk instance.').t()
                 }
                 ];
             },

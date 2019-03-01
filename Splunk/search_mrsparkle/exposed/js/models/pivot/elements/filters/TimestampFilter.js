@@ -20,7 +20,7 @@ define(['jquery', '../BaseElement'], function($, BaseElement) {
         defaults: $.extend({}, BaseElement.prototype.defaults, {
 
             elementType: 'filter',
-            label: 'All Time'
+            label: 'All time'
 
         }),
 

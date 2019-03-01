@@ -63,12 +63,21 @@ define(
             },
             onIframeLoad: function() {
                 var newStyle = '\
+                    body { min-width: 0; } \
                     body.splView-_admin { background: none; }  \
-                    .entityEditForm { border: none; margin: 20px; } \
-                    .entityEditForm fieldset legend {padding-left: 190px;}\
-                    label {float: left; width: 170px; margin-right: 20px; text-align: right; } \
-                    p.exampleText {margin-left: 190px; } \
-                    p.fieldsetHelpText { padding-left: 190px; }\
+                    div.layout { width: 570px; } \
+                    .entityEditForm { width: 570px; } \
+                    .entityEditForm, div.editFormWrapper { border: none; margin: 0; padding: 0; box-shadow: none; } \
+                    .entityEditForm fieldset legend {padding-left: 90px;}\
+                    .entityEditForm .formWrapper .widget { padding-right: 0; } \
+                    .entityEditForm .formWrapper .widget > label { width: 160px; } \
+                    .entityEditForm .formWrapper .widget > div { margin-left: 160px; } \
+                    .entityEditForm input[type=text], .entityEditForm input[type=password], .entityEditForm textarea.regular, .entityEditForm .CodeMirror, .entityEditForm select.regular { width: 415px; } \
+                    .entityEditForm .formWrapper .widget.checkboxWidget .checkbox + label { width: 115px; margin-top: 11px; } \
+                    .splClearfix:after { content: none; } \
+                    label {float: left; width: 70px; margin-right: 20px; text-align: right; } \
+                    p.exampleText {margin-left: 90px; } \
+                    p.fieldsetHelpText { padding-left: 90px; }\
                     ';
 
                 var contents = this.iframe.contents().find('head')

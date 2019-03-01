@@ -7,6 +7,7 @@ define(
         'views/search/Master',
         'views/shared/dialogs/RiskyCommand',
         'collections/services/configs/SearchBNFs',
+        'collections/services/admin/workload_management/Status',
         'util/splunkd_utils',
         'splunk.util'
     ],
@@ -18,6 +19,7 @@ define(
         SearchView,
         RiskyCommandDialog,
         SearchBNFsCollection,
+        WorkloadManagementStatus,
         splunkd_utils,
         splunkUtils
     ) {
@@ -29,6 +31,8 @@ define(
                 this.fetchVisualizations = true;
                 this.collection.searchBNFs = new SearchBNFsCollection();
                 this.deferreds.searchBNF = $.Deferred();
+                this.collection.workloadManagementStatus = new WorkloadManagementStatus();
+                this.deferreds.workloadManagementStatus = $.Deferred();
 
                 $(window).resize(_.debounce(function(){
                     this.setBodyMinHeight();
@@ -37,6 +41,24 @@ define(
             //Our only Action method
             page: function(locale, app, page) {
                 BootstrapSearch.prototype.page.apply(this, arguments);
+
+                if (this.deferreds.workloadManagementStatus.state() !== 'resolved') {
+                    var callbacks = {
+                        success: function(){
+                            this.deferreds.workloadManagementStatus.resolve();
+                        }.bind(this),
+                        error: function(){
+                            this.deferreds.workloadManagementStatus.resolve();
+                        }.bind(this)
+                    };
+                    $.when(this.deferreds.user).then(function(){
+                        if (this.model.user.hasCapability('list_workload_pools')) {
+                            this.collection.workloadManagementStatus.fetch(callbacks);
+                        } else {
+                            this.deferreds.workloadManagementStatus.resolve();
+                        }
+                    }.bind(this));
+                }
 
                 if (this.deferreds.searchBNF.state() !== 'resolved') {
                     this.collection.searchBNFs.fetch({
@@ -55,7 +77,7 @@ define(
                     });
                 }
 
-                $.when(this.baseDeactivateDeferred, this.deferreds.userPref, this.deferreds.times, this.deferreds.pageViewRendered, this.deferreds.searchBNF).then(function(){
+                $.when(this.baseDeactivateDeferred, this.deferreds.userPref, this.deferreds.times, this.deferreds.pageViewRendered, this.deferreds.searchBNF, this.deferreds.workloadManagementStatus).then(function(){
                     if (this.shouldRender) {
                         //insert the top bars
                         //this.pageView.$('.section-padded').remove();//remove once all pages migrated to Page view class correctly
@@ -116,7 +138,8 @@ define(
                             times: this.collection.times,
                             workflowActions: this.collection.workflowActions,
                             selectedFields: this.collection.selectedFields,
-                            searchBNFs: this.collection.searchBNFs
+                            searchBNFs: this.collection.searchBNFs,
+                            workloadManagementStatus: this.collection.workloadManagementStatus
                         },
                         deferreds: {
                             appLocal: this.deferreds.appLocal,

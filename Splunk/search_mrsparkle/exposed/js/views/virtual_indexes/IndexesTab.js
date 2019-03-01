@@ -75,6 +75,7 @@ define([
                         this.$('.divider').hide();
                     } else {
                         this.children.filter.$el.show();
+                        this.children.filter.$el.css('display', 'inline-block');
                         this.children.paginator.$el.show();
                         this.children.pageCount.$el.show();
                         this.$('.divider').show();
@@ -114,7 +115,7 @@ define([
             },
             template: '\
                 <div class="filter-placeholder"></div>\
-                <div class="buttons-plaecholder pull-right">\
+                <div class="virtualindexes-buttons-placeholder pull-right">\
                     <a href="vix_index_new" class="btn btn-primary "><%- _("New Virtual Index").t()%></a>\
                     <a href="<%= exploreDataUrl %>" class="btn btn-primary"><%- _("Explore Data").t()%></a>\
                 </div>\

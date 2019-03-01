@@ -20,12 +20,9 @@ define([
                 name: 'display.visualizations.trellis.size',
                 label: _('Size').t(),
                 defaultValue: 'medium',
-                groupOptions: {
-                    controlClass: 'controls-fill'
-                },
                 control: SyntheticRadioControl,
                 controlOptions: {
-                    className: 'btn-group locale-responsive-layout',
+                    additionalClassNames: 'locale-responsive-layout',
                     items: [
                         {
                             label: _('Small').t(),
@@ -48,18 +45,15 @@ define([
 
             TRELLIS_ENABLED: {
                 name: 'display.visualizations.trellis.enabled',
-                label: _('Use trellis layout').t(),
+                label: _('Use Trellis Layout').t(),
                 defaultValue: false,
                 control: SyntheticCheckboxControl
             },
 
             TRELLIS_SPLIT_FIELD: {
                 name: 'display.visualizations.trellis.splitBy',
-                label: _('Split by').t(),
+                label: _('Split By').t(),
                 group: SplitFieldsControlGroup,
-                groupOptions: {
-                    controlClass: 'controls-block'
-                },
                 enabledWhen: function (reportContent) {
                     return Splunk.util.normalizeBoolean(reportContent.get('display.visualizations.trellis.enabled'));
                 }
@@ -69,9 +63,6 @@ define([
                 name: 'display.visualizations.trellis.scales.shared',
                 label: _('Scale').t(),
                 defaultValue: '1',
-                groupOptions: {
-                    controlClass: 'controls-fill'
-                },
                 control: BooleanRadioControl,
                 controlOptions: {
                     trueLabel: _('Shared').t(),

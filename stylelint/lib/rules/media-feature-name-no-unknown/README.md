@@ -10,9 +10,10 @@ Disallow unknown media feature names.
 
 This rule considers media feature names defined in the CSS Specifications, up to and including Editor's Drafts, to be known.
 
-All vendor-prefixed media feature names are ignored.
+This rule ignores:
 
-Caveat: Media feature names within a [range context](https://www.w3.org/TR/mediaqueries-4/#mq-ranges) are currently ignored.
+-   media feature names within a range context
+-   vendor-prefixed media feature names
 
 ## Options
 
@@ -30,11 +31,11 @@ The following patterns are considered violations:
 
 The following patterns are *not* considered violations:
 
-```css  
+```css
 @media all and (monochrome) {}
 ```
 
-```css  
+```css
 @media (min-width: 700px) {}
 ```
 
@@ -64,10 +65,6 @@ The following patterns are *not* considered violations:
 
 ```css
 @media screen and (my-media-feature-name) {}
-```
-
-```css
-@media screen and (MY-MEDIA-FEATURE-NAME) {}
 ```
 
 ```css

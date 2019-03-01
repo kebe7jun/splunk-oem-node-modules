@@ -13,7 +13,6 @@ define(
              PrebuiltPanelItem) {
 
         return BaseList.extend({
-            className: 'prebuilt-panel-list',
             moduleId: module.id,
             initialize: function(options) {
                 BaseList.prototype.initialize.apply(this, arguments);

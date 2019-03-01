@@ -41,15 +41,26 @@ define(
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
                 
+                this.peerNameList = this.getRemotePeers('remoteSearchLogs');
+                this.dfsPeerNameList = this.getRemotePeers('remoteDFSLogs');
+            },
+
+            /**
+             * Private helper function to extract peers.
+             * @returns {Array} peerNameList - Array of peer names.
+             */
+            getRemotePeers : function (key) {
+                var peerNameList = [];
                 // Construct peerNameList if search job model contains remoteSearchLogs.
-                if ((this.model.searchJob.entry.content.get('remoteSearchLogs')) &&
-                    (this.model.searchJob.entry.content.get('remoteSearchLogs').length > 0) &&
-                    (_.isString(this.model.searchJob.entry.content.get('remoteSearchLogs')[0]))
+                if ((this.model.searchJob.entry.content.get(key)) &&
+                    (this.model.searchJob.entry.content.get(key).length > 0) &&
+                    (_.isString(this.model.searchJob.entry.content.get(key)[0]))
                 ) {
-                    this.peerNameList = this.model.searchJob.entry.content.get('remoteSearchLogs')[0].split('\n');
+                    peerNameList = this.model.searchJob.entry.content.get(key)[0].split('\n');
                 } else {
-                    this.peerNameList = [];
+                    peerNameList = [];
                 }
+                return peerNameList;
             },
             
             /**
@@ -110,7 +121,8 @@ define(
                         this.model.searchJob.id,
                         {data: {outputMode: 'xml'}}),
                     searchLogLink: this.searchLogUrl.bind(this),
-                    peerNameList: this.peerNameList ? this.peerNameList : []
+                    peerNameList: this.peerNameList ? this.peerNameList : [],
+                    dfsPeerNameList: this.dfsPeerNameList ? this.dfsPeerNameList : []
                 }));
                 
                 if (hasSavedSearch) {
@@ -136,6 +148,11 @@ define(
                 //add peerNameList if present.
                 if (this.peerNameList && this.peerNameList.length > 0) {
                     additionalSearchJobProps['peerNameList'] = this.peerNameList;
+                }
+
+                //add dfsPeerNameList if present.
+                if (this.dfsPeerNameList && this.dfsPeerNameList.length > 0) {
+                    additionalSearchJobProps['dfsPeerNameList'] = this.dfsPeerNameList;
                 }
                 
                 //combine, sort and render search job props.
@@ -196,7 +213,7 @@ define(
                         <table>\
                             <tbody>\
                                 <tr class="additional-links">\
-                                    <td class="job-prop-name"><%- _("Additional info").t() %></td>\
+                                    <td class="job-prop-name" tabindex="0"><%- _("Additional info").t() %></td>\
                                     <td class="job-prop-value">\
                                         <% if(searchJob.isTimelineAvailable()) { %>\
                                             <a href="<%- timelineLink %>"><%- _("timeline").t() %></a>\
@@ -205,18 +222,36 @@ define(
                                             <a href="<%- summaryLink %>"><%- _("field summary").t() %></a>\
                                         <% } %>\
                                         <% _.each(searchJob.getAvailableSearchLogs(), function(link) { %>\
-                                            <a class="search-log" href="<%- searchLogLink(link, {data: {outputMode:"raw"}}) %>">\
-                                                <%- link %>\
-                                            </a>\
-                                            <% if(peerNameList.length > 0) { %>\
-                                                <span>(</span>\
-                                                    <% _.each(peerNameList, function(peerName) { %>\
-                                                        <a class="peer-link" href="<%- searchLogLink(link, {data: {peer: peerName, outputMode:"raw"}}) %>">\
-                                                            <%- peerName %>\
-                                                        </a>\
-                                                    <% }) %>\
-                                                <span>)</span>\
+                                            <div>\
+                                            <% if(link.indexOf("search.log") !== -1) { %>\
+                                                <a class="search-log" href="<%- searchLogLink(link, {data: {outputMode:"raw"}}) %>">\
+                                                    <%- link %>\
+                                                </a>\
+                                                <% if(peerNameList.length > 0) { %>\
+                                                    <span>(</span>\
+                                                        <% _.each(peerNameList, function(peerName) { %>\
+                                                            <a class="peer-link" href="<%- searchLogLink(link, {data: {peer: peerName, outputMode:"raw"}}) %>">\
+                                                                <%- peerName %>\
+                                                            </a>\
+                                                        <% }) %>\
+                                                    <span>)</span>\
+                                                <% } %>\
                                             <% } %>\
+                                            <% if(link.indexOf("dfs.log") !== -1) { %>\
+                                                <a class="dfs-log" href="<%- searchLogLink(link, {data: {outputMode:"raw"}}) %>">\
+                                                    <%- link %>\
+                                                </a>\
+                                                <% if(dfsPeerNameList.length > 0) { %>\
+                                                    <span>(</span>\
+                                                        <% _.each(dfsPeerNameList, function(peerName) { %>\
+                                                            <a class="peer-link" href="<%- searchLogLink(link, {data: {peer: peerName, outputMode:"raw"}}) %>">\
+                                                                <%- peerName %>\
+                                                            </a>\
+                                                        <% }) %>\
+                                                    <span>)</span>\
+                                                <% } %>\
+                                            <% } %>\
+                                            </div>\
                                         <% }) %>\
                                     </td>\
                                 </tr>\

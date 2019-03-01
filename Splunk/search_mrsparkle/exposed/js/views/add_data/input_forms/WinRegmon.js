@@ -34,7 +34,6 @@ define(
                 this.children.name = new ControlGroup({
                     className: 'reg-name control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.name',
                         model: this.model.input,
@@ -55,14 +54,13 @@ define(
                         save: false
                     },
                     label:   _('Registry hive').t(),
-                    tooltip: _('Path to the Registry key that Splunk will monitor').t()
+                    tooltip: _('Path to the Registry key that the Splunk platform will monitor').t()
                 });
 
 
                 this.children.monitorSubnodes = new ControlGroup({
                     className: 'reg-subnodes control-group',
                     controlType: 'SyntheticCheckbox',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.monitorSubnodes',
                         model: this.model.input,
@@ -79,7 +77,6 @@ define(
                 this.children.eventTypes = new ControlGroup({
                     className: 'reg-eventTypes control-group',
                     controlType: 'Accumulator',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.type',
                         model: this.model.input,
@@ -89,26 +86,24 @@ define(
                         itemName: _('type(s)').t()
                     },
                     label:   _('Event types').t(),
-                    tooltip: _('Registry event types that you want Splunk to monitor for the chosen Registry hive').t()
+                    tooltip: _('Registry event types that you want the Splunk platform to monitor for the chosen Registry hive').t()
                 });
 
                 this.children.processPath = new ControlGroup({
                     className: 'reg-processPath control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'ui.proc',
                         model: this.model.input,
                         save: false
                     },
                     label:   _('Process Path').t(),
-                    tooltip: _('Which processes Splunk should monitor for changes to the Registry. Leave the default of C:\\.* to have Splunk monitor all processes.').t()
+                    tooltip: _('Which processes the Splunk platform should monitor for changes to the Registry. Leave the default of C:\\.* to have the Splunk platform monitor all processes.').t()
                 });
 
                 this.children.baseline = new ControlGroup({
                     className: 'reg-baseline control-group',
                     controlType: 'SyntheticRadio',
-                    controlClass: 'controls-halfblock',
                     controlOptions: {
                         modelAttribute: 'ui.baseline',
                         model: this.model.input,
@@ -124,12 +119,12 @@ define(
 
             faqList: [
                 {
-                    question: _('What kind of Registry data does Splunk collect?').t(),
-                    answer: _('Splunk collects changes to Windows Registry keys and hives. It can also set a baseline when the system first starts.').t()
+                    question: _('What kind of Registry data does the Splunk platform collect?').t(),
+                    answer: _('The Splunk platform collects changes to Windows Registry keys and hives. It can also set a baseline when the system first starts.').t()
                 },
                 {
                     question: _('Do I need administrative rights to monitor the Windows Registry?').t(),
-                    answer: _('It depends. A domain user can read many Registry items, but only local administrators can access some security-related items. If you install Splunk as the Local System user, it can read all Registry items on the local machine.').t()
+                    answer: _('It depends. A domain user can read many Registry items, but only local administrators can access some security-related items. If you install the Splunk platform as the Local System user, it can read all Registry items on the local machine.').t()
                 },
                 {
                     question: _('Why should I be careful about the number of Registry items I monitor?').t(),
@@ -137,14 +132,14 @@ define(
                 },
                 {
                     question: _('Can I configure Windows registry monitoring on remote Windows machines?').t(),
-                    answer: _('Yes, if you install a universal forwarder on the machines that you want to get this information from. You can’t collect this type of data from remote machines from this Splunk instance.').t()
+                    answer: _('Yes, if you install a universal forwarder on the machines that you want to get this information from. You can’t collect this type of data from remote machines from this Splunk platform instance.').t()
                 }
             ],
 
             template:
                 '<div class="inputform_wrapper"> \
                     <p>\
-                        <%= _("Configure this instance to capture Windows Registry settings and monitor changes. Splunk \
+                        <%= _("Configure this instance to capture Windows Registry settings and monitor changes. The Splunk platform \
                             captures the name of the process that made the change, as well as the path to the changed \
                             entry. ").t() %>\
                         <a class="external" href="<%- helpLink %>" target="_blank"> <%= _("Learn More").t() %> </a>\

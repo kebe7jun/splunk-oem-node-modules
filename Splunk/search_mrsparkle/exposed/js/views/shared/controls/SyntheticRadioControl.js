@@ -34,6 +34,7 @@ define(
      *     @param {String} options.items[].icon icon name to show in menu and button label
      *     @param {String} options.items[].className class attribute to be applied
      *     @param {String} options.items[].tooltip Text to display in the tooltip
+     *     @param {String} options.items[].ariaLabel aria-label attribute text. If not set it will use label, then tooltip.
      * @param {String} [options.buttonClassName = btn] Class attribute to each button element.
      * @param {Boolean} [options.elastic = false] Automatically assigns percentage width to children
      * to completely fill the parent.
@@ -89,7 +90,6 @@ define(
                 var template = _.template(this.template, {
                                 items: this.options.items,
                                 itemClassName: this.options.showAsButtonGroup ? this.options.buttonClassName : this.options.linkClassName,
-                                tag: this.options.showAsButtonGroup ? 'button' : 'a',
                                 help: this.options.help,
                                 elastic: this.options.elastic,
                                 enabled: this.options.enabled,
@@ -104,6 +104,8 @@ define(
                     $(el).attr('data-value', items[i].value).data('value', items[i].value);
                 });
             }
+
+            this.$el[this.options.showAsButtonGroup ? 'removeClass' : 'addClass' ]('radio-control-list');
 
             var value = this._value;
 
@@ -125,15 +127,18 @@ define(
         },
         template: '\
             <% _.each(items, function(item, index){ %>\
-                <<%= tag %> <% if (tag === "button") { %> type="button" <% } %> name="<%- modelAttribute || "" %>" \
+                <button type="button" name="<%- modelAttribute || "" %>" \
                         <% if (elastic) { %> style="width:<%- Math.round(100*(1/items.length)) %>%" <% } %> \
+                        <% if (item.ariaLabel || item.label || item.tooltip) { %> \
+                            aria-label="<%- item.ariaLabel || item.label || item.tooltip %>" \
+                        <% } %> \
                         <% if (item.tooltip) { %> rel="tooltip" title="<%=item.tooltip%>" <% } %>\
                         class="<%= itemClassName %> <%- item.className || "" %>" \
                         <% if (!enabled) { %> disabled="disabled" <% } %>>\
                     <% if (item.icon) { %> <i class="icon-<%-item.icon%> <%-item.iconSize%>"></i><% } %>\
                     <% if (item.svg) { %> <%= item.svg %> <% } %>\
                     <% if(item.label){ %> <%= item.label%> <%}%>\
-                </<%= tag %>>\
+                </button>\
             <% }) %>\
         '
     });

@@ -25,7 +25,8 @@ function(
             this.options.contentView = new MenuContentsView({
                 model: this.model,
                 collection: {
-                    apps: this.collection.apps
+                    apps: this.collection.apps,
+                    appsVisible: this.collection.appsVisible
                 }
             });
             this.options.toggleView = new MenuButtonView({

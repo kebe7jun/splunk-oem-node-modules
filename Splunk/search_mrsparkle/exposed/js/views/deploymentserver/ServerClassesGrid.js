@@ -96,7 +96,7 @@ define(
                                 data:{
                                     serverclasses: serverclass.entry.get('name'), 
                                     hasDeploymentError: false,
-                                    count: 1 
+                                    count: -1 
                                 }
                             });  
 
@@ -136,11 +136,31 @@ define(
                                             }
                                     });       
 
-
                                     //Parse results from fetch #2 (clients in serverclass with out any errors)
-                                    if (clientsWithServerclassWithoutErrors.length > 0) {
-                                        numSuccessfulDownloads +=  clientsWithServerclassWithoutErrors.first().paging.get('total');
-                                    }
+                                    clientsWithServerclassWithoutErrors.each(function(client) {
+                                        var serverclasses = client.entry.content.get("serverClasses");                                      
+                                        var sc = serverclasses[serverclass.entry.get("name")];
+                                        var isSuccessful = undefined;
+                                        
+                                        if (!_.isUndefined(sc)) {
+                                            var applications = client.entry.content.get("applications");
+                                           
+                                            isSuccessful = _.find(applications, function(app) {
+                                                return _.find(app.serverclasses, function(classentry) {
+                                                    if (classentry === serverclass.entry.get("name")) {
+                                                        var appStatus = app["result"];
+                                                        if (appStatus.toLowerCase() === "ok") {
+                                                            return true;
+                                                        }
+                                                    }
+                                                });
+                                            });
+                                        }
+
+                                        if (!_.isUndefined(isSuccessful)) {
+                                            numSuccessfulDownloads++;
+                                        }
+                                    });
 
 
                                     // Display errors/successes in the html

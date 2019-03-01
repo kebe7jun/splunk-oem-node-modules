@@ -45,7 +45,7 @@ define([
                     var syntheticCheckboxControl = new SyntheticCheckboxControl({
                         model: this._selections,
                         modelAttribute: value.value,
-                        label: _($.trim(value.label) || value.value || '').t()
+                        label: value.label ? _($.trim(value.label)).t() : value.value ? _(value.value).t() : ''
                     });
                     this._checkboxes.push(syntheticCheckboxControl);
                 }, this );

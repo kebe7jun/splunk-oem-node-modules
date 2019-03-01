@@ -175,3 +175,9 @@ export const transferDrilldown = (previousReportContent, currentReportContent) =
         [currentDrilldownKey]: currentDrilldownValue,
     };
 };
+
+/**
+ * @param {string} the vizType
+ * @returns {boolean} whether if it is a custom vizType
+ */
+export const isCustomViz = vizType => vizType === 'viz';

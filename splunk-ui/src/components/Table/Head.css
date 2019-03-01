@@ -1,5 +1,0 @@
-@import './shared.pcss';
-
-.main {
-    @mixin reset table-header-group;
-}

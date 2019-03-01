@@ -8,7 +8,6 @@ define([
     'helpers/Session',
     'views/Base',
     'views/shared/Icon',
-    'views/shared/DCEIcon',
     'views/shared/splunkbar/MenuButton',
     'views/shared/delegates/Popdown',
     'views/shared/splunkbar/system/Master',
@@ -17,6 +16,7 @@ define([
     'views/shared/splunkbar/activity/Master',
     'views/shared/splunkbar/help/Master',
     'views/shared/splunkbar/find/Master',
+    'views/shared/splunkbar/healthbadge/Master',
     'views/shared/splunkbar/noconnection/Master',
     'views/shared/splunkbar/product/Master',
     'views/shared/splunkbar/apps/Master',
@@ -47,7 +47,6 @@ function(
      Session,
      BaseView,
      IconView,
-     DCEIconView,
      ButtonView,
      Popdown,
      SystemMenu,
@@ -56,6 +55,7 @@ function(
      ActivityMenu,
      HelpMenu,
      FindBar,
+     HealthBadge,
      NoConnectionView,
      ProductMenu,
      AppMenuView,
@@ -83,7 +83,15 @@ function(
         },
         initialize: function() {
             BaseView.prototype.initialize.apply(this, arguments);
-            
+
+            this.children.helpTemp = new ButtonView({label: _("Help").t()});
+            this.children.activityTemp = new ButtonView({label: _("Activity").t()});
+            this.children.systemTemp = new ButtonView({label: _("System").t()});
+            this.children.messagesTemp = new ButtonView({label: _("Messages").t()});
+            this.children.splunk = new IconView({icon: 'splunk'});
+            this.children.prompt = new IconView({icon: 'greaterRegistered'});
+
+            this.collection = this.collection || {};
             this.options = _.extend({},this.defaults, this.options);
             this.MAX_RETRIES_BEFORE_FAIL = 3;
             this.MESSAGES_POLLING_DELAY_STANDARD = 60000;
@@ -91,10 +99,10 @@ function(
             this.isFreeDfd = $.Deferred();
             this.userDfd = $.Deferred();
             this.appsDfd =  $.Deferred();
+            this.appsVisibleDfd = $.Deferred();
             this.serverInfoDfd = $.Deferred();
             this.webConfDfd = $.Deferred();
             this.cntRetries = 0;
-
             if (this.model && this.model.user && this.model.user.entry.content.has('realname')){
                 this.userDfd.resolve();
             } else {
@@ -102,12 +110,23 @@ function(
                     this.userDfd.resolve();
                 }, this);
             }
-            if (this.collection && this.collection.apps && this.collection.apps.length){
-                this.appsDfd.resolve();
-            } else {
-                this.collection.apps.on('sync', function() {
+            if (this.collection.apps) {
+                if (this.collection.apps.length) {
                     this.appsDfd.resolve();
-                }, this);
+                } else {
+                    this.collection.apps.on('reset sync', function() {
+                        this.appsDfd.resolve();
+                    }, this);
+                }
+            }
+            if (this.collection.appsVisible) {
+                if (this.collection.appsVisible.length) {
+                    this.appsVisibleDfd.resolve();
+                } else {
+                    this.collection.appsVisible.on('sync', function() {
+                        this.appsVisibleDfd.resolve();
+                    }, this);
+                }
             }
             if (this.model && this.model.serverInfo) {
                 if (this.model.serverInfo.hasAttr('isFree')) {
@@ -157,44 +176,60 @@ function(
             Session.off('restart timeout start', null, this);
             return this;
         },
-        _getName: function() {
-            var realName = this.model.user.entry.content.get('realname'),
-                name = realName && realName.length ? realName : this.model.user.entry.get('name');
-
-            return name;
-        },
         render: function() {
             $.when(this.serverInfoDfd).then(function() {
                 var isCloud = this.model.serverInfo.isCloud();
+                this.children.logo = new IconView({icon: this.model.serverInfo.getProductIconName()});
 
                 var homeLink = route.home(
                     this.model.application.get('root'),
                     this.model.application.get('locale'));
 
-            // DCE-OEM-CHANGE
-            // 增加 DCE-M help 链接
                 var html = this.compileTemplate(template)({
                     makeUrl: splunkUtil.make_url,
-                    userName: this._getName(),
                     options: this.options,
                     homeLink: homeLink,
-                    DCEMhelpLink: 'http://guide.daocloud.io/dcem/dce-m-13884223.html',
                     css: css,
                     cloud: isCloud
                 });
                 this.$el.html(html);
 
+                //insert Placeholders
+                this.children.helpTemp.render().appendTo(this.$('[data-role=right-nav]'));
+                this.children.activityTemp.render().prependTo(this.$(isCloud ? '[data-role=left-nav]' : '[data-role=right-nav]'));
+                this.children.systemTemp.render().prependTo(this.$(isCloud ? '[data-role=left-nav]' : '[data-role=right-nav]'));
+                this.children.messagesTemp.render().prependTo(this.$( isCloud ? '[data-role=left-nav]' : '[data-role=right-nav]'));
+                this.children.splunk.render().prependTo(this.$('[data-action=home]'));
+                this.children.prompt.render().prependTo(this.$('[data-role=gt]'));
+
+                if (this.model.serverInfo.hasAttr('activeLicenseSubgroup')) {
+                    var subgroup_id = this.model.serverInfo.entry.content.get('activeLicenseSubgroup');
+                    if (!_.isEmpty(subgroup_id)
+                        && _.isString(subgroup_id)
+                        && subgroup_id.lastIndexOf('Production',0) !== 0
+                        && subgroup_id !== 'UNKNOWN_LICENSE_SUBGROUP'
+                    ) {
+                        var wrapper = document.createElement("div");
+                        var devTest = $("<span>", {
+                            "class": css.devTest,
+                            title: _("For non-production use only").t(),
+                            text: _(subgroup_id).t()
+                        });
+                        devTest.appendTo(wrapper);
+                        this.$('[data-role=left-nav]').append(wrapper);
+                    }
+                }
+                
+                this.children.logo.render().prependTo(this.$('[data-role=logo]'));
+
                 var activeMenu = this.getActiveMenu();
-                // this.children.newMenu.render().appendTo(this.$('[data-role=left-nav]'));
 
                 $.when(this.userDfd, this.appsDfd).then(function() {
                     if (this.model.user.canUseApps() && this.options.showAppsList){
                         this.children.apps = new AppMenuView({
                             collection: this.collection,
                             model: this.model,
-                            activeMenu: activeMenu,
-                            // DCE-OEM-CHANGE 增加 dceIcon option
-                            dceIcon: true
+                            activeMenu: activeMenu
                         });
 
                         this.children.apps.prependTo(this.$('[data-role=left-nav]'));
@@ -210,26 +245,53 @@ function(
                             user: this.model.user
                         }
                     });
+                    this.children.systemTemp.$el.replaceWith(this.children.systemMenu.render().el);
+
+                    this.children.findbar = new FindBar({
+                        model: {
+                            user: this.model.user,
+                            application: this.model.application,
+                            serverInfo: this.model.serverInfo
+                        },
+                        collection: {
+                            apps: this.collection.apps
+                        }
+                    });
+
+                    this.children.findbar.render().appendTo(this.$(isCloud ? '[data-role=left-nav]' : '[data-role=right-nav]'));
+
+                    $.when(this.webConfDfd, this.appsVisibleDfd).then(function() {
+                        this.isFreeDfd.fail(function() {
+                            this.children.userMenu = new UserMenu({
+                                collection: {
+                                    appsVisible: this.collection.appsVisible,
+                                    apps: this.collection.apps,
+                                    currentContext: this.model.currentContext //this represents the current logged in user
+                                },
+                                model: {
+                                    user: this.model.user,
+                                    application: this.model.application,
+                                    webConf: this.model.webConf,
+                                    config: this.model.config,
+                                    serverInfo: this.model.serverInfo
+                                }
+                            });
+                            this.children.userMenu.render().prependTo(this.$('[data-role=right-nav]'));
+
+                            if (this.model.user.canListHealth()) {
+                                this.children.healthBadge = new HealthBadge({
+                                    model: {
+                                        application: this.model.application,
+                                        serverInfo: this.model.serverInfo
+                                    }
+                                });
+
+                                this.children.healthBadge.render().prependTo(this.$('[data-role=right-nav]'));
+                            }
+                        }.bind(this));
+                    }.bind(this));
 
                     this.webConfDfd.done(function(){
-                        // 不用 userMenu 组件
-                        // this.isFreeDfd.fail(function() {
-
-                        //     this.children.userMenu = new UserMenu({
-                        //         collection: {
-                        //             currentContext: this.model.currentContext //this represents the current logged in user
-                        //         },
-                        //         model: {
-                        //             user: this.model.user,
-                        //             application: this.model.application,
-                        //             webConf: this.model.webConf,
-                        //             config: this.model.config,
-                        //             serverInfo: this.model.serverInfo
-                        //         }
-                        //     });
-                        //     this.children.userMenu.render().prependTo(this.$('[data-role=right-nav]'));
-                        // }.bind(this));
-
                         this.children.messages = new MessagesView({
                             collection: {
                                 messages: this.collection.messages,
@@ -240,12 +302,14 @@ function(
                                 updateChecker: this.model.updateChecker,
                                 userPref: this.model.userPref,
                                 webConf: this.model.webConf,
-                                application: this.model.application
+                                application: this.model.application,
+                                user: this.model.user
                             }
                         });
+                        this.children.messagesTemp.$el.replaceWith(this.children.messages.render().el);
                         this.restartMessagePolling(this.MESSAGES_POLLING_DELAY_STANDARD);
-
                     }.bind(this));
+
                 }.bind(this));
 
                 this.children.noConnectionModal = new NoConnectionView({});
@@ -279,6 +343,7 @@ function(
                             application: this.model.application
                         }
                     });
+                    this.children.activityTemp.$el.replaceWith(this.children.activityMenu.render().el);
 
                     this.children.helpMenu = new HelpMenu({
                         model: this.model,
@@ -286,6 +351,7 @@ function(
                             apps: this.collection.apps
                         }
                     });
+                    this.children.helpTemp.$el.replaceWith(this.children.helpMenu.render().el);
 
                     // highlight the active menu
                     if (activeMenu){
@@ -308,10 +374,6 @@ function(
                     }
 
                 }.bind(this));
-                // DCE-OEM-CHANGE
-                // 增加 DCE-M help 链接
-                this.children.help = this.children.help || new DCEIconView({svg: 'question'});
-                this.children.help.render().appendTo(this.$('[data-role=notification-nav]'));
 
                 return this;
             }.bind(this));
@@ -462,30 +524,48 @@ function(
 
             var currentUserIdDfd = $.Deferred();
             currentUserIdDfd.resolve(options.model.application.get('owner'));
+            
+            var appsCollection = options.collection.apps, 
+                appsVisibleCollection = options.collection.appsVisible,
+                appsVisibleDfd = $.Deferred(),
+                appsDfd = $.Deferred();
 
-            var appsDfd = $.Deferred();
-
-            var appsCollection;
-            if(!options.collection.apps){
-                appsCollection = options.collection.apps = new AppsCollection();
+            // If appsVisible collection doesn't get passed in, we need fetch it here.
+            if(!appsVisibleCollection) {
+                appsVisibleCollection = options.collection.appsVisible = new AppsCollection();
                 $.when(currentUserIdDfd).done(function(){
-                    appsCollection.fetch({
+                    appsVisibleCollection.fetch({
                         data: {
                             sort_key: 'name',
                             sort_dir: 'asc',
                             app: '-' ,
                             owner: options.model.application.get('owner'),
-                            search: 'visible=true AND disabled=0 AND name!=launcher',
+                            search: 'visible=true AND disabled=0',
                             count: -1
                         }
                     });
-                    appsCollection.on('reset sort', appsDfd.resolve);
+                    appsVisibleCollection.on('sync', appsVisibleDfd.resolve);
+                });
+            } else {
+                appsVisibleDfd.resolve();
+            }
+
+            // If apps collection isn't passed in, we set it with the models from appsVisible 
+            // collection, and remove launcher app.
+            if (!appsCollection) {
+                appsCollection = options.collection.apps = new AppsCollection();
+                appsVisibleDfd.done(function(){
+                    appsCollection.reset(appsVisibleCollection.models);
+                    appsCollection.remove(appsCollection.find(function(app) {
+                        return app.entry.get('name') === 'launcher';
+                    }));//remove launcher
+                    appsDfd.resolve();
                 });
             } else {
                 appsDfd.resolve();
             }
 
-            if (!options.model.userPref){
+            if (!options.model.userPref) {
                 options.model.userPref = new UserPrefModel();
                 options.model.userPref.fetch({data: {app:'user-prefs', owner: options.model.application.get('owner'), count:-1}});
                 appsCollection = options.collection.apps;
@@ -495,6 +575,9 @@ function(
                         appsCollection.trigger('ready');
                     });
                 });
+            }
+            else {
+                options.collection.apps.sortWithString(options.model.userPref.entry.content.get('appOrder'));
             }
 
             var serverInfoDfd = $.Deferred();

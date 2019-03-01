@@ -1,0 +1,20 @@
+{
+  "name": "@splunk/eslint-config",
+  "version": "1.2.0",
+  "description": "Eslint configurations for Splunk projects.",
+  "main": "browser.js",
+  "author": "Splunk",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "peerDependencies": {
+    "babel-eslint": "^7",
+    "eslint": "^3 || ^4",
+    "eslint-config-airbnb": "^14 || ^15",
+    "eslint-config-prettier": "^2",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jsx-a11y": "^5",
+    "eslint-plugin-react": "^6 || ^7"
+  },
+  "engines": {
+    "node": ">=6"
+  }
+}

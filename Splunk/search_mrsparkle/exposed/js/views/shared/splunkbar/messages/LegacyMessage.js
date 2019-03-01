@@ -50,7 +50,7 @@ define(
             },
             template: '<li class="<%- msgLevel %>" data-islegacy="1" data-id="<%- msgId %>">\
                 <span class="message-content"><%= msg %></span>\
-                <a href="#" class="delete-message"><i class="icon-x-circle"></i></a>\
+                <a href="#" class="delete-message"><i class="icon-x"></i></a>\
             </li>'
         });
     });

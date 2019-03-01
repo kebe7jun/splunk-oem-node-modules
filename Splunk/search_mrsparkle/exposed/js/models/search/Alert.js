@@ -75,6 +75,12 @@ define(
                     'disabled': false,
                     'is_scheduled': 1
                 });
+                if (!this.workingTimeRange.get('earliest') && !this.workingTimeRange.get('latest')) {
+                    this.workingTimeRange.set({
+                        'earliest': this.entry.content.get('dispatch.earliest_time'),
+                        'latest':   this.entry.content.get('dispatch.latest_time')
+                    });
+                }
             },
             canNotEditInUI: function() {
                 // can not edit in ui if realtime alltime with trigger type other than always
@@ -84,6 +90,8 @@ define(
             },
             
             transposeToSavedsearch: function() {
+				// uiExecuteActionsChanged has to be calculated before any content set
+                var uiExecuteActionsChanged = this.entry.content.hasChanged("ui.executeactions");
                 switch(this.entry.content.get('ui.type')){
                     case 'realtime':
                         if (this.entry.content.get('ui.realtime.triggercondition') != 'per_result'){
@@ -217,9 +225,8 @@ define(
                     this.entry.content.set({
                         'alert.suppress.period': this.entry.content.get('ui.supresstime') + this.entry.content.get('ui.supresstimeunit')
                     });
-                    if (!(this.entry.content.get('ui.type') == 'realtime' &&
-                            this.entry.content.get('ui.realtime.triggercondition') == 'per_result') &&
-                        this.entry.content.get('ui.executeactions')) {
+					// SPL-144451 Reset value of alert.suppress.fields only when alerting mode is switched from per-result to once-per-search.
+                    if (this.entry.content.get('alert.digest_mode') && uiExecuteActionsChanged) {
                         this.entry.content.set('alert.suppress.fields', '');
                     }
                 } else {

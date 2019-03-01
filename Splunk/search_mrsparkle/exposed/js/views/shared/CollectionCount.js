@@ -45,7 +45,7 @@ define(
                     collectionStatus: isFetching ? _('Loading').t() : i18n.format_decimal(this.collection.paging.get("total") || 0)
                 });
                 this.$el.html(html);
-                
+
                 this.children.spinner = this.children.spinner || new WaitSpinner();
                 this.children.spinner.prependTo(this.$el);
                 this.children.spinner.$el[isFetching ? 'show' : 'hide']();

@@ -29,7 +29,7 @@ define(
                 this.model.state = new BaseModel();
                 this.collection = this.collection || {};
                 this.collection.flashMessages = new FlashMessagesCollection();
-                
+
                 this.children.patternJobState = new PatternJobState({
                     model: {
                         searchJob: this.model.searchJob,
@@ -37,9 +37,9 @@ define(
                         patternData: this.model.patternData,
                         application: this.model.application,
                         state: this.model.state
-                    }                    
+                    }
                 });
-                
+
                 this.children.regenerate = new Regenerate({
                     model: {
                         searchJob: this.model.searchJob,
@@ -48,21 +48,22 @@ define(
                         state: this.model.state
                     }
                 });
-                
+
                 this.children.flashMessages = new FlashMessagesLegacy({
                     collection: this.collection.flashMessages
                 });
 
                 this.children.sensitivity = new ControlGroup({
                     controlType: 'SyntheticSlider',
-                    controlClass: 'controls-block',
+                    
                     controlOptions: {
                         modelAttribute: 'display.page.search.patterns.sensitivity',
                         model: this.model.report.entry.content,
                         steps: [0.9, 0.866, 0.833, 0.8, 0.75, 0.7, 0.6, 0.5, 0.3],
                         enableStepLabels: false,
                         minLabel: _('Smaller').t(),
-                        maxLabel: _('Larger').t()
+                        maxLabel: _('Larger').t(),
+                        ariaLabel: _("Pattern Sensitivity").t()
                     }
                 });
 
@@ -73,7 +74,7 @@ define(
                         state: this.model.state
                     }
                 });
-                
+
                 this.children.sidebar = new Sidebar({
                     model: {
                         report: this.model.report,
@@ -110,7 +111,7 @@ define(
                 this.listenTo(this.model.state, 'unselectPattern', function() {
                     this.$el.css('min-height', 'inherit');
                 });
-            },     
+            },
             activate: function() {
                 if (this.active) {
                     Base.prototype.activate.apply(this, arguments);
@@ -124,7 +125,7 @@ define(
                     return Base.prototype.deactivate.apply(this, arguments);
                 }
                 this.collection.flashMessages.reset();
-                
+
                 Base.prototype.deactivate.apply(this, arguments);
 
                 this.model.state.clear();

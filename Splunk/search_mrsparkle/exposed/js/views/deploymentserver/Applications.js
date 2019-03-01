@@ -38,7 +38,8 @@ define(
                         this.children.paginator = new Paginator(
                             {
                                 model: this.model.paginator, 
-                                collection: this.collection.deploymentApps
+                                collection: this.collection.deploymentApps,
+								countLabel: _('Apps').t()
                             }
                         );
 

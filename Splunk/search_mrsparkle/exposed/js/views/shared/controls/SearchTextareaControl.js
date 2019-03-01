@@ -32,7 +32,7 @@ define([
             BaseView.prototype.initialize.apply(this, arguments);
 
             _.defaults(this.options, {
-                label: _("Search string").t(),
+                label: _("Search String").t(),
                 submitOnBlur: true,
                 minSearchBarLines: 3,
                 maxSearchBarLines: 12,
@@ -91,6 +91,7 @@ define([
                 minSearchBarLines: this.options.minSearchBarLines,
                 maxSearchBarLines: this.options.maxSearchBarLines,
                 searchAssistant: this.options.searchAssistant,
+                syntaxHighlighting: this.options.syntaxHighlighting,
                 readOnly: this.options.readOnly
             });
             this.children.searchField.render().appendTo(controls);

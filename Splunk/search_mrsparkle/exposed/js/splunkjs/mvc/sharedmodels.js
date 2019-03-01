@@ -198,19 +198,21 @@ define(function(require, exports, module) {
             visualizations: {
                 model: new Visualizations(),
                 fetch: _.memoize(function() {
-                    var appLocals = _STORAGE['appLocalsUnfiltered'];
+                    var appLocals = _STORAGE['appLocalsUnfilteredAll'];
                     var appModel = _STORAGE['app'].model;
                     var model = _STORAGE['visualizations'].model;
-                    return model.dfd = appLocals.fetch().then(function() {
-                        return model.fetch({
+                    var dfd = model.dfd = $.Deferred();
+                    appLocals.fetch().then(function() {
+                        model.fetch({
                             includeFormatter: false,
                             appLocalsCollection: appLocals.model,
                             data: _.extend({
                                 search: Visualization.ENABLED_FILTER,
                                 count: 0
                             }, appModel.pick('app', 'owner'))
-                        });
+                        }).then(dfd.resolve, dfd.reject);
                     });
+                    return dfd;
                 })
             },
             panels: {

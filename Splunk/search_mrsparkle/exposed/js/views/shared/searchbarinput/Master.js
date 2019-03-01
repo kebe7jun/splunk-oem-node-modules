@@ -6,12 +6,13 @@ define(
         'models/search/SearchBar',
         'models/services/authentication/User',
         'views/Base',
-        'views/shared/searchbarinput/SearchField',
+        'views/shared/searchbarinput/advancedsearchfield/Master',
+        'views/shared/searchbarinput/TextAreaSearchField',
         'views/shared/searchbarinput/searchassistant/Master',
         'splunk.util',
         './Master.pcss'
     ],
-    function($, _, module, SearchBarModel, UserModel, Base, SearchField, SearchAssistant, splunkUtils, css) {
+    function($, _, module, SearchBarModel, UserModel, Base, AdvancedEditorSearchField, TextAreaSearchField, SearchAssistant, splunkUtils, css) {
         return Base.extend({
             moduleId: module.id,
             className: 'search-bar-input',
@@ -31,6 +32,7 @@ define(
              *     collection: {
              *         searchBNFs: <collections/services/configs/SearchBNFs>
              *     },
+             *     useAdvancedEditor (optional): <Boolean>
              *     showLineNumbers (optional): <Boolean> determines if show line numbers is on, this trumps user preference in user model.
              *     searchAssistant (optional): <String: full|compact|none> determines which search assistant to use, this trumps user preference in user model.
              *     syntaxHighlighting (optional): <String: black-white|light|dark> determines which color theme to use.
@@ -58,14 +60,11 @@ define(
                     maxSearchBarLines: Infinity,
                     minSearchBarLines: 1,
                     forceChangeEventOnSubmit: false,
-                    autoFormat: this.model.user ? this.model.user.getSearchAutoFormat() : false,
-                    showLineNumbers: this.model.user ? this.model.user.getSearchLineNumbers() : false,
-                    syntaxHighlighting: this.model.user? this.model.user.getSearchSyntaxHighlighting()
-                                        : UserModel.EDITOR_THEMES.DEFAULT,
                     enabled: true,
                     searchAttribute: 'search',
                     submitEmptyString: true,
-                    readOnly: false
+                    readOnly: false,
+                    isTabbable: true
                 };
                 _.defaults(this.options, defaults);
                 
@@ -76,19 +75,18 @@ define(
                 this.model.searchBar.set({'autoOpenAssistant': this.options.autoOpenAssistant});
                 this.windowListenerActive = false;
                 this.nameSpace = this.uniqueNS();
-
-                if (!_.isUndefined(this.options.searchAssistant)) {
-                    this.options.useAssistant = this.options.searchAssistant === UserModel.SEARCH_ASSISTANT.FULL;
-                    this.options.useAutocomplete = this.options.searchAssistant === UserModel.SEARCH_ASSISTANT.COMPACT;
-                } else if(!_.isUndefined(this.options.useAssistant)) {
-                    this.options.useAutocomplete = !this.options.useAssistant;
-                } else {
-                    var assistant = this.model.user.getSearchAssistant();
-                    this.options.useAssistant = assistant === UserModel.SEARCH_ASSISTANT.FULL;
-                    this.options.useAutocomplete = assistant === UserModel.SEARCH_ASSISTANT.COMPACT;
-                }
                 
-                this.children.searchField = new SearchField($.extend(true, {}, this.options, {
+                this.initializeSearchField();
+
+                this.activate();
+            },
+
+            initializeSearchField: function(options) {
+                if (this.children.searchField) {
+                    this.children.searchField.remove();
+                    delete this.children.searchField;
+                }
+                var searchFieldOptions = $.extend(true, {}, this.options, {
                     model: {
                         user: this.model.user,
                         content: this.model.content,
@@ -98,18 +96,17 @@ define(
                     collection: {
                         searchBNFs: this.collection.searchBNFs
                     }
-                }));
-                
-                if (this.options.useAssistant && !this.options.readOnly) {
-                    this.children.searchAssistant = new SearchAssistant($.extend(true, {}, this.options, {
-                        model: {
-                            searchBar: this.model.searchBar,
-                            application: this.model.application
-                        }
-                    }));
+
+                });
+
+                var useAdvancedEditor = this.options.useAdvancedEditor;
+                if (_.isUndefined(useAdvancedEditor)) {
+                    useAdvancedEditor = this.model.user ? 
+                        this.model.user.canUseAdvancedEditor(): true;
                 }
 
-                this.activate();
+                this.children.searchField = useAdvancedEditor ?
+                    new AdvancedEditorSearchField(searchFieldOptions) : new TextAreaSearchField(searchFieldOptions);
             },
             
             startListening: function() {
@@ -131,12 +128,41 @@ define(
                         this.windowListenerActive = false;
                     }
                 });
-                
+
                 this.listenTo(this.model.searchBar, 'change:autoOpenAssistant', function(model, value, options) {
                     this.trigger('changedAutoOpenAssistant', value);
                 });
+
+                if (this.model.user) {
+                    this.listenTo(this.model.user.entry.content, 'change', function() {
+                        var changed = this.model.user.entry.content.changedAttributes();
+                        
+                        if (_.has(changed, 'search_use_advanced_editor') && _.isUndefined(this.options.useAdvancedEditor)) {
+                            this.initializeSearchField();
+                            this.render();
+                            // return since the render will handle updating the other changes
+                            return;
+                        }
+
+                        if (_.has(changed, 'search_assistant')) {
+                            this.setSearchAssistant();
+                        }
+
+                        var hasChange = _.some([
+                            'search_auto_format',
+                            'search_line_numbers',
+                            'search_syntax_highlighting'
+                        ], function(attr) { return _.has(changed, attr); });
+
+                        if (hasChange) {
+                            this.children.searchField.setEditorOptions();
+                            this.setAssistantTheme();
+                        }
+                        
+                    });
+                }
             },
-            
+
             activate: function(options) {
                 if (this.active) {
                     return Base.prototype.activate.apply(this, arguments);
@@ -149,10 +175,10 @@ define(
                     );
                 }
                 this.model.searchBar.set('autoOpenAssistant', this.options.autoOpenAssistant);
-                
+
                 return Base.prototype.activate.apply(this, arguments);
             },
-            
+
             deactivate: function(options) {
                 if (!this.active) {
                     return Base.prototype.deactivate.apply(this, arguments);
@@ -171,7 +197,55 @@ define(
                 this.children.searchField.closeCompleter();
                 this.children.searchAssistant && this.children.searchAssistant.closeAssistant();
             },
-            
+
+            setSearchAssistant: function() {
+                if (!_.isUndefined(this.options.searchAssistant)) {
+                    this.useAssistant = this.options.searchAssistant === UserModel.SEARCH_ASSISTANT.FULL;
+                    this.useAutocomplete = this.options.searchAssistant === UserModel.SEARCH_ASSISTANT.COMPACT;
+                } else if (!_.isUndefined(this.options.useAssistant)) {
+                    this.useAssistant = this.options.useAssistant;
+                    this.useAutocomplete = !this.options.useAssistant;
+                } else if (this.model.user) {
+                    var assistant = this.model.user.getSearchAssistant();
+                    this.useAssistant = assistant === UserModel.SEARCH_ASSISTANT.FULL;
+                    this.useAutocomplete = assistant === UserModel.SEARCH_ASSISTANT.COMPACT;
+                }
+
+                this.toggleFullAssistant();
+                this.children.searchField.setSearchAssistant({
+                    useAssistant: this.useAssistant,
+                    useAutocomplete: this.useAutocomplete
+                });
+            },
+
+            toggleFullAssistant: function() {
+                if (this.useAssistant && !this.options.readOnly) {
+                    if (!this.children.searchAssistant) {
+                        this.children.searchAssistant = new SearchAssistant($.extend(true, {}, this.options, {
+                            model: {
+                                searchBar: this.model.searchBar,
+                                application: this.model.application
+                            }
+                        }));
+                        this.children.searchAssistant.render().appendTo(this.$el);
+                    }
+                    this.setAssistantTheme();
+                    this.children.searchAssistant.activate({deep: true}).$el.show();
+                } else if (this.children.searchAssistant) {
+                    this.children.searchAssistant.deactivate({deep: true}).$el.hide();
+                }
+            },
+
+            setAssistantTheme: function() {
+                if (this.children.searchAssistant) {
+                    var theme = this.options.syntaxHighlighting;
+                    if (!theme && this.model.user) {
+                        theme = this.model.user.entry.content.get('search_syntax_highlighting');
+                    }
+                    this.children.searchAssistant.setTheme(theme);
+                }
+            },
+
             /**
              * Disable the input, make the search string unwritable.
              */
@@ -180,7 +254,7 @@ define(
                 this.closeAssistant();
                 this.children.searchAssistant && this.children.searchAssistant.disable();
             },
-            
+
             /**
              * Enable the input, make the search string editable.
              * If option disableOnSubmit this must be called to re enable the input.
@@ -189,7 +263,7 @@ define(
                 this.children.searchField.enable();
                 this.children.searchAssistant && this.children.searchAssistant.enable();
             },
-            
+
             /**
              * Updates the text value in the searchbar input. The text is not submitted.
              * @param {string} search
@@ -197,7 +271,7 @@ define(
             setText: function(search) {
                 this.model.searchBar.set('search', search);
             },
-            
+
             /**
              * Returns the text value in the searchbar input. The text is not necessarily submitted.
              * @return {string} search
@@ -205,21 +279,21 @@ define(
             getText: function() {
                 return this.model.searchBar.get('search') || '';
             },
-            
+
             /**
              * Adds focus to the search field.
              */
             searchFieldFocus: function() {
                 this.children.searchField.searchFieldfocus();
             },
-            
+
             /**
              * Removes focus from the search field.
              */
             removeSearchFieldFocus: function() {
                 this.children.searchField.removeSearchFieldFocus();
             },
-            
+
             /**
              * Reformats the search string in the searchbar input. This is an asynchronous function
              * which waits for the reformat functionality to be available on the editor.
@@ -227,7 +301,7 @@ define(
             reformatSearch: function() {
                 this.children.searchField.reformatSearch();
             },
-            
+
             /**
              * Sets the autoOpenAssistant option.
              * @param {boolean} value
@@ -236,7 +310,22 @@ define(
                 this.options.autoOpenAssistant = splunkUtils.normalizeBoolean(value);
                 this.model.searchBar.set({'autoOpenAssistant': value});
             },
-            
+
+            setSyntaxHighlightingOption: function (value) {
+                this.options.syntaxHighlighting = value;
+                this.children.searchField.setEditorOptions({
+                    syntaxHighlighting: this.options.syntaxHighlighting
+                });
+            },
+
+            setUseAdvancedEditorOption: function(value) {
+                if (this.options.useAdvancedEditor != value) {
+                    this.options.useAdvancedEditor = value;
+                    this.initializeSearchField();
+                    this.render();
+                }
+            },
+
             /**
              * Sets the search attribute on the content model to the text value in the search bar.
              * @param {object} options {
@@ -248,17 +337,10 @@ define(
             submit: function(options) {
                 this.children.searchField.submit(options);
             },
-            
+
             render: function() {
-                if (this.$el.html()) {
-                    return this;
-                }
-
-                this.children.searchField.render().appendTo(this.$el);
-
-                if (this.children.searchAssistant && this.options.useAssistant) {
-                    this.children.searchAssistant.render().appendTo(this.$el);
-                }
+                this.children.searchField.render().prependTo(this.$el);
+                this.setSearchAssistant();
 
                 return this;
             }

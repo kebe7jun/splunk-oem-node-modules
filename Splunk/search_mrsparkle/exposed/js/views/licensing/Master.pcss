@@ -1,9 +1,8 @@
-.manager-header {
-    border-bottom: 1px solid $grayLightMedium;
+.manager-container {
+    @mixin create-card;
 }
 
 .manager-table {
-    
     width: 100%;
     table-layout: fixed;
 
@@ -11,23 +10,22 @@
         padding: 10px;
         white-space: nowrap;
     }
-    .license-group {
-        font-weight: 500;
-        font-size: large;
-    }
     .license-table-left {
         text-align: right;
         width: 140px;
+    }
+    .license-listing-table td {
+        white-space: normal;
     }
     .license-listing-table-label {
         vertical-align: top;
     }
 }
-
 .license-header {
-    font-weight: bold;
+    .btn {
+        margin-left: $spacingHalf;
+    }
 }
-
 .alerts-violations-outer {
     padding: 10px;
 }
@@ -40,45 +38,33 @@
     margin-left: 28px;
 }
 
-.splButton-tertiary.orange {
-    background: $splunkLiteOrange;
-    border: none;
-    color: $white;
-}
-
 .splButton-tertiary.black {
-    background: $grayDark;
+    background: $gray30;
     border: none;
     color: $white;
-}
-
-.inline-btn {
-    float: none !important;
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 5px !important;
-    height: 24px !important;
-    line-height: 24px;
-    padding: 0 15px;
 }
 
 .license-listings td {
     padding: 4px 8px;
 }
 
-.license-progress-bar-outer {
-    position: relative;
-    border-style: solid;
-    border-width: 1px;
-    width: 200px;
-    height: 8px;
-    overflow: hidden;
-}
 
-.license-progress-bar-inner {
-    position: absolute;
-    height: inherit;
-    background-color: $black;
+td.license-progress-bar {
+    padding-top: 0;
+    .license-progress-bar-outer {
+        position: relative;
+        border: $borderDefault;
+        border-radius: $borderRadius;
+        width: 200px;
+        height: 20px;
+        overflow: hidden;
+    }
+
+    .license-progress-bar-inner {
+        position: absolute;
+        height: inherit;
+        background-color: $gray20;
+    }
 }
 
 .license-usage-chart {
@@ -118,6 +104,15 @@
     .back-license-btn {
         margin-right: 5px;
     }
+    .dropzone {
+      margin-bottom: $spacingHalf;
+    }
+    .license-select-control > .select-file-button {
+        margin-left: $spacingQuarter;
+    }
+    .modal-footer > .btn-primary {
+        margin-left: $spacingHalf;
+    }
 }
 
 .browser-warning,
@@ -130,19 +125,19 @@
     margin-bottom: 10px;
     .icon-check {
         font-size: 16px;
-        color: $splunkGreen;
+        color: $successColor;
     }
 }
 
 .license-upload-success {
     .icon-check {
         font-size: 16px;
-        color: $splunkGreen;
+        color: $successColor;
     }
 }
 
 .upgrade-enterprise-btn {
-    background-color: $splunkGreen;
+    background-color: $brandColor;
 }
 
 .get-new-license {
@@ -164,7 +159,16 @@
 }
 
 .licensing-dialogs-expiredlicense {
-    
+
+}
+
+.licensing-table-details .list-dotted {
+    dd {
+        margin-left: 145px;
+    }
+    dt {
+        width: 140px;
+    }
 }
 
 .change-spl-light-free {

@@ -97,7 +97,7 @@ define(
                 this.children.table.render().appendTo(this.$el);
             },
 
-            template: '<div class="section-padded section-header"></div>'
+            template: '<div class="section-padded section-header page-heading"></div>'
         });
     }
 );

@@ -14,10 +14,6 @@ define(
         return BaseView.extend({
             moduleId: module.id,
             tagName: 'tr',
-            className: 'tabbable-table-primary-row',
-            attributes: {
-                tabindex: -1
-            },
             /**
              * @param {Object} options {
              *     model: { 

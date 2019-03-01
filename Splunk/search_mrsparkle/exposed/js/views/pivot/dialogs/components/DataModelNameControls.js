@@ -31,7 +31,6 @@ define([
             this.children.modelDisplayNameGroup = new ControlGroup({
                 label: _('Model Title').t(),
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 controls: this.children.modelDisplayNameControl
             });
 
@@ -43,7 +42,6 @@ define([
             this.children.modelNameGroup = new ControlGroup({
                 label: _('Model ID').t(),
                 controlType: 'Text',
-                controlClass: 'controls-block',
                 controls: this.children.modelNameControl,
                 tooltip: _('The ID is used as the filename on disk. Cannot be changed later.').t(),
                 help: _('Can only contain letters, numbers and underscores.').t()

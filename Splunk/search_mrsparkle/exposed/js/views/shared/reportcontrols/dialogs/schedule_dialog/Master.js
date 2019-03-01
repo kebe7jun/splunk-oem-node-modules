@@ -109,14 +109,22 @@ define([
 
                 this.model.inmem.on('saveSchedule', function() {
                     var wasNew = this.model.report.isNew();
+                    var data = {};
+
+                    if (wasNew) {
+                        data.data = {
+                            app: this.model.application.get('app'),
+                            owner: this.model.application.get('owner')
+                        };
+                    }
 
                     if (this.model.inmem.get('scheduled_and_enabled')) {
                         this.model.scheduleWindow.validate();
                         this.model.inmem.entry.content.set('schedule_window', this.model.scheduleWindow.getScheduleWindow());
-        
+
                         var removedAttr = this.model.inmem.unsetUnselectedActionArgs();
 
-                        var saveDeferred = this.model.inmem.save({}, {
+                        var saveDeferred = this.model.inmem.save({}, _.extend(data, {
                             success: function(model, response) {
                                 if (wasNew) {
                                     this.children.edit.$el.hide();
@@ -130,7 +138,7 @@ define([
                                     this.model.controller.trigger('refreshEntities');
                                 }
                             }.bind(this)
-                        });
+                        }));
 
                         // if save fails due to validation error we need to reset unset unselected alert actions args 
                         $.when(saveDeferred).done(function() {
@@ -139,13 +147,12 @@ define([
                             }
                         }.bind(this));
                     } else {
-                        this.model.inmem.save({is_scheduled: 0}, {
+                        this.model.inmem.save({is_scheduled: 0}, _.extend(data, {
                             patch: true,
                             success: function(model, response) {
                                 this.model.inmem.trigger('saveSuccessNotScheduled');
                             }.bind(this)
-                        });
-
+                        }));
                     }
                 }, this);
             },

@@ -18,7 +18,7 @@ define([
      * @name TextareaControl
      * @description Textarea with Bootstrap markup
      * @extends {views.Control}
-     *  
+     *
      * @param {Object} options
      * @param {String} options.modelAttribute The attribute on the model to observe and update on selection
      * @param {Backbone.Model} options.model The model to operate on
@@ -45,11 +45,11 @@ define([
                     pattern: null
             };
             _.defaults(this.options, defaults);
-           
+
             if (this.options.placeholder && !dom_utils.supportsNativePlaceholder()) {
                 this.options.useSyntheticPlaceholder = true;
             }
-            
+
             Control.prototype.initialize.apply(this, arguments);
         },
         events: {
@@ -103,17 +103,20 @@ define([
             this.options.enabled = false;
             this.$textarea.hide();
             this.$disabledTextarea.show();
+            this.$disabledTextarea.attr('disabled', 'disabled');
         },
         enable: function(){
             this.options.enabled = true;
             this.$textarea.show();
             this.$disabledTextarea.hide();
+            this.$disabledTextarea.removeAttr('disabled');
         },
         render: function() {
             if (!this.el.innerHTML) {
                 var template = _.template(this.template, {
                         options: this.options,
-                        value: (_.isUndefined(this._value) || _.isNull(this._value)) ? '' : this._value
+                        value: (_.isUndefined(this._value) || _.isNull(this._value)) ? '' : this._value,
+                        id: 'control-' + this.cid
                     });
                 this.$el.html(template);
                 this.$textarea = this.$('textarea');
@@ -131,7 +134,7 @@ define([
                 this.$disabledTextarea.text(this._value);
             }
             this.updatePlaceholder();
-            
+
             var additionalClassNames = this.options.additionalClassNames;
             if(additionalClassNames) {
                 this.$el.addClass(additionalClassNames);
@@ -148,6 +151,8 @@ define([
             <textarea type="text" \
                         name="<%- options.modelAttribute || "" %>" \
                         class="<%= options.textareaClassName %>" \
+                        id="<%- id %>" \
+                        aria-label="<%- options.ariaLabel || options.placeholder || options.modelAttribute || "" %>"\
                         <% if(options.placeholder && !options.useSyntheticPlaceholder){ %>\
                            placeholder="<%- options.placeholder %>"\
                         <%}%> \

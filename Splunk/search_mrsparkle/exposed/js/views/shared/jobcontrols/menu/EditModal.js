@@ -7,19 +7,24 @@ define(
         'views/shared/Modal',
         'views/shared/FlashMessages',
         'views/shared/controls/ControlGroup',
+        'views/shared/jobcontrols/menu/WorkloadInput',
         'models/search/Job',
         'uri/route',
         'util/splunkd_utils',
         'util/time'
      ],
-     function($, _, Backbone, module, Modal, FlashMessages, ControlGroup, SearchJobModel, route, splunkd_utils, time_utils){
+     function($, _, Backbone, module, Modal, FlashMessages, ControlGroup, WorkloadInput, SearchJobModel, route, splunkd_utils, time_utils){
         return Modal.extend({
             /**
              * @param {Object} options {
-                    model: {
+                   collection: {
+                        workloadManagementStatus: <collections.services.admin.workload_management> (Optional.)
+                   }
+                   model: {
                         searchJob: this.model.searchJob,
                         application: this.model.application,
-                        report: <models.Report> (Optional.)
+                        report: <models.Report> (Optional.),
+                        user: this.model.user
                     },
                     page: where to link to (optional, default is this.modal.application.get('page'))
              *  }
@@ -28,9 +33,23 @@ define(
             initialize: function() {
                 Modal.prototype.initialize.apply(this, arguments);
 
+                this.deferreds = this.deferreds || {};
+
                 this.model.inmem = this.model.searchJob.clone();
                 this.children.flashMessages = new FlashMessages({ model: this.model.inmem });
                 this.fetchOnHidden = true;
+
+                if (!_.isEmpty(this.collection) && !_.isEmpty(this.collection.workloadManagementStatus)) {
+                    this.children.workloadInput = new WorkloadInput({
+                        model: {
+                            inmem: this.model.inmem,
+                            user: this.model.user
+                        },
+                        collection: {
+                            workloadManagementStatus: this.collection.workloadManagementStatus
+                        }
+                    });
+                }
 
                 var currApp = this.model.application.get("app"),
                     currOwner = this.model.application.get("owner"),
@@ -88,7 +107,7 @@ define(
                     label: _("Read Permissions").t(),
                     controlType:'SyntheticRadio',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             { value: false, label: _('Private').t() },
                             { value: true, label: _('Everyone').t() }
@@ -104,7 +123,7 @@ define(
                     controlType:'SyntheticRadio',
                     tooltip: _("Lifetime defines how long the job is accessible, after the job is run. If the job is not accessed in the specified time period, the job is removed.").t(),
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             { value: false, label: time_utils.getRelativeStringFromSeconds(this.defaultTTL, true) },
                             { value: true, label: time_utils.getRelativeStringFromSeconds(this.defaultSaveTTL, true) }
@@ -120,9 +139,9 @@ define(
                     controlType:'Text',
                     help: _('Copy or bookmark the link by right-clicking the icon, or drag the icon into your bookmarks bar.').t(),
                     controlOptions: {
-                        className: 'job-link',
+                        additionalClassNames: 'job-link',
                         defaultValue: this.linkToJob,
-                        append: '<a class="add-on bookmark" href="' + this.linkToJob + '"><i class="icon-bookmark"></i><span class="hide-text">' + _("Splunk Search Job").t() + '</span></a>'
+                        append: '<a class="add-on bookmark" aria-label="' + _("click here to copy the link").t() + '" href="' + this.linkToJob + '"><i class="icon-bookmark"></i><span class="hide-text">' + _("Splunk Search Job").t() + '</span></a>'
                     }
                 });
 
@@ -135,7 +154,7 @@ define(
             events: $.extend({}, Modal.prototype.events, {
                 'click .btn-primary': function(e) {
                     e.preventDefault();
-                    
+
                     //TODO: SPL-75065, SPL-75098 because the job endpoint cannot handle parallel requests
                     //we must send all of our changes serially. Sending these requests serially will
                     //make the process slower in systems with slow response times. When SplunkD is fixed
@@ -143,8 +162,10 @@ define(
 
                     var everyoneRead = this.model.inmem.get('everyoneRead'),
                         isRealTime = this.model.inmem.entry.content.get("isRealTimeSearch"),
+                        workloadPool = this.model.inmem.entry.content.get("workload_pool"),
                         aclDeferred = $.Deferred(),
-                        saveDeferred = $.Deferred();
+                        saveJobDeferred = $.Deferred(),
+                        saveWorkloadDeferred = $.Deferred();
 
                     if (this.everyoneRead !== everyoneRead) {
                         var options = {
@@ -159,7 +180,7 @@ define(
                                 }
                             }
                         };
-                        
+
                         if (everyoneRead) {
                             this.model.inmem.makeWorldReadable(options);
                         } else {
@@ -170,22 +191,35 @@ define(
                     }
 
                     $.when(aclDeferred).done(function(){
-                        var options = {
+                        var saveJoboptions = {
                             success: function(model, response) {
-                                saveDeferred.resolve();
+                                saveJobDeferred.resolve();
                             },
                             error: function(model, response) {
                                 if (response.status == splunkd_utils.NOT_FOUND) {
-                                    saveDeferred.reject();
+                                    saveJobDeferred.reject();
                                 } else {
-                                    saveDeferred.resolve();
+                                    saveJobDeferred.resolve();
+                                }
+                            }
+                        };
+
+                        var saveWorkloadOptions = {
+                            success: function(model, response) {
+                                saveWorkloadDeferred.resolve();
+                            },
+                            error: function(model, response) {
+                                if (response.status == splunkd_utils.NOT_FOUND) {
+                                    saveWorkloadDeferred.reject();
+                                } else {
+                                    saveWorkloadDeferred.resolve();
                                 }
                             }
                         };
 
                         if (!this.model.inmem.entry.content.get('isSaved')) {
                             this.model.inmem.unsaveJob(
-                               $.extend(true, options, {
+                               $.extend(true, saveJoboptions, {
                                    data: {
                                        auto_cancel: SearchJobModel.DEFAULT_AUTO_CANCEL
                                    }
@@ -194,7 +228,7 @@ define(
                         } else {
                             if (isRealTime) {
                                 this.model.inmem.saveJob(
-                                    $.extend(true, options, {
+                                    $.extend(true, saveJoboptions, {
                                         data: {
                                             auto_cancel: SearchJobModel.DEFAULT_AUTO_CANCEL
                                         }
@@ -202,16 +236,29 @@ define(
                                 );
                             } else {
                                 //if the job is not realtime then we use the job endpoint's inherent clear of auto_pause and auto_cancel
-                                this.model.inmem.saveJob(options);
+                                this.model.inmem.saveJob(saveJoboptions);
                             }
                         }
+
+                        if (_.isUndefined(workloadPool) || _.isEmpty(workloadPool)) {
+                            saveWorkloadDeferred.resolve();
+                        } else {
+                            this.model.inmem.saveWorkloadPool(
+                                $.extend(true, saveWorkloadOptions, {
+                                    data: {
+                                        workload_pool: workloadPool
+                                    }
+                                })
+                            );
+                        }
+
                     }.bind(this));
 
-                    $.when(saveDeferred).done(function() {
+                    $.when(saveJobDeferred, saveWorkloadDeferred).done(function() {
                         this.hide();
                     }.bind(this));
-                    
-                    $.when(saveDeferred, aclDeferred).fail(function () {
+
+                    $.when(saveJobDeferred, saveWorkloadDeferred, aclDeferred).fail(function () {
                         this.fetchOnHidden = false;
                         this.hide();
                         this.model.searchJob.trigger('jobControls:notFound', { title: _('Job Settings').t() });
@@ -237,7 +284,9 @@ define(
                 this.children.permissions.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
                 this.children.lifetime.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
                 this.children.link.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
-
+                if (!_.isEmpty(this.collection) && !_.isEmpty(this.collection.workloadManagementStatus)) {
+                    this.children.workloadInput.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
+                }
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL);
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_SAVE);
 

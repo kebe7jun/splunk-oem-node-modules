@@ -4,18 +4,12 @@
    .editFormWrapper {
         padding: 0px;
         position: relative;
-        padding-top: 10px;
-        min-width: 500px;
-        max-width: 940px;
-        background: #ffffff;
-        border: 1px solid #cccccc;
+        width: $bodyMinWidth;
         margin: 20px auto 20px auto;
-        border-radius: 2px; 
+        @mixin create-card;
 
         .formWrapper {
-            padding-bottom: 5px;
-            padding-left: 10px;
-            padding-right: 10px;
+            padding: $spacing;
             min-height: 200px;
 
             .splBorder.splBorder-nsew.splBackground-primary.btn {
@@ -29,17 +23,17 @@
         }
 
         .jmFormActions {
-            border-top: 1px solid #cccccc;
+            border-top: $borderLight;
             height: 35px;
-            padding: 10px 10px 0 10px;
-           
-           .cancel-button{
-                float: left;
-            } 
+            padding: $spacing;
+            text-align: right;
 
            .save-button {
-                float: right;
+                margin-left: $spacingHalf;
             }
-        }       
+            .btn {
+                min-width: $buttonMinWidth;
+            }
+        }
     }
 }

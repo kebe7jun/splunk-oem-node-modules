@@ -9,7 +9,9 @@ define(
         'models/search/SHelper',
         'util/keyboard',
         'util/dom_utils',
-        'splunk.util'
+        'util/general_utils',
+        'splunk.util',
+        './Master.pcss'
     ],
     function(
         $,
@@ -21,6 +23,7 @@ define(
         SHelperModel,
         keyboard_utils,
         dom_utils,
+        general_utils,
         splunkUtils
     ) {
         return Base.extend({
@@ -109,18 +112,18 @@ define(
                     }
                     e.preventDefault();
                 },
-                'keydown a.search-assistant-activator': function(e) {
+                'keydown .search-assistant-activator': function(e) {
                     if (e.keyCode === keyboard_utils.KEYS['TAB'] && !e.shiftKey) {
                          if (this.model.searchBar.get('assistantOpen')) {
                             this.closeAssistant();
                         }
-                    } 
+                    }
                 },
                 'click .search-assistant-resize': function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                 },
-                'mousedown .search-assistant-resize': 'resizeAssistant', 
+                'mousedown .search-assistant-resize': 'resizeAssistant',
                 'keypress': 'returnToSearchFocus'
             },
             returnToSearchFocus: function(e) {
@@ -165,8 +168,9 @@ define(
                     return;
                 }
 
-                this.$assistantContainer.hide();
+                this.$assistantContainer.css('display', 'none');
                 this.$assistantActivator.addClass("icon-triangle-down-small").removeClass("icon-triangle-up-small");
+                this.$assistantActivator.attr("aria-expanded", "false");
                 this.$assistantResize.removeClass("search-assistant-resize-active");
                 this.$el.removeClass('open');
 
@@ -181,10 +185,11 @@ define(
                     $(document).on('keyup.' + this.nameSpace, function(e) {
                         if (e.keyCode == keyboard_utils.KEYS['ESCAPE']) {
                             this.closeAssistant();
-                            this.returnToSearchFocus(e); 
+                            this.returnToSearchFocus(e);
                         }
                     }.bind(this));
                     this.$assistantActivator.addClass("icon-triangle-up-small").removeClass("icon-triangle-down-small");
+                    this.$assistantActivator.attr("aria-expanded", "true");
                     this.$assistantResize.addClass("search-assistant-resize-active");
                     this.$el.addClass('open');
                     this.model.searchBar.set("assistantOpen", true);
@@ -204,14 +209,13 @@ define(
                             'namespace': this.model.application.get('app') || 'search',
                             'search': searchString,
                             'useTypeahead': this.options.useTypeahead,
-                            'useAssistant': this.options.useAssistant,
                             'showCommandHelp': this.options.showCommandHelp,
                             'showCommandHistory': this.options.showCommandHistory,
                             'showFieldInfo': this.options.showFieldInfo
                         },
                         success: function() {
                             if (this.model.searchBar.get('assistantOpen')) {
-                                this.$assistantContainer.show();
+                                this.$assistantContainer.css('display', 'flex');
 
                                 this.model.searchBar.set({
                                     assistantKeywordCount: this.$('.typeahead-keyword').length,
@@ -219,7 +223,7 @@ define(
                                 });
                                 this.model.searchBar.trigger('searchFieldfocus');
                             }
-                        }.bind(this) 
+                        }.bind(this)
                     });
                 }
             },
@@ -241,18 +245,25 @@ define(
                 this._disabled = false;
                 this.$el.removeClass('disabled');
             },
+            setTheme: function(theme) {
+                this.$el.attr('data-theme', theme);
+            },
             render: function() {
                 if (this.$el.html()) {
                     return this;
                 }
 
                 var template = _.template(this.template, {});
+                var elementId = "id-" + general_utils.generateUUID();
                 this.$el.html(template);
 
                 // Setup shortcuts
                 this.$assistantContainer = this.$('.search-assistant-container');
                 this.$assistantActivator = this.$('.search-assistant-activator');
                 this.$assistantResize = this.$('.search-assistant-resize');
+                
+                this.$assistantContainer.attr("id", elementId);
+                this.$assistantActivator.attr("aria-controls", elementId);
 
                 this.children.typeAhead.render().appendTo(this.$assistantContainer);
                 this.children.searchHelp.render().appendTo(this.$assistantContainer);
@@ -262,7 +273,7 @@ define(
             template: '\
                 <div class="search-assistant-container"></div>\
                 <div class="search-assistant-resize"></div>\
-                <a href="#" class="search-assistant-activator icon-triangle-down-small"></a>\
+                <a href="#" role="button" class="search-assistant-activator icon-triangle-down-small" aria-label="<%- _("Search Assistant").t() %>" aria-expanded="false"></a>\
             '
         });
     }

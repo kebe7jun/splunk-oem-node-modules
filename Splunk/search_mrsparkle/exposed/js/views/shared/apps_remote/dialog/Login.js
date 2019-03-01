@@ -79,18 +79,6 @@ define([
                     e.preventDefault();
                     var url = 'http://www.splunk.com/page/lost_password';
                     route.redirectTo(url, true);
-                },
-
-                'click #software-license': function(e) {
-                    e.preventDefault();
-                    var url = 'http://www.splunk.com/view/SP-CAAAAFA';
-                    route.redirectTo(url, true);
-                },
-
-                'click #terms-conditions': function(e) {
-                    e.preventDefault();
-                    var url = 'https://d38o4gzaohghws.cloudfront.net/static/misc/eula.html';
-                    route.redirectTo(url, true);
                 }
             }),
 
@@ -134,13 +122,18 @@ define([
                 this.$(Modal.BODY_FORM_SELECTOR).find('.username-placeholder').html(this.children.username.render().el);
                 this.$(Modal.BODY_FORM_SELECTOR).find('.password-placeholder').html(this.children.password.render().el);
                 this.$(Modal.BODY_FORM_SELECTOR).find('.consent-placeholder').html(this.children.consent.render().el);
+
+                this.$(Modal.BODY_FORM_SELECTOR).find('#splunk-base-link')
+                    .text(this.model.appRemote.get('title'))
+                    .attr('href', this.model.appRemote.get('path'));
+
                 this.$(Modal.BODY_FORM_SELECTOR).find('#app-license')
                     .text(this.model.appRemote.get('license_name'))
                     .attr('href', this.model.appRemote.get('license_url'));
 
                 this.$(Modal.FOOTER_SELECTOR).append(Modal.BUTTON_CANCEL);
-
                 this.$(Modal.FOOTER_SELECTOR).append('<a href="#" class="btn btn-primary modal-btn-primary">' + this.loginBtnLabel + '</a>');
+
                 if (!this.model.auth.get('consent')) {
                     this.$(Modal.FOOTER_SELECTOR).find('.modal-btn-primary').addClass('disabled');
                 }

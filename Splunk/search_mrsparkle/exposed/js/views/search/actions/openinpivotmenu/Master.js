@@ -276,17 +276,17 @@ define([
         ',
 
         dialogFormBodyTemplate: '\
-            <label class="radio" for="all-button-<%- cid %>">\
+            <label class="radio all-button-radio" for="all-button-<%- cid %>">\
                 <input type="radio" name="selection-mode" value="<%- MODES.ALL_FIELDS %>" id="all-button-<%- cid %>" />\
-                <%- _("All Fields").t() %> (<span class="all-fields-count"><%- numFields %></span>)\
+                <span class="radio-label"><%- _("All Fields").t() %></span> (<span class="all-fields-count"><%- numFields %></span>)\
             </label>\
-            <label class="radio" for="selected-button-<%- cid %>">\
+            <label class="radio selected-button-radio" for="selected-button-<%- cid %>">\
                 <input type="radio" name="selection-mode" value="<%- MODES.SELECTED_FIELDS %>" id="selected-button-<%- cid %>"/>\
-                <%- _("Selected Fields").t() %> (<span class="selected-fields-count"><%- numSelectedFields %></span>)\
+                <span class="radio-label"><%- _("Selected Fields").t() %></span> (<span class="selected-fields-count"><%- numSelectedFields %></span>)\
             </label>\
-            <label class="radio" for="coverage-button-<%- cid %>">\
+            <label class="radio coverage-radio-button" for="coverage-button-<%- cid %>">\
                 <input type="radio" name="selection-mode" value="<%- MODES.FIELD_COVERAGE %>" id="coverage-button-<%- cid %>"/>\
-                <%= coverageLabel %>\
+                <span class="radio-label"><%= coverageLabel %></span>\
                 (<span class="coverage-count"></span>)\
             </label>\
         ',

@@ -182,7 +182,9 @@ define(
                 }
             },
             render: function() {
-                var openInSearch = route.search(
+                var viewTarget = this.model.savedAlert.openInView(this.model.user);
+                var view = route.getView(viewTarget);
+                var openInSearch = view.route(
                         this.model.application.get("root"),
                         this.model.application.get("locale"),
                         this.model.application.get("app"),
@@ -201,6 +203,7 @@ define(
                         button: this.options.button,
                         gear: this.options.gear,
                         searchLink: openInSearch,
+                        searchLabel: view.openLabel,
                         enableDiable: this.model.savedAlert.entry.content.get('disabled') ? _('Enable').t() : _('Disable').t(),
                         canChangePerms: this.model.savedAlert.entry.acl.get('can_change_perms'),
                         canAdvancedEdit: canAdvancedEdit
@@ -255,7 +258,7 @@ define(
                 <div class="dropdown-menu dropdown-menu-narrow">\
                     <div class="arrow"></div>\
                     <ul class="open_actions">\
-                        <li><a href="<%= searchLink %>"><%- _("Open in Search").t() %></a></li>\
+                        <li><a href="<%= searchLink %>"><%- searchLabel %></a></li>\
                     </ul>\
                     <ul class="second-group">\
                         <li><a class="edit-alert" href="#"><%- _("Edit Alert").t() %></a></li>\

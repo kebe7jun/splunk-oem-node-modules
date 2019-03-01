@@ -8,6 +8,9 @@ import {
 } from 'dashboard/containers/editor/drilldown/drilldownNames';
 import {
     UPDATE_ACTIVE_ACTION,
+    FETCH_TIME_RANGE_PRESETS_REQUEST,
+    FETCH_TIME_RANGE_PRESETS_SUCCESS,
+    FETCH_TIME_RANGE_PRESETS_FAILURE,
     FETCH_APPS_REQUEST,
     FETCH_APPS_SUCCESS,
     FETCH_APPS_FAILURE,
@@ -24,6 +27,59 @@ import {
 
 export const updateActiveAction = value =>
     ({ type: UPDATE_ACTIVE_ACTION, value });
+
+const fetchTimeRangePresetsRequest = fetchOptions => ({
+    type: FETCH_TIME_RANGE_PRESETS_REQUEST,
+    fetchOptions,
+});
+
+const fetchTimeRangePresetsSuccess = (timeRangePresets, fetchOptions) => ({
+    type: FETCH_TIME_RANGE_PRESETS_SUCCESS,
+    timeRangePresets,
+    fetchOptions,
+});
+
+const fetchTimeRangePresetsFailure = (error, fetchOptions) => ({
+    type: FETCH_TIME_RANGE_PRESETS_FAILURE,
+    error,
+    fetchOptions,
+});
+
+export const fetchTimeRangePresets = (options = {}) => (dispatch, getState) => {
+    const fetchOptions = _.defaults({}, options, { count: -1 });
+
+    if (getState().timeRangePresets.isFetching) {
+        // return $.Deferred to be consistent with what Backbone.Model.fetch() returns
+        return (new $.Deferred()).resolve();
+    }
+
+    dispatch(fetchTimeRangePresetsRequest(fetchOptions));
+
+    // ideally we should use @splunk/time-range-utils/presets instead of using ModelHelper, because
+    // @splunk/time-range-utils is designed for @splunk/react-time-range. But, we have been using
+    // ModelHelper in other places in dashboard codebase, it is memoized so we can reduce number of
+    // network request (in some cases).
+    const timeRangePresetsCollection = ModelHelper.getCachedModel('times', fetchOptions);
+
+    return timeRangePresetsCollection.dfd
+        .done(() => {
+            const presets = timeRangePresetsCollection
+                .filter(model => model.entry.content.get('earliest_time') || model.entry.content.get('latest_time'))
+                .map((model) => {
+                    const { label, earliest_time, latest_time } = model.entry.content.toJSON();
+                    return {
+                        label,
+                        earliest: earliest_time || '',  // eslint-disable-line camelcase
+                        latest: latest_time || '',      // eslint-disable-line camelcase
+                    };
+                });
+
+            return dispatch(fetchTimeRangePresetsSuccess(
+                presets,
+                fetchOptions));
+        })
+        .fail(() => dispatch(fetchTimeRangePresetsFailure('fetch time range presets failed!', fetchOptions)));
+};
 
 const fetchAppsRequest = fetchOptions => ({
     type: FETCH_APPS_REQUEST,
@@ -92,8 +148,10 @@ export const fetchDashboards = options => (dispatch, getState) => {
     const fetchOptions = _.defaults({}, options, {
         count: -1,
         sort_key: 'label',
-        search: '(eai:type="views" AND (eai:data="*<dashboard*" OR eai:data="*<form*")) OR (' +
-            'eai:type="html")',
+        digest: '1',
+        // cannot use (eai:data="*<dashboard*" OR eai:data="*<form*") here, because eai:data is not available
+        // in digest mode.
+        search: '(eai:type="views" OR eai:type="html")',
     });
 
     if (getState().dashboards.isFetching) {

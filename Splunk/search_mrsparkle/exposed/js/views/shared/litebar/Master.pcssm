@@ -3,21 +3,20 @@
 
 .view {
     all: initial;
-    background: $splunkLiteBlack !important;
+    background: $gray20;
     color: $white;
-    min-height: $navbarHeightLite;
+    min-height: $litebarHeight;
     padding-right: 10px;
-    font-size: $baseFontSize;
-    font-family: $baseFontFamily;
+    font-size: $fontSize;
+    font-family: $fontFamily;
     display: block;
     a {
-        color: $white;
         text-decoration: none;
     }
 }
 .hamburger {
-    line-height: $navbarHeightLite;
-    height: $navbarHeightLite;
+    line-height: $litebarHeight;
+    height: $litebarHeight;
     cursor: pointer;
     position: relative;
     z-index: calc($zindexSideNavBackdrop + 1);
@@ -25,18 +24,24 @@
     display: block;
     text-align: center;
     font-size: 24px;
+    color: $white;
     float: left;
 
     &:hover  {
         background: color($white a(10%));
+        color: $white;
+    }
+    &:focus {
+        @mixin focus-element-inset $gray20;
     }
 }
 .brand {
     font-size: 17px;
     float: left;
     text-decoration: none;
-    line-height: $navbarHeightLite;
-    height: $navbarHeightLite;
+    color: $white;
+    line-height: $litebarHeight;
+    height: $litebarHeight;
     border: none;
     &:hover {
         background: none;
@@ -45,11 +50,11 @@
     }
 }
 .gt {
-    color: $splunkGray;
+    color: $gray60;
     font-weight: normal;
 }
 .subBrand {
-    color: $splunkLiteOrange;
+    color: $splunkLiteColor;
     -webkit-font-smoothing: antialiased;
 }
 .logo {
@@ -57,8 +62,8 @@
 }
 .nav {
     margin-bottom: 0;
-    height: $navbarHeightLite;
-    line-height: $navbarHeightLite;
+    height: $litebarHeight;
+    line-height: $litebarHeight;
     float: left;
 }
 .navbarGlobal {
@@ -68,7 +73,7 @@
     float: right;
 }
 .messageNotification {
-    background: $red;
+    background: $errorColor;
     border-radius: 10px;
     color: $white;
     display: inline-block;
@@ -83,7 +88,7 @@
 }
 .sidenavScreen {
     position: fixed;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(23, 29, 33, 0.6);
     z-index: $zindexSideNavBackdrop;
     width: 100%;
     height: 100%;

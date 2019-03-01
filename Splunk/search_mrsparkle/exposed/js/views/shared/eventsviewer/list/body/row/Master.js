@@ -30,10 +30,6 @@ define(
         return BaseView.extend({
             moduleId: module.id,
             tagName: 'tr',
-            className: 'tabbable-list-row',
-            attributes: {
-                tabindex: -1
-            },
             /**
              * @param {Object} options {
              *      model: {
@@ -76,8 +72,7 @@ define(
                         application: this.model.application
                     },
                     idx: this.options.idx,
-                    highlightExtractedTime: this.options.highlightExtractedTime,
-                    clickFocus: this.options.clickFocus
+                    highlightExtractedTime: this.options.highlightExtractedTime
                 });
 
                 this.children.selectedFields = new SelectedFieldsView({
@@ -96,8 +91,7 @@ define(
                     },
                     rowExpanded: this.rowExpanded,
                     selectableFields: this.options.selectableFields,
-                    idx: this.options.idx,
-                    clickFocus: this.options.clickFocus
+                    idx: this.options.idx
                 });
             },
             startListening: function() {
@@ -116,8 +110,12 @@ define(
                 });
 
                 this.listenTo(this.model.state, 'change:' + this.showAllLines, function(model, value, options) {
-                    this.eventFetch();
-                    this.model.state.set('modalizedRow', this.options.idx);
+                    // SPL-144803: Modalize row after event is fetched, since it may impact the table width and height.
+                    this.eventFetch().then(function() {
+                        // Force triggering change event to make collapse work too.
+                        this.model.state.unset('modalizedRow', { silent: true });
+                        this.model.state.set('modalizedRow', this.options.idx);
+                    }.bind(this));
                 });
 
                 //on change of the search string we should unmodalize
@@ -231,8 +229,7 @@ define(
                     allowRowExpand: this.options.allowRowExpand,
                     idx: this.options.idx,
                     swappingKey: this.swappingKey,
-                    showAllLines: this.showAllLines,
-                    clickFocus: this.options.clickFocus
+                    showAllLines: this.showAllLines
                 });
                 //remove and put into another function
                 this.children.eventFields.render().insertAfter(this.$('.event').find(this.children.raw.el));
@@ -255,7 +252,7 @@ define(
                     postProcessSearch = (this.model.report.entry.content.get('display.general.search.postProcessSearch') || '') + (sortingSearch || '');
                 }
                 this.model.event.set(this.model.event.idAttribute, this.model.searchJob.entry.links.get('events'));
-                this.model.event.fetch({
+                return this.model.event.fetch({
                     data: $.extend(true, this.model.application.toJSON(), {
                         isRt: this.model.searchJob.isRealtime(),
                         search: postProcessSearch || sortingSearch,
@@ -289,7 +286,9 @@ define(
                 }
                 this.model.state.set('currentlyExpandedRow', this);
 
-                this.eventFetch();
+                this.eventFetch().then(function() {
+                    this.model.state.set('modalizedRow', this.options.idx);
+                }.bind(this));
                 this.model.state.set(this.rowExpanded, true);
                 this.model.state.set('modalizedRow', this.options.idx);
                 this.children.eventFields && this.children.eventFields.activate().$el.show();
@@ -383,10 +382,10 @@ define(
             template: '<!--Line breaks intentionally removed to fix obscure IE9 bug with tables-->' +
                 '<% if (allowRowExpand) { %>' +
                 '<td tabindex="0" class="expands <%- colorClass %> <% if (isPreviewEvent) { %> disabled <% } %>">' +
-                    '<a><i class="icon-triangle-<%- expanded ? "down" : "right" %>-small"></i></a>' +
+                    '<a aria-label="<%- _("Expand/collapse row toggle").t() %>"><i class="icon-triangle-<%- expanded ? "down" : "right" %>-small"></i></a>' +
                 '</td>' +
                 '<% } %>' +
-                '<td class="line-num"><span><%- lineNum %></span></td>' +
+                '<td tabindex="0" class="line-num"><span><%- lineNum %></span></td>' +
                 '<% if (showWarnings) { %>' +
                     '<td class="col-warnings" tabindex="0">' +
                     '<% if (warningTexts && warningTexts.length > 0) {' +

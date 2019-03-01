@@ -23,7 +23,7 @@ var getValue = function getValue(selector) {
             throw new _ErrorHandler.CommandError(7, selector || _this.lastResult.selector);
         }
 
-        var elementIdAttributeCommands = [];
+        var elementIdPropertyCommands = [];
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -32,7 +32,7 @@ var getValue = function getValue(selector) {
             for (var _iterator = (0, _getIterator3.default)(res.value), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var elem = _step.value;
 
-                elementIdAttributeCommands.push(_this.elementIdAttribute(elem.ELEMENT, 'value'));
+                elementIdPropertyCommands.push(_this.elementIdProperty(elem.ELEMENT, 'value'));
             }
         } catch (err) {
             _didIteratorError = true;
@@ -49,13 +49,14 @@ var getValue = function getValue(selector) {
             }
         }
 
-        return _this.unify(elementIdAttributeCommands, {
+        return _this.unify(elementIdPropertyCommands, {
             extractValue: true
         });
     });
 }; /**
     *
     * Get the value of a `<textarea>`, `<select>` or text `<input>` found by given selector.
+    * If multiple elements are found via the given selector, an array of values is returned instead.
     *
     * <example>
        :index.html
@@ -72,8 +73,8 @@ var getValue = function getValue(selector) {
     *
     * @alias browser.getValue
     * @param   {String} selector input, textarea, or select element
-    * @return {String}          requested input value
-    * @uses protocol/elements, protocol/elementIdAttribute
+    * @return {String|String[]}          requested element(s) value
+    * @uses protocol/elements, protocol/elementIdProperty
     * @type property
     *
     */

@@ -86,12 +86,14 @@ define(
                     if (openInApp === "system") {
                         openInApp = app;
                     }
+                    var openInView = this.model.savedAlert.openInView(this.model.user);
+                    var view = route.getView(openInView);
                     var alertLink   = route.alert(
                                     this.model.application.get("root"),
                                     this.model.application.get("locale"),
                                     openInApp,
                                     { data: { s: this.model.savedAlert.id}}),
-                    openInSearch = route.search(
+                    openInSearch = view.route(
                                     this.model.application.get("root"),
                                     this.model.application.get("locale"),
                                     openInApp,
@@ -102,6 +104,7 @@ define(
                     alertName: alertName,
                     alertLink: alertLink,
                     searchLink: openInSearch,
+                    searchText: view.openLabel,
                     status: this.model.savedAlert.entry.content.get('disabled') ? _('Disabled').t(): _('Enabled').t(),
                     app: this.model.savedAlert.entry.acl.get('app'),
                     owner: this.model.savedAlert.entry.acl.get('owner'),
@@ -115,13 +118,13 @@ define(
             },
             template: '\
                 <td class="expands">\
-                    <a href="#"><i class="icon-triangle-right-small"></i></a>\
+                    <a href="#" aria-label="<%- _("Expand Table Row").t() %>"><i class="icon-triangle-right-small"></i></a>\
                 </td>\
                 <td class="title">\
                     <a href="<%= alertLink %>" title="<%- alertName %>"><%- alertName %></a>\
                 </td>\
                 <td class="actions">\
-                    <a class="openInLink" href="<%= searchLink %>"><%- _("Open in Search").t() %></a>\
+                    <a class="openInLink" href="<%= searchLink %>"><%= searchText %></a>\
                 </td>\
                 <td class="owner"><%- owner %></td>\
                 <% if(canUseApps) { %>\
@@ -133,4 +136,3 @@ define(
         });
     }
 );
-

@@ -68,7 +68,8 @@ define(
                     "^display\..*",
                     "^dispatch\.earliest_time$",
                     "^dispatch\.latest_time$",
-                    "^dispatch\.sample_ratio$"
+                    "^dispatch\.sample_ratio$",
+                    "^workload_pool$"
                 ];
 
                 this.report_filter = [
@@ -76,6 +77,7 @@ define(
                    "^dispatch\.earliest_time$",
                    "^dispatch\.latest_time$",
                    "^dispatch\.sample_ratio$",
+                   "^workload_pool$",
                    "^search$"
                 ];
 
@@ -84,7 +86,8 @@ define(
                    "^earliest$",
                    "^latest$",
                    "^q$",
-                   "^dispatch\.sample_ratio$"
+                   "^dispatch\.sample_ratio$",
+                    "^workload_pool$"
                 ];
 
                 this.user_prefs_filter = [
@@ -428,7 +431,7 @@ define(
                         if (options.forceTrigger || (search && (
                                 _.has(urlFilteredAttrs,"q") || _.has(urlFilteredAttrs,"earliest") ||
                                 _.has(urlFilteredAttrs,"latest") || _.has(urlFilteredAttrs,"display.page.search.mode") ||
-                                _.has(urlFilteredAttrs,"dispatch.sample_ratio")
+                                _.has(urlFilteredAttrs,"dispatch.sample_ratio") || _.has(urlFilteredAttrs,"workload_pool")
                             ))
                         ){
                             //unset the sid and oneTimeUserAttrs so that we get a new one when the page loads
@@ -473,7 +476,7 @@ define(
                     if (!(
                             _.has(filteredAttrs,"search") || _.has(filteredAttrs,"dispatch.earliest_time") ||
                             _.has(filteredAttrs,"dispatch.latest_time") || _.has(filteredAttrs,"display.page.search.mode") ||
-                            _.has(filteredAttrs,"dispatch.sample_ratio")
+                            _.has(filteredAttrs,"dispatch.sample_ratio") || _.has(filteredAttrs,"workload_pool")
                             
                     )){
                         this.deleteOneTimeUseAttrs(filteredAttrs);
@@ -557,6 +560,7 @@ define(
                 attrsFromJob["dispatch.latest_time"] = this.model.searchJob.getDispatchLatestTimeOrAllTime(isScheduled);
                 attrsFromJob["display.page.search.mode"] = this.model.searchJob.getAdhocSearchMode();
                 attrsFromJob["dispatch.sample_ratio"] = this.model.searchJob.getSampleRatio();
+                attrsFromJob["workload_pool"] = this.model.searchJob.getWorkloadPool();
                 this.mediateReportAttrsToClassicUrl(attrsFromJob);
 
                 this.model.classicUrl.save(attrsFromJob, {

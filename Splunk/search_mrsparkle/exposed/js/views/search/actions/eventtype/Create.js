@@ -15,11 +15,10 @@ define(
             className: 'modal eventtype-create',
             initialize: function() {
                 Base.prototype.initialize.apply(this, arguments);
-                
+
                 if (this.options.showSearch) {
                     this.children.search = new ControlGroup({
                         controlType: 'Textarea',
-                        controlClass: 'controls-block',
                         controlOptions: {
                             defaultValue: this.model.report.entry.content.get('search'),
                             enabled: false,
@@ -28,10 +27,9 @@ define(
                         label: _('Search').t()
                     });
                 }
-                
+
                 this.children.name = new ControlGroup({
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'name',
                         model: this.model.eventType.entry.content,
@@ -39,10 +37,9 @@ define(
                     },
                     label: _('Name').t()
                 });
-                
+
                 this.children.tags = new ControlGroup({
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'tags',
                         model: this.model.eventType.entry.content,
@@ -51,7 +48,7 @@ define(
                     },
                     label: _('Tags').t()
                 });
-                
+
                 var colors = [
                     {
                         label: _("none").t(),
@@ -94,10 +91,9 @@ define(
                         value: 'et_yellow'
                     }
                 ];
-                
+
                 this.children.color = new ControlGroup({
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'color',
                         model: this.model.eventType.entry.content,
@@ -113,42 +109,42 @@ define(
                     },
                     label: _('Color').t()
                 });
-                
+
                 var priorities = [
                     {
                         label: _("1 (Highest)").t(),
                         value: 1
                     },
                     {
-                        label: _("2").t(),
+                        label: 2,
                         value: 2
                     },
                     {
-                        label: _("3").t(),
+                        label: 3,
                         value: 3
                     },
                     {
-                        label: _("4").t(),
+                        label: 4,
                         value: 4
                     },
                     {
-                        label: _("5").t(),
+                        label: 5,
                         value: 5
                     },
                     {
-                        label: _("6").t(),
+                        label: 6,
                         value: 6
                     },
                     {
-                        label: _("7").t(),
+                        label: 7,
                         value: 7
                     },
                     {
-                        label: _("8").t(),
+                        label: 8,
                         value: 8
                     },
                     {
-                        label: _("9").t(),
+                        label: 9,
                         value: 9
                     },
                     {
@@ -156,10 +152,9 @@ define(
                         value: 10
                     }
                 ];
-                
+
                 this.children.priority = new ControlGroup({
                     controlType: 'SyntheticSelect',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'priority',
                         model: this.model.eventType.entry.content,
@@ -180,11 +175,11 @@ define(
                 this.children.serverflashMessages = new FlashMessagesView({ model: this.model.eventType });
 
             },
-            
+
             focus: function() {
                 this.$('input[type="text"]').first().focus();
             },
-            
+
             events: {
                 'click .modal-footer .btn-primary': function(e) {
                     this.children.serverflashMessages.$el.empty();

@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var sparkline = require("jquery.sparkline");
     var BaseCellRenderer = require("./BaseCellRenderer");
 
-    var DEFAULT_SPARKLINE_SETTINGS = { type: "line", lineColor: "#65A637", highlightSpotColor: null, minSpotColor: null, maxSpotColor: null, spotColor: null, fillColor: null };
+    var DEFAULT_SPARKLINE_SETTINGS = { type: "line", lineColor: "#5CC05C", highlightSpotColor: null, minSpotColor: null, maxSpotColor: null, spotColor: null, fillColor: null };
 
     return BaseCellRenderer.extend({
 

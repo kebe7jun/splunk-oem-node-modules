@@ -9,7 +9,8 @@ define(
         'views/jobmanager/table/EmptyTableRow',
         'views/jobmanager/table/MoreInfo',
         'views/shared/delegates/TableDock',
-        'util/keyboard'
+        'util/keyboard',
+        './Master.pcss'
     ],
     function(
         module,
@@ -25,6 +26,7 @@ define(
     ){
         return BaseView.extend({
             moduleId: module.id,
+            className: 'table-padded',
             /**
              * @param {Object} options {
              *     model: {
@@ -99,6 +101,14 @@ define(
                             className: 'col-status'
                         },
                         {
+                            label: _("Workload Pool").t(),
+                            className: 'col-workloadPool',
+                            sortKey: 'workload_pool',
+                            visible: function() {
+                                return this.model.user.canListAndSelectWorkloadPools(this.collection.workloadManagementStatus);
+                            }.bind(this)
+                        },
+                        {
                             label: _("Actions").t(),
                             className: 'col-actions'
                         }
@@ -107,14 +117,14 @@ define(
                 this.children.rows = this.rowsFromCollection();
                 this.children.tableDock = new TableDock({
                     el: this.el,
-                    offset: 87,
+                    offset: 90,
                     dockScrollBar: false,
                     proxyThEvents: ['click label.checkbox']
                 });
 
                 this.activate();
             },
-            
+
             events: {
                 'click .col-select-all': function(e) {
                     // Must listen to click and not change of selectAll because
@@ -139,7 +149,7 @@ define(
                     e.preventDefault();
                 }
             },
-            
+
             startListening: function() {
                 this.listenTo(this.collection.jobs, 'reset', this.renderRows);
 
@@ -174,10 +184,10 @@ define(
                         $testSearchRow = $searchRow.clone().css({visibility: 'hidden'}),
                         expanded = $details.hasClass('expanded'),
                         collapsedHeight, expandedHeight;
-                        
+
                     $testSearchRow.prepend('<td></td>');
                     $testSearchRow.appendTo(this.$('tbody'));
-                    
+
                     if (expanded) {
                         expandedHeight = parseFloat($testSearchRow.css('height'));
                         $testSearchRow.find('td.details').removeClass('expanded');
@@ -187,7 +197,7 @@ define(
                         $testSearchRow.find('td.details').addClass('expanded');
                         expandedHeight = parseFloat($testSearchRow.css('height'));
                     }
-                    
+
                     if (expandedHeight > collapsedHeight) {
                         $expandsTD.removeClass('disabled').find('span').replaceWith('<a href="#"><i class="icon-triangle-right-small"></i></a>');
                     } else {
@@ -196,11 +206,11 @@ define(
                         }
                         $expandsTD.addClass('disabled').find('a').replaceWith('<span><i class="icon-triangle-right-small"></i></span>');
                     }
-                    
+
                     $testSearchRow.remove();
                 }, this);
             },
-            
+
             rowsFromCollection: function() {
                 var rows = [];
                 if (this.collection.jobs.length) {
@@ -214,6 +224,9 @@ define(
                                 appLocal: this.model.appLocal,
                                 serverInfo: this.model.serverInfo
                             },
+                            collection: {
+                                workloadManagementStatus: this.collection.workloadManagementStatus
+                            },
                             attributes: {
                                 'data-sid': model.get(model.idAttribute)
                             }
@@ -226,7 +239,7 @@ define(
                             collection: {
                                 apps: this.collection.apps
                             },
-                            cols: 9 + this.model.user.canUseApps(),
+                            cols: 9 + this.model.user.canUseApps() + this.model.user.canListAndSelectWorkloadPools(this.collection.workloadManagementStatus),
                             attributes: {
                                 'data-sid': model.get(model.idAttribute)
                             }
@@ -245,7 +258,7 @@ define(
                 }
                 return rows;
             },
-            
+
             _render: function() {
                 var fragment = document.createDocumentFragment();
                 _(this.children.rows).each(function(row) {
@@ -255,13 +268,13 @@ define(
                 this.disableNonTruncatedExpands();
                 this.children.tableDock.update();
             },
-            
+
             renderRows: function() {
                 _(this.children.rows).each(function(row){ row.debouncedRemove({detach: true}); }, this);
                 this.children.rows = this.rowsFromCollection();
                 this._render();
             },
-            
+
             render: function() {
                 if (!this.el.innerHTML) {
                     this.$el.append(this.compiledTemplate({}));
@@ -275,7 +288,7 @@ define(
                 BaseView.prototype.onAddedToDocument.apply(this, arguments);
                 this.disableNonTruncatedExpands();
             },
-            
+
             template: '\
                 <table class="table table-fixed table-row-expanding table-chrome">\
                     <tbody class="job-listings"></tbody>\

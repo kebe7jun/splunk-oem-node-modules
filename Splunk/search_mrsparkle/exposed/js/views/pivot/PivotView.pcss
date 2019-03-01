@@ -1,22 +1,23 @@
 /*  Splunk: Page: Pivot View */
 /*  =================== */
 
-
 $vizMenuWidth: 80px;
-$configMenuWidth: 380px;
-$docActionBarHeight: 55px;
-$jobActionBarHeight: 37px;
-$bodyMinWidth: 960px;
+$configMenuWidth: 420px;
+$docActionBarHeight: 48px;
+$jobActionBarHeight: 39px;
+
+.body {
+    overflow: hidden;
+}
 
 .pivot-pivotview {
-
     .pivot-visualizationtypemenu {
         position: absolute;
         left: 0px;
         bottom: 0px;
         top: 0px;
         width: $vizMenuWidth;
-        background-color: $black;
+        background-color: $gray30;
         margin: 0px;
         overflow-y: auto;
         padding-top: 15px;
@@ -37,42 +38,43 @@ $bodyMinWidth: 960px;
 
         li a {
             display: block;
-            color: $gray;
+            color: $gray60;
             text-decoration: none;
-        }
 
-        li a:hover {
-            color: $white;
-            background-color: $grayDark;
-        }
+            &:hover:not(.disabled) {
+                color: $white;
+                background-color: $gray45;
+            }
 
-        li a.disabled {
-            color: $grayDarker;
-            background-color: $black;
-            cursor: default;
+            &:focus {
+                @mixin focus-element-inset;
+            }
+
+            &.disabled {
+                color: $gray45;
+                cursor: default;
+            }
         }
 
         li.active a {
             color: $white;
             background-color: transparent;
         }
-
     }
 
     .pivot-documentactionbar {
         $paddingLeft: 20px;
-        $bottomBorderWidth: 1px;
         min-width: calc($bodyMinWidth - $vizMenuWidth - $paddingLeft);
         position: absolute;
-        left: $vizMenuWidth;
+        top: $spacingHalf;
         right: 0px;
-        height: calc($docActionBarHeight - $bottomBorderWidth);
+        left: $vizMenuWidth;
+        height: calc($docActionBarHeight);
         padding-left: $paddingLeft;
-        border-bottom: $bottomBorderWidth solid $borderColor;
 
         .report-name {
-            font-weight: 200;
-            font-size: 26px;
+            font-weight: 600;
+            font-size: $fontSizeXXLarge;
             margin: 0;
             line-height: $docActionBarHeight;
             display: inline;
@@ -84,9 +86,10 @@ $bodyMinWidth: 960px;
 
         .action-bar {
             position: absolute;
-            bottom: 13px;
+            bottom: 10px;
 
-            .report-action-buttons, .data-source-button {
+            .report-action-buttons,
+            .data-source-button {
                 margin-left: 15px;
             }
 
@@ -113,18 +116,19 @@ $bodyMinWidth: 960px;
         .jobstatus-wrapper {
             margin-right: calc($actionBarWidth + 30px);
 
-		    &.with-inspect-button {
-		        margin-right: calc($actionBarWidth + 55px);
-		    }
+            &.with-inspect-button {
+                margin-right: calc($actionBarWidth + 55px);
+            }
 
-	        .alert {
-	            /*  lame, but effective */
-	            top: -5px;
-	        }
+            .alert {
+                /*  lame, but effective */
+                top: -5px;
+            }
         }
 
         .action-bar {
-        	padding-right: 20px;
+            padding-right: 20px;
+            margin-bottom: 2px;
         }
 
         .shared-jobstatus {
@@ -141,9 +145,12 @@ $bodyMinWidth: 960px;
 
         .shared-jobstatus-count {
             padding-top: 5px;
-    	}
+        }
 
-        .icon-share, .icon-print, .icon-export, .icon-search {
+        .icon-share,
+        .icon-print,
+        .icon-export,
+        .icon-search {
             font-size: 15px;
         }
     }
@@ -159,7 +166,6 @@ $bodyMinWidth: 960px;
         border-left: none;
         border-right: none;
         border-top: none;
-
     }
 
     .data-display-alert,
@@ -181,7 +187,8 @@ $bodyMinWidth: 960px;
     }
 
     .concertina-group-body {
-        padding-right: 20px;
+        padding-right: 30px;
+        padding-left: 10px;
     }
 
     .pivot-pivotcontent {
@@ -202,10 +209,10 @@ $bodyMinWidth: 960px;
     /*  define a different horizontal component offset from the 180px default for form.form-horizontal */
     $horizontalComponentOffset: 120px;
     .pivot-visualizationconfigmenu {
-        background-color: $offWhite;
+        background-color: $white;
 
-            .panel-body > .form-horizontal {
-                margin-bottom: 10px;
+        .panel-body > .form-horizontal {
+            margin-bottom: 10px;
 
             .alert-viz-control {
                 margin-left: 12px;
@@ -224,12 +231,13 @@ $bodyMinWidth: 960px;
                     text-overflow: ellipsis;
                 }
 
+                .controls,
+                .help-block {
+                    margin-left: $horizontalComponentOffset;
+                }
+
                 .controls {
-                     margin-left: $horizontalComponentOffset;
-                    /*  override for block controls */
-                    .btn {
-                        width: auto;
-                    }
+                    margin-bottom: 0;
                 }
             }
 
@@ -237,15 +245,11 @@ $bodyMinWidth: 960px;
                 padding-left: $horizontalComponentOffset;
             }
 
-            .btn-pill:hover {
-                background-color: color($interactiveGradientEndColor l(-20%));
-            }
-
             .divider {
                 padding-bottom: 15px;
                 width: $configMenuWidth;
+                border-color: $borderLightColor;
             }
-
         }
 
         $borderRightWidth: 1px;
@@ -254,21 +258,23 @@ $bodyMinWidth: 960px;
         left: 0px;
         width: calc($configMenuWidth - $borderRightWidth);
         bottom: 0px;
-        border-right: $borderRightWidth solid $borderColor;
-        border-top: 1px solid $borderColor;
+        border-right: $borderRightWidth solid $borderLightColor;
+        border-top: 1px solid $white;
         overflow: hidden;
-
-
     }
 
     /*  These next two widths are chosen so that the overall label input controls have the same width */
     /*  whether or not there is a show/hide button appended */
-    .pivot-customcontrols-axislabelcontrolgroup input {
-        width: 115px;
+    .pivot-customcontrols-axislabelcontrolgroup .controls {
+        display: flex;
     }
 
     .input-pivot-label {
-        width: 187px;
+        width: 191px;
+    }
+
+    .controls .input-number-small {
+        flex: 0 0 60px;
     }
 
     .pivot-addsubpaneldropdownmenu {
@@ -276,20 +282,10 @@ $bodyMinWidth: 960px;
         margin-bottom: 16px;
     }
 
-    .pivot-field-picker-group .dropdown-toggle .link-label {
-        max-width: 150px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        display: inline-block;
-        margin-bottom: -4px;
-    }
-
     .pivot-visualizationconfigpanel {
-
         .alert {
             border: none;
-            border-bottom: 1px dotted $borderColor;
+            border-bottom: 1px solid $borderLightColor;
             background: none;
             border-radius: 0;
             margin: 0;
@@ -310,32 +306,32 @@ $bodyMinWidth: 960px;
         }
 
         .panel-section-divider {
-            font-size: 11px;
-            border-top: 1px dotted $borderColor;
+            font-size: $fontSizeSmall;
+            border-top: 1px solid $borderLightColor;
             font-weight: bold;
-            margin: 10px 20px;
+            margin: 10px 0 10px 20px;
         }
 
         .remove-button {
-            font-size: 14px;
-            cursor: pointer;
-            margin-left: 10px;
-            text-decoration: none;
+            position: absolute;
+            right: -25px;
+            width: 20px;
+            padding-left: 2px;
+            padding-right: 0;
         }
-
 
         .input-append .dropdown-toggle:first-child {
             border-top-right-radius: $interactiveBorderRadius;
             border-bottom-right-radius: $interactiveBorderRadius;
         }
-
     }
 
     /*  shared styles for the visualization content */
     /*  NOTE: any width- or left-offset-dependent styles need to go in the individual declarations below */
     /*  the single value container has to be handled as a special case because it over-writes class names */
     /*  that are dynamically added to it... */
-    .viz-content-full-width, .viz-content-with-menu {
+    .viz-content-full-width,
+    .viz-content-with-menu {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -351,7 +347,6 @@ $bodyMinWidth: 960px;
     .viz-content-with-menu {
         min-width: calc($bodyMinWidth - $vizMenuWidth - $configMenuWidth);
         left: $configMenuWidth;
-        border-top: 1px solid $borderColor;
     }
 
     .shared-jschart {
@@ -389,7 +384,9 @@ $bodyMinWidth: 960px;
             /*  Add a negative margin to the color range labels so that they can expand left */
             /*  underneath the control label. (SPL-77469) */
             label {
-                width: calc($labelWidth + $horizontalComponentOffset) !important;
+                width: calc(
+                    $labelWidth + $horizontalComponentOffset
+                ) !important;
                 margin-left: -$horizontalComponentOffset;
             }
 
@@ -409,9 +406,7 @@ $bodyMinWidth: 960px;
             top: 2px;
             left: 5px;
         }
-
     }
-
 }
 
 /*  In the field picker drop down, wrap long field names mid-word to avoid them */
@@ -421,8 +416,9 @@ $bodyMinWidth: 960px;
 }
 
 .pivot-datasourcemenu {
-    h4, dl {
-        font-size: $baseFontSize;
+    h4,
+    dl {
+        font-size: $fontSize;
         padding: 5px 10px;
         margin: 0;
     }
@@ -448,8 +444,6 @@ $bodyMinWidth: 960px;
     }
 }
 
-
-
 /*  Print */
 /*  -------------------------------------------------- */
 
@@ -461,7 +455,7 @@ $bodyMinWidth: 960px;
     }
 
     .pivot-documentactionbar,
-    .pivot-jobactionbar{
+    .pivot-jobactionbar {
         border: none !important;
     }
 
@@ -469,7 +463,7 @@ $bodyMinWidth: 960px;
     .pivot-documentactionbar,
     .pivot-pivotcontent {
         @mixin print-no-background;
-        position:static !important;
+        position: static !important;
         left: auto !important;
         right: auto !important;
         top: auto !important;

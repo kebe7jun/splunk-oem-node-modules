@@ -21,6 +21,7 @@ define(
         'splunkjs/mvc/savedsearchmanager',
         'splunkjs/mvc/utils',
         'util/general_utils',
+        'util/keyboard',
         'splunk.util',
         'splunk.window',
         'uri/route'
@@ -37,6 +38,7 @@ define(
                 SavedSearchManager,
                 MvcUtils,
                 GeneralUtils,
+                KeyboardUtils,
                 SplunkUtil,
                 SplunkWindow,
                 Route) {
@@ -61,15 +63,20 @@ define(
                 this.$el[attributes.visible ? 'show' : 'hide']();
                 this.$el.addClass(attributes.clazz);
                 this.$el.attr('title', attributes.text);
+                this.$el.attr('tabindex', 0);
                 this.$el.html(this.compiledTemplate(attributes));
-
                 // display tooltip
                 this.$el.tooltip("destroy");
                 attributes.visible && (this.$el.tooltip({animation: false, container: "body"}));
                 return this;
             },
             events: {
-                'click': '_onButtonClick'
+                'click': '_onButtonClick',
+                'keyup': function(e) {
+                    if (e.which === KeyboardUtils.KEYS['ENTER']) {
+                        this._onButtonClick(e);
+                    }
+                }
             },
             _onButtonClick: function(e) {
                 e.preventDefault();
@@ -197,6 +204,10 @@ define(
                     if (this.resolveBooleanOptions("link.openSearch.visible", "link.visible", true)) {
                         if (this.settings.get('link.openSearch.text')) {
                             this.model.menus.search.set('text', this.settings.get('link.openSearch.text'));
+                        } else {
+                            var viewTarget = this.model.report.openInView(this.model.user);
+                            var view = Route.getView(viewTarget);
+                            this.model.menus.search.set('text', view.openLabel);
                         }
                         this.children.search = new FloatButton({
                             model: this.model.menus.search
@@ -383,8 +394,8 @@ define(
                         sid: this.searchJobModel.get("id")
                     };
                 }
-
-                var url = Route.page(this.model.application.get('root'), this.model.application.get('locale'), this.model.application.get('app'), this.settings.get("link.openSearch.viewTarget") || "search", {data: params});
+                var viewTarget = this.model.report.openInView(this.model.user);
+                var url = Route.page(this.model.application.get('root'), this.model.application.get('locale'), this.model.application.get('app'), this.settings.get("link.openSearch.viewTarget") || viewTarget, {data: params});
 
                 MvcUtils.redirect(url, true);
             },

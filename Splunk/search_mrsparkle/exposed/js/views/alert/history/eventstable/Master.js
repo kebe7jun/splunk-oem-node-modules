@@ -43,7 +43,7 @@ define(
 
                 this.children.rows = this.rowsFromCollection();
                 this.activate();
-                this.children.tableDock = new TableDock({ el: this.el, offset: 36, dockScrollBar: false, defaultLayout: 'fixed'});
+                this.children.tableDock = new TableDock({ el: this.el, offset: 46, dockScrollBar: false, defaultLayout: 'fixed'});
 
             },
             startListening: function() {

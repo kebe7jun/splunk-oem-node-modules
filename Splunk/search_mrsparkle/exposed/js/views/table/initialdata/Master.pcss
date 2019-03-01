@@ -2,10 +2,10 @@
     @mixin display-flex;
     flex: 1 0 0px;
     position: absolute;
-    top: 104px;
+    top: 117px;
     bottom: 0;
     width: 100%;
-    font-size: 11px;
+    font-size: $fontSizeSmall;
     border-right: 1px solid $borderColor;
     display: none;
 
@@ -18,14 +18,15 @@
         padding: 20px;
         border-bottom: 1px solid $borderColor;
         max-height: 230px;
+        min-height: 40px;
     }
 }
 
 .initial-data-cancel {
     position: absolute;
     right: 20px;
-    top: -33px;
-    font-size: 12px;
+    top: -35px;
+    font-size: $fontSize;
 }
 
 .initial-data-vertical-flex-container {
@@ -39,25 +40,41 @@
     min-height: 170px;
 }
 
-.select-method {
-    min-width: 200px;
-}
-
 .method-picker {
     @mixin display-flex row;
-    background-color: #eee;
+    background-color: $gray92;
     border-top: 1px solid $borderColor;
     border-bottom: 1px solid $borderColor;
-    min-height: 75px;
+    min-height: 98px;
     width: 100%;
     min-width: 75px;
-    padding: 10px 8px 5px 8px;
+    padding: 10px 0 0 20px;
     text-decoration: none;
 
-    h3 {
-        margin: 5px 0 10px 11px;
-        color: $black;
-        font-size: 16px;
+    .nav-tabs {
+        background: transparent;
+        margin: 0 auto -1px;
+        font-size: $fontSize;
+        height: 98px;
+        border-bottom-color: $borderColor;
+
+        >li {
+            min-width: 180px;
+        }
+
+        >li > a {
+            text-align: center;
+
+            > svg {
+                height: 60px;
+                margin: 0 auto;
+                display: block;
+            }
+        }
+
+        > li:not(.active) > a:before {
+            background-color: $gray80;
+        }
     }
 }
 
@@ -81,7 +98,7 @@
 
     &.active {
         svg {
-            fill: rgb(101, 166, 55);
+            fill: $brandColor;
         }
     }
 
@@ -142,7 +159,7 @@
     &:focus {
         background: $white;
         text-decoration:none;
-        @mixin focus-button;
+        @mixin focus-element;
     }
 
     .placeholder {
@@ -227,7 +244,7 @@
     h2 {
         margin: -1px -21px 10px -21px;
         line-height: 40px;
-        font-size: $baseFontSizeLarge;
+        font-size: $fontSizeLarge;
         font-weight: normal;
         color: $textColor;
         padding: 0 20px;
@@ -238,7 +255,7 @@
 
     .fields-type-icon {
         font-size: 16px;
-        color: $grayLight;
+        color: $gray60;
         padding-right: 5px;
     }
 
@@ -258,7 +275,7 @@
 }
 
 .index-and-sourcetypes-row {
-    font-size: 11px;
+    font-size: $fontSizeSmall;
     position: relative;
     padding: 10px;
 
@@ -321,12 +338,12 @@
     }
 
     .status, .table-count {
-        line-height: 27px;
+        line-height: 32px;
         padding-left: 10px;
         float: left;
 
         .icon-warning-paused {
-            color: $yellow;
+            color: $warningColor;
             font-size: 200%;
             display: inline-block;
             margin-right: 3px;
@@ -335,7 +352,7 @@
         }
 
         .icon-check {
-            color: $splunkGreen;
+            color: $successColor;
         }
     }
 }
@@ -385,8 +402,5 @@
 @if $theme == lite {
     .initial-data {
         top: 79px;
-    }
-    .method-option.active svg {
-        fill: $splunkLiteOrange;
     }
 }

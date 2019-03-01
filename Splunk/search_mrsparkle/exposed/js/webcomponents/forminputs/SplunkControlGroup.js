@@ -17,7 +17,7 @@ define([
             var $el = $(this);
             $el.html($.trim($el.html()));
         },
-        
+
         attachedCallback: function() {
             var $el = $(this);
 
@@ -26,13 +26,11 @@ define([
                 this.htmlToRender = $el.html();
                 $el.empty();
             }
-
             // Get the label and layout
             var layout = $(this).attr('layout');
             var label = $(this).attr('label');
             var helpText = $(this).attr('help');
-                            
-            this.view = new ControlGroup({
+            var controlGroupConfig = {
                 el: this,
                 controlType: 'Empty',
                 controlTypes: {
@@ -40,21 +38,25 @@ define([
                 },
                 label: label,
                 help: helpText
-            });
+            };
+            if (layout) {
+                controlGroupConfig.controlsLayout = layout;
+            }
+            this.view = new ControlGroup(controlGroupConfig);
             this.view.render();
 
             $el.addClass('control-group');
 
             // Add the original html under the controls div
-            $el.find('.controls').append(this.htmlToRender);
+            $el.find('.controls').html(this.htmlToRender);
 
             // Move the help block back to the end
             if (helpText) {
-                $el.find('.controls').append($el.find('.help-block')); 
+                $el.find('.controls').append($el.find('.help-block'));
             }
         },
 
-        detachedCallback: function() {    
+        detachedCallback: function() {
             if (this.view) {
                 this.view.remove();
             }

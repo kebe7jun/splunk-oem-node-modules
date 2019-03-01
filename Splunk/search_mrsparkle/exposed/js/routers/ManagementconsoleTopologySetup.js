@@ -50,7 +50,6 @@ define(
             initialize: function(options) {
                 DmcBaseRouter.prototype.initialize.call(this, options);
                 this.setPageTitle(_('Forwarder Management').t());
-                this.enableFooter = false;
                 this.fetchUser = true;
                 this.collection = this.collection || {};
                 this.model = this.model || {};

@@ -29,7 +29,7 @@
 		left: 0;
 		right: 0;
 		background-color: $white;
-		z-index: 10;
+		z-index: calc($zindexHeaderTable + 1);
 		position: fixed;
 	}
 }
@@ -76,16 +76,8 @@
 
 /*  TODO: maybe this should be global? */
 .alert-info .icon-info-circle {
-	color: $splunkGreen;
+	color: $infoColor;
 	font-size: 200%;
 	vertical-align: middle;
 	margin-right: 0.5em;
-}
-
-/*  Lite */
-/*  ------------------------------- */
-@if $theme == lite {
-	.alert-info .icon-info-circle {
-		color: $splunkLiteBlack;
-	}
 }

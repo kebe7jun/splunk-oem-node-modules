@@ -7,7 +7,7 @@
  * Inputs:
  *
  *     collection {collections/Base} - {
- *                                      extractedFields:  collection of {models/datamodel/ExtractedField}, 
+ *                                      extractedFields:  collection of {models/datamodel/ExtractedField},
  *                                      manualFields: collection of {models/datamodel/ExtractedField}
  *                                     }
  */
@@ -64,8 +64,8 @@ define([
             },
 
             removeField: function(field) {
-                this.collection.manualFields.remove(field); 
-            }, 
+                this.collection.manualFields.remove(field);
+            },
             render: function() {
 
                 this.children.selectAllCheckbox.detach();
@@ -86,7 +86,7 @@ define([
 
                 var $html = $(html);
 
-               
+
                 rowIterator.eachRow(this.collection.manualFields, function(field, index, rowNumber, isExpanded) {
                     var fieldRow = new ManualFieldRow({tagName: "tr",
                                                  model:field,
@@ -95,7 +95,7 @@ define([
                                                  rowNumber: rowNumber});
                     this.fieldRows.push(fieldRow);
                     $html.find(".field-table-body").append(fieldRow.render().el);
-                    fieldRow.on('action:removeField', this.removeField, this); 
+                    fieldRow.on('action:removeField', this.removeField, this);
                 }, this);
 
 
@@ -131,9 +131,9 @@ define([
                     <tr>\
                         <th class="<%- headerCellClass %>"></th>\
                         <th class="col-checkbox select-all-checkbox"></th>\
-                        <th class="col-field"><%- _("Field").t() %></th>\
-                        <th class="col-rename"><%- _("Rename").t() %></th>\
-                        <th class="col-type"><%- _("Type").t() %></th>\
+                        <th class="col-field"><%- _("Field Name").t() %></th>\
+                        <th class="col-rename"><%- _("Display Name").t() %></th>\
+                        <th class="col-type"><%- _("Type and Flags").t() %></th>\
                     </tr>\
                 </thead>\
                 <tbody class="field-table-body">\

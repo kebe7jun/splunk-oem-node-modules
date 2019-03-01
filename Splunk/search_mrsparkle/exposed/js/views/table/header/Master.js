@@ -35,16 +35,6 @@ define(
                     }
                 });
 
-                this.children.previewModeButtons = new SyntheticRadioControl({
-                    model: this.model.table.entry.content,
-                    modelAttribute: 'dataset.display.mode',
-                    items: [
-                        { label: _('Preview Rows').t(), value: datasetMixin.MODES.TABLE },
-                        { label: _('Summarize Fields').t(), value: datasetMixin.MODES.DATA_SUMMARY }
-                    ],
-                    additionalClassNames: 'btn-group-tabs btn-group-summary'
-                });
-
                 this.children.saveDataset = new SaveView({
                     model: {
                         application: this.model.application,
@@ -61,6 +51,19 @@ define(
                 });
             },
 
+            events: {
+                'click .preview a': function (e) {
+                    e.preventDefault();
+                    this.model.table.entry.content.set('dataset.display.mode', datasetMixin.MODES.TABLE);
+                },
+
+                'click .summarize a': function(e) {
+                    e.preventDefault();
+                    this.model.table.entry.content.set('dataset.display.mode', datasetMixin.MODES.DATA_SUMMARY);
+                }
+            },
+
+
             activate: function(options) {
                 var clonedOptions = _.extend({}, (options || {}));
                 delete clonedOptions.deep;
@@ -74,31 +77,48 @@ define(
                 return BaseView.prototype.activate.call(this, clonedOptions);
             },
 
-            startListening: function(options) {
+            startListening: function() {
                 this.listenTo(this.model.state, 'change:initialDataState', this.manageStateOfChildren);
+                this.listenTo(this.model.table.entry.content, 'change:dataset.display.mode', this.manageStateOfChildren);
             },
 
             manageStateOfChildren: function() {
                 if (this.model.state.get('initialDataState') === InitialDataModel.STATES.EDITING) {
-                    this.children.previewModeButtons.deactivate({ deep: true }).$el.hide();
+                    this.$('.nav-tabs').hide();
                     this.children.saveDataset.deactivate({ deep: true }).$el.hide();
+                    return;
+                }
+
+                this.$('.nav-tabs').css('display', '');
+                this.children.saveDataset.activate({ deep: true }).$el.css('display', '');
+
+                var currentTab = this.model.table.entry.content.get('dataset.display.mode');
+                if (currentTab !== datasetMixin.MODES.DATA_SUMMARY) {
+                    this.$('.preview').addClass('active');
+                    this.$('.summarize').removeClass('active');
                 } else {
-                    this.children.previewModeButtons.activate({ deep: true }).$el.css('display', '');
-                    this.children.saveDataset.activate({ deep: true }).$el.css('display', '');
+                    this.$('.preview').removeClass('active');
+                    this.$('.summarize').addClass('active');
                 }
             },
 
             render: function() {
-                this.$el.html(this.compiledTemplate());
+                if (!this.el.innerHTML) {
+                    this.$el.html(this.compiledTemplate());
 
-                this.children.previewModeButtons.render().prependTo(this.$el);
-                this.children.tableName.activate({ deep: true }).render().prependTo(this.$el);
-                this.children.saveDataset.render().appendTo(this.$('.btn-container'));
+                    this.children.tableName.activate({ deep: true }).render().prependTo(this.$el);
+                    this.children.saveDataset.render().appendTo(this.$('.btn-container'));
+                }
+                this.manageStateOfChildren();
 
                 return this;
             },
 
             template: '\
+                <ul class="nav nav-tabs">\
+                    <li class="preview"><a href="#"><%- _(\'Preview Rows\').t() %></a></li>\
+                    <li class="summarize"><a href="#"><%- _(\'Summarize Fields\').t() %></a></li>\
+                </ul>\
                 <div class="btn-container"></div>\
             '
         });

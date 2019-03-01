@@ -322,11 +322,19 @@ define(function(require, exports, module) {
 
         _onSearchCancelled: function() {
             this._isJobDone = false;
+
+            // clean this._data, otherwise it may contain stale data.
+            this._cleanResultsData();
+
             this._displayMessage('cancelled');
         },
 
         _onSearchError: function(message, err) {
             this._isJobDone = false;
+
+            // clean this._data, otherwise it may contain stale data.
+            this._cleanResultsData();
+
             var msg = Messages.getSearchErrorMessage(err) || message;
             this._displayMessage({
                 level: "error",
@@ -337,11 +345,19 @@ define(function(require, exports, module) {
 
         _onSearchFailed: function(state, job) {
             var msg = Messages.getSearchFailureMessage(state);
+
+            // clean this._data, otherwise it may contain stale data.
+            this._cleanResultsData();
+
             this._displayMessage({
                 level: "error",
                 icon: "warning-sign",
                 message: msg
             });
+        },
+
+        _cleanResultsData: function() {
+            this._data = [];
         }
 
     });

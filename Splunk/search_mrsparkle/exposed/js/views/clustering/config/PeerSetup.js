@@ -32,7 +32,6 @@ define([
                 this.children.masteruri = new ControlGroup({
                     className: 'cluster-masterip control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     helpClass: 'hint',
                     controlOptions: {
                         modelAttribute: 'ui.master_uri',
@@ -46,7 +45,6 @@ define([
                 this.children.repPort = new ControlGroup({
                     className: 'cluster-port control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     helpClass: 'hint',
                     controlOptions: {
                         modelAttribute: 'ui.replication_port',
@@ -60,7 +58,6 @@ define([
                 this.children.secret = new ControlGroup({
                     className: 'cluster-secret control-group',
                     controlType: 'Text',
-                    controlClass: 'controls-block',
                     helpClass: 'hint',
                     controlOptions: {
                         placeholder: 'Optional',

@@ -33,24 +33,20 @@
 			.btn-group-4 button {
 			width: 34px;
 			}
-
+			+ .help-block {
+				margin-left: calc($labelWidth + $labelLeftSpace);
+			}
 		}
-		/*  reverse the styles above if the dropdown-toggle is a child of an input-prepend */
-		.input-prepend > .dropdown-toggle {
-			width: auto;
-			padding: 4px 12px;
-		}
-		/*  smaller width for input that are children of an input-prepend */
-		.input-prepend > input[type="text"] {
-			width: 100px;
-		}
+        .title-input-width input[type="text"] {
+            width: 118px;
+        }
 	}
 
-	$tabbableDialogWidth: 420px;
-	$tabsLabelWidth: 90px;
-	$noTabsDialogWidth: 300px;
-	$noTabsLabelWidth: 100px;
-	$tabsLeftWidth: 98px;
+	$tabbableDialogWidth: 520px;
+	$tabsLabelWidth: 110px;
+	$noTabsDialogWidth: 370px;
+	$noTabsLabelWidth: 120px;
+	$tabsLeftWidth: 110px;
 	$labelLeftSpace: 10px;
 
 	.popdown-dialog-body{
@@ -67,7 +63,7 @@
 		  }
 		  color:$textColor;
 		  position:relative;
-		  font-size:$baseFontSize;
+		  font-size:$fontSize;
 		  padding:10px;
 		  margin:0px;
 		  border-bottom:1px solid $borderColor;
@@ -76,28 +72,33 @@
 
 		.drag-handle {
 			$handleHeight: 8px;
-			$closeButtonWidth: 11px;
+			$closeButtonWidth: 8px;
 
-			height: $handleHeight;
-			padding: 5px;
+			height: calc($handleHeight - 2);
+			padding: $spacingQuarter;
 			cursor: move;
 			z-index: 3;
-			background: $interactiveColor;
+			background: $interactiveBackgroundColor;
 			border-bottom: 1px solid $interactiveBorderColor;
+            border-radius: 3px 3px 0 0;
 
 			.close {
 				height: $handleHeight;
 				width: $closeButtonWidth;
+				position: absolute;
+				right: $spacingQuarter;
 
 				&:before {
 					line-height: $handleHeight;
+					font-size: 15px;
 				}
 			}
 
 			.handle-inner {
 				@mixin draggable-handle-background;
 				height: $handleHeight;
-                margin-right: calc($closeButtonWidth + 3px);
+				max-width: 80px;
+                margin: 0 auto;
 			}
 		}
 	}
@@ -116,21 +117,16 @@
 
 	.tabbable {
         width: $tabbableDialogWidth;
-		background: $interactiveColor;
-		border-top-right-radius: 0px;
-		border-bottom-right-radius: 4px;
-		border-bottom-left-radius: 4px;
+        display: flex;
 
         .tab-content {
-		    border-left: 1px solid $interactiveBorderColor;
-		    margin-left: $tabsLeftWidth;
+            flex: 1;
 		    min-height: 200px;
-            background-color: $white;
+            background-color: $tabContentColor;
             overflow: visible;
-            padding: 10px ;
-			border-top-right-radius: 0px;
-            border-bottom-right-radius: 4px;
+            padding: $spacingHalf;
             @mixin clearfix;
+
             .message-single{
                 margin:0px;
             }
@@ -140,72 +136,63 @@
                 width: 100%;
                 margin-bottom: 0;
             }
-			& > .alerts {
-				padding-left: 5px;
+            & > .alerts {
+                padding-left: 5px;
 
-				.alert {
-					padding-right: 0;
-				}
-			}
+                .alert {
+                    padding-right: 0;
+                }
+            }
         }
-	}
+    }
 
 	.nav-tabs-left {
-		float: left;
+        flex: 0 0 $tabsLeftWidth;
 		cursor: pointer;
-        max-width: $tabsLeftWidth;
         overflow: hidden;
         text-overflow: ellipsis;
-	}
+        background-color: $tabHeaderColor;
+        border-right: $tabHeaderBorder;
 
-	.nav-tabs-left > li > a {
-		min-width: 74px;
-		margin-right: -1px;
-		border-radius: 0px;
-		@mixin interactive;
-		border-left: 0;
-		border-top: 0;
-		padding:10px 12px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        background-color: $offWhite;
-	}
+        > li  {
+            position: relative;
 
-	.nav-tabs-left > li:not(.active) > a:hover {
-		@mixin interactive-hover;
-	}
+            > a {
+                padding: $spacingHalf $spacing;
+                color: $interactiveTextColor;
+                text-overflow: ellipsis;
+                overflow: hidden;
 
-	.nav-tabs-left > li > a:focus {
-	    @mixin focus-pill;
-	    @mixin reset-filter;
-	}
+                &:before {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: calc(100% - $spacing);
+                    top: $spacingHalf;
+                    right: 0;
+                    background-color: $tabHeaderActiveColor;
+                    transition: width $transitionTime;
+                }
 
+                &:hover:before {
+                    width: $appBarUnderlineWidth;
+                }
 
-	.nav-tabs-left .active > a,
-	.nav-tabs-left .active > a:hover {
-		@mixin reset-filter; /*  reset filter for IE so bg color will work */
-		background: $white;
-		border-right-color: $white;
-		cursor: default;
-	}
+                &:focus {
+                    @mixin focus-element-inset $tabHeaderColorHover;
+                }
+            }
+        }
 
-	.tab-content{
-		background-color: $white;
-		border-left: 1px solid $interactiveBorderColor;
-		overflow: visible;
-		margin-left: $tabsLeftWidth;
-		min-height: 200px;
-		padding: 10px;
-		border-top-right-radius: 4px;
-		border-bottom-right-radius: 4px;
-		@mixin clearfix;
-		.message-single{
-			margin:0px;
-		}
-		.form {
-			float:left; /*  new context */
-			width: 100%;
-		}
+        .active > a {
+            font-weight: $fontWeightSemiBold;
+            color: $textColor;
+
+            &:before {
+                background-color: $accentColor;
+                width: $appBarUnderlineWidth;
+            }
+        }
 	}
 
 	.form-horizontal.error input{

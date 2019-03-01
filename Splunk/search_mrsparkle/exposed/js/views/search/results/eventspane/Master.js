@@ -59,13 +59,13 @@ define(
 
                 //models
                 this.model.state = new BaseModel();
-                
+
                 this.collection.flashMessages = new FlashMessagesCollection();
-                
+
                 this.children.timelineState = new FlashMessagesView({
                     collection: this.collection.flashMessages
                 });
-                
+
                 //views
                 this.children.timeline = new LazyTimeline({
                     className: 'timeline-container',
@@ -90,7 +90,7 @@ define(
                         report: this.model.report,
                         searchJob: this.model.searchJob,
                         application: this.model.application,
-                        summary: this.model.summary,	
+                        summary: this.model.summary,
                         state: this.model.state
                     },
                     collection: {
@@ -113,9 +113,9 @@ define(
                         workflowActions: this.collection.workflowActions
                     },
                     scrollToTopOnPagination: true,
-                    headerOffset: 36 // default EventControls' height in pixels
+                    headerOffset: 42 // default EventControls' height in pixels
                 });
-                
+
                 this.children.jobDispatchState = new JobDispatchState({
                     model: {
                         searchJob: this.model.searchJob,
@@ -123,7 +123,7 @@ define(
                     },
                     mode: 'events'
                 });
-                
+
                 this.children.verboseWarning = new VerboseWarning({
                     model: {
                         report: this.model.report,
@@ -146,7 +146,7 @@ define(
                       } else {
                           this.children.eventsViewer.load().activate({deep: true});
                           if (!this.children.timeline.active){
-                              this.children.timeline.activate({deep: true}); 
+                              this.children.timeline.activate({deep: true});
                           }
                           this.children.timeline.render();
                       }
@@ -154,7 +154,7 @@ define(
                   this.listenTo(this.model.report.entry.content, 'change:display.events.timelineEarliestTime change:display.events.timelineLatestTime', _.debounce(function() {
                       var tl_et = this.model.report.entry.content.get('display.events.timelineEarliestTime'),
                           tl_lt = this.model.report.entry.content.get('display.events.timelineLatestTime');
-                  
+
                       if (!(!!(tl_et && tl_lt))){
                           this.children.timelineState.$el.hide();
                           if (this.active) {
@@ -165,16 +165,17 @@ define(
                   this.listenTo(this.model.timeline.buckets, 'reset', function() {
                       var tl_et = this.model.report.entry.content.get('display.events.timelineEarliestTime'),
                           tl_lt = this.model.report.entry.content.get('display.events.timelineLatestTime');
-                  
+
                       if (!!(tl_et && tl_lt) && (this.model.timeline.availableCount(tl_et, tl_lt).length === 0)){
                           _.chain(this.children).omit(['timeline']).each(function(child) {
                               child.$el.hide();
-                          }); 
+                          });
                           this.children.timelineState.$el.show();
-                          
+
                           this.collection.flashMessages.reset([{
                               key: 'waiting',
                               type: 'info',
+                              icon: 'alert',
                               html: _('No results in current time range.').t()
                           }]);
                       } else {
@@ -197,14 +198,14 @@ define(
                 Base.prototype.activate.call(this, clonedOptions);
                 var tl_et = this.model.report.entry.content.get('display.events.timelineEarliestTime'),
                     tl_lt = this.model.report.entry.content.get('display.events.timelineLatestTime');
-                
+
                 if (!(!!(tl_et && tl_lt))) {
                     $.when(this.children.timeline.wrappedViewLoaded()).then(function() {
-                        this.children.timeline.wrappedView.clearSelectionRange(); 
+                        this.children.timeline.wrappedView.clearSelectionRange();
                     }.bind(this));
                     this.collection.flashMessages.reset();
                 }
-                
+
                 this.visibility();
                 return this;
             },
@@ -212,7 +213,7 @@ define(
                 if (!this.active) {
                     return Base.prototype.deactivate.apply(this, arguments);
                 }
-                
+
                 Base.prototype.deactivate.apply(this, arguments);
                 this.model.state.clear();
                 return this;

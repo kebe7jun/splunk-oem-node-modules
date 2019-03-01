@@ -12,6 +12,7 @@ define(
         'views/shared/controls/ColorPickerControl',
         'views/shared/controls/MultiInputControl',
         'views/shared/controls/PercentTextControl',
+        'views/shared/controls/SpinnerControl',
         'views/shared/controls/TimeZone'
     ],
     function(
@@ -27,6 +28,7 @@ define(
         ColorPickerControl,
         MultiInputControl,
         PercentTextControl,
+        SpinnerControl,
         TimeZoneControl
     ) {
         return BaseView.extend({
@@ -40,10 +42,11 @@ define(
             initialize: function() {
                 // Dummy model
                 this.model = new BaseModel({
-                    sliderVal: 0.5,
-                    radioToggle: 'no',
-                    radioList: 'yes',
-                    radioBoolean: 0
+                    inputSteppedSlider: 0.5,
+                    inputSpinner: 20,
+                    inputRadioToggle: 'false',
+                    inputRadioList: 'yes',
+                    inputRadioBoolean: 0
                 });
 
                 BaseView.prototype.initialize.apply(this,arguments);
@@ -122,7 +125,7 @@ define(
                     controls: [
                         new BooleanRadioControl({
                             model: this.model,
-                            modelAttribute: 'inputBooleanRadioBoolean',
+                            modelAttribute: 'inputRadioBoolean',
                             trueLabel: _('Deal').t(),
                             falseLabel: _('No Deal').t()
                         })
@@ -192,7 +195,6 @@ define(
 
                 this.children.sliderView = new ControlGroup({
                     controlType: 'SyntheticSlider',
-                    controlClass: 'controls-block',
                     controlOptions: {
                         modelAttribute: 'inputSteppedSlider',
                         model: this.model,
@@ -202,6 +204,16 @@ define(
                         maxLabel: _('1.0').t()
                     },
                     label: _('Stepped Slider').t()
+                });
+
+                this.children.spinnerView = new ControlGroup({
+                    controls: [
+                        new SpinnerControl({
+                            model: this.hexColorModel,
+                            modelAttribute: 'inputSpinner'
+                        })
+                    ],
+                    label: _('Spinner').t()
                 });
 
                 this.children.checkboxesView = new ControlGroup({
@@ -220,7 +232,6 @@ define(
                 });
 
                 this.children.multiInputView = new ControlGroup({
-                    className: 'input-xxlarge',
                     controls: [
                         new MultiInputControl({
                             autoCompleteFields: [

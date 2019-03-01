@@ -103,8 +103,8 @@ define(
                         </a>\
                     </div>\
                 </td>\
-                <td class="count"><%- result.get("totalCount") %></td>\
-                <td class="last-update"><%- date %></td>\
+                <td class="count" tabindex="0"><%- result.get("totalCount") %></td>\
+                <td class="last-update" tabindex="0"><%- date %></td>\
             '
         });
     }

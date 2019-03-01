@@ -1,6 +1,9 @@
 var sourceMap = require('source-map');
+var path = require('path');
 
-var coreJSRequire = 'require(\'core-js/es6\');\n';
+var coreJSPath = path.dirname(require.resolve('core-js'));
+var coreJSPathES6 = path.join(coreJSPath, 'es6');
+var coreJSRequire = 'require(' + JSON.stringify(coreJSPathES6) + ');\n';
 var useStrictRegExp = /^['"]use strict['"];?/;
 
 /**

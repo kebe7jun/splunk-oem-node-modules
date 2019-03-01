@@ -6,6 +6,7 @@ define(
         'module',
         'views/Base',
         'views/shared/controls/SyntheticCheckboxControl',
+        'util/keyboard',
         'bootstrap.tooltip'
     ],
     function(
@@ -14,7 +15,8 @@ define(
         Backbone,
         module,
         BaseView,
-        SyntheticCheckboxControl
+        SyntheticCheckboxControl,
+        KeyboardUtil
         //tooltip
     )
     {
@@ -24,7 +26,7 @@ define(
             className: 'table-head',
             /**
              * @param {Object} options {
-             *     model: <Backbone.Model> 
+             *     model: <Backbone.Model>
              *     or model: { // use this if using checkbox and it should be powered by a model different then other columns
              *            state <Backbone.Model>,
              *            checkbox <Backbone.Model>
@@ -47,14 +49,13 @@ define(
             },
             events: {
                 'click th': function(e) {
-                    var $target = $(e.currentTarget),
-                        sortKey = $target.attr('data-key'),
-                        sortDirection = $target.hasClass('asc') ? 'desc': 'asc';
-                    if (!sortKey) {
-                        return true;
-                    }
-                    this.model.state.set({sortKey: sortKey, sortDirection: sortDirection});
+                    this.handleClick(e);
                     e.preventDefault();
+                },
+                'keyup th': function(e) {
+                    if (e.which === KeyboardUtil.KEYS['ENTER']) {
+                        this.handleClick(e);
+                    }
                 },
                 'click th a': function(e) {
                     e.preventDefault();
@@ -63,6 +64,15 @@ define(
                     e.preventDefault();
                     $('.tooltip').remove();
                 }
+            },
+            handleClick: function(e) {
+                var $target = $(e.currentTarget),
+                    sortKey = $target.attr('data-key'),
+                    sortDirection = $target.hasClass('asc') ? 'desc': 'asc';
+                if (!sortKey) {
+                    return true;
+                }
+                this.model.state.set({sortKey: sortKey, sortDirection: sortDirection});
             },
             startListening: function() {
                 this.listenTo(this.model.state, 'change:sortKey change:sortDirection', this.debouncedRender);
@@ -93,20 +103,31 @@ define(
             },
             template: '\
                 <tr class="">\
-                    <% _.each(columns, function(value, sortKey) { %>\
+                    <% _.each(columns, function(value) { %>\
                         <% if (_.isFunction(value.visible) && !value.visible.call()) { return; } %>\
                         <% var sortableClassName = (value.sortKey) ? "sorts" : "" %>\
                         <% var activeClassName = model.get("sortKey") && value.sortKey==model.get("sortKey") ? "active " + model.get("sortDirection") : "" %>\
-                        <th data-key="<%- value.sortKey || "" %>" class="<%- sortableClassName %> <%- activeClassName %> <%- value.className || "" %>" <%- value.colSpan ? "colspan=" + value.colSpan : "" %> >\
+                        <th scope="col" data-key="<%- value.sortKey || "" %>"\
+                            <% if (sortableClassName || value.label) { %>\
+                                tabindex="<%- value.tabindex || 0 %>"\
+                            <% } %>\
+                            class="<%- sortableClassName %> <%- activeClassName %> <%- value.className || "" %>"\
+                            <%- value.colSpan ? "colspan=" + value.colSpan : "" %>\
+                            <% if (value.ariaLabel) { %>\
+                                aria-label="<%- value.ariaLabel %>"\
+                            <% } else if (value.label) { %>\
+                                aria-label="<%- value.label %>"\
+                            <% } %>\
+                        >\
                         <% if (value.html) { %>\
                             <%= value.html %>\
                             <% if (value.sortKey) { %>\
                                 <i class="icon-sorts <%- activeClassName %>"></i>\
                             <% } %>\
                         <% } else if (value.sortKey) { %>\
-                            <a href="#"><%- value.label %>\
+                            <a aria-hidden="true"><%- value.label %>\
                                 <% if (value.tooltip) { %>\
-                                    <a href="#" class="column-tooltip tooltip-link"><%- _("?").t() %></a>\
+                                    <a aria-hidden="true" href="#" class="column-tooltip tooltip-link"><%- _("?").t() %></a>\
                                 <% } %>\
                                 <i class="icon-sorts <%- activeClassName %>"></i>\
                             </a>\

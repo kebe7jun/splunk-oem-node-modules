@@ -8,6 +8,10 @@ var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
+var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -130,14 +134,15 @@ var Launcher = function () {
                         reporters[Reporter.reporterName] = Reporter;
                     } else if (typeof reporterName === 'string') {
                         try {
-                            Reporter = require('wdio-' + reporterName + '-reporter');
+                            var pkgName = reporterName.startsWith('@') ? reporterName : `wdio-${reporterName}-reporter`;
+                            Reporter = require(pkgName);
                         } catch (e) {
-                            throw new Error('reporter "wdio-' + reporterName + '-reporter" is not installed. Error: ' + e.stack);
+                            throw new Error(`reporter "wdio-${reporterName}-reporter" is not installed. Error: ${e.stack}`);
                         }
                         reporters[reporterName] = Reporter;
                     }
                     if (!Reporter) {
-                        throw new Error('config.reporters must be an array of strings or functions, but got \'' + typeof reporterName + '\': ' + reporterName);
+                        throw new Error(`config.reporters must be an array of strings or functions, but got '${typeof reporterName}': ${reporterName}`);
                     }
                 }
 
@@ -215,7 +220,7 @@ var Launcher = function () {
     }, {
         key: 'run',
         value: function () {
-            var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+            var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
                 var _this = this;
 
                 var config, caps, launcher, _exitCode, cid, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, capabilities, exitCode;
@@ -232,7 +237,7 @@ var Launcher = function () {
                                 this.reporters.handleEvent('start', {
                                     isMultiremote: this.isMultiremote(),
                                     capabilities: caps,
-                                    config: config
+                                    config
                                 });
 
                                 /**
@@ -344,7 +349,7 @@ var Launcher = function () {
                                     _this.resolve = resolve;
 
                                     /**
-                                     * return immediatelly if no spec was run
+                                     * return immediately if no spec was run
                                      */
                                     if (_this.runSpecs()) {
                                         resolve(0);
@@ -385,7 +390,7 @@ var Launcher = function () {
     }, {
         key: 'runServiceHook',
         value: function () {
-            var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(launcher, hookName) {
+            var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(launcher, hookName) {
                 for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
                     args[_key - 2] = arguments[_key];
                 }
@@ -409,7 +414,7 @@ var Launcher = function () {
                                 _context2.prev = 6;
                                 _context2.t0 = _context2['catch'](0);
 
-                                console.error('A service failed in the \'' + hookName + '\' hook\n' + _context2.t0.stack + '\n\nContinue...');
+                                console.error(`A service failed in the '${hookName}' hook\n${_context2.t0.stack}\n\nContinue...`);
 
                             case 9:
                             case 'end':
@@ -471,13 +476,13 @@ var Launcher = function () {
                     return _this2.getNumberOfRunningInstances() < config.maxInstances;
                 })
                 /**
-                 * make sure the capabiltiy has available capacities
+                 * make sure the capability has available capacities
                  */
                 .filter(function (a) {
                     return a.availableInstances > 0;
                 })
                 /**
-                 * make sure capabiltiy has still caps to run
+                 * make sure capability has still caps to run
                  */
                 .filter(function (a) {
                     return a.specs.length > 0;
@@ -490,7 +495,7 @@ var Launcher = function () {
                 });
 
                 /**
-                 * continue if no capabiltiy were schedulable
+                 * continue if no capability were schedulable
                  */
                 if (schedulableCaps.length === 0) {
                     break;
@@ -516,7 +521,7 @@ var Launcher = function () {
                 return a.runningInstances;
             }).reduce(function (a, b) {
                 return a + b;
-            });
+            }, 0);
         }
 
         /**
@@ -531,7 +536,7 @@ var Launcher = function () {
                 return a.specs.length;
             }).reduce(function (a, b) {
                 return a + b;
-            });
+            }, 0);
         }
 
         /**
@@ -544,42 +549,102 @@ var Launcher = function () {
         key: 'startInstance',
         value: function startInstance(specs, caps, cid, server) {
             var config = this.configParser.getConfig();
-            var debug = caps.debug || config.debug;
             cid = this.getRunnerId(cid);
             var processNumber = this.processesStarted + 1;
 
             // process.debugPort defaults to 5858 and is set even when process
             // is not being debugged.
-            var debugArgs = debug ? ['--debug=' + (process.debugPort + processNumber)] : [];
+            var debugArgs = [];
+            var debugType = void 0;
+            var debugHost = '';
+            var debugPort = process.debugPort;
+            for (var i in process.execArgv) {
+                var _debugArgs = process.execArgv[i].match('--(debug|inspect)(?:-brk)?(?:=(.*):)?');
+                if (_debugArgs) {
+                    var _debugArgs2 = (0, _slicedToArray3.default)(_debugArgs, 3),
+                        type = _debugArgs2[1],
+                        host = _debugArgs2[2];
+
+                    if (type) {
+                        debugType = type;
+                    }
+                    if (host) {
+                        debugHost = `${host}:`;
+                    }
+                }
+            }
+
+            if (debugType) {
+                debugArgs.push(`--${debugType}=${debugHost}${debugPort + processNumber}`);
+            }
 
             // if you would like to add --debug-brk, use a different port, etc...
             var capExecArgs = [].concat((0, _toConsumableArray3.default)(config.execArgv || []), (0, _toConsumableArray3.default)(caps.execArgv || []));
 
             // The default value for child.fork execArgs is process.execArgs,
             // so continue to use this unless another value is specified in config.
-            var defaultArgs = capExecArgs.length ? process.execArgv : [];
+            var defaultArgs = capExecArgs.length === 0 ? process.execArgv : [];
 
-            // If an arg appears multiple times the last occurence is used
+            // If an arg appears multiple times the last occurrence is used
             var execArgv = [].concat((0, _toConsumableArray3.default)(defaultArgs), debugArgs, (0, _toConsumableArray3.default)(capExecArgs));
 
             var childProcess = _child_process2.default.fork(_path2.default.join(__dirname, '/runner.js'), process.argv.slice(2), {
                 cwd: process.cwd(),
-                execArgv: execArgv
+                execArgv
             });
+
+            /**
+             * increase framework timeout to 10m when debugging is enabled
+             */
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
+
+            try {
+                for (var _iterator4 = (0, _getIterator3.default)(execArgv), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                    var argv = _step4.value;
+
+                    if (argv !== '--inspect') {
+                        continue;
+                    }
+
+                    var frameworkOptsKey = config.framework === 'mocha' ? 'mochaOpts' : config.framework === 'jasmine' ? 'jasmineNodeOpts' : 'cucumberOpts';
+                    var frameworkTimeoutKey = config.framework === 'jasmine' ? 'defaultTimeoutInterval' : 'timeout';
+
+                    if (!this.argv[frameworkOptsKey]) {
+                        this.argv[frameworkOptsKey] = {};
+                    }
+
+                    this.argv[frameworkOptsKey][frameworkTimeoutKey] = 10 * 60 * 1000;
+                }
+            } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                        _iterator4.return();
+                    }
+                } finally {
+                    if (_didIteratorError4) {
+                        throw _iteratorError4;
+                    }
+                }
+            }
 
             this.processes.push(childProcess);
 
             childProcess.on('message', this.messageHandler.bind(this, cid)).on('exit', this.endHandler.bind(this, cid));
 
             childProcess.send({
-                cid: cid,
+                cid,
                 command: 'run',
                 configFile: this.configFile,
                 argv: this.argv,
-                caps: caps,
-                processNumber: processNumber,
-                specs: specs,
-                server: server,
+                caps,
+                processNumber,
+                specs,
+                server,
                 isMultiremote: this.isMultiremote()
             });
 
@@ -598,7 +663,7 @@ var Launcher = function () {
             if (!this.rid[cid]) {
                 this.rid[cid] = 0;
             }
-            return cid + '-' + this.rid[cid]++;
+            return `${cid}-${this.rid[cid]++}`;
         }
 
         /**
@@ -702,7 +767,11 @@ var Launcher = function () {
                 });
             }
 
-            console.log('\n\nEnd selenium sessions properly ...\n(press ctrl+c again to hard kill the runner)\n');
+            console.log(`
+
+End selenium sessions properly ...
+(press ctrl+c again to hard kill the runner)
+`);
 
             this.hasTriggeredExitRoutine = true;
         }
@@ -720,13 +789,13 @@ var Launcher = function () {
                 return launchServices;
             }
 
-            var _iteratorNormalCompletion4 = true;
-            var _didIteratorError4 = false;
-            var _iteratorError4 = undefined;
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
 
             try {
-                for (var _iterator4 = (0, _getIterator3.default)(config.services), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                    var serviceName = _step4.value;
+                for (var _iterator5 = (0, _getIterator3.default)(config.services), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                    var serviceName = _step5.value;
 
                     var service = void 0;
 
@@ -739,28 +808,29 @@ var Launcher = function () {
                     }
 
                     try {
-                        service = require('wdio-' + serviceName + '-service/launcher');
+                        var pkgName = serviceName.startsWith('@') ? `${serviceName}/launcher` : `wdio-${serviceName}-service/launcher`;
+                        service = require(pkgName);
                     } catch (e) {
-                        if (!e.message.match('Cannot find module \'wdio-' + serviceName + '-service/launcher\'')) {
-                            throw new Error('Couldn\'t initialise launcher from service "' + serviceName + '".\n' + e.stack);
+                        if (!e.message.match(`Cannot find module 'wdio-${serviceName}-service/launcher'`)) {
+                            throw new Error(`Couldn't initialise launcher from service "${serviceName}".\n${e.stack}`);
                         }
                     }
 
-                    if (service && typeof service.onPrepare === 'function') {
+                    if (service && (typeof service.onPrepare === 'function' || typeof service.onComplete === 'function')) {
                         launchServices.push(service);
                     }
                 }
             } catch (err) {
-                _didIteratorError4 = true;
-                _iteratorError4 = err;
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                        _iterator4.return();
+                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                        _iterator5.return();
                     }
                 } finally {
-                    if (_didIteratorError4) {
-                        throw _iteratorError4;
+                    if (_didIteratorError5) {
+                        throw _iteratorError5;
                     }
                 }
             }

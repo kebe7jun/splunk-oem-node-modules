@@ -40,17 +40,17 @@ renderingErrors = []
     <div class="jobsHeader">
         % if isLite:
             <div class="appHeaderWrapper">
-                <%call expr="parent.buildSimplePanelContainer(modules, 'liteHeader')"></%call>
+            <%call expr="parent.buildSimplePanelContainer(modules, 'liteHeader')"></%call>
             </div>
         % else:
             % if "messaging" in modules :
                 <%call expr="parent.buildSimplePanelContainer(modules, 'messaging')"></%call>
             % endif
-            
+
             <div class="appHeaderWrapper">
-                % for panelName in headerPanels : 
-                    <%call expr="parent.buildSimplePanelContainer(modules, panelName)"></%call>
-                % endfor    
+            % for panelName in headerPanels :
+                <%call expr="parent.buildSimplePanelContainer(modules, panelName)"></%call>
+            % endfor
             </div>
         % endif
 

@@ -19,15 +19,15 @@ import cgi
 % if key != None:
     key="${key | h}"
 % endif
-${nameAttr} ${idAttr} />
+${nameAttr|h} ${idAttr|h} />
 % else:
 <input type="radio" value="${text | h}" 
 % if key != None:
     key="${key | h}"
 % endif
-${nameAttr} ${idAttr} />
+${nameAttr|h} ${idAttr|h} />
 % endif
-<label ${forAttr}>${text | h}</label>
+<label ${forAttr|h}>${text | h}</label>
 <br/>
 </%def>\
 

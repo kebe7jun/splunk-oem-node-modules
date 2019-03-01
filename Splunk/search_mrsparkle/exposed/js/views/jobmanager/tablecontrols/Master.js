@@ -116,6 +116,7 @@ define(
                     model: this.model.state,
                     modelAttribute: 'jobStatus',
                     items: statusItems,
+                    additionalClassNames: 'status-filter',
                     label: _('Status: ').t()
                 });
                 

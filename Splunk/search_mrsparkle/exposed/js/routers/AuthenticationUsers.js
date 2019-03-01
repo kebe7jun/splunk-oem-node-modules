@@ -2,17 +2,19 @@ define(
 [
     'jquery',
     'underscore',
+    'routers/BaseListings',
     'collections/services/authentication/Users',
     'models/shared/EAIFilterFetchData',
-    'routers/BaseListings',
+    'models/services/admin/splunk-auth',
     'views/authentication_users/Master'
 ],
 function(
     $,
     _,
+    BaseListingsRouter,
     UsersCollection,
     EAIFilterFetchData,
-    BaseListingsRouter,
+    SplunkAuthModel,
     UsersView
 ){
     return BaseListingsRouter.extend({
@@ -33,18 +35,31 @@ function(
                 visible: false
             });
             this.model.metadataModel.on('change', this.fetchListCollection, this);
+            this.model.splunkAuth = new SplunkAuthModel({id: 'splunk_auth'});
+            this.deferreds.splunkAuth = $.Deferred();
 
             // collections
             this.collection.users = new UsersCollection();
         },
 
         initializeAndRenderViews: function() {
-            this.usersView = new UsersView({
-                model: this.model,
-                collection: this.collection,
-                deferreds: this.deferreds
+            this.model.splunkAuth.fetch({
+                success: function(model, response) {
+                    this.deferreds.splunkAuth.resolve();
+                }.bind(this),
+                error: function(model, response) {
+                    this.deferreds.splunkAuth.resolve();
+                }.bind(this)
             });
-            this.pageView.$('.main-section-body').html(this.usersView.render().el);
+
+            $.when(this.deferreds.splunkAuth).done(_(function() {
+                this.usersView = new UsersView({
+                    model: this.model,
+                    collection: this.collection,
+                    deferreds: this.deferreds
+                });
+                this.pageView.$('.main-section-body').html(this.usersView.render().el);
+            }).bind(this));
         },
 
         fetchListCollection: function() {

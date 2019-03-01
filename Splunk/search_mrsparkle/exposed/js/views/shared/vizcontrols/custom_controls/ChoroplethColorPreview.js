@@ -2,13 +2,15 @@ define([
             'module',
             'underscore',
             'views/Base',
-            'util/color_utils'
+            'util/color_utils',
+            'splunk/palettes/ColorCodes'
         ],
         function(
             module,
             _,
             Base,
-            colorUtils
+            colorUtils,
+            ColorCodes
         ) {
 
     return Base.extend({
@@ -28,7 +30,7 @@ define([
                 colorMode = this.model.get('autoDetectedColorMode');
             }
             if (colorMode === 'categorical') {
-                binColors = [0x1e93c6, 0xf2b827, 0xd6563c, 0x6a5c9e, 0x31a35f];
+                binColors = ColorCodes.toNumbers(ColorCodes.CATEGORICAL.slice(0, 5));
             } else {
                 var numBins = parseInt(this.model.get('display.visualizations.mapping.choroplethLayer.colorBins'), 10);
                 var maxColor = parseInt(this.model.get('display.visualizations.mapping.choroplethLayer.maximumColor'), 16);

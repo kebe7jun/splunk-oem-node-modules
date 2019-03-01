@@ -12,6 +12,7 @@ define(
     'models/services/cluster/slave/Info',
     'models/services/cluster/searchhead/Generation',
     'models/services/cluster/master/RestartCluster',
+    'models/services/cluster/master/RestartClusterStatus',
 
     'collections/services/cluster/master/Fixups',
     'collections/services/cluster/master/Indexes',
@@ -42,6 +43,7 @@ function(
     PeerInfoModel,
     GenerationModel,
     RestartClusterModel,
+    RestartClusterStatusModel,
 
     MasterFixupsCollection,
     MasterIndexesCollection,
@@ -222,6 +224,7 @@ function(
                 model: {
                     clusterConfig: this.clusterConfig,
                     restartCluster: new RestartClusterModel(),
+                    restartClusterStatus: new RestartClusterStatusModel(),
                     masterInfo: masterInfo,
                     indexesStatusSummary: indexesStatusSummaryModel,
                     peersStatusSummary: peersStatusSummaryModel,

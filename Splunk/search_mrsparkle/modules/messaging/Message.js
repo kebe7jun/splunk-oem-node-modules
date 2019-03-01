@@ -110,6 +110,7 @@ Splunk.Module.Message = $.klass(Splunk.Module, {
         if(this.clearOnJobDispatch){
             $(document).bind('jobDispatched', this.onJobDispatched.bind(this));
         }
+        $(document).trigger("messageLoad", this.container);
     },
     /**
      * Show an alert if the delete post request fails
@@ -171,9 +172,14 @@ Splunk.Module.Message = $.klass(Splunk.Module, {
         for(var i=0; i<this.displayedMessages.length; i++){
             var message = this.displayedMessages[i];
 
-            html.push('<li class="message ' + message.level + '">');
-            html.push('<div style="float:left">');
+            html.push('<li class="message">');
+            html.push('<div style="float:left;display:inline-flex">');
+            if (message.level == 'error') {
+                html.push('<svg style="fill:#dc4e41;padding-right:16px" focusable="false" height="24px" width="24px" viewBox="0 0 1375 1500" aria-hidden="false" preserveAspectRatio="xMidYMid" xmlns="http://www.w3.org/2000/svg" class="inline_SVG_d13579264976c537_847fc6 main_SVG_d13579264976c537_847fc6"><title>Error</title><path d="M187.5 61.5h1000c103.553 0 187.5 83.947 187.5 187.5v1000c0 103.553-83.947 187.5-187.5 187.5h-1000C83.947 1436.5 0 1352.553 0 1249V249C0 145.447 83.947 61.5 187.5 61.5zm400.79 413.083l32.145 257.167c4.908 39.264 34.086 74.685 69.815 91.187 36.612-16.018 64.87-50.826 69.914-91.187l32.146-257.167C799.18 419.623 759.582 374 703.7 374h-26.8c-55.908 0-95.555 45.033-88.61 100.583zm101.293 644.209c63.283 0 114.584-51.301 114.584-114.584 0-63.282-51.301-114.583-114.584-114.583-63.282 0-114.583 51.3-114.583 114.583s51.3 114.584 114.583 114.584z"></path></svg>');
+            }
+            html.push('<span style="padding-top:3px">');
             html.push(this.getWikiTranform(message.content));
+            html.push('</span>');
             html.push('</div>');
 
             // Only removable splunkd messages will have a non-numeric message id.

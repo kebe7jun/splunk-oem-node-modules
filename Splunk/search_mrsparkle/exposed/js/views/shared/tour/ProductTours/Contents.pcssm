@@ -7,37 +7,28 @@
     padding: 10px;
     margin-right: 20px;
     display: inline-block;
-    color: $splunkGreen;
-    border: 1px solid $grayLighter;
+    color: $textColor;
+    font-weight: $fontWeightSemiBold;
+    border-radius: $borderRadius;
+    transition: $transitionBackgroundColor;
+
+    > [data-icon] {
+        color: $brandColor;
+    }
     &:last-child {
         margin-right: 0;
     }
     &:hover,
     &:focus {
-        background: color($splunkGreen a(10%));
-        transition: background 0.15s linear;
+        background-color: $gray98;
         text-decoration: none;
+        color: $textColor;
+    }
+    &:focus {
+        @mixin focus-element;
     }
 }
 
 .icon {
     padding: 12px 32px;
-}
-
-/*  Lite UI */
-@if $theme == lite {
-    .tourLink {
-        color: $splunkLiteBlack;
-        &:hover,
-        &:focus {
-            background: color($splunkLiteBlack a(10%));
-        }
-    }
-    .icon {
-        color: $splunkLiteOrange;
-    }
-    .sharedTourProducttoursFade {
-        width: 600px;
-        margin-left: -300px;
-    }
 }

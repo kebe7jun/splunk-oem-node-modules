@@ -7,11 +7,11 @@ define(function(require, exports, module) {
     var UserModel = require("models/services/authentication/User");
     var BaseView = require("views/Base");
     var FlashMessages = require("views/shared/FlashMessages");
+    var SyntheticCheckboxControl = require("views/shared/controls/SyntheticCheckboxControl");
     var SyntheticRadioControl = require("views/shared/controls/SyntheticRadioControl");
-    var SyntheticSelectControl = require("views/shared/controls/SyntheticSelectControl");
     var TextControl = require("views/shared/controls/TextControl");
-    var TimeZoneControl = require("views/shared/controls/TimeZone");
     var TextDialog = require("views/shared/dialogs/TextDialog");
+    var PasswordFeedbackView = require("views/shared/PasswordFeedback");
 
     var template = require("contrib/text!views/authentication_users/tiles/UserForm.html");
 
@@ -33,6 +33,41 @@ define(function(require, exports, module) {
             },
             "click .detail-cancel": function(e) {
                 this.cancel();
+            },
+            'input #newpassword': function(e) {
+                var curValue = $(e.currentTarget).val();
+                // valResults is a dictionary of whether each criteria passes or not
+                var valResults = this.model.splunkAuth.validatePassword(curValue);
+                // then pass what onInputChange returns to PasswordFeedbackView to change the classes and color
+                this.children.passwordFeedbackView.onInputChange(valResults);
+                // if user decides not to set optional password and clears newpassword field, remove mismatch error
+                var confirmPass = $("#confirmpassword").val();
+                if (curValue == confirmPass) {
+                    this.children.passwordFeedbackView.onPasswordMatch();
+                }
+            },
+            'focus #confirmpassword': function(e) {
+                var curValue = $("#newpassword").val();
+                var valResults = this.model.splunkAuth.validatePassword(curValue);
+                this.children.passwordFeedbackView.onRemoveFocus(valResults);
+            },
+            'input #confirmpassword': function(e) {
+                var newPass = $("#newpassword").val();
+                var confirmPass = $(e.currentTarget).val();
+                if (newPass == confirmPass) {
+                    this.children.passwordFeedbackView.onPasswordMatch();
+                }
+            },
+            'blur #confirmpassword': function(e) {
+                var newPass = $("#newpassword").val();
+                var confirmPass = $(e.currentTarget).val();
+                if (newPass == "" && confirmPass == "") {
+                    this.children.passwordFeedbackView.resetIcons();
+                }
+                (newPass != confirmPass) ? this.children.passwordFeedbackView.onPasswordMismatch() : this.children.passwordFeedbackView.onPasswordMatch();
+            },
+            'click .detail-unlock': function(e) {
+                this.model.userEdit.entry.content.set("locked-out", false);
             }
         },
 
@@ -46,20 +81,12 @@ define(function(require, exports, module) {
                     "can_delete": (_.indexOf(roles, "can_delete") >= 0),
                     "email": this.model.userEdit.entry.content.get("email"),
                     "realname": this.model.userEdit.entry.content.get("realname"),
-                    "tz": this.model.userEdit.entry.content.get("tz"),
-                    "search_assistant": this.model.userEdit.entry.content.get("search_assistant"),
-                    "search_syntax_highlighting": this.model.userEdit.getSearchSyntaxHighlighting(),
-                    "search_auto_format": this.model.userEdit.entry.content.get("search_auto_format"),
-                    "search_line_numbers": this.model.userEdit.entry.content.get("search_line_numbers")
+                    "locked-out": this.model.userEdit.entry.content.get("locked-out")
                 });
             } else {
                 this._workingModel = new Backbone.Model({
                     "role": "user",
-                    "can_delete": false,
-                    "search_assistant": UserModel.SEARCH_ASSISTANT.COMPACT,
-                    "search_syntax_highlighting": UserModel.EDITOR_THEMES.DEFAULT,
-                    "search_auto_format": false,
-                    "search_line_numbers": false
+                    "can_delete": false
                 });
             }
 
@@ -94,9 +121,18 @@ define(function(require, exports, module) {
                 placeholder: !this.model.userEdit ? _("name@example.com").t() : ""
             });
 
+            this.children.oldPasswordInput = new TextControl({
+                model: this._workingModel,
+                modelAttribute: "oldpassword",
+                elementId: "oldpassword",
+                placeholder: this.model.userEdit ? _("Old password").t() : "",
+                password: true
+            });
+
             this.children.passwordInput = new TextControl({
                 model: this._workingModel,
                 modelAttribute: "password",
+                elementId: "newpassword",
                 placeholder: this.model.userEdit ? _("Change password").t() : "",
                 password: true,
                 updateOnKeyUp: true
@@ -106,7 +142,14 @@ define(function(require, exports, module) {
             this.children.confirmPasswordInput = new TextControl({
                 model: this._workingModel,
                 modelAttribute: "confirmPassword",
+                elementId: "confirmpassword",
                 password: true
+            });
+
+            this.children.passwordFeedbackView = new PasswordFeedbackView({
+                model: {
+                    splunkAuth: this.model.splunkAuth
+                }
             });
 
             this.children.fullnameInput = new TextControl({
@@ -114,52 +157,11 @@ define(function(require, exports, module) {
                 modelAttribute: "realname"
             });
 
-            this.children.timezoneInput = new TimeZoneControl({
+            this.children.unlockInput = new SyntheticCheckboxControl({
                 model: this._workingModel,
-                modelAttribute: "tz",
-                showDefaultLabel: false
+                modelAttribute: 'locked-out',
+                invertValue: true // when userLocked == true, button show and is unchecked; when button checked, userLocked set to false and won't appear next time
             });
-
-            if (this.model.userEdit && this.isSelf()) {
-                this.children.searchAssistant = new SyntheticSelectControl({
-                    toggleClassName: 'btn',
-                    model: this._workingModel,
-                    modelAttribute: "search_assistant",
-                    items: [
-                        { label: _("Compact").t(), value: UserModel.SEARCH_ASSISTANT.COMPACT },
-                        { label: _("Full").t(), value: UserModel.SEARCH_ASSISTANT.FULL },
-                        { label: _("None").t(), value: UserModel.SEARCH_ASSISTANT.NONE }
-                    ]
-                });
-                this.children.syntaxHighlighting = new SyntheticSelectControl({
-                    toggleClassName: 'btn',
-                    model: this._workingModel,
-                    modelAttribute: "search_syntax_highlighting",
-                    items: [
-                        { label: _("Black on white").t(), value: UserModel.EDITOR_THEMES.BLACK_WHITE },
-                        { label: _("Light theme").t(), value: UserModel.EDITOR_THEMES.DEFAULT },
-                        { label: _("Dark theme").t(), value: UserModel.EDITOR_THEMES.DARK }
-                    ]
-                });
-
-                this.children.autoFormat = new SyntheticRadioControl({
-                    model: this._workingModel,
-                    modelAttribute: "search_auto_format",
-                    items: [
-                        { label: _("On").t(), value: true },
-                        { label: _("Off").t(), value: false }
-                    ]
-                });
-
-                this.children.lineNumbers = new SyntheticRadioControl({
-                    model: this._workingModel,
-                    modelAttribute: "search_line_numbers",
-                    items: [
-                        { label: _("On").t(), value: true },
-                        { label: _("Off").t(), value: false }
-                    ]
-                });
-            }
         },
 
         isSelf: function() {
@@ -174,7 +176,8 @@ define(function(require, exports, module) {
                     canEditUsers: this.model.user.canEditUsers(),
                     isSplunkAuth: this.model.userEdit ? (this.model.userEdit.entry.content.get("type") === "Splunk") : false,
                     isSelf: this.isSelf(),
-                    isNew: (this.model.userEdit == null)
+                    isNew: (this.model.userEdit == null),
+                    lockedOut: this.model.userEdit ? (this.model.userEdit.entry.content.get("locked-out")) : false
                 }));
             }
 
@@ -184,21 +187,23 @@ define(function(require, exports, module) {
             }
             this.children.canDeleteInput.render().appendTo(this.$("tr.detail-pair-candelete td.detail-value"));
             this.children.emailInput.render().appendTo(this.$("tr.detail-pair-email td.detail-value"));
+            // Since admin doesn't need to enter old password when changing other users' passwords, only show oldpassword field when
+            // (1) Editing an existing user AND (2) the logged in user does not have edit user capability, or is editing their own password
+            if ((this.model.userEdit !== null) &&
+                (!this.model.user.canEditUsers() || this.isSelf())) {
+                this.children.oldPasswordInput.render().appendTo(this.$("tr.detail-pair-oldpassword td.detail-value"));
+            } else {
+                this.$("tr.detail-pair-oldpassword").hide();
+            }
             this.children.passwordInput.render().appendTo(this.$("tr.detail-pair-password td.detail-value"));
             this.children.confirmPasswordInput.render().appendTo(this.$("tr.detail-pair-confirmpassword td.detail-value"));
+            this.children.passwordFeedbackView.render().appendTo(this.$("tr.detail-pair-passwordreq td.detail-value"));
             this.children.fullnameInput.render().appendTo(this.$("tr.detail-pair-fullname td.detail-value"));
-            this.children.timezoneInput.render().appendTo(this.$("tr.detail-pair-timezone td.detail-value"));
-            if (this.children.searchAssistant) {
-                this.children.searchAssistant.render().appendTo(this.$("tr.detail-pair-src-assistant td.detail-value"));
-            }
-            if (this.children.syntaxHighlighting) {
-                this.children.syntaxHighlighting.render().appendTo(this.$("tr.detail-pair-syntaxhighlight td.detail-value"));
-            }
-            if (this.children.autoFormat) {
-                this.children.autoFormat.render().appendTo(this.$("tr.detail-pair-autoformat td.detail-value"));
-            }
-            if (this.children.lineNumbers) {
-                this.children.lineNumbers.render().appendTo(this.$("tr.detail-pair-linenumbers td.detail-value"));
+
+            // only admin should be able to see this while editing a user
+            if ((this.model.user.isAdmin() || this.model.user.isCloudAdmin()) && this.model.userEdit &&
+                this.model.userEdit.entry.content.get("locked-out")) {
+                this.children.unlockInput.render().appendTo(this.$("tr.detail-unlock td.detail-value"));
             }
 
             // disable rolesInput if not admin or editing self and making label rather than switch
@@ -217,22 +222,14 @@ define(function(require, exports, module) {
                 this.children.rolesInput.disable();
                 this.children.canDeleteInput.disable();
                 this.children.emailInput.disable();
+                this.children.oldPasswordInput.disable();
                 this.children.passwordInput.disable();
                 this.children.confirmPasswordInput.disable();
                 this.children.fullnameInput.disable();
+                this.children.unlockInput.disable();
+                this.$("tr.detail-pair-oldpassword").hide();
                 this.$("tr.detail-pair-password").hide();
-                if (this.children.searchAssistant) {
-                    this.children.searchAssistant.disable();
-                }
-                if (this.children.syntaxHighlighting) {
-                    this.children.syntaxHighlighting.disable();
-                }
-                if (this.children.autoFormat) {
-                    this.children.autoFormat.disable();
-                }
-                if (this.children.lineNumbers) {
-                    this.children.lineNumbers.disable();
-                }
+                this.$("tr.detail-pair-passwordreq").hide();
             }
 
             this._toggleConfirmPassword();
@@ -248,6 +245,7 @@ define(function(require, exports, module) {
 
             var self = this;
             var attributes = _(this._workingModel.attributes).clone();
+            var oldpassword = attributes["oldpassword"];
             var password = attributes["password"];
             var confirmPassword = attributes["confirmPassword"];
 
@@ -263,6 +261,7 @@ define(function(require, exports, module) {
             // delete empty password
             if (!password) {
                 delete attributes["password"];
+                delete attributes["oldpassword"];
             }
 
             // delete confirmPassword (not part of remote storage, just for local validation)

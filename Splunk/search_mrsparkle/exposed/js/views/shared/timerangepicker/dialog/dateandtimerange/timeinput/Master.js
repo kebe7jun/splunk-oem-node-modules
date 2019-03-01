@@ -9,7 +9,7 @@ define([
       ],
      function($, _, Backbone, module, Base, DateControl, HoursMinutesSeconds) {
         return Base.extend({
-            tagName: 'span',
+            tagName: 'fieldset',
             className: 'timeinput',
             moduleId: module.id,
             initialize: function(options) {
@@ -17,13 +17,15 @@ define([
 
                 this.children.monthDayYear = new DateControl({
                     model: this.model.dateTime,
-                    className: 'control pull-left',
+                    className: 'control',
                     inputClassName: this.options.inputClassName || 'date',
-                    validate: true
+                    validate: true,
+                    ariaLabel: _('Date').t()
                 });
 
                 this.children.hoursMinutesSeconds = new HoursMinutesSeconds({
-                    model: this.model.dateTime
+                    model: this.model.dateTime,
+                    ariaLabel: _('Time').t()
                 });
 
                 this.$el.addClass(this.options.inputClassName || 'earliest');
@@ -33,7 +35,8 @@ define([
                     var template = _.template(this.template, {
                         _: _,
                         cid: this.cid,
-                        label: this.options.label
+                        label: this.options.label,
+                        legendLabel: this.options.legendLabel
                     });
                     this.$el.html(template);
 
@@ -46,8 +49,11 @@ define([
                 return this;
             },
             template: '\
-                <span class="time-mdy"></span>\
-                <span class="time-hms"></span>\
+                <legend class="visuallyhidden"><%- legendLabel %></legend>\
+                <span class="time-container">\
+                    <span class="time-mdy"></span>\
+                    <span class="time-hms"></span>\
+                </span>\
             '
         });
     }

@@ -81,7 +81,7 @@ define(
                     label: "Include Results",
                     controlType:'SyntheticRadio',
                     controlOptions: {
-                        className: "btn-group btn-group-2",
+                        additionalClassNames: "btn-group-2",
                         items: [
                             { value: 'none', label: 'None' },
                             { value: 'text', label: 'Text' },
@@ -93,7 +93,7 @@ define(
                     }
                 });
                 */
-                
+
                 this.model.inmem.on("change:email", function(){
                     var shouldEmail = this.model.inmem.get("email");
                     if (shouldEmail) {
@@ -112,7 +112,7 @@ define(
                     e.preventDefault();
                     $.when(this.model.inmem.sendToBackground()).then(function(){
                         var fetch = this.model.inmem.fetch();
-                        
+
                         $.when(fetch).then(function() {
                             this.model.inmem.trigger('saveSuccess');
                         }.bind(this));
@@ -127,7 +127,7 @@ define(
                 this.children.flashMessages.render().prependTo(this.$(Modal.BODY_SELECTOR));
 
                 this.$(Modal.BODY_SELECTOR).append(Modal.FORM_HORIZONTAL);
-                
+
                 this.children.email.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
                 this.children.subject.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));
                 this.children.addresses.render().appendTo(this.$(Modal.BODY_FORM_SELECTOR));

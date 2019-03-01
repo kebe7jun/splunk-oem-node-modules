@@ -3,7 +3,7 @@ define(
         'module',
         'jquery',
         'underscore',
-        'models/search/Report',
+        'models/search/ScheduledReport',
         'models/services/datamodel/DataModel',
         'models/services/datasets/PolymorphicDataset',
         'views/shared/PopTart',
@@ -21,7 +21,7 @@ define(
         module,
         $,
         _,
-        ReportModel,
+        ScheduledReportModel,
         DataModel,
         PolymorphicDatasetModel,
         PopTartView,
@@ -195,8 +195,13 @@ define(
                     e.preventDefault();
                     this.hide();
 
-                    this.model.report = new ReportModel();
-                    $.when(this.model.report.fetch()).then(function() {
+                    this.model.report = new ScheduledReportModel();
+                    $.when(this.model.report.fetch({
+                        data: {
+                            app: this.model.application.get('app'),
+                            owner: this.model.application.get('owner')
+                        }
+                    })).then(function() {
                         this.model.report.entry.content.set({
                             'search': this.model.dataset.getFromSearch(),
                             'is_scheduled': true,

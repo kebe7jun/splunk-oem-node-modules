@@ -5,7 +5,7 @@
     margin-bottom: 10px;
 }
 
-.splunk-editors-ColorScaleMinMidMaxEditor-row:not(:last-of-type) {
+.splunk-editors-ColorScaleMinMidMaxEditor-row {
     margin-bottom: 10px;
 }
 
@@ -13,7 +13,7 @@
     margin-right: 10px;
 }
 .splunk-editors-ColorScaleMinMidMaxEditor-row > .splunk-editors-EnumEditor > .control > .dropdown-toggle {
-    width: 100px;
+    width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -23,7 +23,7 @@
 }
 .splunk-editors-ColorScaleMinMidMaxEditor-row > .splunk-editors-SimpleTypeEditor > .control > input,
 .splunk-editors-ColorScaleMinMidMaxEditor-row > .splunk-editors-SimpleTypeEditor > .control > span {
-    width: 50px;
+    width: 75px;
 }
 
 .presets-button {
@@ -40,6 +40,7 @@
 
     .sequential-list, .divergent-list {
         display: inline-block;
+        float: left;
 
         .title {
             text-align: center;
@@ -59,6 +60,10 @@
 
         .item:hover {
             background-color: #F3F3F3;
+        }
+
+        .item-border-bottom {
+            border-bottom: 1px dotted $borderColor;
         }
     }
 

@@ -1,35 +1,26 @@
 /*  Splunk Bar */
 /*  ======================= */
-@import '../../../../pcss/base/variables-oem.pcss';
-
-$backgroundHover:           #444;
-$backgroundActive:          #555;
-$backgroundFocus:           #666;
-
-$color:                     #bbb;
-$colorCaret:                $textGray;
-
 
 /*  Main Container */
 .view {
     all: initial;
     display: block;
     min-width:750px;
-    height: $splunkbarHeight;
+    height: $navbarHeight;
     color: $textDisabledColor;
     position:relative;
     margin-bottom: 0;
-    background: $dce-black;
-    font-size: $baseFontSize;
-    font-family: $baseFontFamily;
-    z-index: 3;
+    background: $gray20;
+    font-size: $fontSize;
+    font-family: $fontFamily;
+    line-height: $navbarHeight;
 }
 
 .devTest {
     line-height: 25px;
     padding: 2px 10px;
     border-radius: 10px;
-    background-color: $orange;
+    background-color: $alertColor;
     color: $white;
     text-transform: uppercase;
 }
@@ -43,103 +34,51 @@ $colorCaret:                $textGray;
     white-space: no-wrap;
     display: flex;
     flex-direction: row;
-    /* DCE-OEM-CHANGE
-    */
-    font-family: Avenir,Helvetica,Arial,sans-serif;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    font-size: 14px;
+    height: inherit;
+    line-height: inherit;
 }
 
 
-/* DCE-OEM-CHANGE
-*/
 .navRight {
     composes: nav;
     float: right;
-    border-left: 1px solid #424447;
-    padding: 0 15px;
-    height: 100%;
-    line-height: 40px;
-    color: #fff;
+    height: inherit;
+    line-height: inherit;
 }
 
-.notificationRight {
-    composes: nav;
-    float: right;
-    border-left: 1px solid #424447;
-    height: 100%;
-    line-height: 40px;
-    color: #fff;
-}
-.notificationLink {
-    display: block;
-    padding: 0 15px;
-}
-
-.notificationLink:focus {
-    background: none;
-    box-shadow: none;
-}
-
-.navLeft {
-    composes: nav;
-    float: left;
-    border-right: 1px solid #424447;
-}
+$dataIconShadow: 0 0 $spacing $gray80;
+$logoIconShadow: 0 0 $spacing $brandColor;
+$focusIconShadow: 0 0 $spacing $accentColor;
 
 /*  Nav Logo */
 .brand {
-    /* DCE-OEM-CHANGE
-    */
-    font-family: Avenir,Helvetica,Arial,sans-serif;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-
-    padding: 0 10px; /*  can't use vertical padding since badges/labels push this out */
-    color: $color;
-    border-left: 0px solid transparent;
-
-    /* DCE-OEM-CHAGNE
-      border-right: 0px solid transparent;
-    */
-    border-right: 1px solid #424447;
-
-    line-height: 40px;
-    height: 40px;
+    line-height: inherit;
+    height: inherit;
     white-space: nowrap;
     display: block;
     color: $white;
-
-    /* DCE-OEM-CHANGE
-      padding: 0 10px 0 20px;
-    */
-    padding: 0;
-
-    /* DCE-OEM-CHANGE
-      font-size: 17px;
-    */
-    font-size: 14px;
-
+    padding: 0 $spacing;
+    font-size: $fontSizeXLarge;
     float: left;
     text-decoration: none;
-    /* DCE-OEM-CHANGE
-    &:hover {
-        color: $white;
-        transition: background-color 0.3s linear;
-        background-color: $accent;
-    }
+    text-rendering: geometricPrecision;
+    backface-visibility: hidden;
+
     &:focus {
+        @mixin focus-element-inset $navbarBackground;
         color: $white;
-        background: $accent;
+        background: $navbarBackground;
         outline: none;
     }
-    */
-
+    > [data-icon] {
+        color: $white;
+    }
 }
 
-.gt {
-    color: $splunkGray;
+
+.gt, .logo {
+    color: $brandColor;
+    transition: text-shadow $transitionTime;
 }
 
 .icon {
@@ -152,11 +91,4 @@ $colorCaret:                $textGray;
 .productMenuLabelCloud,
 .helpMenuLabelCloud {
   display: inline;
-}
-
-/* DCE-OEM-CHANGE */
-.dceLogo {
-    height: 18.5px;
-    padding: 0 10px;
-    vertical-align: middle;
 }

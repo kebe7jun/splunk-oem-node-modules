@@ -101,7 +101,7 @@ with new line
         })
     })
 
-    describe('outputFileFormat', () => {
+    describe('outputFileFormat as function', () => {
         let xml1 = null
         let xml2 = null
 
@@ -121,6 +121,34 @@ with new line
             [ xml1, xml2 ] = fs.readdirSync(outputDir)
             xml1.should.be.equal('some-file-0-0.xml')
             xml2.should.be.equal('some-file-0-1.xml')
+        })
+    })
+
+    describe('outputFileFormat as single+multi', () => {
+        let xml1 = null
+        let xml2 = null
+        let xml3 = null
+
+        before(() => {
+            reporter = new JunitReporter(baseReporter, {}, {
+                outputDir,
+                outputFileFormat: {
+                    single: (config) => `all.xml`,
+                    multi: (opts) => `some-file-${opts.cid}.xml`
+                }
+            })
+            reporter.onEnd()
+        })
+
+        after(() => {
+            rimraf.sync(outputDir)
+        })
+
+        it('should have used expected file name format', () => {
+            [ xml1, xml2, xml3 ] = fs.readdirSync(outputDir)
+            xml1.should.be.equal('all.xml')
+            xml2.should.be.equal('some-file-0-0.xml')
+            xml3.should.be.equal('some-file-0-1.xml')
         })
     })
 
@@ -167,6 +195,40 @@ with new line
 
         it('should have package name in classname', () => {
             xml1Content.should.containEql('classname="phantomjs-____O.o____.some_foobar_test"')
+        })
+    })
+
+    describe('errorOptions', () => {
+        let xml1Content = null
+
+        before(() => {
+            reporter = new JunitReporter(baseReporter, {}, {
+                outputDir,
+                errorOptions: {
+                    error: 'message',
+                    failure: 'message',
+                    stacktrace: 'stack'
+                }
+            })
+            reporter.onEnd()
+
+            const files = fs.readdirSync(outputDir)
+            xml1Content = fs.readFileSync(path.join(outputDir, files[0]), 'utf8')
+        })
+
+        after(() => {
+            rimraf.sync(outputDir)
+        })
+
+        it('should have package name in classname', () => {
+            xml1Content.should.containEql(
+                // eslint-disable-next-line
+                `<failure message="some error message">
+        <![CDATA[some error stack
+with new line]]>
+      </failure>
+      <error message="some error message"/>`
+            )
         })
     })
 

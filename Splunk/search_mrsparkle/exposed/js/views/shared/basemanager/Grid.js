@@ -168,6 +168,7 @@ define([
                 var $html = $(html);
 
                 this.removeGridRows();
+                this.removeToolTips();
 
                 rowIterator.eachRow(this.collection.entities, function(entityModel, ix, rowNumber, isExpanded) {
                     var model = _.defaults({entity: entityModel}, this.model);
@@ -199,14 +200,28 @@ define([
                 if (this.options.bulkedit.enable === true) {
                     this.children.selectAllCheckbox.render().appendTo($html.find('.col-entity-select-all'));
                 }
-
+				
                 this.children.columnSort.update($html);
                 this.$el.html($html);
                 this.children.flashMessages.render().appendTo(this.$el);
+                
+                _.each(this.columns, function(col, ix){
+                    if (col.tooltip){
+                        this.$('#'+col.id+'-tooltip').tooltip({title: col.tooltip, container: 'body'});
+                    }
+                }.bind(this));
 
                 this.updateNoEntitiesMessage();
 
                 return this;
+            },
+			
+            removeToolTips: function() {
+                _.each(this.columns, function(col, ix) {
+                    if (col.tooltip){
+                        this.$('#'+col.id+'-tooltip').tooltip('destroy');
+                    }
+                });
             },
 
             removeGridRows: function () {

@@ -53,18 +53,21 @@ function(
                 el: this.el,
                 inactiveIconName: "chevronRight",
                 activeIconName: "chevronDown",
-                collapsible: true
+                collapsible: true,
+                speed: 100
             });
             this.children.accordion.on('toggled', function() {
                 this.setPrefs();
             }, this);
 
-            this.children.activityMenu = new ActivityMenu({
-                model: {
-                    user: this.model.user,
-                    application: this.model.application
-                }
-            });
+            if (!this.options.hideActivityMenu) {
+                this.children.activityMenu = new ActivityMenu({
+                    model: {
+                        user: this.model.user,
+                        application: this.model.application
+                    }
+                });
+            }
 
             this.deferreds = {};
             this.deferreds.managers = $.Deferred();
@@ -288,7 +291,9 @@ function(
             }));
             this.liteMessages();
 
-            this.$('[data-role=sidenav-menu]').prepend(this.children.activityMenu.render().el);
+            if (this.children.activityMenu) {
+                this.$('[data-role=sidenav-menu]').prepend(this.children.activityMenu.render().el);
+            }
 
             $.when(this.deferreds.managers).then(function() {
                 this.buildSections();
